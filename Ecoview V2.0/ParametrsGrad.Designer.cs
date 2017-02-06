@@ -709,7 +709,6 @@
         public System.Windows.Forms.DateTimePicker dateTimePicker1;
         private System.Windows.Forms.Label label2;
         public System.Windows.Forms.ComboBox Ed;
-        private System.Windows.Forms.Button Cancel;
         public System.Windows.Forms.TextBox WL_grad;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.GroupBox groupBox5;
@@ -750,5 +749,6 @@
         public System.Windows.Forms.TextBox ND;
         private System.Windows.Forms.Label label15;
         public System.Windows.Forms.Button button1;
+        public System.Windows.Forms.Button Cancel;
     }
 }

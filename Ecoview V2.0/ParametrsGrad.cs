@@ -577,6 +577,8 @@ namespace Ecoview_V2._0
                             }
                         }
                     }
+                    _Analis.CountSeriya1 = numericUpDown3.Text;
+                    _Analis.CountInSeriya1 = numericUpDown4.Text;
                     _Analis.edconctr = Ed.Text;
                     if (_Analis.ComPodkl == true)
                     {

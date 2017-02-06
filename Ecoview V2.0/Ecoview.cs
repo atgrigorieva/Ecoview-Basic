@@ -23,6 +23,33 @@ namespace Ecoview_V2._0
         public Ecoview()
         {
             InitializeComponent();
+           // this.StartPosition = FormStartPosition.WindowsDefaultBounds;
+            if (ComPodkl == false)
+            {
+                this.подключитьToolStripMenuItem.Enabled = true;
+                button2.Enabled = true;
+                button13.Enabled = false;
+                button12.Enabled = false;
+                button14.Enabled = false;
+                this.настройкаПортаToolStripMenuItem.Enabled = false;
+                this.информацияToolStripMenuItem.Enabled = false;
+                this.калибровкаToolStripMenuItem.Enabled = false;
+                this.темновойТокToolStripMenuItem.Enabled = false;
+                this.измеритьToolStripMenuItem.Enabled = false;
+                
+                this.калибровкаДляОдноволновогоАнализаToolStripMenuItem.Enabled = false;
+            }
+            //   groupBox3.Enabled = false;
+            // groupBox2.Enabled = false;
+            tabPage4.Parent = null;
+            radioButton1.Enabled = false;
+            radioButton2.Enabled = false;
+            radioButton3.Enabled = false;
+            radioButton4.Enabled = false;
+            radioButton5.Enabled = false;
+            textBox4.Text = string.Format("{0:0.0000}", 0);
+            textBox5.Text = string.Format("{0:0.0000}", 0);
+            textBox6.Text = string.Format("{0:0.0000}", 0);
         }
         public bool nonPort;
         public SerialPort newPort;
@@ -110,6 +137,32 @@ namespace Ecoview_V2._0
         int count = 0;
         public string filename;
         int cordY = 0;
+        public void Ecoview_Load(object sender, EventArgs e)
+        {
+            edconctr = "%";
+            SposobZadan = "По СО";
+
+            dateTimePicker1.Text = DateTime;
+
+            chart1.Series[0].ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+
+            chart1.Series[0].Points.Add();
+
+            chart1.ChartAreas[0].AxisX.MajorGrid.Enabled = false;
+            chart1.ChartAreas[0].AxisY.MajorGrid.Enabled = false;
+            chart1.Series[0].Points.Clear();
+            chart1.Series[1].Points.Clear();
+            Zavisimoct = "A(C)";
+            aproksim = "Линейная";
+            Table1.AllowUserToResizeRows = false;
+            Podskazka.Text = "Подключите прибор!";
+            label27.Visible = false;
+            label24.Visible = true;
+            label25.Visible = false;
+            label26.Visible = false;
+            label28.Visible = false;
+
+        }
         private void button2_Click(object sender, EventArgs e)
         {
             podcluchenie();
@@ -660,17 +713,21 @@ namespace Ecoview_V2._0
             Izmerenie1 = true;
             if (tabControl2.SelectedIndex == 0)
             {
-                NewGraduirovca();
+                NewGraduirovca(ref CountInSeriya, ref CountSeriya);
             }
             else
             {
                 NewIzmerenie();
             }
         }
-        public void NewGraduirovca()
+       public string CountSeriya1 = "";
+       public string CountInSeriya1 = "";
+        public void NewGraduirovca(ref string CountInSeriya, ref string CountSeriya)
         {
+            CountSeriya1 = CountSeriya;
+            CountInSeriya1 = CountInSeriya;
             ParametrsGrad _ParametrsGrad = new ParametrsGrad(this);
-
+            _ParametrsGrad.ShowDialog();
             _ParametrsGrad.button1.Click += (ParametrsGrad, eSlave) =>
             {
                 Veshestvo1 = _ParametrsGrad.Veshestvo.Text;
@@ -682,8 +739,8 @@ namespace Ecoview_V2._0
                 Description = _ParametrsGrad.Description.Text;
                 DateTime = _ParametrsGrad.dateTimePicker1.Text;
                 Ispolnitel = _ParametrsGrad.Ispolnitel.Text;
-                CountSeriya = _ParametrsGrad.numericUpDown3.Text;
-                CountInSeriya = _ParametrsGrad.numericUpDown4.Text;
+                CountSeriya1 = _ParametrsGrad.numericUpDown3.Text;
+                CountInSeriya1 = _ParametrsGrad.numericUpDown4.Text;
                 textBox3.Text = _ParametrsGrad.textBox4.Text;
                 Days = Convert.ToInt32(_ParametrsGrad.numericUpDown1.Value);
                 label6.Text = dateTimePicker1.Value.AddDays(Days).ToString("dd.MM.yyyy");
@@ -757,8 +814,9 @@ namespace Ecoview_V2._0
                 label26.Visible = false;
                 label28.Visible = true;
             };
-
-            _ParametrsGrad.ShowDialog();
+            
+            CountSeriya = CountSeriya1;
+            CountInSeriya = CountInSeriya1;
             dateTimePicker1.Text = DateTime;
             tabControl2.SelectTab(tabPage3);
             chart1.ChartAreas[0].AxisX.MajorGrid.Enabled = false;
@@ -773,10 +831,39 @@ namespace Ecoview_V2._0
                 Table1.Columns.RemoveAt(i);
             }
             Table1.Rows[Table1.Rows.Count - 1].Cells[0].Value = "";
+            if(Convert.ToInt32(CountInSeriya) < 3)
+            {
+                radioButton3.Enabled = false;
+            }
+            else
+            {
+                if(Convert.ToInt32(CountInSeriya) < 2)
+                {
+                    radioButton2.Enabled = false;
+                    radioButton3.Enabled = false;
+                }
+                else
+                {
+                    radioButton1.Enabled = true;
+                    radioButton2.Enabled = true;
+                    radioButton3.Enabled = true;
+                }
+            }
+            RR.Text = "";
+            SKO.Text = "";
+            label21.Text = "";
+            label22.Text = "";
+            if (SposobZadan == "По СО")
+            {
+                textBox4.Text = "";
+                textBox5.Text = "";
+                textBox6.Text = "";
+            }
             if (SposobZadan == "Ввод коэффициентов")
             {
                 functionA();
             }
+
         }
         public void NewIzmerenie()
         {
@@ -789,7 +876,7 @@ namespace Ecoview_V2._0
             Izmerenie1 = true;
             if (tabControl2.SelectedIndex == 0)
             {
-                NewGraduirovca();
+                NewGraduirovca(ref CountInSeriya, ref CountSeriya);
             }
             else
             {
@@ -898,6 +985,24 @@ namespace Ecoview_V2._0
             label25.Visible = false;
             label26.Visible = false;
             label28.Visible = false;
+            if (Convert.ToInt32(CountInSeriya) < 3)
+            {
+                radioButton3.Enabled = false;
+            }
+            else
+            {
+                if (Convert.ToInt32(CountInSeriya) < 2)
+                {
+                    radioButton2.Enabled = false;
+                    radioButton3.Enabled = false;
+                }
+                else
+                {
+                    radioButton1.Enabled = true;
+                    radioButton2.Enabled = true;
+                    radioButton3.Enabled = true;
+                }
+            }
             tabPage4.Parent = tabControl2;
         }
         public void TableWrite()
@@ -2225,7 +2330,7 @@ namespace Ecoview_V2._0
                 }
                 Array.Sort(Table1masStr);
                 double maxEl = Table1masStr[Table1masStr.Length - 1];
-                Table1masStr1[i] = ((maxEl - xrasch) * 100) / xrasch;
+                Table1masStr1[i] = Math.Abs(((maxEl - xrasch) * 100) / xrasch);
                 //label22.Text = "Макс.Ошибка А(С) = " + string.Format("{0:0.0000}", (((maxEl - xrasch) * 100) / xrasch));
             }
             for (int i = 1; i <= Table1masStr1.Length; i++)
@@ -2429,7 +2534,7 @@ namespace Ecoview_V2._0
                 }
                 Array.Sort(Table1masStr);
                 double maxEl = Table1masStr[Table1masStr.Length - 1];
-                Table1masStr1[i] = ((maxEl - xrasch) * 100) / xrasch;
+                Table1masStr1[i] = Math.Abs(((maxEl - xrasch) * 100) / xrasch);
                 //label22.Text = "Макс.Ошибка А(С) = " + string.Format("{0:0.0000}", (((maxEl - xrasch) * 100) / xrasch));
             }
             for (int i = 1; i <= Table1masStr1.Length; i++)
@@ -2626,7 +2731,7 @@ namespace Ecoview_V2._0
                 }
                 Array.Sort(Table1masStr);
                 double maxEl = Table1masStr[Table1masStr.Length - 1];
-                Table1masStr1[i] = ((maxEl - x) * 100) / x;
+                Table1masStr1[i] = Math.Abs(((maxEl - x) * 100) / x);
                 //label22.Text = "Макс.Ошибка А(С) = " + string.Format("{0:0.0000}", (((maxEl - xrasch) * 100) / xrasch));
             }
             for (int i = 1; i <= Table1masStr1.Length; i++)
@@ -2665,6 +2770,7 @@ namespace Ecoview_V2._0
             }
             RR.Text = "R^2 = " + string.Format("{0:0.0000}", (1 - (yx / yx1)));
             double x2 = 0;
+            int Table1_Asred = 0;
             for (int i = 0; i < Table1.Rows.Count - 1; i++)
             {
                 double x1 = Convert.ToDouble(Table1.Rows[i].Cells["Asred"].Value);
@@ -2682,7 +2788,7 @@ namespace Ecoview_V2._0
                 // circle++;
                 //double y2 = 0.5 * i;
                 //double x2 = y2 / k1;
-                int Table1_Asred = 0;
+                
                 x2 = 0;
                 if (Table1_Asred == 0)
                 {
@@ -2822,7 +2928,7 @@ namespace Ecoview_V2._0
                 }
                 Array.Sort(Table1masStr);
                 double maxEl = Table1masStr[Table1masStr.Length - 1];
-                Table1masStr1[i] = ((maxEl - x) * 100) / x;
+                Table1masStr1[i] = Math.Abs(((maxEl - x) * 100) / x);
                 //label22.Text = "Макс.Ошибка А(С) = " + string.Format("{0:0.0000}", (((maxEl - xrasch) * 100) / xrasch));
             }
             for (int i = 1; i <= Table1masStr1.Length; i++)
@@ -3127,7 +3233,7 @@ namespace Ecoview_V2._0
                 }
                 Array.Sort(Table1masStr);
                 double maxEl = Table1masStr[Table1masStr.Length - 1];
-                Table1masStr1[i] = ((maxEl - xrasch) * 100) / xrasch;
+                Table1masStr1[i] = Math.Abs(((maxEl - xrasch) * 100) / xrasch);
                 //label22.Text = "Макс.Ошибка А(С) = " + string.Format("{0:0.0000}", (((maxEl - xrasch) * 100) / xrasch));
             }
             for (int i = 1; i <= Table1masStr1.Length; i++)
@@ -3304,7 +3410,7 @@ namespace Ecoview_V2._0
                 }
                 Array.Sort(Table1masStr);
                 double maxEl = Table1masStr[Table1masStr.Length - 1];
-                Table1masStr1[i] = ((maxEl - xrasch) * 100) / xrasch;
+                Table1masStr1[i] = Math.Abs(((maxEl - xrasch) * 100) / xrasch);
                 //label22.Text = "Макс.Ошибка А(С) = " + string.Format("{0:0.0000}", (((maxEl - xrasch) * 100) / xrasch));
             }
             for (int i = 1; i <= Table1masStr1.Length; i++)
@@ -3474,7 +3580,7 @@ namespace Ecoview_V2._0
                 }
                 Array.Sort(Table1masStr);
                 double maxEl = Table1masStr[Table1masStr.Length - 1];
-                Table1masStr1[i] = ((maxEl - x) * 100) / x;
+                Table1masStr1[i] = Math.Abs(((maxEl - x) * 100) / x);
                 //label22.Text = "Макс.Ошибка А(С) = " + string.Format("{0:0.0000}", (((maxEl - xrasch) * 100) / xrasch));
             }
             for (int i = 1; i <= Table1masStr1.Length; i++)
@@ -3643,7 +3749,7 @@ namespace Ecoview_V2._0
                }
                Array.Sort(Table1masStr);
                double maxEl = Table1masStr[Table1masStr.Length - 1];
-               Table1masStr1[i] = ((maxEl - x) * 100) / x;
+               Table1masStr1[i] = Math.Abs(((maxEl - x) * 100) / x);
                //label22.Text = "Макс.Ошибка А(С) = " + string.Format("{0:0.0000}", (((maxEl - xrasch) * 100) / xrasch));
            }
            for (int i = 1; i <= Table1masStr1.Length; i++)
@@ -3999,7 +4105,7 @@ namespace Ecoview_V2._0
                 }
                 Array.Sort(Table1masStr);
                 double maxEl = Table1masStr[Table1masStr.Length - 1];
-                Table1masStr1[i] = ((maxEl - xrasch) * 100) / xrasch;
+                Table1masStr1[i] = Math.Abs(((maxEl - xrasch) * 100) / xrasch);
                 //label22.Text = "Макс.Ошибка А(С) = " + string.Format("{0:0.0000}", (((maxEl - xrasch) * 100) / xrasch));
             }
             for (int i = 1; i <= Table1masStr1.Length; i++)
@@ -4173,7 +4279,7 @@ namespace Ecoview_V2._0
                 }
                 Array.Sort(Table1masStr);
                 double maxEl = Table1masStr[Table1masStr.Length - 1];
-                Table1masStr1[i] = ((maxEl - xrasch) * 100) / xrasch;
+                Table1masStr1[i] = Math.Abs(((maxEl - xrasch) * 100) / xrasch);
                 //label22.Text = "Макс.Ошибка А(С) = " + string.Format("{0:0.0000}", (((maxEl - xrasch) * 100) / xrasch));
             }
             for (int i = 1; i <= Table1masStr1.Length; i++)
@@ -4345,7 +4451,7 @@ namespace Ecoview_V2._0
                 }
                 Array.Sort(Table1masStr);
                 double maxEl = Table1masStr[Table1masStr.Length - 1];
-                Table1masStr1[i] = ((maxEl - x) * 100) / x;
+                Table1masStr1[i] = Math.Abs(((maxEl - x) * 100) / x);
                 //label22.Text = "Макс.Ошибка А(С) = " + string.Format("{0:0.0000}", (((maxEl - xrasch) * 100) / xrasch));
             }
             for (int i = 1; i <= Table1masStr1.Length; i++)
@@ -4511,7 +4617,7 @@ namespace Ecoview_V2._0
                 }
                 Array.Sort(Table1masStr);
                 double maxEl = Table1masStr[Table1masStr.Length - 1];
-                Table1masStr1[i] = ((maxEl - x) * 100) / x;
+                Table1masStr1[i] = Math.Abs(((maxEl - x) * 100) / x);
                 //label22.Text = "Макс.Ошибка А(С) = " + string.Format("{0:0.0000}", (((maxEl - xrasch) * 100) / xrasch));
             }
             for (int i = 1; i <= Table1masStr1.Length; i++)
@@ -4675,16 +4781,27 @@ namespace Ecoview_V2._0
 
                 }
             }
+            else
+            {
+                SaveAs1();
+                tabPage4.Parent = tabControl2;
+            }
+            Podskazka.Text = "Перейдите в Измерения!";
+            label27.Visible = false;
+            label24.Visible = false;
+            label25.Visible = false;
+            label26.Visible = false;
+            label28.Visible = false;
         }
         public void Save1()
         {
             bool doNotWrite = false;
-            for (int j = 0; j < Table1.Rows.Count - 1; j++)
+            for (int j = 0; j < Table2.Rows.Count - 1; j++)
             {
 
-                for (int i = 2; i < Table1.Rows[j].Cells.Count; i++)
+                for (int i = 2; i < Table2.Rows[j].Cells.Count; i++)
                 {
-                    if (Table1.Rows[j].Cells[i].Value == null)
+                    if (Table2.Rows[j].Cells[i].Value == null)
                     {
                         doNotWrite = true;
                         break;
@@ -5332,17 +5449,19 @@ namespace Ecoview_V2._0
         {
             if (tabControl2.SelectedIndex == 0)
             {
-                NewGrad();
+                NewGrad(ref CountSeriya, ref CountInSeriya);
             }
             else
             {
                 NewIzmer();
             }
         }
-        public void NewGrad()
+        public void NewGrad(ref string CountSeriya, ref string CountInSeriya)
         {
+            CountSeriya1 = CountSeriya;
+            CountInSeriya1 = CountInSeriya;
             NewGraduirovka _NewGraduirovka = new NewGraduirovka(this);
-
+            _NewGraduirovka.ShowDialog();
             _NewGraduirovka.button1.Click += (NewGraduirovka, eSlave) =>
             {
                 Veshestvo1 = _NewGraduirovka.Veshestvo.Text;
@@ -5355,8 +5474,8 @@ namespace Ecoview_V2._0
                 DateTime = _NewGraduirovka.dateTimePicker1.Text;
                 Ispolnitel = _NewGraduirovka.Ispolnitel.Text;
                 textBox3.Text = _NewGraduirovka.textBox4.Text;
-                CountSeriya = _NewGraduirovka.numericUpDown3.Text;
-                CountInSeriya = _NewGraduirovka.numericUpDown4.Text;
+                CountSeriya1 = _NewGraduirovka.numericUpDown3.Text;
+                CountInSeriya1 = _NewGraduirovka.numericUpDown4.Text;
                 edconctr = _NewGraduirovka.Ed.Text;
                 Days = Convert.ToInt32(_NewGraduirovka.numericUpDown1.Value);
                 label6.Text = dateTimePicker1.Value.AddDays(Days).ToString("dd.MM.yyyy");
@@ -5438,7 +5557,8 @@ namespace Ecoview_V2._0
                 }
 
             };
-            _NewGraduirovka.ShowDialog();
+            CountSeriya = CountSeriya1;
+            CountInSeriya = CountInSeriya1;
             dateTimePicker1.Text = DateTime;
             tabControl2.SelectTab(tabPage3);
             chart1.ChartAreas[0].AxisX.MajorGrid.Enabled = false;
@@ -5455,6 +5575,34 @@ namespace Ecoview_V2._0
                 if (Table1.Columns.Count == 3 + NoCaIzm)
                     break;
                 Table1.Columns.RemoveAt(i);
+            }
+            if (Convert.ToInt32(CountInSeriya) < 3)
+            {
+                radioButton3.Enabled = false;
+            }
+            else
+            {
+                if (Convert.ToInt32(CountInSeriya) < 2)
+                {
+                    radioButton2.Enabled = false;
+                    radioButton3.Enabled = false;
+                }
+                else
+                {
+                    radioButton1.Enabled = true;
+                    radioButton2.Enabled = true;
+                    radioButton3.Enabled = true;
+                }
+            }
+            RR.Text = "";
+            SKO.Text = "";
+            label21.Text = "";
+            label22.Text = "";
+            if (SposobZadan == "По СО")
+            {
+                textBox4.Text = "";
+                textBox5.Text = "";
+                textBox6.Text = "";
             }
             Table1.Rows[Table1.Rows.Count - 1].Cells[0].Value = "";
             if (SposobZadan == "Ввод коэффициентов")
@@ -5755,7 +5903,7 @@ namespace Ecoview_V2._0
         {
             if (tabControl2.SelectedIndex == 0)
             {
-                NewGrad();
+                NewGrad(ref CountSeriya, ref CountInSeriya);
             }
             else
             {
@@ -7481,14 +7629,14 @@ public void WLADDSTR2()
         {
             if (tabControl2.SelectedIndex == 0)
             {
-                Graduirovka();
+                Graduirovka(sender, e);
             }
             else
             {
-                Izmerenie();
+                Izmerenie(sender, e);
             }
         }
-        public void Graduirovka()
+        public void Graduirovka(object sender, EventArgs e)
         {
             double sum = 0.0;
             int startIndexCell = 2;
@@ -7697,7 +7845,7 @@ public void WLADDSTR2()
 
             }
         }
-        public void Izmerenie()
+        public void Izmerenie(object sender, EventArgs e)
         {
             double CCR = 0.0;
 
@@ -8146,11 +8294,11 @@ public void WLADDSTR2()
         {
             if (tabControl2.SelectedIndex == 0)
             {
-                Graduirovka();
+                Graduirovka(sender, e);
             }
             else
             {
-                Izmerenie();
+                Izmerenie(sender, e);
             }
         }
 
