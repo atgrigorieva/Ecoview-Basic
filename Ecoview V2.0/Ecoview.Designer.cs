@@ -30,9 +30,9 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Ecoview));
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea24 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Series series47 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series48 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.radioButton3 = new System.Windows.Forms.RadioButton();
             this.radioButton2 = new System.Windows.Forms.RadioButton();
@@ -253,7 +253,7 @@
             this.groupBox6.Controls.Add(this.Table1);
             this.groupBox6.Location = new System.Drawing.Point(9, 399);
             this.groupBox6.Name = "groupBox6";
-            this.groupBox6.Size = new System.Drawing.Size(942, 201);
+            this.groupBox6.Size = new System.Drawing.Size(942, 151);
             this.groupBox6.TabIndex = 19;
             this.groupBox6.TabStop = false;
             this.groupBox6.Text = "Измерения стандартных образцов";
@@ -272,9 +272,15 @@
             this.Asred});
             this.Table1.Location = new System.Drawing.Point(6, 19);
             this.Table1.Name = "Table1";
-            this.Table1.Size = new System.Drawing.Size(930, 176);
+            this.Table1.Size = new System.Drawing.Size(930, 126);
             this.Table1.TabIndex = 20;
+            this.Table1.CellBeginEdit += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.Table1_CellBeginEdit_1);
+            this.Table1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.Table1_CellContentClick);
             this.Table1.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.Table1_CellEndEdit);
+            this.Table1.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.Table1_CellValueChanged);
+            this.Table1.EditingControlShowing += new System.Windows.Forms.DataGridViewEditingControlShowingEventHandler(this.Table1_EditingControlShowing);
+            this.Table1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Table1_KeyDown);
+            this.Table1.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Table1_KeyPress);
             // 
             // NoCo
             // 
@@ -431,6 +437,9 @@
             this.Table2.Size = new System.Drawing.Size(911, 499);
             this.Table2.TabIndex = 23;
             this.Table2.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.Table2_CellEndEdit);
+            this.Table2.CellParsing += new System.Windows.Forms.DataGridViewCellParsingEventHandler(this.Table2_CellParsing);
+            this.Table2.EditingControlShowing += new System.Windows.Forms.DataGridViewEditingControlShowingEventHandler(this.Table2_EditingControlShowing);
+            this.Table2.Enter += new System.EventHandler(this.Table2_Enter);
             // 
             // groupBox4
             // 
@@ -620,7 +629,7 @@
             this.tabPage4.Location = new System.Drawing.Point(4, 22);
             this.tabPage4.Name = "tabPage4";
             this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage4.Size = new System.Drawing.Size(957, 606);
+            this.tabPage4.Size = new System.Drawing.Size(957, 556);
             this.tabPage4.TabIndex = 1;
             this.tabPage4.Text = "Измерение";
             this.tabPage4.UseVisualStyleBackColor = true;
@@ -724,6 +733,7 @@
             this.Podskazka.Size = new System.Drawing.Size(279, 18);
             this.Podskazka.TabIndex = 35;
             this.Podskazka.Text = "Создайте (откройте) градуировку!";
+            this.Podskazka.TabIndexChanged += new System.EventHandler(this.Podskazka_TabIndexChanged);
             // 
             // button13
             // 
@@ -794,7 +804,7 @@
             // 
             // GEText
             // 
-            this.GEText.Location = new System.Drawing.Point(291, 1);
+            this.GEText.Location = new System.Drawing.Point(304, 1);
             this.GEText.Name = "GEText";
             this.GEText.ReadOnly = true;
             this.GEText.Size = new System.Drawing.Size(100, 20);
@@ -844,40 +854,40 @@
             this.button11.Size = new System.Drawing.Size(40, 35);
             this.button11.TabIndex = 62;
             this.button11.UseVisualStyleBackColor = true;
-            this.button11.Visible = false;
+            this.button11.Click += new System.EventHandler(this.button11_Click);
             // 
             // chart1
             // 
-            chartArea1.AxisX.MajorTickMark.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.NotSet;
-            chartArea1.AxisX.MinorGrid.Enabled = true;
-            chartArea1.AxisX.MinorGrid.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.NotSet;
-            chartArea1.AxisX.MinorTickMark.Enabled = true;
-            chartArea1.AxisX.MinorTickMark.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.NotSet;
-            chartArea1.AxisX.Title = "Оптическая плотность, А";
-            chartArea1.AxisX2.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.NotSet;
-            chartArea1.AxisX2.MajorGrid.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.NotSet;
-            chartArea1.AxisX2.MajorTickMark.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.NotSet;
-            chartArea1.AxisX2.MinorGrid.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.NotSet;
-            chartArea1.AxisX2.MinorTickMark.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.NotSet;
-            chartArea1.AxisY.MajorGrid.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.NotSet;
-            chartArea1.AxisY.Title = "Концетрация";
-            chartArea1.Name = "ChartArea1";
-            this.chart1.ChartAreas.Add(chartArea1);
+            chartArea24.AxisX.MajorTickMark.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.NotSet;
+            chartArea24.AxisX.MinorGrid.Enabled = true;
+            chartArea24.AxisX.MinorGrid.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.NotSet;
+            chartArea24.AxisX.MinorTickMark.Enabled = true;
+            chartArea24.AxisX.MinorTickMark.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.NotSet;
+            chartArea24.AxisX.Title = "Оптическая плотность, А";
+            chartArea24.AxisX2.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.NotSet;
+            chartArea24.AxisX2.MajorGrid.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.NotSet;
+            chartArea24.AxisX2.MajorTickMark.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.NotSet;
+            chartArea24.AxisX2.MinorGrid.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.NotSet;
+            chartArea24.AxisX2.MinorTickMark.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.NotSet;
+            chartArea24.AxisY.MajorGrid.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.NotSet;
+            chartArea24.AxisY.Title = "Концетрация";
+            chartArea24.Name = "ChartArea1";
+            this.chart1.ChartAreas.Add(chartArea24);
             this.chart1.Cursor = System.Windows.Forms.Cursors.Default;
             this.chart1.Location = new System.Drawing.Point(9, 72);
             this.chart1.Name = "chart1";
             this.chart1.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.SeaGreen;
             this.chart1.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            series1.ChartArea = "ChartArea1";
-            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
-            series1.IsVisibleInLegend = false;
-            series1.Name = "Series1";
-            series2.ChartArea = "ChartArea1";
-            series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series2.IsVisibleInLegend = false;
-            series2.Name = "Series2";
-            this.chart1.Series.Add(series1);
-            this.chart1.Series.Add(series2);
+            series47.ChartArea = "ChartArea1";
+            series47.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
+            series47.IsVisibleInLegend = false;
+            series47.Name = "Series1";
+            series48.ChartArea = "ChartArea1";
+            series48.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series48.IsVisibleInLegend = false;
+            series48.Name = "Series2";
+            this.chart1.Series.Add(series47);
+            this.chart1.Series.Add(series48);
             this.chart1.Size = new System.Drawing.Size(566, 321);
             this.chart1.TabIndex = 14;
             this.chart1.Text = "chart1";
@@ -1086,16 +1096,13 @@
             // 
             // menuStrip1
             // 
-            this.menuStrip1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.menuStrip1.Dock = System.Windows.Forms.DockStyle.None;
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.файлToolStripMenuItem,
             this.анализToolStripMenuItem,
             this.приборToolStripMenuItem,
             this.справкаToolStripMenuItem});
-            this.menuStrip1.Location = new System.Drawing.Point(15, 1);
+            this.menuStrip1.Location = new System.Drawing.Point(11, 1);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(178, 24);
             this.menuStrip1.TabIndex = 43;
@@ -1238,7 +1245,7 @@
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(957, 606);
+            this.tabPage3.Size = new System.Drawing.Size(957, 556);
             this.tabPage3.TabIndex = 0;
             this.tabPage3.Text = "Градуировка";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -1253,8 +1260,9 @@
             this.tabControl2.Location = new System.Drawing.Point(28, 108);
             this.tabControl2.Name = "tabControl2";
             this.tabControl2.SelectedIndex = 0;
-            this.tabControl2.Size = new System.Drawing.Size(965, 632);
+            this.tabControl2.Size = new System.Drawing.Size(965, 582);
             this.tabControl2.TabIndex = 52;
+            this.tabControl2.SelectedIndexChanged += new System.EventHandler(this.tabControl2_SelectedIndexChanged);
             // 
             // dataSet1
             // 
@@ -1388,9 +1396,10 @@
             // 
             // Ecoview
             // 
+            this.AccessibleRole = System.Windows.Forms.AccessibleRole.ScrollBar;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1009, 741);
+            this.ClientSize = new System.Drawing.Size(1009, 691);
             this.Controls.Add(this.label28);
             this.Controls.Add(this.label27);
             this.Controls.Add(this.label26);
@@ -1424,7 +1433,8 @@
             this.Controls.Add(this.tabControl2);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Ecoview";
-            this.Text = "Ecoview Basic v2.5.0";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = "Ecoview Basic v2.6.0";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Ecoview_FormClosing);
             this.Load += new System.EventHandler(this.Ecoview_Load);
             this.groupBox3.ResumeLayout(false);

@@ -137,6 +137,7 @@ namespace Ecoview_V2._0
         int count = 0;
         public string filename;
         int cordY = 0;
+        public double CellOpt;
         public void Ecoview_Load(object sender, EventArgs e)
         {
             edconctr = "%";
@@ -161,7 +162,7 @@ namespace Ecoview_V2._0
             label25.Visible = false;
             label26.Visible = false;
             label28.Visible = false;
-
+ 
         }
         private void button2_Click(object sender, EventArgs e)
         {
@@ -265,6 +266,150 @@ namespace Ecoview_V2._0
                 label28.Visible = false;
             }
         }
+
+           public void ZapicInTable1()
+        {
+            bool doNotWrite = false;
+            double sum = 0.0;
+            int startIndexCell = 2;
+            int endIndexCell = startIndexCell + NoCaIzm;
+            int rowIndex = Table1.CurrentRow.Index;
+            //int curentIndex = Table1.CurrentCell.ColumnIndex;
+
+            if (Table1.CurrentCell.ColumnIndex > 2)
+            {
+                InputBox _InputBox = new InputBox(this);
+                _InputBox.ShowDialog();
+                if (Table1.CurrentCell.ReadOnly != true)
+                {
+                    Table1.CurrentCell.Value = string.Format("{0:0.0000}", CellOpt);
+                    CellOpt = 0;
+                                     
+
+
+                }
+                else
+                {
+                    MessageBox.Show("Запись запрещена!");
+                }
+            }
+            
+          
+            int rownull = 0;
+            for (int j = 0; j < Table1.Rows.Count - 1; j++)
+            {
+                {
+                    for (int i = 3; i < Table1.Rows[j].Cells.Count; i++)
+                    {
+                        if (Table1.Rows[j].Cells[i].Value == null)
+                        {
+                            doNotWrite = true;
+
+                            for (int l = startIndexCell + NoCaIzm; l <= endIndexCell; ++l)
+                            {
+                                if (Table1.Rows[rowIndex].Cells[l].Value == null)
+                                {
+                                    cellnull++;
+                                }
+                            }
+                        }
+
+
+                    }
+                }
+            }
+
+
+
+            if (!doNotWrite)
+            {
+                if (NoCaSer == 1)
+                {
+                    radioButton1.Enabled = true;
+                    radioButton4.Enabled = true;
+                    radioButton5.Enabled = true;
+                    radioButton3.Enabled = false;
+                    radioButton2.Enabled = false;
+                }
+                if (NoCaSer == 2)
+                {
+                    radioButton1.Enabled = true;
+                    radioButton2.Enabled = true;
+                    radioButton4.Enabled = true;
+                    radioButton5.Enabled = true;
+                    radioButton3.Enabled = false;
+                }
+                if (NoCaSer >= 3)
+                {
+                    radioButton1.Enabled = true;
+                    radioButton2.Enabled = true;
+                    radioButton3.Enabled = true;
+                    radioButton4.Enabled = true;
+                    radioButton5.Enabled = true;
+                }
+
+                sum = 0.0;
+                /*while (true)
+                 {
+                     int i = Table1.Columns.Count - 1;//С какого столбца начать
+                     if (Table1.Columns.Count == 3 + Convert.ToInt32(CountSeriya2))
+                         break;
+                     //Table1.Columns.RemoveAt(i);
+                 }*/
+
+                for (int l = startIndexCell + NoCaIzm; l <= endIndexCell; ++l)
+                {
+                    if (Table1.Rows[rowIndex].Cells[l].Value == null)
+                    {
+                        cellnull++;
+                    }
+
+                    else
+                    {
+                        for (int j = 0; j < Table1.Rows.Count - 1; j++)
+                        {
+
+                            for (int i1 = startIndexCell + 1; i1 <= endIndexCell; ++i1)
+                            {
+                                sum += Convert.ToDouble(Table1.Rows[j].Cells[i1].Value);
+                                Asred1 = sum / NoCaIzm;
+                                // MessageBox.Show(Convert.ToString(Asred1));
+                                Table1.Rows[j].Cells["Asred"].Value = string.Format("{0:0.0000}", Asred1);
+
+                            }
+                            sum = 0.0;
+                        }
+                    }
+                    Izmerenie1 = true;
+                }
+                for (int m = 0; m < Table1.Rows.Count - 1; m++)
+                {
+                    for (int ml = 0; ml < Table1.Rows[m].Cells.Count; ml++)
+                    {
+                        if (Table1.Rows[m].Cells[ml].Value == null)
+                        { doNotWrite = true; }
+                    }
+                }
+                
+                functionAsred();
+            }
+
+            int curentIndex = Table1.CurrentCell.ColumnIndex;
+            if (curentIndex != Table1.ColumnCount - 1 || rowIndex != Table1.Rows.Count - 2)
+            {
+                if (rowIndex != Table1.Rows.Count - 2)
+                {
+                    Table1.CurrentCell = this.Table1[curentIndex, rowIndex + 1];
+                }
+                else
+                {
+                    Table1.CurrentCell = this.Table1[curentIndex + 1, 0];
+                }
+                Table1.EndEdit();
+            }
+
+        }
+    
         public void LogoForm()
         {
             Form LogoForm = new Form();
@@ -870,6 +1015,15 @@ namespace Ecoview_V2._0
 
             New _New = new New(this);
             _New.ShowDialog();
+            if (ComPort == true)
+            {
+                button14.Enabled = true;
+            }
+            else
+            {
+                button14.Enabled = false;
+            }
+
         }
         private void новыйToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -907,7 +1061,7 @@ namespace Ecoview_V2._0
                 firstColumn1.ValueType = Type.GetType("System.Double");
 
                 Table1.Columns.Add(firstColumn1);
-                //  firstColumn1.KeyPress += new System.Windows.Forms.KeyPressEventHandler(txt_KeyPress);
+                //firstColumn1.KeyPress += new System.Windows.Forms.KeyPressEventHandler(txt_KeyPress);
                 //   firstColumn1.EditingControlShowing
 
             }
@@ -1959,12 +2113,13 @@ namespace Ecoview_V2._0
         public double Asred1;
         private void Table1_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
-            if (Table1.CurrentCell.ReadOnly == true)
-            {
-                MessageBox.Show("Запись запрещена!");
-            }
+            
+            /*  if (Table1.CurrentCell.ReadOnly == true)
+              {
+                  MessageBox.Show("Запись запрещена!");
+              }*/
 
-            double sum;
+            /*double sum;
             sum = 0.0;
             int startIndexCell = 2;
             int endIndexCell = startIndexCell + NoCaIzm;
@@ -2033,42 +2188,45 @@ namespace Ecoview_V2._0
                      //Table1.Columns.RemoveAt(i);
                  }*/
 
-                for (int l = startIndexCell + NoCaIzm; l <= endIndexCell; ++l)
-                {
-                    if (Table1.Rows[rowIndex].Cells[l].Value == null)
-                    {
-                        cellnull++;
-                    }
+            /*  for (int l = startIndexCell + NoCaIzm; l <= endIndexCell; ++l)
+              {
+                  if (Table1.Rows[rowIndex].Cells[l].Value == null)
+                  {
+                      cellnull++;
+                  }
 
-                    else
-                    {
-                        for (int j = 0; j < Table1.Rows.Count - 1; j++)
-                        {
+                  else
+                  {
+                      for (int j = 0; j < Table1.Rows.Count - 1; j++)
+                      {
 
-                            for (int i1 = startIndexCell + 1; i1 <= endIndexCell; ++i1)
-                            {
-                                sum += Convert.ToDouble(Table1.Rows[j].Cells[i1].Value);
-                                Asred1 = sum / NoCaIzm;
-                                // MessageBox.Show(Convert.ToString(Asred1));
-                                Table1.Rows[j].Cells["Asred"].Value = string.Format("{0:0.0000}", Asred1);
+                          for (int i1 = startIndexCell + 1; i1 <= endIndexCell; ++i1)
+                          {
+                              sum += Convert.ToDouble(Table1.Rows[j].Cells[i1].Value);
+                              Asred1 = sum / NoCaIzm;
+                              // MessageBox.Show(Convert.ToString(Asred1));
+                              Table1.Rows[j].Cells["Asred"].Value = string.Format("{0:0.0000}", Asred1);
 
-                            }
-                            sum = 0.0;
-                        }
-                    }
-                    Izmerenie1 = true;
-                }
-                for (int m = 0; m < Table1.Rows.Count - 1; m++)
-                {
-                    for (int ml = 0; ml < Table1.Rows[m].Cells.Count; ml++)
-                    {
-                        if (Table1.Rows[m].Cells[ml].Value == null)
-                        { doNotWrite = true; }
-                    }
-                }
+                          }
+                          sum = 0.0;
+                      }
+                  }
+                  Izmerenie1 = true;
+              }
+              for (int m = 0; m < Table1.Rows.Count - 1; m++)
+              {
+                  for (int ml = 0; ml < Table1.Rows[m].Cells.Count; ml++)
+                  {
+                      if (Table1.Rows[m].Cells[ml].Value == null)
+                      { doNotWrite = true; }
+                  }
+              }
 
-                functionAsred();
-            }
+              functionAsred();
+          }*/
+            /// Table1.CurrentCell = null;
+            this.Table1.EndEdit();
+
         }
         public void functionAsred()
         {
@@ -4265,6 +4423,7 @@ namespace Ecoview_V2._0
             textBox4.Text = string.Format("{0:0.0000}", k0);
             textBox5.Text = string.Format("{0:0.0000}", k1);
             textBox6.Text = string.Format("{0:0.0000}", k2);
+            label14.Text = "A(C) = " + k0.ToString("0.0000 ;- 0.0000 ") + k1.ToString("+ 0.0000;- 0.0000") + "*C " + k2.ToString("+ 0.0000;- 0.0000") + "*C^2";
             double[] Table1masStr1 = new double[Table1.Rows.Count - 1];
             max = -1;
             for (int i = 0; i < Table1.Rows.Count - 1; i++)
@@ -5199,7 +5358,7 @@ namespace Ecoview_V2._0
 
                 }
 
-                Table1.CurrentCell = this.Table1[3, 0];
+             Table1.CurrentCell = this.Table1[3, 0];
             }
             for (int i = 1; i <= NoCaIzm; i++)
             {
@@ -5225,7 +5384,7 @@ namespace Ecoview_V2._0
                 Table1.Rows[NoCaSer + 1].Cells["Concetr"].ReadOnly = true;
                 Table1.Rows[NoCaSer + 1].Cells["Asred"].ReadOnly = true;
             }
-
+            
 
         }
         public void WLREMOVESTR1()
@@ -5615,6 +5774,15 @@ namespace Ecoview_V2._0
         {
             Parametr1 _Parametr1 = new Parametr1(this);
             _Parametr1.ShowDialog();
+            if (ComPort == true)
+            {
+                button14.Enabled = true;
+            }
+            else
+            {
+                button14.Enabled = false;
+            }
+
         }
 
         private void Table2_CellEndEdit(object sender, DataGridViewCellEventArgs e)
@@ -5630,6 +5798,7 @@ namespace Ecoview_V2._0
             double minEl;
             double serValue = 0;
             int cellnull = 0;
+           // int count = 0;
             //    Table2.CellEnter -= new System.Windows.Forms.DataGridViewCellEventHandler(Table2_GridCellEnter);
 
             if (USE_KO == false)
@@ -5637,72 +5806,55 @@ namespace Ecoview_V2._0
                 if (Table2.CurrentCell.Value == null)
                 {
                     El = new double[NoCaIzm1];
+
+                    doNotWrite = true;
+
+
+                    // El = new double[NoCaIzm1 + 1];
+                    //for (int j = 0; j < Table2.Rows.Count - 1; j++)
+                    //{
+                    // El = new double[NoCaIzm1 + 1];
                     double SredValue = 0;
                     for (int i1 = 1; i1 <= NoCaIzm1; i1++)
                     {
-
                         if (Table2.Rows[Table2.CurrentCell.RowIndex].Cells["A;Ser" + i1].Value == null)
                         {
                             cellnull++;
                         }
                         else
                         {
-
                             if (aproksim == "Линейная через 0")
                             {
-                                if (Table2.Rows[0].Cells["A;Ser" + i1].Value.ToString() != "" && Table2.Rows[Table2.CurrentCell.RowIndex].Cells["A;Ser" + i1].Value.ToString() != "")
+                                if (Table2.Rows[Table2.CurrentCell.RowIndex].Cells["A;Ser" + i1].Value.ToString() != "")
                                 {
-                                    serValue = (Convert.ToDouble(Table2.Rows[Table2.CurrentCell.RowIndex].Cells["A;Ser" + i1].Value.ToString()) - Convert.ToDouble(Table2.Rows[0].Cells["A;Ser" + i1].Value.ToString())) / Convert.ToDouble(textBox5.Text);
+                                    serValue = Convert.ToDouble(Table2.Rows[Table2.CurrentCell.RowIndex].Cells["A;Ser" + i1].Value.ToString()) / Convert.ToDouble(textBox5.Text);
                                 }
                                 else
                                 {
-
                                     serValue = 0;
-                                    if (Table2.Rows[0].Cells["A;Ser" + i1].Value.ToString() == null)
-                                    {
-                                        MessageBox.Show("Измерьте Контрольый образец!");
-                                        return;
-
-
-                                    }
                                 }
+
                             }
                             if (aproksim == "Линейная")
                             {
-                                if (Table2.Rows[0].Cells["A;Ser" + i1].Value.ToString() != "" && Table2.Rows[Table2.CurrentCell.RowIndex].Cells["A;Ser" + i1].Value.ToString() != "")
+                                if (Table2.Rows[Table2.CurrentCell.RowIndex].Cells["A;Ser" + i1].Value.ToString() != "")
                                 {
-                                    serValue = ((Convert.ToDouble(Table2.Rows[Table2.CurrentCell.RowIndex].Cells["A;Ser" + i1].Value.ToString()) - Convert.ToDouble(Table2.Rows[0].Cells["A;Ser" + i1].Value.ToString()) - Convert.ToDouble(textBox4.Text))) / Convert.ToDouble(textBox5.Text);
+                                    serValue = ((Convert.ToDouble(Table2.Rows[Table2.CurrentCell.RowIndex].Cells["A;Ser" + i1].Value.ToString()) - Convert.ToDouble(textBox4.Text))) / Convert.ToDouble(textBox5.Text);
                                 }
                                 else
                                 {
-
                                     serValue = 0;
-                                    if (Table2.Rows[0].Cells["A;Ser" + i1].Value.ToString() == null)
-                                    {
-                                        MessageBox.Show("Измерьте Контрольый образец!");
-                                        return;
-
-
-                                    }
                                 }
-
                             }
                             if (aproksim == "Квадратичная")
                             {
-                                if (Table2.Rows[0].Cells["A;Ser" + i1].Value.ToString() != "" && Table2.Rows[Table2.CurrentCell.RowIndex].Cells["A;Ser" + i1].Value.ToString() != "")
+                                if (Table2.Rows[Table2.CurrentCell.RowIndex].Cells["A;Ser" + i1].Value.ToString() != "")
                                 {
-                                    serValue = ((Convert.ToDouble(Table2.Rows[Table2.CurrentCell.RowIndex].Cells["A;Ser" + i1].Value.ToString()) - Convert.ToDouble(Table2.Rows[0].Cells["A;Ser" + i1].Value.ToString()) - Convert.ToDouble(textBox4.Text))) / (Convert.ToDouble(textBox5.Text) + Convert.ToDouble(textBox6.Text));
+                                    serValue = ((Convert.ToDouble(Table2.Rows[Table2.CurrentCell.RowIndex].Cells["A;Ser" + i1].Value.ToString()) - Convert.ToDouble(textBox4.Text))) / (Convert.ToDouble(textBox5.Text) + Convert.ToDouble(textBox6.Text));
                                 }
                                 else
                                 {
                                     serValue = 0;
-                                    if (Table2.Rows[0].Cells["A;Ser" + i1].Value.ToString() == null)
-                                    {
-                                        MessageBox.Show("Измерьте Контрольый образец!");
-                                        return;
-
-
-                                    }
                                 }
                             }
                             double CValue1 = Convert.ToDouble(F1Text.Text);
@@ -5719,10 +5871,153 @@ namespace Ecoview_V2._0
                             CCR = SredValue / NoCaIzm1;
                             if (Convert.ToDouble(textBox7.Text) >= 1)
                             {
-                                Table2.Rows[Table2.CurrentCell.RowIndex].Cells["Ccr"].Value = string.Format("{0:0.0000}", CCR) + "±" + string.Format("{0:0.0000}", ((CCR * Convert.ToDouble(textBox7.Text))) / 100);
+                                Table2.Rows[Table2.CurrentCell.RowIndex].Cells["Ccr"].Value = string.Format("{0:0.0000}", CCR) + "±" + string.Format("{0:0.00}", ((CCR * Convert.ToDouble(textBox7.Text)) / 100));
                             }
                             else Table2.Rows[Table2.CurrentCell.RowIndex].Cells["Ccr"].Value = string.Format("{0:0.0000}", CCR);
                             //Table2.Rows[j].Cells["d%"].Value = El.Max();
+                            //  El[i1] = Convert.ToDouble(Table2.Rows[j].Cells["C,edconctr;Ser." + i1].Value.ToString());
+                        }
+                        //El = new double[NoCaIzm1 + 1];
+                        if (Table2.Rows[Table2.CurrentCell.RowIndex].Cells["C,edconctr;Ser." + i1].Value == null)
+                        {
+                            cellnull++;
+                        }
+                        else
+                        {
+                            if (Table2.Rows[Table2.CurrentCell.RowIndex].Cells["C,edconctr;Ser." + i1].Value.ToString() != "")
+                            {
+                                El[i1 - 1] = Convert.ToDouble(Table2.Rows[Table2.CurrentCell.RowIndex].Cells["C,edconctr;Ser." + i1].Value.ToString());
+                            }
+                        }
+                    }
+
+                    Array.Sort(El);
+                    maxEl = El[El.Length - 1];
+                    minEl = El[0];
+                    double a = ((maxEl - minEl) * 100) / Convert.ToDouble(CCR);
+                    double b = a;
+                    // b = b * 10;
+
+
+                    if (minEl == 0)
+                    {
+                        Table2.Rows[Table2.CurrentCell.RowIndex].Cells["d%"].Value = 0.0000;
+                    }
+                    else
+                    {
+                        Table2.Rows[Table2.CurrentCell.RowIndex].Cells["d%"].Value = string.Format("{0:0.00}", b);
+
+                    }
+                }
+
+            }
+            else
+            {
+                for (int i1 = 1; i1 <= NoCaIzm1; i1++)
+                {
+                    Table2.Rows[0].Cells["C,edconctr;Ser." + i1].ReadOnly = true;
+                    Table2.Rows[0].Cells["Ccr"].ReadOnly = true;
+                    Table2.Rows[0].Cells["d%"].ReadOnly = true;
+                }
+                if (Table2.CurrentCell.Value == null && Table2.CurrentCell.ReadOnly != true)
+                {
+                    El = new double[NoCaIzm1];
+
+                    doNotWrite = true;
+
+
+                    // El = new double[NoCaIzm1 + 1];
+                    for (int j = 0; j < Table2.Rows.Count - 1; j++)
+                    {
+                        // El = new double[NoCaIzm1 + 1];
+                        double SredValue = 0;
+                        for (int i1 = 1; i1 <= NoCaIzm1; i1++)
+                        {
+                            if (Table2.Rows[j].Cells["A;Ser" + i1].Value == null)
+                            {
+                                cellnull++;
+                            }
+                            else
+                            {
+                                if (aproksim == "Линейная через 0")
+                                {
+                                    if (Table2.Rows[0].Cells["A;Ser" + i1].Value.ToString() != "" && Table2.Rows[j].Cells["A;Ser" + i1].Value.ToString() != "")
+                                    {
+                                        serValue = (Convert.ToDouble(Table2.Rows[j].Cells["A;Ser" + i1].Value.ToString()) - Convert.ToDouble(Table2.Rows[0].Cells["A;Ser" + i1].Value.ToString())) / Convert.ToDouble(textBox5.Text);
+                                    }
+                                    else
+                                    {
+
+                                        serValue = 0;
+                                        if (Table2.Rows[0].Cells["A;Ser" + i1].Value.ToString() == null)
+                                        {
+                                            MessageBox.Show("Измерьте Контрольый образец!");
+                                            return;
+
+
+                                        }
+                                    }
+                                }
+                                if (aproksim == "Линейная")
+                                {
+                                    if (Table2.Rows[0].Cells["A;Ser" + i1].Value.ToString() != "" && Table2.Rows[j].Cells["A;Ser" + i1].Value.ToString() != "")
+                                    {
+                                        serValue = ((Convert.ToDouble(Table2.Rows[j].Cells["A;Ser" + i1].Value.ToString()) - Convert.ToDouble(Table2.Rows[0].Cells["A;Ser" + i1].Value.ToString()) - Convert.ToDouble(textBox4.Text))) / Convert.ToDouble(textBox5.Text);
+                                    }
+                                    else
+                                    {
+
+                                        serValue = 0;
+                                        if (Table2.Rows[0].Cells["A;Ser" + i1].Value.ToString() == null)
+                                        {
+                                            MessageBox.Show("Измерьте Контрольный образец!");
+                                            return;
+
+
+                                        }
+                                    }
+
+                                }
+                                if (aproksim == "Квадратичная")
+                                {
+                                    if (Table2.Rows[0].Cells["A;Ser" + i1].Value.ToString() != "" && Table2.Rows[j].Cells["A;Ser" + i1].Value.ToString() != "")
+                                    {
+                                        serValue = ((Convert.ToDouble(Table2.Rows[j].Cells["A;Ser" + i1].Value.ToString()) - Convert.ToDouble(Table2.Rows[0].Cells["A;Ser" + i1].Value.ToString()) - Convert.ToDouble(textBox4.Text))) / (Convert.ToDouble(textBox5.Text) + Convert.ToDouble(textBox6.Text));
+                                    }
+                                    else
+                                    {
+                                        serValue = 0;
+                                        if (Table2.Rows[0].Cells["A;Ser" + i1].Value.ToString() == null)
+                                        {
+                                            MessageBox.Show("Измерьте Контрольный образец!");
+                                            return;
+
+
+                                        }
+                                    }
+                                }
+                                double CValue1 = Convert.ToDouble(F1Text.Text);
+                                double CValue2 = Convert.ToDouble(F2Text.Text);
+
+                                if (serValue >= 0)
+                                {
+                                    Table2.Rows[j].Cells["C,edconctr;Ser." + i1].Value = string.Format("{0:0.0000}", serValue * CValue1 * CValue2);
+                                    SredValue += Convert.ToDouble(Table2.Rows[j].Cells["C,edconctr;Ser." + i1].Value.ToString());
+                                }
+                                else
+                                {
+                                    Table2.Rows[j].Cells["C,edconctr;Ser." + i1].Value = "";
+                                }
+                                CCR = SredValue / NoCaIzm1;
+                                if (Convert.ToDouble(textBox7.Text) >= 1)
+                                {
+                                    Table2.Rows[j].Cells["Ccr"].Value = string.Format("{0:0.0000}", CCR) + "±" + string.Format("{0:0.00}", ((CCR * Convert.ToDouble(textBox7.Text)) / 100));
+                                }
+                                else Table2.Rows[j].Cells["Ccr"].Value = string.Format("{0:0.0000}", CCR);
+                                //Table2.Rows[j].Cells["d%"].Value = El.Max();
+                                //  El[i1] = Convert.ToDouble(Table2.Rows[j].Cells["C,edconctr;Ser." + i1].Value.ToString());
+                            }
+                            //El = new double[NoCaIzm1 + 1];
                             if (Table2.Rows[Table2.CurrentCell.RowIndex].Cells["C,edconctr;Ser." + i1].Value == null)
                             {
                                 cellnull++;
@@ -5736,32 +6031,43 @@ namespace Ecoview_V2._0
                             }
                         }
 
+                        Array.Sort(El);
+                        maxEl = El[El.Length - 1];
+                        minEl = El[0];
+                        double a = ((maxEl - minEl) * 100) / Convert.ToDouble(CCR);
+                        double b = a;
+                        // b = b * 10;
+
+
+                        if (minEl == 0)
+                        {
+                            Table2.Rows[Table2.CurrentCell.RowIndex].Cells["d%"].Value = 0.0000;
+                        }
+                        else
+                        {
+                            Table2.Rows[Table2.CurrentCell.RowIndex].Cells["d%"].Value = string.Format("{0:0.00}", b);
+
+                        }
+
                     }
-
-                    Array.Sort(El);
-                    maxEl = El[El.Length - 1];
-                    minEl = El[0];
-                    double a = ((maxEl - minEl) * 100) / Convert.ToDouble(CCR);
-                    double b = a;
-
-
-                    if (minEl == 0)
-                    {
-                        Table2.Rows[Table2.CurrentCell.RowIndex].Cells["d%"].Value = 0.0000;
-                    }
-                    else
-                    {
-                        Table2.Rows[Table2.CurrentCell.RowIndex].Cells["d%"].Value = string.Format("{0:0.00}", b);
-
-                    }
+                }
+                for (int i1 = 1; i1 <= NoCaIzm1; i1++)
+                {
+                    Table2.Rows[0].Cells["C,edconctr;Ser." + i1].Value = "";
+                    Table2.Rows[0].Cells["Ccr"].Value = "";
+                    Table2.Rows[0].Cells["d%"].Value = "";
+                }
+            }
 
 
-                    for (int i1 = 1; i1 <= NoCaIzm1; i1++)
-                    {
-                        Table2.Rows[0].Cells["C,edconctr;Ser." + i1].Value = "";
-                        Table2.Rows[0].Cells["Ccr"].Value = "";
-                        Table2.Rows[0].Cells["d%"].Value = "";
-                    }
+            if (!doNotWrite)
+            {
+                if (USE_KO == true)
+                {
+
+                        Table2_UseCo();
+                    
+
                 }
 
                 else
@@ -5789,6 +6095,7 @@ namespace Ecoview_V2._0
                             {
                                 if (Table2.Rows[Table2.CurrentCell.RowIndex].Cells["A;Ser" + i1].Value.ToString() != "")
                                 {
+
                                     serValue = Convert.ToDouble(Table2.Rows[Table2.CurrentCell.RowIndex].Cells["A;Ser" + i1].Value.ToString()) / Convert.ToDouble(textBox5.Text);
                                 }
                                 else
@@ -5879,6 +6186,7 @@ namespace Ecoview_V2._0
                      }*/
                 }
             }
+
             doNotWrite = false;
             for (int j = 0; j < Table2.Rows.Count - 1; j++)
             {
@@ -5897,8 +6205,175 @@ namespace Ecoview_V2._0
             {
                 button3.Enabled = true;
             }
-        }
 
+
+        }
+        public void Table2_UseCo()
+        {
+            double CCR = 0.0;
+            
+            double maxEl;
+            double minEl;
+            double serValue = 0;
+            int cellnull = 0;
+            int count = 0;
+            for (int i1 = 0; i1 < Table2.RowCount - 1; i1++)
+            {
+                serValue = 0;
+                El = new double[NoCaIzm1];
+
+                double SredValue = 0;
+                for (int i = 1; i <= NoCaIzm1; i++)
+                {
+                    if (Table2.Rows[i1].Cells["A;Ser" + i].Value == null)
+                    {
+                        cellnull++;
+                    }
+                    else
+                    {
+                        if (aproksim == "Линейная через 0")
+                        {
+
+                            if (Table2.Rows[0].Cells["A;Ser" + i].Value.ToString() != "" && Table2.Rows[i1].Cells["A;Ser" + i].Value.ToString() != "")
+                            {
+                                if ((Convert.ToDouble(Table2.Rows[0].Cells["A;Ser" + i].Value.ToString()) > Convert.ToDouble(Table2.Rows[i1].Cells["A;Ser" + i].Value.ToString())) && count == 0)
+                                {
+                                    count++;
+                                    MessageBox.Show("Оптическая плотность контрольногго образца не может быть больше иззмеряемого!");
+                                }
+
+                                serValue = (Convert.ToDouble(Table2.Rows[i1].Cells["A;Ser" + i].Value.ToString()) - Convert.ToDouble(Table2.Rows[0].Cells["A;Ser" + i].Value.ToString())) / Convert.ToDouble(textBox5.Text);
+                            }
+                            else
+                            {
+
+                                serValue = 0;
+                                if (Table2.Rows[0].Cells["A;Ser" + i1].Value.ToString() == null)
+                                {
+                                    MessageBox.Show("Измерьте Контрольый образец!");
+                                    return;
+
+
+                                }
+                            }
+                        }
+                        if (aproksim == "Линейная")
+                        {
+                            if (Table2.Rows[0].Cells["A;Ser" + i].Value.ToString() != "" && Table2.Rows[Table2.CurrentCell.RowIndex].Cells["A;Ser" + i].Value.ToString() != "")
+                            {
+                                if ((Convert.ToDouble(Table2.Rows[0].Cells["A;Ser" + i].Value.ToString()) > Convert.ToDouble(Table2.Rows[i1].Cells["A;Ser" + i].Value.ToString())) && count == 0)
+                                {
+                                    count++;
+                                    MessageBox.Show("Оптическая плотность контрольногго образца не может быть больше иззмеряемого!");
+                                }
+                                serValue = ((Convert.ToDouble(Table2.Rows[i1].Cells["A;Ser" + i].Value.ToString()) - Convert.ToDouble(Table2.Rows[0].Cells["A;Ser" + i].Value.ToString()) - Convert.ToDouble(textBox4.Text))) / Convert.ToDouble(textBox5.Text);
+                            }
+                            else
+                            {
+
+                                serValue = 0;
+                                if (Table2.Rows[0].Cells["A;Ser" + i1].Value.ToString() == null)
+                                {
+                                    MessageBox.Show("Измерьте Контрольый образец!");
+                                    return;
+
+
+                                }
+                            }
+
+                        }
+                        if (aproksim == "Квадратичная")
+                        {
+                            if (Table2.Rows[0].Cells["A;Ser" + i1].Value.ToString() != "" && Table2.Rows[i1].Cells["A;Ser" + i].Value.ToString() != "")
+                            {
+                                if ((Convert.ToDouble(Table2.Rows[0].Cells["A;Ser" + i].Value.ToString()) > Convert.ToDouble(Table2.Rows[i1].Cells["A;Ser" + i].Value.ToString())) && count == 0)
+                                {
+                                    count++;
+                                    MessageBox.Show("Оптическая плотность контрольногго образца не может быть больше иззмеряемого!");
+                                }
+                                serValue = ((Convert.ToDouble(Table2.Rows[i1].Cells["A;Ser" + i].Value.ToString()) - Convert.ToDouble(Table2.Rows[0].Cells["A;Ser" + i].Value.ToString()) - Convert.ToDouble(textBox4.Text))) / (Convert.ToDouble(textBox5.Text) + Convert.ToDouble(textBox6.Text));
+                            }
+                            else
+                            {
+                                serValue = 0;
+                                if (Table2.Rows[0].Cells["A;Ser" + i].Value.ToString() == null)
+                                {
+                                    MessageBox.Show("Измерьте Контрольый образец!");
+                                    return;
+
+
+                                }
+                            }
+                        }
+                        double CValue1 = Convert.ToDouble(F1Text.Text);
+                        double CValue2 = Convert.ToDouble(F2Text.Text);
+
+                        if (serValue >= 0)
+                        {
+                            Table2.Rows[i1].Cells["C,edconctr;Ser." + i].Value = string.Format("{0:0.0000}", serValue * CValue1 * CValue2);
+                            SredValue += Convert.ToDouble(Table2.Rows[i1].Cells["C,edconctr;Ser." + i].Value.ToString());
+                        }
+                        else
+                        {
+                            Table2.Rows[i1].Cells["C,edconctr;Ser." + i].Value = "";
+                        }
+                        if (Convert.ToDouble(Table2.Rows[0].Cells["A;Ser" + i].Value.ToString()) > Convert.ToDouble(Table2.Rows[i1].Cells["A;Ser" + i].Value.ToString()))
+                        {
+                            Table2.Rows[i1].Cells["Ccr"].Value = "";
+
+                        }
+                        else {
+                            CCR = SredValue / NoCaIzm1;
+                            if (Convert.ToDouble(textBox7.Text) >= 1)
+                            {
+                                Table2.Rows[i1].Cells["Ccr"].Value = string.Format("{0:0.0000}", CCR) + "±" + string.Format("{0:0.0000}", ((CCR * Convert.ToDouble(textBox7.Text))) / 100);
+                            }
+                            else Table2.Rows[Table2.CurrentCell.RowIndex].Cells["Ccr"].Value = string.Format("{0:0.0000}", CCR);
+                            //Table2.Rows[j].Cells["d%"].Value = El.Max();
+                            if (Table2.Rows[i1].Cells["C,edconctr;Ser." + i].Value == null)
+                            {
+                                cellnull++;
+                            }
+                            else
+                            {
+                                if (Table2.Rows[i1].Cells["C,edconctr;Ser." + i].Value.ToString() != "")
+                                {
+                                    El[i - 1] = Convert.ToDouble(Table2.Rows[i1].Cells["C,edconctr;Ser." + i].Value.ToString());
+                                }
+                            }
+                        }
+
+
+
+                     
+                    }
+                }
+                Array.Sort(El);
+                maxEl = El[El.Length - 1];
+                minEl = El[0];
+                double a = ((maxEl - minEl) * 100) / Convert.ToDouble(CCR);
+                double b = a;
+
+
+                if (minEl == 0)
+                {
+                    Table2.Rows[i1].Cells["d%"].Value = 0.0000;
+                }
+                else
+                {
+                    Table2.Rows[i1].Cells["d%"].Value = string.Format("{0:0.0}", b);
+
+                }
+            }
+                for (int i1 = 1; i1 <= NoCaIzm1; i1++)
+                {
+                    Table2.Rows[0].Cells["C,edconctr;Ser." + i1].Value = "";
+                    Table2.Rows[0].Cells["Ccr"].Value = "";
+                    Table2.Rows[0].Cells["d%"].Value = "";
+                }
+            
+            
+        }
         private void параметрыToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (tabControl2.SelectedIndex == 0)
@@ -6607,7 +7082,7 @@ public void WLADDSTR2()
             e.Graphics.DrawString("Дата:", new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, 25, cordY);
             e.Graphics.DrawString(DateTime, new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, 80, cordY);
             e.Graphics.DrawString("Исполнитель:", new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, 25, cordY + 30);
-            e.Graphics.DrawString(Ispolnitel, new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, 160, cordY + 30);
+            e.Graphics.DrawString(Ispolnitel + "   _______________________", new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, 160, cordY + 30);
 
             //  Paragraph Ispolnitel2 = new Paragraph("Исполнитель: " + Ispolnitel, font);
 
@@ -6658,7 +7133,7 @@ public void WLADDSTR2()
             {
                 e.Graphics.FillRectangle(Brushes.White, new System.Drawing.Rectangle(width, height, Table1.Columns[0].Width + 5, Table1.Rows[j].Height));
                 e.Graphics.DrawRectangle(p, new System.Drawing.Rectangle(width, height, Table1.Columns[0].Width + 5, Table1.Rows[j].Height));
-                e.Graphics.DrawString(Table1.Rows[j].Cells[0].Value.ToString(), new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, new System.Drawing.Rectangle(width + 10, height, Table1.Columns[0].Width + 5, Table1.Rows[j].Height));
+                e.Graphics.DrawString(Table1.Rows[j].Cells[0].Value.ToString(), new System.Drawing.Font("Times New Roman", 10, FontStyle.Regular), Brushes.Black, new System.Drawing.Rectangle(width + 10, height, Table1.Columns[0].Width + 5, Table1.Rows[j].Height));
                 // width = width + Table1.Columns[0].Width;
                 height += Table1.Rows[j].Height;
             }
@@ -6668,7 +7143,7 @@ public void WLADDSTR2()
             {
                 e.Graphics.FillRectangle(Brushes.White, new System.Drawing.Rectangle(width, height, Table1.Columns[1].Width, Table1.Rows[j].Height));
                 e.Graphics.DrawRectangle(p, new System.Drawing.Rectangle(width, height, Table1.Columns[1].Width, Table1.Rows[j].Height));
-                e.Graphics.DrawString(Table1.Rows[j].Cells[1].Value.ToString(), new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, new System.Drawing.Rectangle(width + 10, height, Table1.Columns[1].Width, Table1.Rows[j].Height));
+                e.Graphics.DrawString(Table1.Rows[j].Cells[1].Value.ToString(), new System.Drawing.Font("Times New Roman", 10, FontStyle.Regular), Brushes.Black, new System.Drawing.Rectangle(width + 10, height, Table1.Columns[1].Width, Table1.Rows[j].Height));
                 // width = width + Table1.Columns[1].Width;
                 height += Table1.Rows[j].Height;
             }
@@ -6680,7 +7155,7 @@ public void WLADDSTR2()
                 e.Graphics.DrawRectangle(p, new System.Drawing.Rectangle(width, height, Table1.Columns[2].Width + 5, Table1.Rows[j].Height));
                 if (Table1.Rows[j].Cells[2].Value != null)
                 {
-                    e.Graphics.DrawString(Table1.Rows[j].Cells[2].Value.ToString(), new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, new System.Drawing.Rectangle(width + 10, height, Table1.Columns[2].Width + 5, Table1.Rows[j].Height));
+                    e.Graphics.DrawString(Table1.Rows[j].Cells[2].Value.ToString(), new System.Drawing.Font("Times New Roman", 10, FontStyle.Regular), Brushes.Black, new System.Drawing.Rectangle(width + 10, height, Table1.Columns[2].Width + 5, Table1.Rows[j].Height));
                 }
                 else
                 {
@@ -6778,7 +7253,7 @@ public void WLADDSTR2()
             {
                 e.Graphics.FillRectangle(Brushes.White, new System.Drawing.Rectangle(width, height, Table1.Columns[0].Width + 5, Table1.Rows[j].Height));
                 e.Graphics.DrawRectangle(p, new System.Drawing.Rectangle(width, height, Table1.Columns[0].Width + 5, Table1.Rows[j].Height));
-                e.Graphics.DrawString(Table1.Rows[j].Cells[0].Value.ToString(), new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, new System.Drawing.Rectangle(width + 10, height, Table1.Columns[0].Width + 5, Table1.Rows[j].Height));
+                e.Graphics.DrawString(Table1.Rows[j].Cells[0].Value.ToString(), new System.Drawing.Font("Times New Roman", 10, FontStyle.Regular), Brushes.Black, new System.Drawing.Rectangle(width + 10, height, Table1.Columns[0].Width + 5, Table1.Rows[j].Height));
                 // width = width + Table1.Columns[0].Width;
                 height += Table1.Rows[j].Height;
             }
@@ -6788,7 +7263,7 @@ public void WLADDSTR2()
             {
                 e.Graphics.FillRectangle(Brushes.White, new System.Drawing.Rectangle(width, height, Table1.Columns[1].Width, Table1.Rows[j].Height));
                 e.Graphics.DrawRectangle(p, new System.Drawing.Rectangle(width, height, Table1.Columns[1].Width, Table1.Rows[j].Height));
-                e.Graphics.DrawString(Table1.Rows[j].Cells[1].Value.ToString(), new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, new System.Drawing.Rectangle(width + 10, height, Table1.Columns[1].Width, Table1.Rows[j].Height));
+                e.Graphics.DrawString(Table1.Rows[j].Cells[1].Value.ToString(), new System.Drawing.Font("Times New Roman", 10, FontStyle.Regular), Brushes.Black, new System.Drawing.Rectangle(width + 10, height, Table1.Columns[1].Width, Table1.Rows[j].Height));
                 // width = width + Table1.Columns[1].Width;
                 height += Table1.Rows[j].Height;
             }
@@ -6800,7 +7275,7 @@ public void WLADDSTR2()
                 e.Graphics.DrawRectangle(p, new System.Drawing.Rectangle(width, height, Table1.Columns[2].Width + 5, Table1.Rows[j].Height));
                 if (Table1.Rows[j].Cells[2].Value != null)
                 {
-                    e.Graphics.DrawString(Table1.Rows[j].Cells[2].Value.ToString(), new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, new System.Drawing.Rectangle(width + 10, height, Table1.Columns[2].Width + 5, Table1.Rows[j].Height));
+                    e.Graphics.DrawString(Table1.Rows[j].Cells[2].Value.ToString(), new System.Drawing.Font("Times New Roman", 10, FontStyle.Regular), Brushes.Black, new System.Drawing.Rectangle(width + 10, height, Table1.Columns[2].Width + 5, Table1.Rows[j].Height));
                 }
                 else
                 {
@@ -6923,7 +7398,7 @@ public void WLADDSTR2()
             {
                 e.Graphics.FillRectangle(Brushes.White, new System.Drawing.Rectangle(width, height, Table1.Columns[0].Width + 5, Table1.Rows[j].Height));
                 e.Graphics.DrawRectangle(p, new System.Drawing.Rectangle(width, height, Table1.Columns[0].Width + 5, Table1.Rows[j].Height));
-                e.Graphics.DrawString(Table1.Rows[j].Cells[0].Value.ToString(), new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, new System.Drawing.Rectangle(width + 10, height, Table1.Columns[0].Width + 5, Table1.Rows[j].Height));
+                e.Graphics.DrawString(Table1.Rows[j].Cells[0].Value.ToString(), new System.Drawing.Font("Times New Roman", 10, FontStyle.Regular), Brushes.Black, new System.Drawing.Rectangle(width + 10, height, Table1.Columns[0].Width + 5, Table1.Rows[j].Height));
                 // width = width + Table1.Columns[0].Width;
                 height += Table1.Rows[j].Height;
             }
@@ -6933,7 +7408,7 @@ public void WLADDSTR2()
             {
                 e.Graphics.FillRectangle(Brushes.White, new System.Drawing.Rectangle(width, height, Table1.Columns[1].Width, Table1.Rows[j].Height));
                 e.Graphics.DrawRectangle(p, new System.Drawing.Rectangle(width, height, Table1.Columns[1].Width, Table1.Rows[j].Height));
-                e.Graphics.DrawString(Table1.Rows[j].Cells[1].Value.ToString(), new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, new System.Drawing.Rectangle(width + 10, height, Table1.Columns[1].Width, Table1.Rows[j].Height));
+                e.Graphics.DrawString(Table1.Rows[j].Cells[1].Value.ToString(), new System.Drawing.Font("Times New Roman", 10, FontStyle.Regular), Brushes.Black, new System.Drawing.Rectangle(width + 10, height, Table1.Columns[1].Width, Table1.Rows[j].Height));
                 // width = width + Table1.Columns[1].Width;
                 height += Table1.Rows[j].Height;
             }
@@ -6945,7 +7420,7 @@ public void WLADDSTR2()
                 e.Graphics.DrawRectangle(p, new System.Drawing.Rectangle(width, height, Table1.Columns[2].Width + 5, Table1.Rows[j].Height));
                 if (Table1.Rows[j].Cells[2].Value != null)
                 {
-                    e.Graphics.DrawString(Table1.Rows[j].Cells[2].Value.ToString(), new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, new System.Drawing.Rectangle(width + 10, height, Table1.Columns[2].Width + 5, Table1.Rows[j].Height));
+                    e.Graphics.DrawString(Table1.Rows[j].Cells[2].Value.ToString(), new System.Drawing.Font("Times New Roman", 10, FontStyle.Regular), Brushes.Black, new System.Drawing.Rectangle(width + 10, height, Table1.Columns[2].Width + 5, Table1.Rows[j].Height));
                 }
                 else
                 {
@@ -7152,8 +7627,8 @@ public void WLADDSTR2()
             e.Graphics.DrawString(" ____________________________________________________", new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, 250, cordY + 60);
 
 
-            e.Graphics.DrawString("Исполнитель:", new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, 25, cordY + 30);
-            e.Graphics.DrawString(Ispolnitel, new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, 160, cordY + 30);
+           /* e.Graphics.DrawString("Исполнитель:", new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, 25, cordY + 30);
+            e.Graphics.DrawString(Ispolnitel, new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, 160, cordY + 30);*/
 
         }
         ///Если меньше или равно 3
@@ -7196,7 +7671,7 @@ public void WLADDSTR2()
             {
                 e.Graphics.FillRectangle(Brushes.White, new System.Drawing.Rectangle(width, height, Table2.Columns[0].Width + 5, Table2.Rows[j].Height));
                 e.Graphics.DrawRectangle(p, new System.Drawing.Rectangle(width, height, Table2.Columns[0].Width + 5, Table2.Rows[j].Height));
-                e.Graphics.DrawString(Table2.Rows[j].Cells[0].Value.ToString(), new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, new System.Drawing.Rectangle(width + 10, height, Table2.Columns[0].Width + 5, Table2.Rows[j].Height));
+                e.Graphics.DrawString(Table2.Rows[j].Cells[0].Value.ToString(), new System.Drawing.Font("Times New Roman", 10, FontStyle.Regular), Brushes.Black, new System.Drawing.Rectangle(width + 10, height, Table2.Columns[0].Width + 5, Table2.Rows[j].Height));
                 // width = width + Table2.Columns[0].Width;
                 height += Table2.Rows[j].Height;
             }
@@ -7208,7 +7683,7 @@ public void WLADDSTR2()
                 e.Graphics.DrawRectangle(p, new System.Drawing.Rectangle(width, height, Table2.Columns[1].Width, Table2.Rows[j].Height));
                 if (Table2.Rows[j].Cells[1].Value != null)
                 {
-                    e.Graphics.DrawString(Table2.Rows[j].Cells[1].Value.ToString(), new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, new System.Drawing.Rectangle(width + 10, height, Table2.Columns[1].Width, Table2.Rows[j].Height));
+                    e.Graphics.DrawString(Table2.Rows[j].Cells[1].Value.ToString(), new System.Drawing.Font("Times New Roman", 10, FontStyle.Regular), Brushes.Black, new System.Drawing.Rectangle(width + 10, height, Table2.Columns[1].Width, Table2.Rows[j].Height));
 
                 }
                 else
@@ -7304,7 +7779,7 @@ public void WLADDSTR2()
             {
                 e.Graphics.FillRectangle(Brushes.White, new System.Drawing.Rectangle(width, height, Table2.Columns[0].Width + 5, Table2.Rows[j].Height));
                 e.Graphics.DrawRectangle(p, new System.Drawing.Rectangle(width, height, Table2.Columns[0].Width + 5, Table2.Rows[j].Height));
-                e.Graphics.DrawString(Table2.Rows[j].Cells[0].Value.ToString(), new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, new System.Drawing.Rectangle(width + 10, height, Table2.Columns[0].Width + 5, Table2.Rows[j].Height));
+                e.Graphics.DrawString(Table2.Rows[j].Cells[0].Value.ToString(), new System.Drawing.Font("Times New Roman", 10, FontStyle.Regular), Brushes.Black, new System.Drawing.Rectangle(width + 10, height, Table2.Columns[0].Width + 5, Table2.Rows[j].Height));
                 // width = width + Table2.Columns[0].Width;
                 height += Table2.Rows[j].Height;
             }
@@ -7316,7 +7791,7 @@ public void WLADDSTR2()
                 e.Graphics.DrawRectangle(p, new System.Drawing.Rectangle(width, height, Table2.Columns[1].Width, Table2.Rows[j].Height));
                 if (Table2.Rows[j].Cells[1].Value != null)
                 {
-                    e.Graphics.DrawString(Table2.Rows[j].Cells[1].Value.ToString(), new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, new System.Drawing.Rectangle(width + 10, height, Table2.Columns[1].Width, Table2.Rows[j].Height));
+                    e.Graphics.DrawString(Table2.Rows[j].Cells[1].Value.ToString(), new System.Drawing.Font("Times New Roman", 10, FontStyle.Regular), Brushes.Black, new System.Drawing.Rectangle(width + 10, height, Table2.Columns[1].Width, Table2.Rows[j].Height));
 
                 }
                 else
@@ -7438,7 +7913,7 @@ public void WLADDSTR2()
             {
                 e.Graphics.FillRectangle(Brushes.White, new System.Drawing.Rectangle(width, height, Table2.Columns[0].Width + 5, Table2.Rows[j].Height));
                 e.Graphics.DrawRectangle(p, new System.Drawing.Rectangle(width, height, Table2.Columns[0].Width + 5, Table2.Rows[j].Height));
-                e.Graphics.DrawString(Table2.Rows[j].Cells[0].Value.ToString(), new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, new System.Drawing.Rectangle(width + 10, height, Table2.Columns[0].Width + 5, Table2.Rows[j].Height));
+                e.Graphics.DrawString(Table2.Rows[j].Cells[0].Value.ToString(), new System.Drawing.Font("Times New Roman", 10, FontStyle.Regular), Brushes.Black, new System.Drawing.Rectangle(width + 10, height, Table2.Columns[0].Width + 5, Table2.Rows[j].Height));
                 // width = width + Table2.Columns[0].Width;
                 height += Table2.Rows[j].Height;
             }
@@ -7450,7 +7925,7 @@ public void WLADDSTR2()
                 e.Graphics.DrawRectangle(p, new System.Drawing.Rectangle(width, height, Table2.Columns[1].Width, Table2.Rows[j].Height));
                 if (Table2.Rows[j].Cells[1].Value != null)
                 {
-                    e.Graphics.DrawString(Table2.Rows[j].Cells[1].Value.ToString(), new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, new System.Drawing.Rectangle(width + 10, height, Table2.Columns[1].Width, Table2.Rows[j].Height));
+                    e.Graphics.DrawString(Table2.Rows[j].Cells[1].Value.ToString(), new System.Drawing.Font("Times New Roman", 10, FontStyle.Regular), Brushes.Black, new System.Drawing.Rectangle(width + 10, height, Table2.Columns[1].Width, Table2.Rows[j].Height));
 
                 }
                 else
@@ -7845,6 +8320,7 @@ public void WLADDSTR2()
 
             }
         }
+
         public void Izmerenie(object sender, EventArgs e)
         {
             double CCR = 0.0;
@@ -7897,8 +8373,7 @@ public void WLADDSTR2()
 
 
 
-                else
-                {
+                else {
 
                     indata = newPort.ReadExisting();
 
@@ -7935,27 +8410,16 @@ public void WLADDSTR2()
             while (indata_bool == true)
 
             {
-
-
-
                 if (indata.Contains(">"))
 
                 {
-
-
-
+                    
                     indata_bool = false;
 
+                 }
 
-
-                }
-
-
-
-                else
-                {
-
-
+                
+                else {
 
                     indata = newPort.ReadExisting();
 
@@ -7986,11 +8450,6 @@ public void WLADDSTR2()
             {
 
                 Table2.CurrentCell.Value = string.Format("{0:0.0000}", OptPlot1_1);
-
-
-
-
-
             }
 
             else
@@ -8006,82 +8465,63 @@ public void WLADDSTR2()
             GAText.Text = string.Format("{0:0.00}", Aser);
 
 
-
+            bool doNotWrite = false;
             double SredValue = 0;
 
-
-                if (USE_KO == true)
+            if (USE_KO == false)
+            {
+                if (Table2.CurrentCell.Value == null)
                 {
                     El = new double[NoCaIzm1];
 
-                    //for (int j = 1; j <= Table2.Rows.Count - 1; j++)
+                    doNotWrite = true;
+
+
+                    // El = new double[NoCaIzm1 + 1];
+                    //for (int j = 0; j < Table2.Rows.Count - 1; j++)
                     //{
+                    // El = new double[NoCaIzm1 + 1];
                     SredValue = 0;
                     for (int i1 = 1; i1 <= NoCaIzm1; i1++)
                     {
-
                         if (Table2.Rows[Table2.CurrentCell.RowIndex].Cells["A;Ser" + i1].Value == null)
                         {
                             cellnull++;
                         }
                         else
                         {
-
                             if (aproksim == "Линейная через 0")
                             {
-                                if (Table2.Rows[0].Cells["A;Ser" + i1].Value.ToString() != "" && Table2.Rows[Table2.CurrentCell.RowIndex].Cells["A;Ser" + i1].Value.ToString() != "")
+                                if (Table2.Rows[Table2.CurrentCell.RowIndex].Cells["A;Ser" + i1].Value.ToString() != "")
                                 {
-                                    serValue = (Convert.ToDouble(Table2.Rows[Table2.CurrentCell.RowIndex].Cells["A;Ser" + i1].Value.ToString()) - Convert.ToDouble(Table2.Rows[0].Cells["A;Ser" + i1].Value.ToString())) / Convert.ToDouble(textBox5.Text);
+                                    serValue = Convert.ToDouble(Table2.Rows[Table2.CurrentCell.RowIndex].Cells["A;Ser" + i1].Value.ToString()) / Convert.ToDouble(textBox5.Text);
                                 }
                                 else
                                 {
-
                                     serValue = 0;
-                                    if (Table2.Rows[0].Cells["A;Ser" + i1].Value.ToString() == null)
-                                    {
-                                        MessageBox.Show("Измерьте Контрольый образец!");
-                                        return;
-
-
-                                    }
                                 }
+
                             }
                             if (aproksim == "Линейная")
                             {
-                                if (Table2.Rows[0].Cells["A;Ser" + i1].Value.ToString() != "" && Table2.Rows[Table2.CurrentCell.RowIndex].Cells["A;Ser" + i1].Value.ToString() != "")
+                                if (Table2.Rows[Table2.CurrentCell.RowIndex].Cells["A;Ser" + i1].Value.ToString() != "")
                                 {
-                                    serValue = ((Convert.ToDouble(Table2.Rows[Table2.CurrentCell.RowIndex].Cells["A;Ser" + i1].Value.ToString()) - Convert.ToDouble(Table2.Rows[0].Cells["A;Ser" + i1].Value.ToString()) - Convert.ToDouble(textBox4.Text))) / Convert.ToDouble(textBox5.Text);
+                                    serValue = ((Convert.ToDouble(Table2.Rows[Table2.CurrentCell.RowIndex].Cells["A;Ser" + i1].Value.ToString()) - Convert.ToDouble(textBox4.Text))) / Convert.ToDouble(textBox5.Text);
                                 }
                                 else
                                 {
-
                                     serValue = 0;
-                                    if (Table2.Rows[0].Cells["A;Ser" + i1].Value.ToString() == null)
-                                    {
-                                        MessageBox.Show("Измерьте Контрольый образец!");
-                                        return;
-
-
-                                    }
                                 }
-
                             }
                             if (aproksim == "Квадратичная")
                             {
-                                if (Table2.Rows[0].Cells["A;Ser" + i1].Value.ToString() != "" && Table2.Rows[Table2.CurrentCell.RowIndex].Cells["A;Ser" + i1].Value.ToString() != "")
+                                if (Table2.Rows[Table2.CurrentCell.RowIndex].Cells["A;Ser" + i1].Value.ToString() != "")
                                 {
-                                    serValue = ((Convert.ToDouble(Table2.Rows[Table2.CurrentCell.RowIndex].Cells["A;Ser" + i1].Value.ToString()) - Convert.ToDouble(Table2.Rows[0].Cells["A;Ser" + i1].Value.ToString()) - Convert.ToDouble(textBox4.Text))) / (Convert.ToDouble(textBox5.Text) + Convert.ToDouble(textBox6.Text));
+                                    serValue = ((Convert.ToDouble(Table2.Rows[Table2.CurrentCell.RowIndex].Cells["A;Ser" + i1].Value.ToString()) - Convert.ToDouble(textBox4.Text))) / (Convert.ToDouble(textBox5.Text) + Convert.ToDouble(textBox6.Text));
                                 }
                                 else
                                 {
                                     serValue = 0;
-                                    if (Table2.Rows[0].Cells["A;Ser" + i1].Value.ToString() == null)
-                                    {
-                                        MessageBox.Show("Измерьте Контрольый образец!");
-                                        return;
-
-
-                                    }
                                 }
                             }
                             double CValue1 = Convert.ToDouble(F1Text.Text);
@@ -8098,23 +8538,24 @@ public void WLADDSTR2()
                             CCR = SredValue / NoCaIzm1;
                             if (Convert.ToDouble(textBox7.Text) >= 1)
                             {
-                                Table2.Rows[Table2.CurrentCell.RowIndex].Cells["Ccr"].Value = string.Format("{0:0.0000}", CCR) + "±" + string.Format("{0:0.0000}", ((CCR * Convert.ToDouble(textBox7.Text))) / 100);
+                                Table2.Rows[Table2.CurrentCell.RowIndex].Cells["Ccr"].Value = string.Format("{0:0.0000}", CCR) + "±" + string.Format("{0:0.00}", ((CCR * Convert.ToDouble(textBox7.Text)) / 100));
                             }
                             else Table2.Rows[Table2.CurrentCell.RowIndex].Cells["Ccr"].Value = string.Format("{0:0.0000}", CCR);
                             //Table2.Rows[j].Cells["d%"].Value = El.Max();
-                            if (Table2.Rows[Table2.CurrentCell.RowIndex].Cells["C,edconctr;Ser." + i1].Value == null)
+                            //  El[i1] = Convert.ToDouble(Table2.Rows[j].Cells["C,edconctr;Ser." + i1].Value.ToString());
+                        }
+                        //El = new double[NoCaIzm1 + 1];
+                        if (Table2.Rows[Table2.CurrentCell.RowIndex].Cells["C,edconctr;Ser." + i1].Value == null)
+                        {
+                            cellnull++;
+                        }
+                        else
+                        {
+                            if (Table2.Rows[Table2.CurrentCell.RowIndex].Cells["C,edconctr;Ser." + i1].Value.ToString() != "")
                             {
-                                cellnull++;
-                            }
-                            else
-                            {
-                                if (Table2.Rows[Table2.CurrentCell.RowIndex].Cells["C,edconctr;Ser." + i1].Value.ToString() != "")
-                                {
-                                    El[i1 - 1] = Convert.ToDouble(Table2.Rows[Table2.CurrentCell.RowIndex].Cells["C,edconctr;Ser." + i1].Value.ToString());
-                                }
+                                El[i1 - 1] = Convert.ToDouble(Table2.Rows[Table2.CurrentCell.RowIndex].Cells["C,edconctr;Ser." + i1].Value.ToString());
                             }
                         }
-
                     }
 
                     Array.Sort(El);
@@ -8122,6 +8563,7 @@ public void WLADDSTR2()
                     minEl = El[0];
                     double a = ((maxEl - minEl) * 100) / Convert.ToDouble(CCR);
                     double b = a;
+                    // b = b * 10;
 
 
                     if (minEl == 0)
@@ -8133,14 +8575,28 @@ public void WLADDSTR2()
                         Table2.Rows[Table2.CurrentCell.RowIndex].Cells["d%"].Value = string.Format("{0:0.00}", b);
 
                     }
+                }
 
+            }
+            else
+            {
+                for (int i1 = 1; i1 <= NoCaIzm1; i1++)
+                {
+                    Table2.Rows[0].Cells["C,edconctr;Ser." + i1].ReadOnly = true;
+                    Table2.Rows[0].Cells["Ccr"].ReadOnly = true;
+                    Table2.Rows[0].Cells["d%"].ReadOnly = true;
+                }
+                if (Table2.CurrentCell.Value == null && Table2.CurrentCell.ReadOnly != true)
+                {
+                    Table2_UseCo();
+                }
+            }
 
-                    for (int i1 = 1; i1 <= NoCaIzm1; i1++)
-                    {
-                        Table2.Rows[0].Cells["C,edconctr;Ser." + i1].Value = "";
-                        Table2.Rows[0].Cells["Ccr"].Value = "";
-                        Table2.Rows[0].Cells["d%"].Value = "";
-                    }
+            if (!doNotWrite)
+            {
+                if (USE_KO == true)
+                {
+                    Table2_UseCo();
                 }
 
                 else
@@ -8257,7 +8713,7 @@ public void WLADDSTR2()
                          Table2.Rows[0].Cells["d%"].Value = "";
                      }*/
                 }
-            
+            }
             if ((curentIndex != Table2.ColumnCount - 2 || Table2.CurrentCell.RowIndex != Table2.Rows.Count - 2) && Table2.CurrentCell.ReadOnly != true)
 
             {
@@ -8287,9 +8743,453 @@ public void WLADDSTR2()
                 Table2.CurrentCell = this.Table2[2, 0];
 
             }
+        
 
+    }
+        public void ZapicInTable2()
+        {
+            bool doNotWrite = false;
+            double sum = 0.0;
+            int rowIndex = Table2.CurrentRow.Index;
+            int curentIndex = Table2.CurrentCell.ColumnIndex;
+            double CCR = 0.0;
+            double maxEl;
+            double minEl;
+            double serValue = 0;
+            int cellnull = 0;
+            if (Table2.CurrentCell.ColumnIndex > 1)
+            {
+                InputBox _InputBox = new InputBox(this);
+                _InputBox.ShowDialog();
+                if (Table2.CurrentCell.ReadOnly != true)
+                {
+                    Table2.CurrentCell.Value = string.Format("{0:0.0000}", CellOpt);
+                    CellOpt = 0;
+
+
+                }
+                else
+                {
+                    MessageBox.Show("Запись запрещена!");
+                }
+            }
+            if (USE_KO == false)
+            {
+                if (Table2.CurrentCell.Value == null)
+                {
+                    El = new double[NoCaIzm1];
+
+                    doNotWrite = true;
+
+
+                    // El = new double[NoCaIzm1 + 1];
+                    //for (int j = 0; j < Table2.Rows.Count - 1; j++)
+                    //{
+                    // El = new double[NoCaIzm1 + 1];
+                    double SredValue = 0;
+                    for (int i1 = 1; i1 <= NoCaIzm1; i1++)
+                    {
+                        if (Table2.Rows[Table2.CurrentCell.RowIndex].Cells["A;Ser" + i1].Value == null)
+                        {
+                            cellnull++;
+                        }
+                        else
+                        {
+                            if (aproksim == "Линейная через 0")
+                            {
+                                if (Table2.Rows[Table2.CurrentCell.RowIndex].Cells["A;Ser" + i1].Value.ToString() != "")
+                                {
+                                    serValue = Convert.ToDouble(Table2.Rows[Table2.CurrentCell.RowIndex].Cells["A;Ser" + i1].Value.ToString()) / Convert.ToDouble(textBox5.Text);
+                                }
+                                else
+                                {
+                                    serValue = 0;
+                                }
+
+                            }
+                            if (aproksim == "Линейная")
+                            {
+                                if (Table2.Rows[Table2.CurrentCell.RowIndex].Cells["A;Ser" + i1].Value.ToString() != "")
+                                {
+                                    serValue = ((Convert.ToDouble(Table2.Rows[Table2.CurrentCell.RowIndex].Cells["A;Ser" + i1].Value.ToString()) - Convert.ToDouble(textBox4.Text))) / Convert.ToDouble(textBox5.Text);
+                                }
+                                else
+                                {
+                                    serValue = 0;
+                                }
+                            }
+                            if (aproksim == "Квадратичная")
+                            {
+                                if (Table2.Rows[Table2.CurrentCell.RowIndex].Cells["A;Ser" + i1].Value.ToString() != "")
+                                {
+                                    serValue = ((Convert.ToDouble(Table2.Rows[Table2.CurrentCell.RowIndex].Cells["A;Ser" + i1].Value.ToString()) - Convert.ToDouble(textBox4.Text))) / (Convert.ToDouble(textBox5.Text) + Convert.ToDouble(textBox6.Text));
+                                }
+                                else
+                                {
+                                    serValue = 0;
+                                }
+                            }
+                            double CValue1 = Convert.ToDouble(F1Text.Text);
+                            double CValue2 = Convert.ToDouble(F2Text.Text);
+                            if (serValue >= 0)
+                            {
+                                Table2.Rows[Table2.CurrentCell.RowIndex].Cells["C,edconctr;Ser." + i1].Value = string.Format("{0:0.0000}", serValue * CValue1 * CValue2);
+                                SredValue += Convert.ToDouble(Table2.Rows[Table2.CurrentCell.RowIndex].Cells["C,edconctr;Ser." + i1].Value.ToString());
+                            }
+                            else
+                            {
+                                Table2.Rows[Table2.CurrentCell.RowIndex].Cells["C,edconctr;Ser." + i1].Value = "";
+                            }
+                            CCR = SredValue / NoCaIzm1;
+                            if (Convert.ToDouble(textBox7.Text) >= 1)
+                            {
+                                Table2.Rows[Table2.CurrentCell.RowIndex].Cells["Ccr"].Value = string.Format("{0:0.0000}", CCR) + "±" + string.Format("{0:0.00}", ((CCR * Convert.ToDouble(textBox7.Text)) / 100));
+                            }
+                            else Table2.Rows[Table2.CurrentCell.RowIndex].Cells["Ccr"].Value = string.Format("{0:0.0000}", CCR);
+                            //Table2.Rows[j].Cells["d%"].Value = El.Max();
+                            //  El[i1] = Convert.ToDouble(Table2.Rows[j].Cells["C,edconctr;Ser." + i1].Value.ToString());
+                        }
+                        //El = new double[NoCaIzm1 + 1];
+                        if (Table2.Rows[Table2.CurrentCell.RowIndex].Cells["C,edconctr;Ser." + i1].Value == null)
+                        {
+                            cellnull++;
+                        }
+                        else
+                        {
+                            if (Table2.Rows[Table2.CurrentCell.RowIndex].Cells["C,edconctr;Ser." + i1].Value.ToString() != "")
+                            {
+                                El[i1 - 1] = Convert.ToDouble(Table2.Rows[Table2.CurrentCell.RowIndex].Cells["C,edconctr;Ser." + i1].Value.ToString());
+                            }
+                        }
+                    }
+
+                    Array.Sort(El);
+                    maxEl = El[El.Length - 1];
+                    minEl = El[0];
+                    double a = ((maxEl - minEl) * 100) / Convert.ToDouble(CCR);
+                    double b = a;
+                    // b = b * 10;
+
+
+                    if (minEl == 0)
+                    {
+                        Table2.Rows[Table2.CurrentCell.RowIndex].Cells["d%"].Value = 0.0000;
+                    }
+                    else
+                    {
+                        Table2.Rows[Table2.CurrentCell.RowIndex].Cells["d%"].Value = string.Format("{0:0.00}", b);
+
+                    }
+                }
+
+            }
+            else
+            {
+                for (int i1 = 1; i1 <= NoCaIzm1; i1++)
+                {
+                    Table2.Rows[0].Cells["C,edconctr;Ser." + i1].ReadOnly = true;
+                    Table2.Rows[0].Cells["Ccr"].ReadOnly = true;
+                    Table2.Rows[0].Cells["d%"].ReadOnly = true;
+                }
+                if (Table2.CurrentCell.Value == null && Table2.CurrentCell.ReadOnly != true)
+                {
+                    El = new double[NoCaIzm1];
+
+                    doNotWrite = true;
+
+
+                    // El = new double[NoCaIzm1 + 1];
+                    for (int j = 0; j < Table2.Rows.Count - 1; j++)
+                    {
+                        // El = new double[NoCaIzm1 + 1];
+                        double SredValue = 0;
+                        for (int i1 = 1; i1 <= NoCaIzm1; i1++)
+                        {
+                            if (Table2.Rows[j].Cells["A;Ser" + i1].Value == null)
+                            {
+                                cellnull++;
+                            }
+                            else
+                            {
+                                if (aproksim == "Линейная через 0")
+                                {
+                                    if (Table2.Rows[0].Cells["A;Ser" + i1].Value.ToString() != "" && Table2.Rows[j].Cells["A;Ser" + i1].Value.ToString() != "")
+                                    {
+                                        serValue = (Convert.ToDouble(Table2.Rows[j].Cells["A;Ser" + i1].Value.ToString()) - Convert.ToDouble(Table2.Rows[0].Cells["A;Ser" + i1].Value.ToString())) / Convert.ToDouble(textBox5.Text);
+                                    }
+                                    else
+                                    {
+
+                                        serValue = 0;
+                                        if (Table2.Rows[0].Cells["A;Ser" + i1].Value.ToString() == null)
+                                        {
+                                            MessageBox.Show("Измерьте Контрольый образец!");
+                                            return;
+
+
+                                        }
+                                    }
+                                }
+                                if (aproksim == "Линейная")
+                                {
+                                    if (Table2.Rows[0].Cells["A;Ser" + i1].Value.ToString() != "" && Table2.Rows[j].Cells["A;Ser" + i1].Value.ToString() != "")
+                                    {
+                                        serValue = ((Convert.ToDouble(Table2.Rows[j].Cells["A;Ser" + i1].Value.ToString()) - Convert.ToDouble(Table2.Rows[0].Cells["A;Ser" + i1].Value.ToString()) - Convert.ToDouble(textBox4.Text))) / Convert.ToDouble(textBox5.Text);
+                                    }
+                                    else
+                                    {
+
+                                        serValue = 0;
+                                        if (Table2.Rows[0].Cells["A;Ser" + i1].Value.ToString() == null)
+                                        {
+                                            MessageBox.Show("Измерьте Контрольный образец!");
+                                            return;
+
+
+                                        }
+                                    }
+
+                                }
+                                if (aproksim == "Квадратичная")
+                                {
+                                    if (Table2.Rows[0].Cells["A;Ser" + i1].Value.ToString() != "" && Table2.Rows[j].Cells["A;Ser" + i1].Value.ToString() != "")
+                                    {
+                                        serValue = ((Convert.ToDouble(Table2.Rows[j].Cells["A;Ser" + i1].Value.ToString()) - Convert.ToDouble(Table2.Rows[0].Cells["A;Ser" + i1].Value.ToString()) - Convert.ToDouble(textBox4.Text))) / (Convert.ToDouble(textBox5.Text) + Convert.ToDouble(textBox6.Text));
+                                    }
+                                    else
+                                    {
+                                        serValue = 0;
+                                        if (Table2.Rows[0].Cells["A;Ser" + i1].Value.ToString() == null)
+                                        {
+                                            MessageBox.Show("Измерьте Контрольный образец!");
+                                            return;
+
+
+                                        }
+                                    }
+                                }
+                                double CValue1 = Convert.ToDouble(F1Text.Text);
+                                double CValue2 = Convert.ToDouble(F2Text.Text);
+
+                                if (serValue >= 0)
+                                {
+                                    Table2.Rows[j].Cells["C,edconctr;Ser." + i1].Value = string.Format("{0:0.0000}", serValue * CValue1 * CValue2);
+                                    SredValue += Convert.ToDouble(Table2.Rows[j].Cells["C,edconctr;Ser." + i1].Value.ToString());
+                                }
+                                else
+                                {
+                                    Table2.Rows[j].Cells["C,edconctr;Ser." + i1].Value = "";
+                                }
+                                CCR = SredValue / NoCaIzm1;
+                                if (Convert.ToDouble(textBox7.Text) >= 1)
+                                {
+                                    Table2.Rows[j].Cells["Ccr"].Value = string.Format("{0:0.0000}", CCR) + "±" + string.Format("{0:0.00}", ((CCR * Convert.ToDouble(textBox7.Text)) / 100));
+                                }
+                                else Table2.Rows[j].Cells["Ccr"].Value = string.Format("{0:0.0000}", CCR);
+                                //Table2.Rows[j].Cells["d%"].Value = El.Max();
+                                //  El[i1] = Convert.ToDouble(Table2.Rows[j].Cells["C,edconctr;Ser." + i1].Value.ToString());
+                            }
+                            //El = new double[NoCaIzm1 + 1];
+                            if (Table2.Rows[Table2.CurrentCell.RowIndex].Cells["C,edconctr;Ser." + i1].Value == null)
+                            {
+                                cellnull++;
+                            }
+                            else
+                            {
+                                if (Table2.Rows[Table2.CurrentCell.RowIndex].Cells["C,edconctr;Ser." + i1].Value.ToString() != "")
+                                {
+                                    El[i1 - 1] = Convert.ToDouble(Table2.Rows[Table2.CurrentCell.RowIndex].Cells["C,edconctr;Ser." + i1].Value.ToString());
+                                }
+                            }
+                        }
+
+                        Array.Sort(El);
+                        maxEl = El[El.Length - 1];
+                        minEl = El[0];
+                        double a = ((maxEl - minEl) * 100) / Convert.ToDouble(CCR);
+                        double b = a;
+                        // b = b * 10;
+
+
+                        if (minEl == 0)
+                        {
+                            Table2.Rows[Table2.CurrentCell.RowIndex].Cells["d%"].Value = 0.0000;
+                        }
+                        else
+                        {
+                            Table2.Rows[Table2.CurrentCell.RowIndex].Cells["d%"].Value = string.Format("{0:0.00}", b);
+
+                        }
+
+                    }
+                }
+                for (int i1 = 1; i1 <= NoCaIzm1; i1++)
+                {
+                    Table2.Rows[0].Cells["C,edconctr;Ser." + i1].Value = "";
+                    Table2.Rows[0].Cells["Ccr"].Value = "";
+                    Table2.Rows[0].Cells["d%"].Value = "";
+                }
+            }
+
+
+            if (!doNotWrite)
+            {
+                if (USE_KO == true)
+                {
+
+                    Table2_UseCo();
+
+
+                }
+
+                else
+                {
+                    for (int i = 1; i <= NoCaIzm1; i++)
+                    {
+                        Table2.Rows[0].Cells["C,edconctr;Ser." + i].ReadOnly = true;
+                        Table2.Rows[0].Cells["Ccr"].ReadOnly = true;
+                        Table2.Rows[0].Cells["d%"].ReadOnly = true;
+                    }
+                    El = new double[NoCaIzm1];
+
+                    // for (int j = 0; j < Table2.Rows.Count - 1; j++)
+                    // {
+                    double SredValue = 0;
+                    for (int i1 = 1; i1 <= NoCaIzm1; i1++)
+                    {
+                        if (Table2.Rows[Table2.CurrentCell.RowIndex].Cells["A;Ser" + i1].Value == null)
+                        {
+                            cellnull++;
+                        }
+                        else
+                        {
+                            if (aproksim == "Линейная через 0")
+                            {
+                                if (Table2.Rows[Table2.CurrentCell.RowIndex].Cells["A;Ser" + i1].Value.ToString() != "")
+                                {
+
+                                    serValue = Convert.ToDouble(Table2.Rows[Table2.CurrentCell.RowIndex].Cells["A;Ser" + i1].Value.ToString()) / Convert.ToDouble(textBox5.Text);
+                                }
+                                else
+                                {
+                                    serValue = 0;
+                                }
+
+                            }
+                            if (aproksim == "Линейная")
+                            {
+                                if (Table2.Rows[Table2.CurrentCell.RowIndex].Cells["A;Ser" + i1].Value.ToString() != "")
+                                {
+                                    serValue = ((Convert.ToDouble(Table2.Rows[Table2.CurrentCell.RowIndex].Cells["A;Ser" + i1].Value.ToString()) - Convert.ToDouble(textBox4.Text))) / Convert.ToDouble(textBox5.Text);
+                                }
+                                else
+                                {
+                                    serValue = 0;
+                                }
+                            }
+                            if (aproksim == "Квадратичная")
+                            {
+                                if (Table2.Rows[Table2.CurrentCell.RowIndex].Cells["A;Ser" + i1].Value.ToString() != "")
+                                {
+                                    serValue = ((Convert.ToDouble(Table2.Rows[Table2.CurrentCell.RowIndex].Cells["A;Ser" + i1].Value.ToString()) - Convert.ToDouble(textBox4.Text))) / (Convert.ToDouble(textBox5.Text) + Convert.ToDouble(textBox6.Text));
+                                }
+                                else
+                                {
+                                    serValue = 0;
+                                }
+                            }
+                            double CValue1 = Convert.ToDouble(F1Text.Text);
+                            double CValue2 = Convert.ToDouble(F2Text.Text);
+
+                            if (serValue >= 0)
+                            {
+                                Table2.Rows[Table2.CurrentCell.RowIndex].Cells["C,edconctr;Ser." + i1].Value = string.Format("{0:0.0000}", serValue * CValue1 * CValue2);
+                                SredValue += Convert.ToDouble(Table2.Rows[Table2.CurrentCell.RowIndex].Cells["C,edconctr;Ser." + i1].Value.ToString());
+                            }
+                            else
+                            {
+                                Table2.Rows[Table2.CurrentCell.RowIndex].Cells["C,edconctr;Ser." + i1].Value = "";
+                            }
+                            CCR = SredValue / NoCaIzm1;
+                            if (Convert.ToDouble(textBox7.Text) >= 1)
+                            {
+                                Table2.Rows[Table2.CurrentCell.RowIndex].Cells["Ccr"].Value = string.Format("{0:0.0000}", CCR) + "±" + string.Format("{0:0.00}", ((CCR * Convert.ToDouble(textBox7.Text)) / 100));
+                            }
+                            else Table2.Rows[Table2.CurrentCell.RowIndex].Cells["Ccr"].Value = string.Format("{0:0.0000}", CCR);
+                            //Table2.Rows[j].Cells["d%"].Value = El.Max();
+                            if (Table2.Rows[Table2.CurrentCell.RowIndex].Cells["C,edconctr;Ser." + i1].Value == null)
+                            {
+                                cellnull++;
+                            }
+                            else
+                            {
+                                if (Table2.Rows[Table2.CurrentCell.RowIndex].Cells["C,edconctr;Ser." + i1].Value.ToString() != "")
+                                {
+                                    El[i1 - 1] = Convert.ToDouble(Table2.Rows[Table2.CurrentCell.RowIndex].Cells["C,edconctr;Ser." + i1].Value.ToString());
+                                }
+                            }
+                        }
+
+                    }
+
+                    Array.Sort(El);
+                    maxEl = El[El.Length - 1];
+                    minEl = El[0];
+                    double a = ((maxEl - minEl) * 100) / Convert.ToDouble(CCR);
+                    double b = a;
+
+
+                    if (minEl == 0)
+                    {
+                        Table2.Rows[Table2.CurrentCell.RowIndex].Cells["d%"].Value = 0.0000;
+                    }
+                    else
+                    {
+                        Table2.Rows[Table2.CurrentCell.RowIndex].Cells["d%"].Value = string.Format("{0:0.00}", b);
+
+                    }
+                    // return;
+
+                    /* for (int i1 = 1; i1 <= NoCaIzm1; i1++)
+                     {
+                         Table2.Rows[0].Cells["C,edconctr;Ser." + i1].Value = "";
+                         Table2.Rows[0].Cells["Ccr"].Value = "";
+                         Table2.Rows[0].Cells["d%"].Value = "";
+                     }*/
+                }
+            }
+
+            if (curentIndex != Table2.ColumnCount - 1 || rowIndex != Table2.Rows.Count - 2)
+            {
+                if (rowIndex != Table2.Rows.Count - 2)
+                {
+                    Table2.CurrentCell = this.Table2[curentIndex, rowIndex + 1];
+                }
+                else
+                {
+                    Table2.CurrentCell = this.Table2[curentIndex + 2, 0];
+                }
+            }
+            doNotWrite = false;
+            for (int j = 0; j < Table2.Rows.Count - 1; j++)
+            {
+
+                for (int i = 2; i < Table2.Rows[j].Cells.Count; i++)
+                {
+                    if (Table2.Rows[j].Cells[i].Value == null)
+                    {
+                        doNotWrite = true;
+                        break;
+
+                    }
+                }
+            }
+            if (doNotWrite == true)
+            {
+                button3.Enabled = true;
+            }
         }
-
+    
         private void измеритьToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (tabControl2.SelectedIndex == 0)
@@ -8314,6 +9214,198 @@ public void WLADDSTR2()
         private void калибровкаToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Calibrovka();
+        }
+
+
+        private void Table2_CellParsing(object sender, DataGridViewCellParsingEventArgs e)
+        {
+
+        }
+
+        private void button11_Click(object sender, EventArgs e)
+        {
+            if (tabControl2.SelectedIndex == 0)
+            {
+                ZapicInTable1();
+            }
+            else
+            {
+                ZapicInTable2();
+            }
+        }
+
+               
+       
+
+        private void Podskazka_TabIndexChanged(object sender, EventArgs e)
+        {
+         
+        }
+
+        private void tabControl2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (tabControl2.SelectedIndex == 1)
+            {
+                Podskazka.Text = "Создайте или откройте Измерение!";
+                label27.Visible = false;
+                label24.Visible = false;
+                label25.Visible = true;
+                label26.Visible = true;
+                label28.Visible = false;
+            }
+        }
+
+
+        const int initialValue = -1;
+        private void Table1_CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e)
+        {
+           // ZapicInTable1();
+           // Table1_Enter(sender, e);
+            //Table1_CellEnter(sender, e);
+            //this.Table1.EndEdit();
+          
+        }
+
+        private void Table2_CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e)
+        {
+           // ZapicInTable2();
+        }
+
+        private void Table2_Enter(object sender, EventArgs e)
+        {
+           // ZapicInTable2();
+        }
+
+        private void Table1_Enter(object sender, EventArgs e)
+        {
+          //  ZapicInTable1();
+           // Table1_Leave(sender, e);
+           //// this.Table1.EndEdit();
+        }
+
+        private void Table1_CellEnter(object sender, DataGridViewCellEventArgs e)
+        {
+           // ZapicInTable1();
+           // this.Table1.EndEdit();
+        }
+
+        private void Table1_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void Table1_CellValidating(object sender, DataGridViewCellValidatingEventArgs e)
+        {
+
+        }
+        int curent = 0;
+        private void Table1_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
+        {
+            //Table1.CancelEdit();
+          /*  if (Table1.CurrentCell.ColumnIndex >= 3 && Table1.CurrentCell.ReadOnly != true)            {
+
+                 TextBox Table1 = (TextBox)e.Control;
+                 Table1.KeyPress += new KeyPressEventHandler(tb_KeyPress);
+             }
+             else
+
+             {
+                 TextBox Table1 = (TextBox)e.Control;
+
+                 Table1.KeyPress -= tb_KeyPress;
+
+             }
+
+             if (Table1.CurrentCell.ReadOnly == true)
+
+             {
+
+                 MessageBox.Show("Редактирование ячейки запрещено!");
+
+
+
+             }
+
+             if (curent != 0)
+
+             {
+
+                 TextBox Table1 = (TextBox)e.Control;
+
+                 Table1.KeyPress -= tb_KeyPress;
+
+             }
+
+             curent++;*/
+            if (Table1.CurrentCell.ColumnIndex >= 3 && Table1.CurrentCell.ReadOnly != true)
+            {                
+                ZapicInTable1();
+            }
+         }
+        private void tb_KeyPress(object sender, KeyPressEventArgs e)
+
+        {
+
+            char number = e.KeyChar;
+
+            if (e.KeyChar <= 48 || e.KeyChar >= 58) //цифры, клавиша BackSpace и запятая а ASCII
+            {
+
+                e.Handled = true;
+                MessageBox.Show("Только цифры!");
+                CellOpt = Convert.ToDouble(e.KeyChar);
+                return;              
+
+
+            }
+
+            return;
+
+        }
+        private void Table1_CellValidated(object sender, DataGridViewCellEventArgs e)
+        {
+            Table1.CancelEdit();
+        }
+
+        private void Table1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void Table1_CellLeave(object sender, DataGridViewCellEventArgs e)
+        {
+            // ZapicInTable1();
+            Table1.CancelEdit();
+        }
+
+        private void Table1_CellEnter_1(object sender, DataGridViewCellEventArgs e)
+        {
+            Table1.CancelEdit();
+            Table1.MultiSelect = false;
+        }
+
+        private void Table1_KeyDown(object sender, KeyEventArgs e)
+        {
+
+        }
+
+        private void Table1_CellBeginEdit_1(object sender, DataGridViewCellCancelEventArgs e)
+        {           
+             //   ZapicInTable1();
+            
+        }
+
+        private void Table1_KeyPress(object sender, KeyPressEventArgs e)
+        {
+
+        }
+
+        private void Table2_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
+        {
+            if (Table2.CurrentCell.ColumnIndex >= 2 && Table2.CurrentCell.ReadOnly != true)
+            {
+                ZapicInTable2();
+            }
         }
 
         public void SaveTpPdf2()

@@ -467,6 +467,7 @@
             this.WL_grad.Size = new System.Drawing.Size(202, 20);
             this.WL_grad.TabIndex = 49;
             this.WL_grad.TextChanged += new System.EventHandler(this.WL_grad_TextChanged);
+            this.WL_grad.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.WL_grad_KeyPress);
             // 
             // groupBox4
             // 
