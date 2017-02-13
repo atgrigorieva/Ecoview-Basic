@@ -450,7 +450,7 @@ namespace Ecoview_V2._0
                     Save = true;
 
                 }
-                if (WL_grad.Text == "" && _Analis.ComPort == true)
+                if (WL_grad.Text == "")
                 {
                     MessageBox.Show("Заполните поле Длина волны");
                     Save = false;
@@ -550,10 +550,12 @@ namespace Ecoview_V2._0
                             if (radioButton6.Checked == true)
                             {
                                 _Analis.SposobZadan = "По СО";
+                              
                             }
                             else
                             {
                                 _Analis.SposobZadan = "Ввод коэффициентов";
+                                
                             }
                         }
                         else
@@ -665,11 +667,12 @@ namespace Ecoview_V2._0
                     if (radioButton6.Checked == true)
                     {
                         _Analis.SposobZadan = "По СО";
+                        _Analis.button14.Enabled = true;
                     }
                     else
                     {
                         _Analis.SposobZadan = "Ввод коэффициентов";
-
+                        _Analis.button14.Enabled = false;
                         _Analis.textBox4.Text = k0Text.Text;
                         _Analis.textBox5.Text = k1Text.Text;
                         _Analis.textBox6.Text = k2Text.Text;

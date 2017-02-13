@@ -249,11 +249,19 @@ namespace Ecoview_V2._0
                 {
                     button14.Enabled = false;
                 }
-                if (IzmerCreate == true)
+                if (ComPort == true)
                 {
                     button14.Enabled = true;
                 }
-                if (IzmerCreate1 == true)
+               else
+                {
+                    button14.Enabled = false;
+                }
+                if (SposobZadan == "Ввод коэффициентов")
+                {
+                   button14.Enabled = false;
+                }
+                else
                 {
                     button14.Enabled = true;
                 }
@@ -602,7 +610,7 @@ namespace Ecoview_V2._0
             GW1_2 = GWarr[2];
             GWNew.Text = GW1_2;
             versionPribor = GWarr[1];
-            if (wavelength1 == Convert.ToString(0))
+            if (wavelength1 == Convert.ToString(0) || wavelength1 == "")
             {
                 wavelength1 = GW1_2;
             }
@@ -8104,15 +8112,30 @@ public void WLADDSTR2()
         {
             if (tabControl2.SelectedIndex == 0)
             {
-                Graduirovka(sender, e);
+                if (Table1.RowCount > 1)
+                {
+                    Graduirovka(sender, e);
+                }
+                else
+                {
+                    MessageBox.Show("Создайте градуировку по СО");
+                }
             }
             else
             {
-                Izmerenie(sender, e);
+                if (Table2.RowCount > 1)
+                {
+                    Izmerenie(sender, e);
+                }
+                else
+                {
+                    MessageBox.Show("Создайте измерение");
+                }
             }
         }
         public void Graduirovka(object sender, EventArgs e)
         {
+            
             double sum = 0.0;
             int startIndexCell = 2;
             int endIndexCell = startIndexCell + NoCaIzm;
