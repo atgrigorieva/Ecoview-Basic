@@ -30,9 +30,9 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Ecoview));
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea4 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Series series7 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series8 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.radioButton3 = new System.Windows.Forms.RadioButton();
             this.radioButton2 = new System.Windows.Forms.RadioButton();
@@ -78,6 +78,10 @@
             this.label20 = new System.Windows.Forms.Label();
             this.label16 = new System.Windows.Forms.Label();
             this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.textBox12 = new System.Windows.Forms.TextBox();
+            this.label32 = new System.Windows.Forms.Label();
+            this.textBox9 = new System.Windows.Forms.TextBox();
+            this.label29 = new System.Windows.Forms.Label();
             this.printPreviewTable1 = new System.Windows.Forms.PrintPreviewDialog();
             this.label28 = new System.Windows.Forms.Label();
             this.label27 = new System.Windows.Forms.Label();
@@ -142,6 +146,10 @@
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.textBox11 = new System.Windows.Forms.TextBox();
+            this.label31 = new System.Windows.Forms.Label();
+            this.textBox10 = new System.Windows.Forms.TextBox();
+            this.label30 = new System.Windows.Forms.Label();
             this.tabControl2 = new System.Windows.Forms.TabControl();
             this.dataSet1 = new System.Data.DataSet();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
@@ -307,7 +315,7 @@
             // 
             this.textBox8.Location = new System.Drawing.Point(66, 10);
             this.textBox8.Name = "textBox8";
-            this.textBox8.Size = new System.Drawing.Size(600, 20);
+            this.textBox8.Size = new System.Drawing.Size(352, 20);
             this.textBox8.TabIndex = 21;
             // 
             // label19
@@ -356,6 +364,7 @@
             // label22
             // 
             this.label22.AutoSize = true;
+            this.label22.Enabled = false;
             this.label22.Location = new System.Drawing.Point(15, 56);
             this.label22.Name = "label22";
             this.label22.Size = new System.Drawing.Size(98, 13);
@@ -365,6 +374,7 @@
             // label21
             // 
             this.label21.AutoSize = true;
+            this.label21.Enabled = false;
             this.label21.Location = new System.Drawing.Point(15, 43);
             this.label21.Name = "label21";
             this.label21.Size = new System.Drawing.Size(38, 13);
@@ -374,6 +384,7 @@
             // RR
             // 
             this.RR.AutoSize = true;
+            this.RR.Enabled = false;
             this.RR.Location = new System.Drawing.Point(13, 17);
             this.RR.Name = "RR";
             this.RR.Size = new System.Drawing.Size(27, 13);
@@ -383,6 +394,7 @@
             // SKO
             // 
             this.SKO.AutoSize = true;
+            this.SKO.Enabled = false;
             this.SKO.Location = new System.Drawing.Point(14, 30);
             this.SKO.Name = "SKO";
             this.SKO.Size = new System.Drawing.Size(29, 13);
@@ -402,9 +414,9 @@
             "30 мм",
             "50 мм",
             "100 мм"});
-            this.Opt_dlin_cuvet.Location = new System.Drawing.Point(175, 42);
+            this.Opt_dlin_cuvet.Location = new System.Drawing.Point(154, 42);
             this.Opt_dlin_cuvet.Name = "Opt_dlin_cuvet";
-            this.Opt_dlin_cuvet.Size = new System.Drawing.Size(90, 21);
+            this.Opt_dlin_cuvet.Size = new System.Drawing.Size(63, 21);
             this.Opt_dlin_cuvet.TabIndex = 22;
             // 
             // Obrazec
@@ -454,6 +466,7 @@
             // label14
             // 
             this.label14.AutoSize = true;
+            this.label14.Enabled = false;
             this.label14.Location = new System.Drawing.Point(14, 25);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(30, 13);
@@ -463,7 +476,7 @@
             // F1Text
             // 
             this.F1Text.AutoSize = true;
-            this.F1Text.Location = new System.Drawing.Point(715, 45);
+            this.F1Text.Location = new System.Drawing.Point(759, 45);
             this.F1Text.Name = "F1Text";
             this.F1Text.Size = new System.Drawing.Size(0, 13);
             this.F1Text.TabIndex = 24;
@@ -506,7 +519,7 @@
             // label15
             // 
             this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(679, 45);
+            this.label15.Location = new System.Drawing.Point(724, 45);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(28, 13);
             this.label15.TabIndex = 26;
@@ -537,6 +550,7 @@
             // 
             // textBox6
             // 
+            this.textBox6.Enabled = false;
             this.textBox6.Location = new System.Drawing.Point(42, 66);
             this.textBox6.Name = "textBox6";
             this.textBox6.ReadOnly = true;
@@ -545,6 +559,7 @@
             // 
             // textBox5
             // 
+            this.textBox5.Enabled = false;
             this.textBox5.Location = new System.Drawing.Point(42, 41);
             this.textBox5.Name = "textBox5";
             this.textBox5.ReadOnly = true;
@@ -553,6 +568,7 @@
             // 
             // textBox4
             // 
+            this.textBox4.Enabled = false;
             this.textBox4.Location = new System.Drawing.Point(42, 18);
             this.textBox4.Name = "textBox4";
             this.textBox4.ReadOnly = true;
@@ -588,15 +604,16 @@
             // 
             // textBox7
             // 
-            this.textBox7.Location = new System.Drawing.Point(503, 42);
+            this.textBox7.Location = new System.Drawing.Point(381, 42);
             this.textBox7.Name = "textBox7";
-            this.textBox7.Size = new System.Drawing.Size(100, 20);
+            this.textBox7.ReadOnly = true;
+            this.textBox7.Size = new System.Drawing.Size(69, 20);
             this.textBox7.TabIndex = 29;
             // 
             // label20
             // 
             this.label20.AutoSize = true;
-            this.label20.Location = new System.Drawing.Point(352, 45);
+            this.label20.Location = new System.Drawing.Point(230, 45);
             this.label20.Name = "label20";
             this.label20.Size = new System.Drawing.Size(144, 13);
             this.label20.TabIndex = 28;
@@ -613,6 +630,10 @@
             // 
             // tabPage4
             // 
+            this.tabPage4.Controls.Add(this.textBox12);
+            this.tabPage4.Controls.Add(this.label32);
+            this.tabPage4.Controls.Add(this.textBox9);
+            this.tabPage4.Controls.Add(this.label29);
             this.tabPage4.Controls.Add(this.textBox7);
             this.tabPage4.Controls.Add(this.label20);
             this.tabPage4.Controls.Add(this.label16);
@@ -633,6 +654,41 @@
             this.tabPage4.TabIndex = 1;
             this.tabPage4.Text = "Измерение";
             this.tabPage4.UseVisualStyleBackColor = true;
+            this.tabPage4.Click += new System.EventHandler(this.tabPage4_Click);
+            // 
+            // textBox12
+            // 
+            this.textBox12.Location = new System.Drawing.Point(524, 43);
+            this.textBox12.Name = "textBox12";
+            this.textBox12.ReadOnly = true;
+            this.textBox12.Size = new System.Drawing.Size(159, 20);
+            this.textBox12.TabIndex = 37;
+            // 
+            // label32
+            // 
+            this.label32.AutoSize = true;
+            this.label32.Location = new System.Drawing.Point(457, 46);
+            this.label32.Name = "label32";
+            this.label32.Size = new System.Drawing.Size(58, 13);
+            this.label32.TabIndex = 36;
+            this.label32.Text = "Вещество";
+            // 
+            // textBox9
+            // 
+            this.textBox9.Location = new System.Drawing.Point(503, 10);
+            this.textBox9.Name = "textBox9";
+            this.textBox9.ReadOnly = true;
+            this.textBox9.Size = new System.Drawing.Size(60, 20);
+            this.textBox9.TabIndex = 31;
+            // 
+            // label29
+            // 
+            this.label29.AutoSize = true;
+            this.label29.Location = new System.Drawing.Point(424, 13);
+            this.label29.Name = "label29";
+            this.label29.Size = new System.Drawing.Size(75, 13);
+            this.label29.TabIndex = 30;
+            this.label29.Text = "Длина волны";
             // 
             // printPreviewTable1
             // 
@@ -859,36 +915,36 @@
             // 
             // chart1
             // 
-            chartArea1.AxisX.MajorTickMark.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.NotSet;
-            chartArea1.AxisX.MinorGrid.Enabled = true;
-            chartArea1.AxisX.MinorGrid.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.NotSet;
-            chartArea1.AxisX.MinorTickMark.Enabled = true;
-            chartArea1.AxisX.MinorTickMark.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.NotSet;
-            chartArea1.AxisX.Title = "Оптическая плотность, А";
-            chartArea1.AxisX2.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.NotSet;
-            chartArea1.AxisX2.MajorGrid.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.NotSet;
-            chartArea1.AxisX2.MajorTickMark.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.NotSet;
-            chartArea1.AxisX2.MinorGrid.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.NotSet;
-            chartArea1.AxisX2.MinorTickMark.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.NotSet;
-            chartArea1.AxisY.MajorGrid.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.NotSet;
-            chartArea1.AxisY.Title = "Концетрация";
-            chartArea1.Name = "ChartArea1";
-            this.chart1.ChartAreas.Add(chartArea1);
+            chartArea4.AxisX.MajorTickMark.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.NotSet;
+            chartArea4.AxisX.MinorGrid.Enabled = true;
+            chartArea4.AxisX.MinorGrid.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.NotSet;
+            chartArea4.AxisX.MinorTickMark.Enabled = true;
+            chartArea4.AxisX.MinorTickMark.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.NotSet;
+            chartArea4.AxisX.Title = "Оптическая плотность, А";
+            chartArea4.AxisX2.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.NotSet;
+            chartArea4.AxisX2.MajorGrid.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.NotSet;
+            chartArea4.AxisX2.MajorTickMark.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.NotSet;
+            chartArea4.AxisX2.MinorGrid.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.NotSet;
+            chartArea4.AxisX2.MinorTickMark.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.NotSet;
+            chartArea4.AxisY.MajorGrid.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.NotSet;
+            chartArea4.AxisY.Title = "Концетрация";
+            chartArea4.Name = "ChartArea1";
+            this.chart1.ChartAreas.Add(chartArea4);
             this.chart1.Cursor = System.Windows.Forms.Cursors.Default;
             this.chart1.Location = new System.Drawing.Point(9, 72);
             this.chart1.Name = "chart1";
             this.chart1.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.SeaGreen;
             this.chart1.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            series1.ChartArea = "ChartArea1";
-            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
-            series1.IsVisibleInLegend = false;
-            series1.Name = "Series1";
-            series2.ChartArea = "ChartArea1";
-            series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series2.IsVisibleInLegend = false;
-            series2.Name = "Series2";
-            this.chart1.Series.Add(series1);
-            this.chart1.Series.Add(series2);
+            series7.ChartArea = "ChartArea1";
+            series7.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
+            series7.IsVisibleInLegend = false;
+            series7.Name = "Series1";
+            series8.ChartArea = "ChartArea1";
+            series8.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series8.IsVisibleInLegend = false;
+            series8.Name = "Series2";
+            this.chart1.Series.Add(series7);
+            this.chart1.Series.Add(series8);
             this.chart1.Size = new System.Drawing.Size(566, 321);
             this.chart1.TabIndex = 14;
             this.chart1.Text = "chart1";
@@ -1119,16 +1175,16 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(740, 49);
+            this.label6.Location = new System.Drawing.Point(719, 49);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(0, 13);
             this.label6.TabIndex = 12;
             // 
             // numericUpDown1
             // 
-            this.numericUpDown1.Location = new System.Drawing.Point(644, 46);
+            this.numericUpDown1.Location = new System.Drawing.Point(516, 47);
             this.numericUpDown1.Name = "numericUpDown1";
-            this.numericUpDown1.Size = new System.Drawing.Size(59, 20);
+            this.numericUpDown1.Size = new System.Drawing.Size(42, 20);
             this.numericUpDown1.TabIndex = 11;
             this.numericUpDown1.Value = new decimal(new int[] {
             90,
@@ -1139,9 +1195,9 @@
             // dateTimePicker1
             // 
             this.dateTimePicker1.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.dateTimePicker1.Location = new System.Drawing.Point(320, 46);
+            this.dateTimePicker1.Location = new System.Drawing.Point(299, 46);
             this.dateTimePicker1.Name = "dateTimePicker1";
-            this.dateTimePicker1.Size = new System.Drawing.Size(200, 20);
+            this.dateTimePicker1.Size = new System.Drawing.Size(92, 20);
             this.dateTimePicker1.TabIndex = 10;
             this.dateTimePicker1.Value = new System.DateTime(2016, 10, 18, 0, 0, 0, 0);
             // 
@@ -1151,7 +1207,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(526, 49);
+            this.label5.Location = new System.Drawing.Point(398, 49);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(112, 13);
             this.label5.TabIndex = 8;
@@ -1163,7 +1219,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(230, 49);
+            this.label4.Location = new System.Drawing.Point(209, 49);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(84, 13);
             this.label4.TabIndex = 6;
@@ -1174,7 +1230,7 @@
             this.textBox3.Location = new System.Drawing.Point(134, 46);
             this.textBox3.Name = "textBox3";
             this.textBox3.ReadOnly = true;
-            this.textBox3.Size = new System.Drawing.Size(90, 20);
+            this.textBox3.Size = new System.Drawing.Size(69, 20);
             this.textBox3.TabIndex = 5;
             // 
             // label3
@@ -1191,7 +1247,7 @@
             // 
             // textBox2
             // 
-            this.textBox2.Location = new System.Drawing.Point(829, 11);
+            this.textBox2.Location = new System.Drawing.Point(717, 11);
             this.textBox2.Name = "textBox2";
             this.textBox2.ReadOnly = true;
             this.textBox2.Size = new System.Drawing.Size(90, 20);
@@ -1200,7 +1256,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(675, 14);
+            this.label2.Location = new System.Drawing.Point(569, 14);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(142, 13);
             this.label2.TabIndex = 2;
@@ -1211,7 +1267,7 @@
             this.textBox1.Location = new System.Drawing.Point(69, 11);
             this.textBox1.Name = "textBox1";
             this.textBox1.ReadOnly = true;
-            this.textBox1.Size = new System.Drawing.Size(600, 20);
+            this.textBox1.Size = new System.Drawing.Size(349, 20);
             this.textBox1.TabIndex = 1;
             // 
             // label1
@@ -1225,6 +1281,10 @@
             // 
             // tabPage3
             // 
+            this.tabPage3.Controls.Add(this.textBox11);
+            this.tabPage3.Controls.Add(this.label31);
+            this.tabPage3.Controls.Add(this.textBox10);
+            this.tabPage3.Controls.Add(this.label30);
             this.tabPage3.Controls.Add(this.groupBox6);
             this.tabPage3.Controls.Add(this.groupBox5);
             this.tabPage3.Controls.Add(this.groupBox4);
@@ -1250,6 +1310,40 @@
             this.tabPage3.TabIndex = 0;
             this.tabPage3.Text = "Градуировка";
             this.tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // textBox11
+            // 
+            this.textBox11.Location = new System.Drawing.Point(648, 46);
+            this.textBox11.Name = "textBox11";
+            this.textBox11.ReadOnly = true;
+            this.textBox11.Size = new System.Drawing.Size(159, 20);
+            this.textBox11.TabIndex = 35;
+            // 
+            // label31
+            // 
+            this.label31.AutoSize = true;
+            this.label31.Location = new System.Drawing.Point(581, 49);
+            this.label31.Name = "label31";
+            this.label31.Size = new System.Drawing.Size(58, 13);
+            this.label31.TabIndex = 34;
+            this.label31.Text = "Вещество";
+            // 
+            // textBox10
+            // 
+            this.textBox10.Location = new System.Drawing.Point(503, 11);
+            this.textBox10.Name = "textBox10";
+            this.textBox10.ReadOnly = true;
+            this.textBox10.Size = new System.Drawing.Size(60, 20);
+            this.textBox10.TabIndex = 33;
+            // 
+            // label30
+            // 
+            this.label30.AutoSize = true;
+            this.label30.Location = new System.Drawing.Point(424, 14);
+            this.label30.Name = "label30";
+            this.label30.Size = new System.Drawing.Size(75, 13);
+            this.label30.TabIndex = 32;
+            this.label30.Text = "Длина волны";
             // 
             // tabControl2
             // 
@@ -1293,6 +1387,7 @@
             // 
             // button14
             // 
+            this.button14.Enabled = false;
             this.button14.Image = global::Ecoview_V2._0.Properties.Resources.Meas_btn;
             this.button14.Location = new System.Drawing.Point(768, 28);
             this.button14.Name = "button14";
@@ -1314,6 +1409,7 @@
             // 
             // button9
             // 
+            this.button9.Enabled = false;
             this.button9.Image = global::Ecoview_V2._0.Properties.Resources.pdfIcon;
             this.button9.Location = new System.Drawing.Point(631, 28);
             this.button9.Name = "button9";
@@ -1435,7 +1531,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Ecoview";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Ecoview Basic v2.6.0";
+            this.Text = "Ecoview Basic v2.6.1";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Ecoview_FormClosing);
             this.Load += new System.EventHandler(this.Ecoview_Load);
             this.groupBox3.ResumeLayout(false);
@@ -1594,5 +1690,13 @@
         private System.Data.DataSet dataSet1;
         private System.ComponentModel.BackgroundWorker backgroundWorker1;
         private System.Windows.Forms.ToolStripMenuItem печатьToolStripMenuItem1;
+        public System.Windows.Forms.TextBox textBox12;
+        private System.Windows.Forms.Label label32;
+        public System.Windows.Forms.TextBox textBox9;
+        private System.Windows.Forms.Label label29;
+        public System.Windows.Forms.TextBox textBox11;
+        private System.Windows.Forms.Label label31;
+        public System.Windows.Forms.TextBox textBox10;
+        private System.Windows.Forms.Label label30;
     }
 }

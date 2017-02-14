@@ -488,6 +488,10 @@ namespace Ecoview_V2._0
                     _Analis.textBox1.Text = Description.Text;
                     _Analis.textBox2.Text = Opt_dlin_cuvet.Text;
                     _Analis.textBox3.Text = textBox4.Text;
+                    _Analis.textBox10.Text = WL_grad.Text;
+                    _Analis.textBox9.Text = WL_grad.Text;
+                    _Analis.textBox11.Text = Veshestvo.Text;
+                    _Analis.textBox12.Text = Veshestvo.Text;
                     _Analis.tabPage4.Parent = null;
                     if (radioButton4.Checked == true)
                     {
@@ -606,14 +610,14 @@ namespace Ecoview_V2._0
                     _Analis.параметрыToolStripMenuItem.Enabled = true;
                     _Analis.button10.Enabled = true;
 
-                    if (_Analis.IzmerCreate == true)
+               /*     if (_Analis.IzmerCreate == true)
                     {
                         _Analis.button14.Enabled = true;
                     }
                     else
                     {
                         _Analis.button14.Enabled = false;
-                    }
+                    }*/
                     _Analis.Veshestvo1 = Veshestvo.Text;
                     _Analis.wavelength1 = string.Format("{0:0.00}", WL_grad.Text);
                     _Analis.WidthCuvette = Opt_dlin_cuvet.Text;
@@ -667,12 +671,12 @@ namespace Ecoview_V2._0
                     if (radioButton6.Checked == true)
                     {
                         _Analis.SposobZadan = "По СО";
-                        _Analis.button14.Enabled = true;
+                       // _Analis.button14.Enabled = false;
                     }
                     else
                     {
                         _Analis.SposobZadan = "Ввод коэффициентов";
-                        _Analis.button14.Enabled = false;
+                     //   _Analis.button14.Enabled = false;
                         _Analis.textBox4.Text = k0Text.Text;
                         _Analis.textBox5.Text = k1Text.Text;
                         _Analis.textBox6.Text = k2Text.Text;
@@ -803,7 +807,7 @@ namespace Ecoview_V2._0
 
         private void WL_grad_TextChanged(object sender, EventArgs e)
         {
-
+            
         }
 
         private void Ed_SelectedIndexChanged(object sender, EventArgs e)
@@ -827,6 +831,21 @@ namespace Ecoview_V2._0
         private void textBox4_KeyPress(object sender, KeyPressEventArgs e)
         {
             char number = e.KeyChar;
+            if (e.KeyChar == 46 && textBox4.Text.IndexOf(',') == -1)
+            {
+                e.KeyChar = ',';
+
+            }
+            else
+            {
+
+                if (e.KeyChar == 46 && textBox4.Text.IndexOf(',') != -1)
+                {
+                    e.Handled = true;
+                    return;
+                }
+
+            }
             if (number == 44 && textBox4.Text.IndexOf(',') != -1)
             {
                 e.Handled = true;
@@ -837,7 +856,7 @@ namespace Ecoview_V2._0
                 e.Handled = true;
                 return;
             }
-            if ((e.KeyChar <= 42 || e.KeyChar >= 58 || e.KeyChar == 43 || e.KeyChar == 46 || e.KeyChar == 47) && number != 8 && number != 44) //цифры, клавиша BackSpace и запятая а ASCII
+            if ((e.KeyChar <= 42 || e.KeyChar >= 58 || e.KeyChar == 43 || e.KeyChar == 47) && number != 8 && number != 44) //цифры, клавиша BackSpace и запятая а ASCII
             {
                 e.Handled = true;
                 MessageBox.Show("В данное поле можно вводить цифры, знаки '-', '.'");
@@ -875,6 +894,21 @@ namespace Ecoview_V2._0
         private void Down_KeyPress(object sender, KeyPressEventArgs e)
         {
             char number = e.KeyChar;
+            if (e.KeyChar == 46 && Down.Text.IndexOf(',') == -1)
+            {
+                e.KeyChar = ',';
+
+            }
+            else
+            {
+
+                if (e.KeyChar == 46 && Down.Text.IndexOf(',') != -1)
+                {
+                    e.Handled = true;
+                    return;
+                }
+
+            }
             if (number == 44 && Down.Text.IndexOf(',') != -1)
             {
                 e.Handled = true;
@@ -885,7 +919,7 @@ namespace Ecoview_V2._0
                 e.Handled = true;
                 return;
             }
-            if ((e.KeyChar <= 42 || e.KeyChar >= 58 || e.KeyChar == 43 || e.KeyChar == 46 || e.KeyChar == 47) && number != 8 && number != 44) //цифры, клавиша BackSpace и запятая а ASCII
+            if ((e.KeyChar <= 42 || e.KeyChar >= 58 || e.KeyChar == 43 || e.KeyChar == 47) && number != 8 && number != 44) //цифры, клавиша BackSpace и запятая а ASCII
             {
                 e.Handled = true;
                 MessageBox.Show("В данное поле можно вводить цифры, знаки '-', '.'");
@@ -895,6 +929,21 @@ namespace Ecoview_V2._0
         private void Up_KeyPress(object sender, KeyPressEventArgs e)
         {
             char number = e.KeyChar;
+            if (e.KeyChar == 46 && Up.Text.IndexOf(',') == -1)
+            {
+                e.KeyChar = ',';
+
+            }
+            else
+            {
+
+                if (e.KeyChar == 46 && Up.Text.IndexOf(',') != -1)
+                {
+                    e.Handled = true;
+                    return;
+                }
+
+            }
             if (number == 44 && Up.Text.IndexOf(',') != -1)
             {
                 e.Handled = true;
@@ -905,7 +954,7 @@ namespace Ecoview_V2._0
                 e.Handled = true;
                 return;
             }
-            if ((e.KeyChar <= 42 || e.KeyChar >= 58 || e.KeyChar == 43 || e.KeyChar == 46 || e.KeyChar == 47) && number != 8 && number != 44) //цифры, клавиша BackSpace и запятая а ASCII
+            if ((e.KeyChar <= 42 || e.KeyChar >= 58 || e.KeyChar == 43 ||e.KeyChar == 47) && number != 8 && number != 44) //цифры, клавиша BackSpace и запятая а ASCII
             {
                 e.Handled = true;
                 MessageBox.Show("В данное поле можно вводить цифры, знаки '-', '.'");
@@ -915,6 +964,21 @@ namespace Ecoview_V2._0
         private void k0Text_KeyPress(object sender, KeyPressEventArgs e)
         {
             char number = e.KeyChar;
+            if (e.KeyChar == 46 && k0Text.Text.IndexOf(',') == -1)
+            {
+                e.KeyChar = ',';
+
+            }
+            else
+            {
+
+                if (e.KeyChar == 46 && k0Text.Text.IndexOf(',') != -1)
+                {
+                    e.Handled = true;
+                    return;
+                }
+
+            }
             if (number == 44 && k0Text.Text.IndexOf(',') != -1)
             {
                 e.Handled = true;
@@ -925,7 +989,7 @@ namespace Ecoview_V2._0
                 e.Handled = true;
                 return;
             }
-            if ((e.KeyChar <= 42 || e.KeyChar >= 58 || e.KeyChar == 43 || e.KeyChar == 46 || e.KeyChar == 47) && number != 8 && number != 44) //цифры, клавиша BackSpace и запятая а ASCII
+            if ((e.KeyChar <= 42 || e.KeyChar >= 58 || e.KeyChar == 43 || e.KeyChar == 47) && number != 8 && number != 44) //цифры, клавиша BackSpace и запятая а ASCII
             {
                 e.Handled = true;
                 MessageBox.Show("В данное поле можно вводить цифры, знаки '-', '.'");
@@ -935,6 +999,21 @@ namespace Ecoview_V2._0
         private void k1Text_KeyPress(object sender, KeyPressEventArgs e)
         {
             char number = e.KeyChar;
+            if (e.KeyChar == 46 && k1Text.Text.IndexOf(',') == -1)
+            {
+                e.KeyChar = ',';
+
+            }
+            else
+            {
+
+                if (e.KeyChar == 46 && k1Text.Text.IndexOf(',') != -1)
+                {
+                    e.Handled = true;
+                    return;
+                }
+
+            }
             if (number == 44 && k1Text.Text.IndexOf(',') != -1)
             {
                 e.Handled = true;
@@ -945,7 +1024,7 @@ namespace Ecoview_V2._0
                 e.Handled = true;
                 return;
             }
-            if ((e.KeyChar <= 42 || e.KeyChar >= 58 || e.KeyChar == 43 || e.KeyChar == 46 || e.KeyChar == 47) && number != 8 && number != 44) //цифры, клавиша BackSpace и запятая а ASCII
+            if ((e.KeyChar <= 42 || e.KeyChar >= 58 || e.KeyChar == 43 ||e.KeyChar == 47) && number != 8 && number != 44) //цифры, клавиша BackSpace и запятая а ASCII
             {
                 e.Handled = true;
                 MessageBox.Show("В данное поле можно вводить цифры, знаки '-', '.'");
@@ -955,6 +1034,21 @@ namespace Ecoview_V2._0
         private void k2Text_KeyPress(object sender, KeyPressEventArgs e)
         {
             char number = e.KeyChar;
+            if (e.KeyChar == 46 && k2Text.Text.IndexOf(',') == -1)
+            {
+                e.KeyChar = ',';
+
+            }
+            else
+            {
+
+                if (e.KeyChar == 46 && k2Text.Text.IndexOf(',') != -1)
+                {
+                    e.Handled = true;
+                    return;
+                }
+
+            }
             if (number == 44 && k2Text.Text.IndexOf(',') != -1)
             {
                 e.Handled = true;
@@ -965,7 +1059,7 @@ namespace Ecoview_V2._0
                 e.Handled = true;
                 return;
             }
-            if ((e.KeyChar <= 42 || e.KeyChar >= 58 || e.KeyChar == 43 || e.KeyChar == 46 || e.KeyChar == 47) && number != 8 && number != 44) //цифры, клавиша BackSpace и запятая а ASCII
+            if ((e.KeyChar <= 42 || e.KeyChar >= 58 || e.KeyChar == 43|| e.KeyChar == 47) && number != 8 && number != 44) //цифры, клавиша BackSpace и запятая а ASCII
             {
                 e.Handled = true;
                 MessageBox.Show("В данное поле можно вводить цифры, знаки '-', '.'");
@@ -1044,13 +1138,28 @@ namespace Ecoview_V2._0
         private void WL_grad_KeyPress(object sender, KeyPressEventArgs e)
         {
             char number = e.KeyChar;
+            if (e.KeyChar == 46 && WL_grad.Text.IndexOf(',') == -1)
+            {
+                e.KeyChar = ',';
+
+            }
+            else
+            {
+
+                if (e.KeyChar == 46 && WL_grad.Text.IndexOf(',') != -1)
+                {
+                    e.Handled = true;
+                    return;
+                }
+
+            }
             if (number == 44 && WL_grad.Text.IndexOf(',') != -1)
             {
                 e.Handled = true;
                 return;
             }
 
-            if ((e.KeyChar >= 58 || e.KeyChar <= 47) && number != 8 && number != 44) //цифры, клавиша BackSpace и запятая а ASCII
+            if ((e.KeyChar >= 58 || e.KeyChar <= 47) && number != 8 && number != 44 && number != 46) //цифры, клавиша BackSpace и запятая а ASCII
             {
                 e.Handled = true;
                 MessageBox.Show("В данное поле можно вводить цифры, знаки ','");

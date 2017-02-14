@@ -220,6 +220,7 @@
             this.WL_grad.TabIndex = 48;
             this.WL_grad.TextChanged += new System.EventHandler(this.WL_grad_TextChanged);
             this.WL_grad.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.WL_grad_KeyPress);
+            this.WL_grad.Leave += new System.EventHandler(this.WL_grad_Leave);
             // 
             // label4
             // 

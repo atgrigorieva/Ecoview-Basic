@@ -792,6 +792,7 @@ namespace Ecoview_V2._0
         public void PortClose()
         {
             ComPort = false;
+            ComPodkl = false;
             if (ComPort == false)
             {
                 char[] ClosePribor = { Convert.ToChar('Q'), Convert.ToChar('U'), Convert.ToChar('\r') };
@@ -1140,6 +1141,7 @@ namespace Ecoview_V2._0
                 radioButton4.Enabled = true;
                 radioButton5.Enabled = true;
                 button3.Enabled = true;
+                button9.Enabled = true;
             }
             Podskazka.Text = "Перейдите в Измерения!";
             label27.Visible = false;
@@ -1309,18 +1311,21 @@ namespace Ecoview_V2._0
                                 if ("Veshestvo".Equals(k.Name) && k.FirstChild != null)
                                 {
                                     Veshestvo1 = k.FirstChild.Value; //Вещество
+                                    textBox11.Text = Veshestvo1;
+                                    textBox12.Text = Veshestvo1;
 
                                 }
                                 if ("wavelength".Equals(k.Name) && k.FirstChild != null)
                                 {
                                     wavelength1 = k.FirstChild.Value; //Длина волны
-
-
+                                    textBox9.Text = wavelength1;
+                                    textBox10.Text = wavelength1;
                                 }
                                 if ("WidthCuvet".Equals(k.Name) && k.FirstChild != null)
                                 {
                                     WidthCuvette = k.FirstChild.Value; //Ширина кюветы
                                     textBox2.Text = WidthCuvette;
+                                    
                                 }
                                 if ("BottomLine".Equals(k.Name) && k.FirstChild != null)
                                 {
@@ -1339,6 +1344,7 @@ namespace Ecoview_V2._0
                                 {
                                     Description = k.FirstChild.Value; //Примечание
                                     textBox1.Text = Description;
+                                    
                                 }
                                 if ("DateTime".Equals(k.Name) && k.FirstChild != null)
                                 {
@@ -1873,6 +1879,7 @@ namespace Ecoview_V2._0
                 }
                 TableWrite2();
                 button3.Enabled = true;
+                button9.Enabled = true;
                 печатьToolStripMenuItem1.Enabled = true;
             }
 
@@ -2271,6 +2278,14 @@ namespace Ecoview_V2._0
             label25.Visible = false;
             label26.Visible = false;
             label28.Visible = false;
+            label14.Enabled = true;
+            RR.Enabled = true;
+            SKO.Enabled = true;
+            label21.Enabled = true;
+            label22.Enabled = true;
+            textBox4.Enabled = true;
+            textBox5.Enabled = true;
+            textBox6.Enabled = true;
         }
         int circle;
         public void lineinaya0()
@@ -4912,11 +4927,26 @@ namespace Ecoview_V2._0
         {
             if (tabControl2.SelectedIndex == 0)
             {
-                Save();
+                if ((Table1.RowCount < 1) && SposobZadan == "По СО")
+                {
+                    MessageBox.Show("Создайте Градуировку");
+                    
+                }
+                else
+                {
+                    Save();
+                }
             }
             else
             {
-                Save1();
+                if (Table1.RowCount > 1)
+                {
+                    Save1();
+                }
+                else
+                {
+                    MessageBox.Show("Создайте Измерение");
+                }
             }
         }
         public void Save()
@@ -4997,6 +5027,7 @@ namespace Ecoview_V2._0
                 CreateXMLDocument(ref filepath);
                 WriteXml(ref filepath);
                 button3.Enabled = true;
+                button9.Enabled = true;
                 печатьToolStripMenuItem1.Enabled = true;
             }
         }
@@ -5202,6 +5233,7 @@ namespace Ecoview_V2._0
                 CreateXMLDocument2(ref filepath2);
                 WriteXml2(ref filepath2, ref filepath);
                 button3.Enabled = true;
+                button9.Enabled = true;
                 печатьToolStripMenuItem1.Enabled = true;
             }
         }
@@ -5320,11 +5352,26 @@ namespace Ecoview_V2._0
         {
             if (tabControl2.SelectedIndex == 0)
             {
-                Save();
+                if ((Table1.RowCount < 1) && SposobZadan == "По СО")
+                {
+                    MessageBox.Show("Создайте Градуировку");
+
+                }
+                else
+                {
+                    Save();
+                }
             }
             else
             {
-                Save1();
+                if (Table1.RowCount > 1)
+                {
+                    Save1();
+                }
+                else
+                {
+                    MessageBox.Show("Создайте Измерение");
+                }
             }
         }
 
@@ -6212,6 +6259,7 @@ namespace Ecoview_V2._0
             if (doNotWrite == true)
             {
                 button3.Enabled = true;
+                button9.Enabled = true;
             }
 
 
@@ -6653,7 +6701,7 @@ namespace Ecoview_V2._0
                 welcomeParagraph.Alignment = iTextSharp.text.Element.ALIGN_CENTER;
                 Paragraph Veshestvo2 = new Paragraph("Вещество: " + Veshestvo1, font);
                 Paragraph wavelength2 = new Paragraph("Длина волны: " + wavelength1, font);
-                Paragraph WidthCuvette2 = new Paragraph("Ширина кюветы: " + WidthCuvette, font); ;
+                Paragraph WidthCuvette2 = new Paragraph("Длина кюветы: " + WidthCuvette, font); ;
                 Paragraph BottomLine2 = new Paragraph("Нижняя граница обнаружения: " + BottomLine, font);
                 Paragraph TopLine2 = new Paragraph("Верхняя граница обнаружения: " + TopLine, font);
                 Paragraph ND2 = new Paragraph("НД: " + ND, font);
@@ -7009,7 +7057,7 @@ public void WLADDSTR2()
             e.Graphics.DrawString(Veshestvo1, new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, 115, 110);
             e.Graphics.DrawString("Длина волны:", new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, 25, 130);
             e.Graphics.DrawString(wavelength1, new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, 155, 130);
-            e.Graphics.DrawString("Ширина кюветы:", new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, 25, 150);
+            e.Graphics.DrawString("Длина кюветы:", new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, 25, 150);
             e.Graphics.DrawString(WidthCuvette, new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, 190, 150);
             e.Graphics.DrawString("Границы обнаружения:", new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, 25, 170);
             e.Graphics.DrawString("Нижняя:", new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, 250, 170);
@@ -8114,6 +8162,10 @@ public void WLADDSTR2()
             {
                 if (Table1.RowCount > 1)
                 {
+                    if(textBox10.Text != GWNew.Text)
+                    {
+                        MessageBox.Show("Длина волны градуировки отличается от длины волны, установленной на приборе!\rИзмените настройки градуировки!");
+                    }
                     Graduirovka(sender, e);
                 }
                 else
@@ -8125,6 +8177,10 @@ public void WLADDSTR2()
             {
                 if (Table2.RowCount > 1)
                 {
+                    if (textBox10.Text != GWNew.Text)
+                    {
+                        MessageBox.Show("Длина волны градуировки отличается от длины волны, установленной на приборе!\rИзмените настройки градуировки!");
+                    }
                     Izmerenie(sender, e);
                 }
                 else
@@ -9210,6 +9266,7 @@ public void WLADDSTR2()
             if (doNotWrite == true)
             {
                 button3.Enabled = true;
+                button9.Enabled = true;
             }
         }
     
@@ -9217,11 +9274,25 @@ public void WLADDSTR2()
         {
             if (tabControl2.SelectedIndex == 0)
             {
-                Graduirovka(sender, e);
+                if (Table1.RowCount > 1)
+                {
+                    Graduirovka(sender, e);
+                }
+                else
+                {
+                    MessageBox.Show("Создайте градуировку по СО");
+                }
             }
             else
             {
-                Izmerenie(sender, e);
+                if (Table2.RowCount > 1)
+                {
+                    Izmerenie(sender, e);
+                }
+                else
+                {
+                    MessageBox.Show("Создайте измерение");
+                }
             }
         }
 
@@ -9360,11 +9431,20 @@ public void WLADDSTR2()
              }
 
              curent++;*/
+             
             if (Table1.CurrentCell.ColumnIndex >= 3 && Table1.CurrentCell.ReadOnly != true)
-            {                
+            {
+                //CellOpt = e1.KeyChar;
+                //MessageBox.Show(Convert.ToString(e1.KeyChar));
+                if (Table1.CurrentCell.Value != "" && Table1.CurrentCell.Value != null)
+                   {
+                       CellOpt = Convert.ToDouble(Table1.CurrentCell.Value.ToString());
+                   }
+
                 ZapicInTable1();
             }
          }
+
         private void tb_KeyPress(object sender, KeyPressEventArgs e)
 
         {
@@ -9420,7 +9500,9 @@ public void WLADDSTR2()
 
         private void Table1_KeyPress(object sender, KeyPressEventArgs e)
         {
-
+            //MessageBox.Show(Convert.ToString(e.KeyChar));
+            // CellOpt = Convert.ToDouble(Convert.ToString(e.KeyChar));
+         //   CellOpt = 5;
         }
 
         private void Table2_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
@@ -9429,6 +9511,11 @@ public void WLADDSTR2()
             {
                 ZapicInTable2();
             }
+        }
+
+        private void tabPage4_Click(object sender, EventArgs e)
+        {
+
         }
 
         public void SaveTpPdf2()

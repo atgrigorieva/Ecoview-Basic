@@ -18,12 +18,45 @@ namespace Ecoview_V2._0
         {
             InitializeComponent();
             this._Analis = parent;
-            
+            textBox1.Focus();
+            textBox1.Select();
+            if (_Analis.CellOpt != 0)
+            {
+                textBox1.Text = Convert.ToString(_Analis.CellOpt);
+            }
+            else
+            {
+                textBox1.Text = Convert.ToString(_Analis.CellOpt);
+            }
+
         }
 
         private void textBox1_KeyPress(object sender, KeyPressEventArgs e)
         {
             char number = e.KeyChar;
+            if(number == 13)
+            {
+                Save_Click(sender, e);
+            }
+            if (number == 27)
+            {
+                Cancel_Click(sender, e);
+            }
+            if (e.KeyChar == 46 && textBox1.Text.IndexOf(',') == -1)
+            {
+                e.KeyChar = ',';           
+
+            }
+            else
+            {
+              
+               if(e.KeyChar == 46 && textBox1.Text.IndexOf(',') != -1)
+                {
+                    e.Handled = true;
+                    return;
+                }
+                
+            }
             if(number == 44 && textBox1.Text.IndexOf(',') != -1)
             {
                 e.Handled = true;
@@ -34,7 +67,7 @@ namespace Ecoview_V2._0
                 e.Handled = true;
                 return;
             }
-            if ((e.KeyChar <= 42 || e.KeyChar >= 58 || e.KeyChar == 43 || e.KeyChar == 46 || e.KeyChar == 47) && number != 8 && number != 44) //цифры, клавиша BackSpace и запятая а ASCII
+            if ((e.KeyChar <= 42 || e.KeyChar >= 58 || e.KeyChar == 43 || e.KeyChar == 47) && number != 8 && number != 44 && number != 13 && number != 27) //цифры, клавиша BackSpace и запятая а ASCII
             {
                 e.Handled = true;
                 MessageBox.Show("В данное поле можно вводить цифры, знаки '-', '.'");
@@ -62,14 +95,8 @@ namespace Ecoview_V2._0
 
         private void InputBox_Load(object sender, EventArgs e)
         {
-            if (_Analis.CellOpt != 0)
-            {
-                textBox1.Text = Convert.ToString(_Analis.CellOpt);
-            }
-            else
-            {
-
-            }
+            
+  
         }
     }
 }
