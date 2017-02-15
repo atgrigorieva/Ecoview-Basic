@@ -63,6 +63,26 @@ namespace Ecoview_V2._0.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap add {
+            get {
+                object obj = ResourceManager.GetObject("add", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap add1__2547 {
+            get {
+                object obj = ResourceManager.GetObject("add1-_2547", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Connect_btn {
             get {
                 object obj = ResourceManager.GetObject("Connect_btn", resourceCulture);
@@ -73,9 +93,29 @@ namespace Ecoview_V2._0.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap delete_5424 {
+            get {
+                object obj = ResourceManager.GetObject("delete_5424", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap DevInfo_btn {
             get {
                 object obj = ResourceManager.GetObject("DevInfo_btn", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap edit_remove_7872 {
+            get {
+                object obj = ResourceManager.GetObject("edit_remove_7872", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

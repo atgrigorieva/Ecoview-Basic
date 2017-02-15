@@ -28,7 +28,7 @@ namespace Ecoview_V2._0
             {
                 this.подключитьToolStripMenuItem.Enabled = true;
                 button2.Enabled = true;
-                button13.Enabled = false;
+                Add_Table2.Enabled = false;
                 button12.Enabled = false;
                 button14.Enabled = false;
                 this.настройкаПортаToolStripMenuItem.Enabled = false;
@@ -138,6 +138,10 @@ namespace Ecoview_V2._0
         public string filename;
         int cordY = 0;
         public double CellOpt;
+        double k0_1 = 0;
+        double k1_1 = 0;
+        double k2_1 = 0;
+        bool USE_KO_1 = false;
         public void Ecoview_Load(object sender, EventArgs e)
         {
             edconctr = "%";
@@ -162,7 +166,14 @@ namespace Ecoview_V2._0
             label25.Visible = false;
             label26.Visible = false;
             label28.Visible = false;
- 
+
+
+
+            ToolTip t1 = new ToolTip();
+            t1.SetToolTip(Add_Table2, "Добавить образец");
+            ToolTip t = new ToolTip();
+            t.SetToolTip(Add_Table2, "Удалить текущий образец");
+
         }
         private void button2_Click(object sender, EventArgs e)
         {
@@ -238,7 +249,7 @@ namespace Ecoview_V2._0
                 this.калибровкаДляОдноволновогоАнализаToolStripMenuItem.Enabled = true;
                 button1.Enabled = true;
                 button2.Enabled = false;
-                button13.Enabled = true;
+                Add_Table2.Enabled = true;
                 button12.Enabled = true;
                 ComPort = true;
                 if ((OpenIzmer == true && ComPort == true) || (OpenIzmer1 == true && ComPort == true))
@@ -823,7 +834,7 @@ namespace Ecoview_V2._0
 
                 this.подключитьToolStripMenuItem.Enabled = true;
                 button2.Enabled = true;
-                button13.Enabled = false;
+                Add_Table2.Enabled = false;
                 button12.Enabled = false;
                 button14.Enabled = false;
                 this.настройкаПортаToolStripMenuItem.Enabled = false;
@@ -6340,7 +6351,7 @@ namespace Ecoview_V2._0
                         }
                         if (aproksim == "Квадратичная")
                         {
-                            if (Table2.Rows[0].Cells["A;Ser" + i1].Value.ToString() != "" && Table2.Rows[i1].Cells["A;Ser" + i].Value.ToString() != "")
+                            if (Table2.Rows[0].Cells["A;Ser" + i].Value.ToString() != "" && Table2.Rows[i1].Cells["A;Ser" + i].Value.ToString() != "")
                             {
                                 if ((Convert.ToDouble(Table2.Rows[0].Cells["A;Ser" + i].Value.ToString()) > Convert.ToDouble(Table2.Rows[i1].Cells["A;Ser" + i].Value.ToString())) && count == 0)
                                 {
@@ -6382,9 +6393,14 @@ namespace Ecoview_V2._0
                             CCR = SredValue / NoCaIzm1;
                             if (Convert.ToDouble(textBox7.Text) >= 1)
                             {
+                               
                                 Table2.Rows[i1].Cells["Ccr"].Value = string.Format("{0:0.0000}", CCR) + "±" + string.Format("{0:0.0000}", ((CCR * Convert.ToDouble(textBox7.Text))) / 100);
                             }
-                            else Table2.Rows[Table2.CurrentCell.RowIndex].Cells["Ccr"].Value = string.Format("{0:0.0000}", CCR);
+                            else
+                            {
+                               
+                                Table2.Rows[i1].Cells["Ccr"].Value = string.Format("{0:0.0000}", CCR);
+                            }
                             //Table2.Rows[j].Cells["d%"].Value = El.Max();
                             if (Table2.Rows[i1].Cells["C,edconctr;Ser." + i].Value == null)
                             {
@@ -6965,6 +6981,7 @@ public void WLADDSTR2()
                 Table2.Rows[0].Cells["Ccr"].ReadOnly = true;
                 Table2.Rows[0].Cells["d%"].ReadOnly = true;
             }
+            Table2.Rows[Table2.RowCount-1].ReadOnly = true;
 
         }
 
@@ -8844,14 +8861,36 @@ public void WLADDSTR2()
                 {
                     Table2.CurrentCell.Value = string.Format("{0:0.0000}", CellOpt);
                     CellOpt = 0;
-
-
                 }
                 else
                 {
                     MessageBox.Show("Запись запрещена!");
                 }
             }
+            PodschetTable2();
+            if (curentIndex != Table2.ColumnCount - 1 || rowIndex != Table2.Rows.Count - 2)
+            {
+                if (rowIndex != Table2.Rows.Count - 2)
+                {
+                    Table2.CurrentCell = this.Table2[curentIndex, rowIndex + 1];
+                }
+                else
+                {
+                    Table2.CurrentCell = this.Table2[curentIndex + 2, 0];
+                }
+            }
+        }
+    public void PodschetTable2()
+        {
+            bool doNotWrite = false;
+            double sum = 0.0;
+            int rowIndex = Table2.CurrentRow.Index;
+            int curentIndex = Table2.CurrentCell.ColumnIndex;
+            double CCR = 0.0;
+            double maxEl;
+            double minEl;
+            double serValue = 0;
+            int cellnull = 0;
             if (USE_KO == false)
             {
                 if (Table2.CurrentCell.Value == null)
@@ -9238,17 +9277,7 @@ public void WLADDSTR2()
                 }
             }
 
-            if (curentIndex != Table2.ColumnCount - 1 || rowIndex != Table2.Rows.Count - 2)
-            {
-                if (rowIndex != Table2.Rows.Count - 2)
-                {
-                    Table2.CurrentCell = this.Table2[curentIndex, rowIndex + 1];
-                }
-                else
-                {
-                    Table2.CurrentCell = this.Table2[curentIndex + 2, 0];
-                }
-            }
+      
             doNotWrite = false;
             for (int j = 0; j < Table2.Rows.Count - 1; j++)
             {
@@ -9269,7 +9298,6 @@ public void WLADDSTR2()
                 button9.Enabled = true;
             }
         }
-    
         private void измеритьToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (tabControl2.SelectedIndex == 0)
@@ -9318,14 +9346,14 @@ public void WLADDSTR2()
 
         private void button11_Click(object sender, EventArgs e)
         {
-            if (tabControl2.SelectedIndex == 0)
+           /* if (tabControl2.SelectedIndex == 0)
             {
                 ZapicInTable1();
             }
             else
             {
                 ZapicInTable2();
-            }
+            }*/
         }
 
                
@@ -9338,7 +9366,14 @@ public void WLADDSTR2()
 
         private void tabControl2_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (tabControl2.SelectedIndex == 1)
+            if (Table2.RowCount == 0)
+            {
+                k0_1 = Convert.ToDouble(textBox4.Text);
+                k1_1 = Convert.ToDouble(textBox5.Text);
+                k2_1 = Convert.ToDouble(textBox6.Text);
+                USE_KO_1 = USE_KO;
+            }
+                if (tabControl2.SelectedIndex == 1)
             {
                 Podskazka.Text = "Создайте или откройте Измерение!";
                 label27.Visible = false;
@@ -9346,7 +9381,36 @@ public void WLADDSTR2()
                 label25.Visible = true;
                 label26.Visible = true;
                 label28.Visible = false;
+                if(Table2.RowCount > 0 && (k0_1 != Convert.ToDouble(textBox4.Text) || k1_1 != Convert.ToDouble(textBox5.Text) || k2_1 != Convert.ToDouble(textBox6.Text) || USE_KO_1 != USE_KO))
+                {
+                    MessageBox.Show("Внимание: Грдуировка была изменена! Таблица Измерений будет пересчитана по новым коэффициентам!");
+                    k0_1 = Convert.ToDouble(string.Format("{0:0.0000}", textBox4.Text));
+                    k1_1 = Convert.ToDouble(string.Format("{0:0.0000}", textBox5.Text));
+                    k2_1 = Convert.ToDouble(string.Format("{0:0.0000}", textBox6.Text));
+                    if(USE_KO_1 != USE_KO && USE_KO == false)
+                    {
+                        Table2.Rows.RemoveAt(0);
+                        USE_KO_1 = USE_KO;
+                    }
+                    else
+                    {
+                        if(USE_KO_1 != USE_KO && USE_KO == true)
+                        {
+                            Table2.Rows.Insert(0, 0, "Контрольный");
+                            for (int i = 1; i <= NoCaSer1; i++)
+                            {
+                                Table2.Rows[0].Cells["A;Ser" + i].Value = string.Format("{0:0.0000}", 0);
+                                
+                            }
+                         //   Table2.Rows.Add();
+                            USE_KO_1 = USE_KO;
+                            MessageBox.Show("Не забудьте измерить холостую пробу!");
+                        }
+                    }
+                    PodschetTable2();
+                }
             }
+            
         }
 
 
@@ -9509,11 +9573,28 @@ public void WLADDSTR2()
         {
             if (Table2.CurrentCell.ColumnIndex >= 2 && Table2.CurrentCell.ReadOnly != true)
             {
+                if (Table2.CurrentCell.Value != "" && Table2.CurrentCell.Value != null)
+                {
+                    CellOpt = Convert.ToDouble(Table2.CurrentCell.Value.ToString());
+                }
                 ZapicInTable2();
             }
+
+
         }
 
         private void tabPage4_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Table2_CellContextMenuStripNeeded(object sender, DataGridViewCellContextMenuStripNeededEventArgs e)
+        {
+
+
+        }
+
+        private void Table2_MouseDown(object sender, MouseEventArgs e)
         {
 
         }

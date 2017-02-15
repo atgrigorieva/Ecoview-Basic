@@ -207,6 +207,7 @@
             this.USE_KO.TabIndex = 31;
             this.USE_KO.Text = "Использовать контрольный опыт КО";
             this.USE_KO.UseVisualStyleBackColor = true;
+            this.USE_KO.Click += new System.EventHandler(this.USE_KO_Click);
             // 
             // label19
             // 
