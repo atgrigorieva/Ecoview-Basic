@@ -47,7 +47,14 @@ namespace Ecoview_V2._0
 
 
                 numericUpDown3.Value = _Analis.NoCaIzm1;
-                numericUpDown4.Value = _Analis.NoCaSer1;
+            if (_Analis.USE_KO != true)
+            {
+                numericUpDown4.Value = _Analis.Table2.Rows.Count - 1;
+            }
+            else
+            {
+                numericUpDown4.Value = _Analis.Table2.Rows.Count - 2;
+            }
                 textBox2.Text = _Analis.F1Text.Text;
                 textBox3.Text = _Analis.F2Text.Text;
                 textBox4.Text = _Analis.textBox7.Text;

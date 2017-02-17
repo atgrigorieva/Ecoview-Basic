@@ -34,6 +34,7 @@ namespace Ecoview_V2._0
         private void textBox1_KeyPress(object sender, KeyPressEventArgs e)
         {
             char number = e.KeyChar;
+
             if(number == 13)
             {
                 Save_Click(sender, e);
@@ -97,6 +98,11 @@ namespace Ecoview_V2._0
         {
             
   
+        }
+
+        private void textBox1_KeyDown(object sender, KeyEventArgs e)
+        {
+
         }
     }
 }

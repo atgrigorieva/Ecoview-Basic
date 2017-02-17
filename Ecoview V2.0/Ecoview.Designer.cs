@@ -30,9 +30,9 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Ecoview));
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea5 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Series series9 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series10 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.radioButton3 = new System.Windows.Forms.RadioButton();
             this.radioButton2 = new System.Windows.Forms.RadioButton();
@@ -82,6 +82,8 @@
             this.label32 = new System.Windows.Forms.Label();
             this.textBox9 = new System.Windows.Forms.TextBox();
             this.label29 = new System.Windows.Forms.Label();
+            this.Add_Table2 = new System.Windows.Forms.Button();
+            this.Remove_Table2 = new System.Windows.Forms.Button();
             this.printPreviewTable1 = new System.Windows.Forms.PrintPreviewDialog();
             this.label28 = new System.Windows.Forms.Label();
             this.label27 = new System.Windows.Forms.Label();
@@ -113,10 +115,22 @@
             this.темновойТокToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.настройкаПортаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.приборToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.подключитьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.информацияToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.калибровкаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.измеритьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.графикРезультатаОдноволновогоИзмеренияToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.волновойАнализToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.анализToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.параметрыToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.файлToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.новыйToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.открытьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.сохранитьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.экспортToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.эксопртВPDFToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.выходToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.печатьToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.colorDialog1 = new System.Windows.Forms.ColorDialog();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
@@ -151,20 +165,6 @@
             this.button4 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
-            this.новыйToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.открытьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.сохранитьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.экспортToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.эксопртВPDFToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.выходToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.печатьToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.параметрыToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.подключитьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.информацияToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.калибровкаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.измеритьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.Add_Table2 = new System.Windows.Forms.Button();
-            this.Remove_Table2 = new System.Windows.Forms.Button();
             this.groupBox3.SuspendLayout();
             this.groupBox6.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Table1)).BeginInit();
@@ -282,13 +282,9 @@
             this.Table1.Name = "Table1";
             this.Table1.Size = new System.Drawing.Size(930, 126);
             this.Table1.TabIndex = 20;
-            this.Table1.CellBeginEdit += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.Table1_CellBeginEdit_1);
-            this.Table1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.Table1_CellContentClick);
-            this.Table1.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.Table1_CellEndEdit);
-            this.Table1.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.Table1_CellValueChanged);
+            this.Table1.CancelRowEdit += new System.Windows.Forms.QuestionEventHandler(this.Table1_CancelRowEdit);
+            this.Table1.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.Table1_CellDoubleClick);
             this.Table1.EditingControlShowing += new System.Windows.Forms.DataGridViewEditingControlShowingEventHandler(this.Table1_EditingControlShowing);
-            this.Table1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Table1_KeyDown);
-            this.Table1.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Table1_KeyPress);
             // 
             // NoCo
             // 
@@ -448,8 +444,7 @@
             this.Table2.RowHeadersVisible = false;
             this.Table2.Size = new System.Drawing.Size(911, 499);
             this.Table2.TabIndex = 23;
-            this.Table2.CellContextMenuStripNeeded += new System.Windows.Forms.DataGridViewCellContextMenuStripNeededEventHandler(this.Table2_CellContextMenuStripNeeded);
-            this.Table2.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.Table2_CellEndEdit);
+            this.Table2.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.Table2_CellDoubleClick);
             this.Table2.CellParsing += new System.Windows.Forms.DataGridViewCellParsingEventHandler(this.Table2_CellParsing);
             this.Table2.EditingControlShowing += new System.Windows.Forms.DataGridViewEditingControlShowingEventHandler(this.Table2_EditingControlShowing);
             // 
@@ -656,7 +651,6 @@
             this.tabPage4.TabIndex = 1;
             this.tabPage4.Text = "Измерение";
             this.tabPage4.UseVisualStyleBackColor = true;
-            this.tabPage4.Click += new System.EventHandler(this.tabPage4_Click);
             // 
             // textBox12
             // 
@@ -691,6 +685,27 @@
             this.label29.Size = new System.Drawing.Size(75, 13);
             this.label29.TabIndex = 30;
             this.label29.Text = "Длина волны";
+            // 
+            // Add_Table2
+            // 
+            this.Add_Table2.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.Add_Table2.Image = global::Ecoview_V2._0.Properties.Resources.add1__2547;
+            this.Add_Table2.Location = new System.Drawing.Point(876, 39);
+            this.Add_Table2.Name = "Add_Table2";
+            this.Add_Table2.Size = new System.Drawing.Size(29, 27);
+            this.Add_Table2.TabIndex = 64;
+            this.Add_Table2.UseVisualStyleBackColor = false;
+            this.Add_Table2.Click += new System.EventHandler(this.Add_Table2_Click);
+            // 
+            // Remove_Table2
+            // 
+            this.Remove_Table2.Image = global::Ecoview_V2._0.Properties.Resources.delete_5424;
+            this.Remove_Table2.Location = new System.Drawing.Point(911, 39);
+            this.Remove_Table2.Name = "Remove_Table2";
+            this.Remove_Table2.Size = new System.Drawing.Size(29, 27);
+            this.Remove_Table2.TabIndex = 62;
+            this.Remove_Table2.UseVisualStyleBackColor = true;
+            this.Remove_Table2.Click += new System.EventHandler(this.Remove_Table2_Click);
             // 
             // printPreviewTable1
             // 
@@ -897,36 +912,36 @@
             // 
             // chart1
             // 
-            chartArea5.AxisX.MajorTickMark.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.NotSet;
-            chartArea5.AxisX.MinorGrid.Enabled = true;
-            chartArea5.AxisX.MinorGrid.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.NotSet;
-            chartArea5.AxisX.MinorTickMark.Enabled = true;
-            chartArea5.AxisX.MinorTickMark.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.NotSet;
-            chartArea5.AxisX.Title = "Оптическая плотность, А";
-            chartArea5.AxisX2.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.NotSet;
-            chartArea5.AxisX2.MajorGrid.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.NotSet;
-            chartArea5.AxisX2.MajorTickMark.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.NotSet;
-            chartArea5.AxisX2.MinorGrid.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.NotSet;
-            chartArea5.AxisX2.MinorTickMark.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.NotSet;
-            chartArea5.AxisY.MajorGrid.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.NotSet;
-            chartArea5.AxisY.Title = "Концетрация";
-            chartArea5.Name = "ChartArea1";
-            this.chart1.ChartAreas.Add(chartArea5);
+            chartArea2.AxisX.MajorTickMark.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.NotSet;
+            chartArea2.AxisX.MinorGrid.Enabled = true;
+            chartArea2.AxisX.MinorGrid.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.NotSet;
+            chartArea2.AxisX.MinorTickMark.Enabled = true;
+            chartArea2.AxisX.MinorTickMark.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.NotSet;
+            chartArea2.AxisX.Title = "Оптическая плотность, А";
+            chartArea2.AxisX2.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.NotSet;
+            chartArea2.AxisX2.MajorGrid.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.NotSet;
+            chartArea2.AxisX2.MajorTickMark.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.NotSet;
+            chartArea2.AxisX2.MinorGrid.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.NotSet;
+            chartArea2.AxisX2.MinorTickMark.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.NotSet;
+            chartArea2.AxisY.MajorGrid.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.NotSet;
+            chartArea2.AxisY.Title = "Концетрация";
+            chartArea2.Name = "ChartArea1";
+            this.chart1.ChartAreas.Add(chartArea2);
             this.chart1.Cursor = System.Windows.Forms.Cursors.Default;
             this.chart1.Location = new System.Drawing.Point(9, 72);
             this.chart1.Name = "chart1";
             this.chart1.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.SeaGreen;
             this.chart1.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            series9.ChartArea = "ChartArea1";
-            series9.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
-            series9.IsVisibleInLegend = false;
-            series9.Name = "Series1";
-            series10.ChartArea = "ChartArea1";
-            series10.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series10.IsVisibleInLegend = false;
-            series10.Name = "Series2";
-            this.chart1.Series.Add(series9);
-            this.chart1.Series.Add(series10);
+            series3.ChartArea = "ChartArea1";
+            series3.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
+            series3.IsVisibleInLegend = false;
+            series3.Name = "Series1";
+            series4.ChartArea = "ChartArea1";
+            series4.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series4.IsVisibleInLegend = false;
+            series4.Name = "Series2";
+            this.chart1.Series.Add(series3);
+            this.chart1.Series.Add(series4);
             this.chart1.Size = new System.Drawing.Size(566, 321);
             this.chart1.TabIndex = 14;
             this.chart1.Text = "chart1";
@@ -996,6 +1011,40 @@
             this.приборToolStripMenuItem.Size = new System.Drawing.Size(63, 20);
             this.приборToolStripMenuItem.Text = "Прибор";
             // 
+            // подключитьToolStripMenuItem
+            // 
+            this.подключитьToolStripMenuItem.Image = global::Ecoview_V2._0.Properties.Resources.Connect_btn;
+            this.подключитьToolStripMenuItem.Name = "подключитьToolStripMenuItem";
+            this.подключитьToolStripMenuItem.Size = new System.Drawing.Size(151, 22);
+            this.подключитьToolStripMenuItem.Text = "Подключить";
+            this.подключитьToolStripMenuItem.Click += new System.EventHandler(this.подключитьToolStripMenuItem_Click);
+            // 
+            // информацияToolStripMenuItem
+            // 
+            this.информацияToolStripMenuItem.Image = global::Ecoview_V2._0.Properties.Resources.DevInfo_btn;
+            this.информацияToolStripMenuItem.Name = "информацияToolStripMenuItem";
+            this.информацияToolStripMenuItem.Size = new System.Drawing.Size(151, 22);
+            this.информацияToolStripMenuItem.Text = "Информация";
+            this.информацияToolStripMenuItem.Visible = false;
+            this.информацияToolStripMenuItem.Click += new System.EventHandler(this.информацияToolStripMenuItem_Click);
+            // 
+            // калибровкаToolStripMenuItem
+            // 
+            this.калибровкаToolStripMenuItem.Image = global::Ecoview_V2._0.Properties.Resources.Reziro_btn;
+            this.калибровкаToolStripMenuItem.Name = "калибровкаToolStripMenuItem";
+            this.калибровкаToolStripMenuItem.Size = new System.Drawing.Size(151, 22);
+            this.калибровкаToolStripMenuItem.Text = "Калибровка";
+            this.калибровкаToolStripMenuItem.Visible = false;
+            this.калибровкаToolStripMenuItem.Click += new System.EventHandler(this.калибровкаToolStripMenuItem_Click);
+            // 
+            // измеритьToolStripMenuItem
+            // 
+            this.измеритьToolStripMenuItem.Image = global::Ecoview_V2._0.Properties.Resources.Meas_btn;
+            this.измеритьToolStripMenuItem.Name = "измеритьToolStripMenuItem";
+            this.измеритьToolStripMenuItem.Size = new System.Drawing.Size(151, 22);
+            this.измеритьToolStripMenuItem.Text = "Измерить";
+            this.измеритьToolStripMenuItem.Click += new System.EventHandler(this.измеритьToolStripMenuItem_Click);
+            // 
             // графикРезультатаОдноволновогоИзмеренияToolStripMenuItem
             // 
             this.графикРезультатаОдноволновогоИзмеренияToolStripMenuItem.Name = "графикРезультатаОдноволновогоИзмеренияToolStripMenuItem";
@@ -1020,6 +1069,15 @@
             this.анализToolStripMenuItem.Size = new System.Drawing.Size(59, 20);
             this.анализToolStripMenuItem.Text = "Анализ";
             // 
+            // параметрыToolStripMenuItem
+            // 
+            this.параметрыToolStripMenuItem.Enabled = false;
+            this.параметрыToolStripMenuItem.Image = global::Ecoview_V2._0.Properties.Resources.Setup_btn;
+            this.параметрыToolStripMenuItem.Name = "параметрыToolStripMenuItem";
+            this.параметрыToolStripMenuItem.Size = new System.Drawing.Size(329, 22);
+            this.параметрыToolStripMenuItem.Text = "Параметры";
+            this.параметрыToolStripMenuItem.Click += new System.EventHandler(this.параметрыToolStripMenuItem_Click);
+            // 
             // файлToolStripMenuItem
             // 
             this.файлToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -1033,6 +1091,62 @@
             this.файлToolStripMenuItem.Name = "файлToolStripMenuItem";
             this.файлToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
             this.файлToolStripMenuItem.Text = "Файл";
+            // 
+            // новыйToolStripMenuItem
+            // 
+            this.новыйToolStripMenuItem.Image = global::Ecoview_V2._0.Properties.Resources.NewSetup_btn;
+            this.новыйToolStripMenuItem.Name = "новыйToolStripMenuItem";
+            this.новыйToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
+            this.новыйToolStripMenuItem.Text = "Новый";
+            this.новыйToolStripMenuItem.Click += new System.EventHandler(this.новыйToolStripMenuItem_Click);
+            // 
+            // открытьToolStripMenuItem
+            // 
+            this.открытьToolStripMenuItem.Image = global::Ecoview_V2._0.Properties.Resources.Open_btn;
+            this.открытьToolStripMenuItem.Name = "открытьToolStripMenuItem";
+            this.открытьToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
+            this.открытьToolStripMenuItem.Text = "Открыть";
+            this.открытьToolStripMenuItem.Click += new System.EventHandler(this.открытьToolStripMenuItem_Click);
+            // 
+            // сохранитьToolStripMenuItem
+            // 
+            this.сохранитьToolStripMenuItem.Image = global::Ecoview_V2._0.Properties.Resources.Save_btn;
+            this.сохранитьToolStripMenuItem.Name = "сохранитьToolStripMenuItem";
+            this.сохранитьToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
+            this.сохранитьToolStripMenuItem.Text = "Сохранить";
+            this.сохранитьToolStripMenuItem.Click += new System.EventHandler(this.сохранитьToolStripMenuItem_Click);
+            // 
+            // экспортToolStripMenuItem
+            // 
+            this.экспортToolStripMenuItem.Image = global::Ecoview_V2._0.Properties.Resources.excelicon;
+            this.экспортToolStripMenuItem.Name = "экспортToolStripMenuItem";
+            this.экспортToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
+            this.экспортToolStripMenuItem.Text = "Экспорт в Excel";
+            this.экспортToolStripMenuItem.Click += new System.EventHandler(this.экспортToolStripMenuItem_Click);
+            // 
+            // эксопртВPDFToolStripMenuItem
+            // 
+            this.эксопртВPDFToolStripMenuItem.Image = global::Ecoview_V2._0.Properties.Resources.pdfIcon;
+            this.эксопртВPDFToolStripMenuItem.Name = "эксопртВPDFToolStripMenuItem";
+            this.эксопртВPDFToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
+            this.эксопртВPDFToolStripMenuItem.Text = "Эксопрт в PDF";
+            this.эксопртВPDFToolStripMenuItem.Click += new System.EventHandler(this.эксопртВPDFToolStripMenuItem_Click);
+            // 
+            // выходToolStripMenuItem
+            // 
+            this.выходToolStripMenuItem.Image = global::Ecoview_V2._0.Properties.Resources.exit;
+            this.выходToolStripMenuItem.Name = "выходToolStripMenuItem";
+            this.выходToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
+            this.выходToolStripMenuItem.Text = "Выход";
+            this.выходToolStripMenuItem.Click += new System.EventHandler(this.выходToolStripMenuItem_Click);
+            // 
+            // печатьToolStripMenuItem1
+            // 
+            this.печатьToolStripMenuItem1.Image = global::Ecoview_V2._0.Properties.Resources.Print_btn;
+            this.печатьToolStripMenuItem1.Name = "печатьToolStripMenuItem1";
+            this.печатьToolStripMenuItem1.Size = new System.Drawing.Size(157, 22);
+            this.печатьToolStripMenuItem1.Text = "Печать";
+            this.печатьToolStripMenuItem1.Click += new System.EventHandler(this.печатьToolStripMenuItem1_Click);
             // 
             // menuStrip1
             // 
@@ -1374,127 +1488,6 @@
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
-            // новыйToolStripMenuItem
-            // 
-            this.новыйToolStripMenuItem.Image = global::Ecoview_V2._0.Properties.Resources.NewSetup_btn;
-            this.новыйToolStripMenuItem.Name = "новыйToolStripMenuItem";
-            this.новыйToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
-            this.новыйToolStripMenuItem.Text = "Новый";
-            this.новыйToolStripMenuItem.Click += new System.EventHandler(this.новыйToolStripMenuItem_Click);
-            // 
-            // открытьToolStripMenuItem
-            // 
-            this.открытьToolStripMenuItem.Image = global::Ecoview_V2._0.Properties.Resources.Open_btn;
-            this.открытьToolStripMenuItem.Name = "открытьToolStripMenuItem";
-            this.открытьToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
-            this.открытьToolStripMenuItem.Text = "Открыть";
-            this.открытьToolStripMenuItem.Click += new System.EventHandler(this.открытьToolStripMenuItem_Click);
-            // 
-            // сохранитьToolStripMenuItem
-            // 
-            this.сохранитьToolStripMenuItem.Image = global::Ecoview_V2._0.Properties.Resources.Save_btn;
-            this.сохранитьToolStripMenuItem.Name = "сохранитьToolStripMenuItem";
-            this.сохранитьToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
-            this.сохранитьToolStripMenuItem.Text = "Сохранить";
-            this.сохранитьToolStripMenuItem.Click += new System.EventHandler(this.сохранитьToolStripMenuItem_Click);
-            // 
-            // экспортToolStripMenuItem
-            // 
-            this.экспортToolStripMenuItem.Image = global::Ecoview_V2._0.Properties.Resources.excelicon;
-            this.экспортToolStripMenuItem.Name = "экспортToolStripMenuItem";
-            this.экспортToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
-            this.экспортToolStripMenuItem.Text = "Экспорт в Excel";
-            this.экспортToolStripMenuItem.Click += new System.EventHandler(this.экспортToolStripMenuItem_Click);
-            // 
-            // эксопртВPDFToolStripMenuItem
-            // 
-            this.эксопртВPDFToolStripMenuItem.Image = global::Ecoview_V2._0.Properties.Resources.pdfIcon;
-            this.эксопртВPDFToolStripMenuItem.Name = "эксопртВPDFToolStripMenuItem";
-            this.эксопртВPDFToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
-            this.эксопртВPDFToolStripMenuItem.Text = "Эксопрт в PDF";
-            this.эксопртВPDFToolStripMenuItem.Click += new System.EventHandler(this.эксопртВPDFToolStripMenuItem_Click);
-            // 
-            // выходToolStripMenuItem
-            // 
-            this.выходToolStripMenuItem.Image = global::Ecoview_V2._0.Properties.Resources.exit;
-            this.выходToolStripMenuItem.Name = "выходToolStripMenuItem";
-            this.выходToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
-            this.выходToolStripMenuItem.Text = "Выход";
-            this.выходToolStripMenuItem.Click += new System.EventHandler(this.выходToolStripMenuItem_Click);
-            // 
-            // печатьToolStripMenuItem1
-            // 
-            this.печатьToolStripMenuItem1.Image = global::Ecoview_V2._0.Properties.Resources.Print_btn;
-            this.печатьToolStripMenuItem1.Name = "печатьToolStripMenuItem1";
-            this.печатьToolStripMenuItem1.Size = new System.Drawing.Size(157, 22);
-            this.печатьToolStripMenuItem1.Text = "Печать";
-            this.печатьToolStripMenuItem1.Click += new System.EventHandler(this.печатьToolStripMenuItem1_Click);
-            // 
-            // параметрыToolStripMenuItem
-            // 
-            this.параметрыToolStripMenuItem.Enabled = false;
-            this.параметрыToolStripMenuItem.Image = global::Ecoview_V2._0.Properties.Resources.Setup_btn;
-            this.параметрыToolStripMenuItem.Name = "параметрыToolStripMenuItem";
-            this.параметрыToolStripMenuItem.Size = new System.Drawing.Size(329, 22);
-            this.параметрыToolStripMenuItem.Text = "Параметры";
-            this.параметрыToolStripMenuItem.Click += new System.EventHandler(this.параметрыToolStripMenuItem_Click);
-            // 
-            // подключитьToolStripMenuItem
-            // 
-            this.подключитьToolStripMenuItem.Image = global::Ecoview_V2._0.Properties.Resources.Connect_btn;
-            this.подключитьToolStripMenuItem.Name = "подключитьToolStripMenuItem";
-            this.подключитьToolStripMenuItem.Size = new System.Drawing.Size(151, 22);
-            this.подключитьToolStripMenuItem.Text = "Подключить";
-            this.подключитьToolStripMenuItem.Click += new System.EventHandler(this.подключитьToolStripMenuItem_Click);
-            // 
-            // информацияToolStripMenuItem
-            // 
-            this.информацияToolStripMenuItem.Image = global::Ecoview_V2._0.Properties.Resources.DevInfo_btn;
-            this.информацияToolStripMenuItem.Name = "информацияToolStripMenuItem";
-            this.информацияToolStripMenuItem.Size = new System.Drawing.Size(151, 22);
-            this.информацияToolStripMenuItem.Text = "Информация";
-            this.информацияToolStripMenuItem.Visible = false;
-            this.информацияToolStripMenuItem.Click += new System.EventHandler(this.информацияToolStripMenuItem_Click);
-            // 
-            // калибровкаToolStripMenuItem
-            // 
-            this.калибровкаToolStripMenuItem.Image = global::Ecoview_V2._0.Properties.Resources.Reziro_btn;
-            this.калибровкаToolStripMenuItem.Name = "калибровкаToolStripMenuItem";
-            this.калибровкаToolStripMenuItem.Size = new System.Drawing.Size(151, 22);
-            this.калибровкаToolStripMenuItem.Text = "Калибровка";
-            this.калибровкаToolStripMenuItem.Visible = false;
-            this.калибровкаToolStripMenuItem.Click += new System.EventHandler(this.калибровкаToolStripMenuItem_Click);
-            // 
-            // измеритьToolStripMenuItem
-            // 
-            this.измеритьToolStripMenuItem.Image = global::Ecoview_V2._0.Properties.Resources.Meas_btn;
-            this.измеритьToolStripMenuItem.Name = "измеритьToolStripMenuItem";
-            this.измеритьToolStripMenuItem.Size = new System.Drawing.Size(151, 22);
-            this.измеритьToolStripMenuItem.Text = "Измерить";
-            this.измеритьToolStripMenuItem.Click += new System.EventHandler(this.измеритьToolStripMenuItem_Click);
-            // 
-            // Add_Table2
-            // 
-            this.Add_Table2.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.Add_Table2.Image = global::Ecoview_V2._0.Properties.Resources.add1__2547;
-            this.Add_Table2.Location = new System.Drawing.Point(876, 39);
-            this.Add_Table2.Name = "Add_Table2";
-            this.Add_Table2.Size = new System.Drawing.Size(29, 27);
-            this.Add_Table2.TabIndex = 64;
-            this.Add_Table2.UseVisualStyleBackColor = false;
-            this.Add_Table2.Visible = false;
-            // 
-            // Remove_Table2
-            // 
-            this.Remove_Table2.Image = global::Ecoview_V2._0.Properties.Resources.delete_5424;
-            this.Remove_Table2.Location = new System.Drawing.Point(911, 39);
-            this.Remove_Table2.Name = "Remove_Table2";
-            this.Remove_Table2.Size = new System.Drawing.Size(29, 27);
-            this.Remove_Table2.TabIndex = 62;
-            this.Remove_Table2.UseVisualStyleBackColor = true;
-            this.Remove_Table2.Visible = false;
-            this.Remove_Table2.Click += new System.EventHandler(this.button11_Click);
-            // 
             // Ecoview
             // 
             this.AccessibleRole = System.Windows.Forms.AccessibleRole.ScrollBar;
@@ -1533,7 +1526,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Ecoview";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Ecoview Basic v2.6.2";
+            this.Text = "Ecoview Basic v2.6.3";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Ecoview_FormClosing);
             this.Load += new System.EventHandler(this.Ecoview_Load);
             this.groupBox3.ResumeLayout(false);
