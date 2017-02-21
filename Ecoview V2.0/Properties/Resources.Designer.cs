@@ -153,6 +153,16 @@ namespace Ecoview_V2._0.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Manual_btn {
+            get {
+                object obj = ResourceManager.GetObject("Manual_btn", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Meas_btn {
             get {
                 object obj = ResourceManager.GetObject("Meas_btn", resourceCulture);

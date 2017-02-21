@@ -506,6 +506,7 @@ namespace Ecoview_V2._0
                             else
                             {
                                 _Analis.SposobZadan = "Ввод коэффициентов";
+                                _Analis.button11.Enabled = false;
                             }
                         }
                         else
@@ -559,7 +560,8 @@ namespace Ecoview_V2._0
                             else
                             {
                                 _Analis.SposobZadan = "Ввод коэффициентов";
-                                
+                                _Analis.button11.Enabled = false;
+
                             }
                         }
                         else
@@ -683,16 +685,17 @@ namespace Ecoview_V2._0
                         _Analis.k0 = Convert.ToDouble(_Analis.textBox4.Text);
                         _Analis.k1 = Convert.ToDouble(_Analis.textBox5.Text);
                         _Analis.k2 = Convert.ToDouble(_Analis.textBox6.Text);
-
+                        _Analis.button11.Enabled = false;
 
                     }
 
-                    //Podskazka.Text = "Измерьте СО!";
+                    _Analis.Podskazka.Text = "Измерьте СО или введите значения!";
                     _Analis.label27.Visible = false;
                     _Analis.label24.Visible = false;
                     _Analis.label25.Visible = false;
                     _Analis.label26.Visible = false;
                     _Analis.label28.Visible = true;
+                    _Analis.label33.Visible = true;
                     //this.TopMost = true;
                     this.TopMost = true;
                     while (true)

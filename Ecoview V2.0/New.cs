@@ -82,6 +82,7 @@ namespace Ecoview_V2._0
                 _Analis.IzmerenieOpen = true;
                 _Analis.параметрыToolStripMenuItem.Enabled = true;
                 _Analis.button10.Enabled = true;
+                _Analis.button11.Enabled = true;
                 if (_Analis.ComPodkl == true)
                 {
                     _Analis.IzmerCreate1 = true;
@@ -99,12 +100,13 @@ namespace Ecoview_V2._0
                 {
                     _Analis.button14.Enabled = false;
                 }
-                _Analis.Podskazka.Text = "Измеряйте образцы!";
+                _Analis.Podskazka.Text = "Измеряйте или введите значения!";
                 _Analis.label27.Visible = false;
                 _Analis.label24.Visible = false;
                 _Analis.label25.Visible = false;
                 _Analis.label26.Visible = false;
                 _Analis.label28.Visible = true;
+                _Analis.label33.Visible = true;
             }
             this.TopMost = true;
             Close();

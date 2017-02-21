@@ -30,9 +30,9 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Ecoview));
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea5 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Series series9 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series10 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.radioButton3 = new System.Windows.Forms.RadioButton();
             this.radioButton2 = new System.Windows.Forms.RadioButton();
@@ -153,6 +153,7 @@
             this.tabControl2 = new System.Windows.Forms.TabControl();
             this.dataSet1 = new System.Data.DataSet();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
+            this.button11 = new System.Windows.Forms.Button();
             this.button12 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
             this.button14 = new System.Windows.Forms.Button();
@@ -165,6 +166,7 @@
             this.button4 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
+            this.label33 = new System.Windows.Forms.Label();
             this.groupBox3.SuspendLayout();
             this.groupBox6.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Table1)).BeginInit();
@@ -633,7 +635,6 @@
             this.tabPage4.Controls.Add(this.label20);
             this.tabPage4.Controls.Add(this.label16);
             this.tabPage4.Controls.Add(this.label15);
-            this.tabPage4.Controls.Add(this.Add_Table2);
             this.tabPage4.Controls.Add(this.F2Text);
             this.tabPage4.Controls.Add(this.F1Text);
             this.tabPage4.Controls.Add(this.Table2);
@@ -643,6 +644,7 @@
             this.tabPage4.Controls.Add(this.dateTimePicker2);
             this.tabPage4.Controls.Add(this.label17);
             this.tabPage4.Controls.Add(this.label18);
+            this.tabPage4.Controls.Add(this.Add_Table2);
             this.tabPage4.Controls.Add(this.Remove_Table2);
             this.tabPage4.Location = new System.Drawing.Point(4, 22);
             this.tabPage4.Name = "tabPage4";
@@ -722,7 +724,7 @@
             this.label28.AutoSize = true;
             this.label28.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.label28.ForeColor = System.Drawing.SystemColors.Highlight;
-            this.label28.Location = new System.Drawing.Point(777, 68);
+            this.label28.Location = new System.Drawing.Point(825, 68);
             this.label28.Name = "label28";
             this.label28.Size = new System.Drawing.Size(26, 29);
             this.label28.TabIndex = 73;
@@ -912,36 +914,36 @@
             // 
             // chart1
             // 
-            chartArea2.AxisX.MajorTickMark.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.NotSet;
-            chartArea2.AxisX.MinorGrid.Enabled = true;
-            chartArea2.AxisX.MinorGrid.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.NotSet;
-            chartArea2.AxisX.MinorTickMark.Enabled = true;
-            chartArea2.AxisX.MinorTickMark.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.NotSet;
-            chartArea2.AxisX.Title = "Оптическая плотность, А";
-            chartArea2.AxisX2.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.NotSet;
-            chartArea2.AxisX2.MajorGrid.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.NotSet;
-            chartArea2.AxisX2.MajorTickMark.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.NotSet;
-            chartArea2.AxisX2.MinorGrid.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.NotSet;
-            chartArea2.AxisX2.MinorTickMark.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.NotSet;
-            chartArea2.AxisY.MajorGrid.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.NotSet;
-            chartArea2.AxisY.Title = "Концетрация";
-            chartArea2.Name = "ChartArea1";
-            this.chart1.ChartAreas.Add(chartArea2);
+            chartArea5.AxisX.MajorTickMark.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.NotSet;
+            chartArea5.AxisX.MinorGrid.Enabled = true;
+            chartArea5.AxisX.MinorGrid.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.NotSet;
+            chartArea5.AxisX.MinorTickMark.Enabled = true;
+            chartArea5.AxisX.MinorTickMark.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.NotSet;
+            chartArea5.AxisX.Title = "Оптическая плотность, А";
+            chartArea5.AxisX2.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.NotSet;
+            chartArea5.AxisX2.MajorGrid.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.NotSet;
+            chartArea5.AxisX2.MajorTickMark.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.NotSet;
+            chartArea5.AxisX2.MinorGrid.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.NotSet;
+            chartArea5.AxisX2.MinorTickMark.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.NotSet;
+            chartArea5.AxisY.MajorGrid.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.NotSet;
+            chartArea5.AxisY.Title = "Концетрация";
+            chartArea5.Name = "ChartArea1";
+            this.chart1.ChartAreas.Add(chartArea5);
             this.chart1.Cursor = System.Windows.Forms.Cursors.Default;
             this.chart1.Location = new System.Drawing.Point(9, 72);
             this.chart1.Name = "chart1";
             this.chart1.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.SeaGreen;
             this.chart1.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            series3.ChartArea = "ChartArea1";
-            series3.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
-            series3.IsVisibleInLegend = false;
-            series3.Name = "Series1";
-            series4.ChartArea = "ChartArea1";
-            series4.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series4.IsVisibleInLegend = false;
-            series4.Name = "Series2";
-            this.chart1.Series.Add(series3);
-            this.chart1.Series.Add(series4);
+            series9.ChartArea = "ChartArea1";
+            series9.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
+            series9.IsVisibleInLegend = false;
+            series9.Name = "Series1";
+            series10.ChartArea = "ChartArea1";
+            series10.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series10.IsVisibleInLegend = false;
+            series10.Name = "Series2";
+            this.chart1.Series.Add(series9);
+            this.chart1.Series.Add(series10);
             this.chart1.Size = new System.Drawing.Size(566, 321);
             this.chart1.TabIndex = 14;
             this.chart1.Text = "chart1";
@@ -1360,10 +1362,21 @@
             // 
             this.dataSet1.DataSetName = "NewDataSet";
             // 
+            // button11
+            // 
+            this.button11.Enabled = false;
+            this.button11.Image = global::Ecoview_V2._0.Properties.Resources.Manual_btn;
+            this.button11.Location = new System.Drawing.Point(864, 28);
+            this.button11.Name = "button11";
+            this.button11.Size = new System.Drawing.Size(42, 37);
+            this.button11.TabIndex = 74;
+            this.button11.UseVisualStyleBackColor = true;
+            this.button11.Click += new System.EventHandler(this.button11_Click);
+            // 
             // button12
             // 
             this.button12.Image = global::Ecoview_V2._0.Properties.Resources.Reziro_btn;
-            this.button12.Location = new System.Drawing.Point(723, 28);
+            this.button12.Location = new System.Drawing.Point(771, 28);
             this.button12.Name = "button12";
             this.button12.Size = new System.Drawing.Size(39, 37);
             this.button12.TabIndex = 63;
@@ -1375,7 +1388,7 @@
             this.button3.BackColor = System.Drawing.SystemColors.Control;
             this.button3.Enabled = false;
             this.button3.Image = global::Ecoview_V2._0.Properties.Resources.Print_btn;
-            this.button3.Location = new System.Drawing.Point(816, 28);
+            this.button3.Location = new System.Drawing.Point(588, 28);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(42, 37);
             this.button3.TabIndex = 66;
@@ -1386,7 +1399,7 @@
             // 
             this.button14.Enabled = false;
             this.button14.Image = global::Ecoview_V2._0.Properties.Resources.Meas_btn;
-            this.button14.Location = new System.Drawing.Point(768, 28);
+            this.button14.Location = new System.Drawing.Point(816, 28);
             this.button14.Name = "button14";
             this.button14.Size = new System.Drawing.Size(42, 37);
             this.button14.TabIndex = 65;
@@ -1397,7 +1410,7 @@
             // 
             this.button10.Enabled = false;
             this.button10.Image = global::Ecoview_V2._0.Properties.Resources.Setup_btn;
-            this.button10.Location = new System.Drawing.Point(677, 28);
+            this.button10.Location = new System.Drawing.Point(725, 28);
             this.button10.Name = "button10";
             this.button10.Size = new System.Drawing.Size(40, 37);
             this.button10.TabIndex = 61;
@@ -1408,7 +1421,7 @@
             // 
             this.button9.Enabled = false;
             this.button9.Image = global::Ecoview_V2._0.Properties.Resources.pdfIcon;
-            this.button9.Location = new System.Drawing.Point(631, 28);
+            this.button9.Location = new System.Drawing.Point(679, 28);
             this.button9.Name = "button9";
             this.button9.Size = new System.Drawing.Size(40, 37);
             this.button9.TabIndex = 60;
@@ -1418,7 +1431,7 @@
             // button8
             // 
             this.button8.Image = global::Ecoview_V2._0.Properties.Resources.excelicon;
-            this.button8.Location = new System.Drawing.Point(588, 28);
+            this.button8.Location = new System.Drawing.Point(636, 28);
             this.button8.Name = "button8";
             this.button8.Size = new System.Drawing.Size(37, 37);
             this.button8.TabIndex = 59;
@@ -1488,12 +1501,26 @@
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
+            // label33
+            // 
+            this.label33.AutoSize = true;
+            this.label33.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label33.ForeColor = System.Drawing.SystemColors.Highlight;
+            this.label33.Location = new System.Drawing.Point(874, 68);
+            this.label33.Name = "label33";
+            this.label33.Size = new System.Drawing.Size(26, 29);
+            this.label33.TabIndex = 75;
+            this.label33.Text = "↑";
+            this.label33.Visible = false;
+            // 
             // Ecoview
             // 
             this.AccessibleRole = System.Windows.Forms.AccessibleRole.ScrollBar;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1009, 691);
+            this.Controls.Add(this.label33);
+            this.Controls.Add(this.button11);
             this.Controls.Add(this.label28);
             this.Controls.Add(this.label27);
             this.Controls.Add(this.label26);
@@ -1526,7 +1553,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Ecoview";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Ecoview Basic v2.6.3";
+            this.Text = "Ecoview Basic v2.6.4";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Ecoview_FormClosing);
             this.Load += new System.EventHandler(this.Ecoview_Load);
             this.groupBox3.ResumeLayout(false);
@@ -1693,5 +1720,7 @@
         private System.Windows.Forms.Label label31;
         public System.Windows.Forms.TextBox textBox10;
         private System.Windows.Forms.Label label30;
+        public System.Windows.Forms.Button button11;
+        public System.Windows.Forms.Label label33;
     }
 }

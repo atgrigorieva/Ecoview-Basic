@@ -652,7 +652,8 @@ namespace Ecoview_V2._0
                                 else
                                 {
                                     _Analis.SposobZadan = "Ввод коэффициентов";
-                                }
+                                _Analis.button11.Enabled = false;
+                            }
                             }
                             else
                             {
@@ -790,7 +791,7 @@ namespace Ecoview_V2._0
                                 else
                                 {
                                     _Analis.SposobZadan = "Ввод коэффициентов";
-                               
+                                _Analis.button11.Enabled = false;
                                 _Analis.button14.Enabled = false;
                             }
                             }

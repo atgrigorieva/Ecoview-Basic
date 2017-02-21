@@ -118,14 +118,14 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="Setup_btn" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Setup_btn1.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="exit" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\exit1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="NewSetup_btn" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\NewSetup_btn1.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Exit_btn" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Exit_btn1.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="add1-_2547" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\add1-_2547.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="edit_remove_7872" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\edit_remove_7872.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -136,11 +136,14 @@
   <data name="Connect_btn" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Connect_btn1.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="excelicon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\excelicon2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="Meas_btn" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Meas_btn1.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="excelicon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\excelicon2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="NewSetup_btn" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\NewSetup_btn1.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Save_btn" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Save_btn1.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -163,10 +166,10 @@
   <data name="delete_5424" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\delete_5424.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Setup_btn" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Setup_btn1.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="Exit_btn" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Exit_btn1.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="add1-_2547" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\add1-_2547.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="Manual_btn" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Manual_btn.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

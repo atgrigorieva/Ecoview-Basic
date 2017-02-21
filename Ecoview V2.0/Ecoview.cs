@@ -51,6 +51,7 @@ namespace Ecoview_V2._0
             textBox5.Text = string.Format("{0:0.0000}", 0);
             textBox6.Text = string.Format("{0:0.0000}", 0);
         }
+        public string version = "264";
         public bool nonPort;
         public SerialPort newPort;
         public SWF.TextBox[] textBox = new SWF.TextBox[20];
@@ -283,6 +284,8 @@ namespace Ecoview_V2._0
                 label25.Visible = true;
                 label26.Visible = true;
                 label28.Visible = false;
+                label33.Visible = false;
+
             }
         }
 
@@ -978,6 +981,7 @@ namespace Ecoview_V2._0
                 label25.Visible = false;
                 label26.Visible = false;
                 label28.Visible = true;
+                label33.Visible = true;
             };
             
             CountSeriya = CountSeriya1;
@@ -1143,6 +1147,7 @@ namespace Ecoview_V2._0
                     label21.Enabled = true;
                     label22.Enabled = true;
                     label14.Enabled = true;
+                    button11.Enabled = true;
                 }
                 else
                 {
@@ -1153,6 +1158,7 @@ namespace Ecoview_V2._0
                     SKO.Text = "";
                     label21.Text = "";
                     label22.Text = "";
+                    button11.Enabled = false;
                 }
                 radioButton1.Enabled = true;
                 radioButton2.Enabled = true;
@@ -1276,6 +1282,49 @@ namespace Ecoview_V2._0
             xDoc.Load(@filepath);
 
             XmlNodeList nodes = xDoc.ChildNodes;
+
+            foreach (XmlNode n in nodes)
+            { // Обрабатываем в цикле только Data_Izmerenie
+                if ("Data_Izmerenie".Equals(n.Name))
+                {
+                    // Читаем в цикле вложенные значения Izmerenie
+                    for (XmlNode d = n.FirstChild; d != null; d = d.NextSibling)
+                    {
+                        // Обрабатываем в цикле только Izmerenie
+                        if ("Izmerenie".Equals(d.Name))
+                        {
+                            //Можно, например, в этом цикле, да и не только..., взять какие-то данные
+                            for (XmlNode k = d.FirstChild; k != null; k = k.NextSibling)
+                            {
+                                if ("Version".Equals(k.Name) && k.FirstChild != null)
+                                {
+                                    if (version != k.FirstChild.Value)
+                                    {
+                                        MessageBox.Show("Внимание, версия программы отличается от версии открываемого документа!\n" +
+                                    "Рекомендуем создать новую градуировку!");
+                                        break;
+                                    }
+                                    else
+                                    {
+                                       // MessageBox.Show("Версия совпадает!");
+                                        break;
+                                    }
+
+                                }
+                                else
+                                {
+                                    MessageBox.Show("Внимание, версия программы отличается от версии открываемого документа!\n" +
+"Рекомендуем создать новую градуировку!");
+                                    break;
+                                }
+                               
+                            }
+                        }
+                    }
+                }
+            }
+
+
             foreach (XmlNode n in nodes)
             { // Обрабатываем в цикле только Data_Izmerenie
                 if ("Data_Izmerenie".Equals(n.Name))
@@ -2183,6 +2232,7 @@ namespace Ecoview_V2._0
             label25.Visible = false;
             label26.Visible = false;
             label28.Visible = false;
+            label33.Visible = false;
             label14.Enabled = true;
             RR.Enabled = true;
             SKO.Enabled = true;
@@ -4903,21 +4953,16 @@ namespace Ecoview_V2._0
                 else
                 {
                     SaveAs1();
-                    tabPage4.Parent = tabControl2;
+
 
                 }
             }
             else
             {
                 SaveAs1();
-                tabPage4.Parent = tabControl2;
+                
             }
-            Podskazka.Text = "Перейдите в Измерения!";
-            label27.Visible = false;
-            label24.Visible = false;
-            label25.Visible = false;
-            label26.Visible = false;
-            label28.Visible = false;
+ 
         }
         public void Save1()
         {
@@ -4958,6 +5003,14 @@ namespace Ecoview_V2._0
                 button3.Enabled = true;
                 button9.Enabled = true;
                 печатьToolStripMenuItem1.Enabled = true;
+                tabPage4.Parent = tabControl2;
+                Podskazka.Text = "Перейдите в Измерения!";
+                label27.Visible = false;
+                label24.Visible = false;
+                label25.Visible = false;
+                label26.Visible = false;
+                label28.Visible = false;
+                label33.Visible = false;
             }
         }
         private void CreateXMLDocument(ref string filepath)
@@ -4978,6 +5031,10 @@ namespace Ecoview_V2._0
             xd.Load(fs);
 
             XmlNode Izmerenie = xd.CreateElement("Izmerenie");
+
+            XmlNode Version = xd.CreateElement("Version"); // Версия программы
+            Version.InnerText = version; // и значение
+            Izmerenie.AppendChild(Version); // и указываем кому принадлежит
 
             XmlNode Nazvanie = xd.CreateElement("Nazvanie"); // Название вещества
             Nazvanie.InnerText = "Расчет градуировочного графика"; // и значение
@@ -5374,8 +5431,8 @@ namespace Ecoview_V2._0
                 Table1.Rows[NoCaSer + 1].Cells["Concetr"].ReadOnly = true;
                 Table1.Rows[NoCaSer + 1].Cells["Asred"].ReadOnly = true;
             }
-            
 
+            button11.Enabled = true;
         }
         public void WLREMOVESTR1()
         {
@@ -5822,7 +5879,7 @@ namespace Ecoview_V2._0
                                 serValue = 0;
                                 if (Table2.Rows[0].Cells["A;Ser" + i1].Value.ToString() == null)
                                 {
-                                    MessageBox.Show("Измерьте Контрольый образец!");
+                                    MessageBox.Show("Измерьте Контрольный образец!");
                                     return;
 
 
@@ -5849,7 +5906,7 @@ namespace Ecoview_V2._0
                                 serValue = 0;
                                 if (Table2.Rows[0].Cells["A;Ser" + i1].Value.ToString() == null)
                                 {
-                                    MessageBox.Show("Измерьте Контрольый образец!");
+                                    MessageBox.Show("Измерьте Контрольный образец!");
                                     return;
 
 
@@ -6493,6 +6550,7 @@ public void WLADDSTR2()
                 Table2.Rows[0].Cells["d%"].ReadOnly = true;
             }
             Table2.Rows[Table2.RowCount-1].ReadOnly = true;
+            button11.Enabled = true;
 
         }
 
@@ -8871,8 +8929,9 @@ public void WLADDSTR2()
                 k1_1 = Convert.ToDouble(textBox5.Text);
                 k2_1 = Convert.ToDouble(textBox6.Text);
                 USE_KO_1 = USE_KO;
+                button11.Enabled = false;
             }
-                if (tabControl2.SelectedIndex == 1)
+            if (tabControl2.SelectedIndex == 1 && Table2.Rows.Count == 0)
             {
                 Podskazka.Text = "Создайте или откройте Измерение!";
                 label27.Visible = false;
@@ -8880,28 +8939,29 @@ public void WLADDSTR2()
                 label25.Visible = true;
                 label26.Visible = true;
                 label28.Visible = false;
-                if(Table2.RowCount > 0 && (k0_1 != Convert.ToDouble(textBox4.Text) || k1_1 != Convert.ToDouble(textBox5.Text) || k2_1 != Convert.ToDouble(textBox6.Text) || USE_KO_1 != USE_KO))
+                label33.Visible = false;
+                if (Table2.RowCount > 0 && (k0_1 != Convert.ToDouble(textBox4.Text) || k1_1 != Convert.ToDouble(textBox5.Text) || k2_1 != Convert.ToDouble(textBox6.Text) || USE_KO_1 != USE_KO))
                 {
                     MessageBox.Show("Внимание: Грдуировка была изменена! Таблица Измерений будет пересчитана по новым коэффициентам!");
                     k0_1 = Convert.ToDouble(string.Format("{0:0.0000}", textBox4.Text));
                     k1_1 = Convert.ToDouble(string.Format("{0:0.0000}", textBox5.Text));
                     k2_1 = Convert.ToDouble(string.Format("{0:0.0000}", textBox6.Text));
-                    if(USE_KO_1 != USE_KO && USE_KO == false)
+                    if (USE_KO_1 != USE_KO && USE_KO == false)
                     {
                         Table2.Rows.RemoveAt(0);
                         USE_KO_1 = USE_KO;
                     }
                     else
                     {
-                        if(USE_KO_1 != USE_KO && USE_KO == true)
+                        if (USE_KO_1 != USE_KO && USE_KO == true)
                         {
                             Table2.Rows.Insert(0, 0, "Контрольный");
                             for (int i = 1; i <= NoCaSer1; i++)
                             {
                                 Table2.Rows[0].Cells["A;Ser" + i].Value = string.Format("{0:0.0000}", 0);
-                                
+
                             }
-                         //   Table2.Rows.Add();
+                            //   Table2.Rows.Add();
                             USE_KO_1 = USE_KO;
                             MessageBox.Show("Не забудьте измерить холостую пробу!");
                         }
@@ -8909,7 +8969,57 @@ public void WLADDSTR2()
                     PodschetTable2();
                 }
             }
-            
+            else
+            {
+                if (tabControl2.SelectedIndex == 1 && Table2.Rows.Count > 0)
+                {
+                    Podskazka.Text = "Измеряйте или введите значения!";
+                    label27.Visible = false;
+                    label24.Visible = false;
+                    label25.Visible = false;
+                    label26.Visible = false;
+                    label28.Visible = true;
+                    label33.Visible = true;
+                    if (Table2.RowCount > 0 && (k0_1 != Convert.ToDouble(textBox4.Text) || k1_1 != Convert.ToDouble(textBox5.Text) || k2_1 != Convert.ToDouble(textBox6.Text) || USE_KO_1 != USE_KO))
+                    {
+                        MessageBox.Show("Внимание: Грдуировка была изменена! Таблица Измерений будет пересчитана по новым коэффициентам!");
+                        k0_1 = Convert.ToDouble(string.Format("{0:0.0000}", textBox4.Text));
+                        k1_1 = Convert.ToDouble(string.Format("{0:0.0000}", textBox5.Text));
+                        k2_1 = Convert.ToDouble(string.Format("{0:0.0000}", textBox6.Text));
+                        if (USE_KO_1 != USE_KO && USE_KO == false)
+                        {
+                            Table2.Rows.RemoveAt(0);
+                            USE_KO_1 = USE_KO;
+                        }
+                        else
+                        {
+                            if (USE_KO_1 != USE_KO && USE_KO == true)
+                            {
+                                Table2.Rows.Insert(0, 0, "Контрольный");
+                                for (int i = 1; i <= NoCaSer1; i++)
+                                {
+                                    Table2.Rows[0].Cells["A;Ser" + i].Value = string.Format("{0:0.0000}", 0);
+
+                                }
+                                //   Table2.Rows.Add();
+                                USE_KO_1 = USE_KO;
+                                MessageBox.Show("Не забудьте измерить холостую пробу!");
+                            }
+                        }
+                        PodschetTable2();
+                    }
+                }
+                else
+                {
+                    Podskazka.Text = "Перейдите в измерения!";
+                    label27.Visible = false;
+                    label24.Visible = false;
+                    label25.Visible = false;
+                    label26.Visible = false;
+                    label28.Visible = false;
+                    label33.Visible = false;
+                }
+            }
         }
 
 
@@ -9009,7 +9119,7 @@ public void WLADDSTR2()
             }
             else
             {
-                MessageBox.Show("Измерение еще не создано! Создайте Измерения.");
+                MessageBox.Show("Измерение еще не создано! Создайте Измерение.");
             }
 
         }
@@ -9021,31 +9131,45 @@ public void WLADDSTR2()
                 
                 if (USE_KO == false)
                 {
-                    Table2.Rows.RemoveAt(Table2.CurrentCell.RowIndex);
-                    for (int i = 0; i < Table2.RowCount - 1; i++)
-                    {
-                        Table2.Rows[i].Cells[0].Value = i + 1;
-                    }
-                }
-                else
-                {
-                    if (Table2.CurrentCell.RowIndex != 0)
+                    if (Table2.Rows.Count > 2)
                     {
                         Table2.Rows.RemoveAt(Table2.CurrentCell.RowIndex);
                         for (int i = 0; i < Table2.RowCount - 1; i++)
                         {
-                            Table2.Rows[i].Cells[0].Value = i;
+                            Table2.Rows[i].Cells[0].Value = i + 1;
                         }
                     }
                     else
                     {
-                        MessageBox.Show("Удалять Контрольный опыт запрещено!");
+                        MessageBox.Show("Количество образцов не может быть меньше 1 !");
+                    }
+                }
+                else
+                {
+                    if (Table2.Rows.Count > 3)
+                    {
+                        if (Table2.CurrentCell.RowIndex != 0)
+                        {
+                            Table2.Rows.RemoveAt(Table2.CurrentCell.RowIndex);
+                            for (int i = 0; i < Table2.RowCount - 1; i++)
+                            {
+                                Table2.Rows[i].Cells[0].Value = i;
+                            }
+                        }
+                        else
+                        {
+                            MessageBox.Show("Удалять Контрольный опыт запрещено!");
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("Количество образцов не может быть меньше 1 !");
                     }
                 }
             }
             else
             {
-                MessageBox.Show("Таблица не содержит строки!");
+                MessageBox.Show("Таблица не содержит строк!");
             }
         }
 
@@ -9081,6 +9205,36 @@ public void WLADDSTR2()
                 }
                 
                 ZapicInTable2();
+            }
+        }
+
+        private void button11_Click(object sender, EventArgs e)
+        {
+            if(tabControl2.SelectedIndex == 0)
+            {
+                if (Table1.CurrentCell.ColumnIndex >= 3 && Table1.CurrentCell.ReadOnly != true)
+                {
+
+                    if (Table1.CurrentCell.Value != "" && Table1.CurrentCell.Value != null)
+                    {
+                        CellOpt = Convert.ToDouble(Table1.CurrentCell.Value.ToString());
+                    }
+
+                    ZapicInTable1();
+
+                }
+            }
+            else
+            {
+                if (Table2.CurrentCell.ColumnIndex >= 2 && Table2.CurrentCell.ReadOnly != true)
+                {
+                    if (Table2.CurrentCell.Value != "" && Table2.CurrentCell.Value != null)
+                    {
+                        CellOpt = Convert.ToDouble(Table2.CurrentCell.Value.ToString());
+                    }
+
+                    ZapicInTable2();
+                }
             }
         }
 

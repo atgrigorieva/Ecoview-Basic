@@ -92,7 +92,8 @@ namespace Ecoview_V2._0
                     _Analis.WLREMOVESTR2();
                     _Analis.WLADD2();
                     _Analis.WLADDSTR2();
-                    if (_Analis.ComPodkl == true)
+                _Analis.button11.Enabled = true;
+                if (_Analis.ComPodkl == true)
                     {
                         _Analis.IzmerCreate1 = true;
 
