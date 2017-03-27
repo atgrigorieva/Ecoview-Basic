@@ -14,8 +14,8 @@ namespace Ecoview_V2._0
 {
     public partial class PriborInformation : Form
     {
-        Ecoview _Analis;
-        public PriborInformation(Ecoview parent)
+        EcoviewProfessional1 _Analis;
+        public PriborInformation(EcoviewProfessional1 parent)
         {
             InitializeComponent();
             this._Analis = parent;
@@ -29,13 +29,23 @@ namespace Ecoview_V2._0
         }
         public void Pribor()
         {
-            string model = @"pribor/model";
+            var applicationDirectory = Path.GetDirectoryName(Application.ExecutablePath);
+            const string model = @"pribor/model";
+            var model_var = Path.Combine(applicationDirectory, model);
 
             string SerNomer_Text = @"pribor/SerNomer";
+            var SerNomer_Text_var = Path.Combine(applicationDirectory, SerNomer_Text);
+
             string InventarNomer_Text = @"pribor/InventarNomer";
+            var InventarNomer_Text_var = Path.Combine(applicationDirectory, InventarNomer_Text);
+
             string SrokIstech_Text = @"pribor/SrokIstech";
+            var SrokIstech_Text_var = Path.Combine(applicationDirectory, SrokIstech_Text);
+
             string Poveren_Text = @"pribor/Poveren";
-            StreamReader fs = new StreamReader(model);
+            var Poveren_Text_var = Path.Combine(applicationDirectory, Poveren_Text);
+
+            StreamReader fs = new StreamReader(model_var);
             string model1;
             model1 = fs.ReadLine();
             int index = Model1.FindString(model1);
@@ -51,15 +61,15 @@ namespace Ecoview_V2._0
             }
             fs.Close();
 
-            StreamReader fs1 = new StreamReader(SerNomer_Text);
+            StreamReader fs1 = new StreamReader(SerNomer_Text_var);
             textBox1.Text = fs1.ReadLine();
             fs1.Close();
 
-            StreamReader fs2 = new StreamReader(InventarNomer_Text);
+            StreamReader fs2 = new StreamReader(InventarNomer_Text_var);
             textBox2.Text = fs2.ReadLine();
             fs2.Close();
 
-            StreamReader fs3 = new StreamReader(SrokIstech_Text);
+            StreamReader fs3 = new StreamReader(SrokIstech_Text_var);
             textBox3.Text = fs3.ReadLine();
             fs3.Close();
 
@@ -72,7 +82,7 @@ namespace Ecoview_V2._0
                 textBox3.Enabled = false;
             }
 
-            StreamReader fs4 = new StreamReader(Poveren_Text);
+            StreamReader fs4 = new StreamReader(Poveren_Text_var);
             dateTimePicker1.Text = fs4.ReadLine();
             fs4.Close();
 
@@ -82,7 +92,10 @@ namespace Ecoview_V2._0
         private void button1_Click(object sender, EventArgs e)
         {
             string s1 = "";
-            string model = @"pribor/model";
+            var applicationDirectory = Path.GetDirectoryName(Application.ExecutablePath);
+            const string model = @"pribor/model";
+            var model_var = Path.Combine(applicationDirectory, model);
+
             string s = Model1.SelectedItem.ToString();
 
             File.WriteAllText(model, string.Empty);
@@ -91,19 +104,28 @@ namespace Ecoview_V2._0
             string SerNomer = textBox1.Text;
             string InventarNomer = textBox2.Text;
             string SrokIstech = textBox3.Text;
-            string SerNomer_Text = @"pribor/SerNomer";
-            string InventarNomer_Text = @"pribor/InventarNomer";
-            string SrokIstech_Text = @"pribor/SrokIstech";
-            string Poveren_Text = @"pribor/Poveren";
 
-            File.WriteAllText(SerNomer_Text, string.Empty);
-            File.AppendAllText(SerNomer_Text, textBox1.Text, Encoding.UTF8);
-            File.WriteAllText(InventarNomer_Text, string.Empty);
-            File.AppendAllText(InventarNomer_Text, textBox2.Text, Encoding.UTF8);
-            File.WriteAllText(SrokIstech_Text, string.Empty);
-            File.AppendAllText(SrokIstech_Text, textBox3.Text, Encoding.UTF8);
-            File.WriteAllText(Poveren_Text, string.Empty);
-            File.AppendAllText(Poveren_Text, dateTimePicker1.Value.ToString("dd.MM.yyyy"), Encoding.UTF8);
+
+            string SerNomer_Text = @"pribor/SerNomer";
+            var SerNomer_Text_var = Path.Combine(applicationDirectory, SerNomer_Text);
+
+            string InventarNomer_Text = @"pribor/InventarNomer";
+            var InventarNomer_Text_var = Path.Combine(applicationDirectory, InventarNomer_Text);
+
+            string SrokIstech_Text = @"pribor/SrokIstech";
+            var SrokIstech_Text_var = Path.Combine(applicationDirectory, SrokIstech_Text);
+
+            string Poveren_Text = @"pribor/Poveren";
+            var Poveren_Text_var = Path.Combine(applicationDirectory, Poveren_Text);
+
+            File.WriteAllText(SerNomer_Text_var, string.Empty);
+            File.AppendAllText(SerNomer_Text_var, textBox1.Text, Encoding.UTF8);
+            File.WriteAllText(InventarNomer_Text_var, string.Empty);
+            File.AppendAllText(InventarNomer_Text_var, textBox2.Text, Encoding.UTF8);
+            File.WriteAllText(SrokIstech_Text_var, string.Empty);
+            File.AppendAllText(SrokIstech_Text_var, textBox3.Text, Encoding.UTF8);
+            File.WriteAllText(Poveren_Text_var, string.Empty);
+            File.AppendAllText(Poveren_Text_var, dateTimePicker1.Value.ToString("dd.MM.yyyy"), Encoding.UTF8);
             Close();
         }
 

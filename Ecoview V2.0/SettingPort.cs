@@ -9,8 +9,8 @@ namespace Ecoview_V2._0
 {
     public partial class SettingPort : Form
     {
-        Ecoview _Analis;
-        public SettingPort(Ecoview parent)
+        EcoviewProfessional1 _Analis;
+        public SettingPort(EcoviewProfessional1 parent)
         {
             InitializeComponent();
             this._Analis = parent;

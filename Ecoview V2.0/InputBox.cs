@@ -13,8 +13,8 @@ namespace Ecoview_V2._0
     
     public partial class InputBox : Form
     {
-        Ecoview _Analis;
-        public InputBox(Ecoview parent)
+        EcoviewProfessional1 _Analis;
+        public InputBox(EcoviewProfessional1 parent)
         {
             InitializeComponent();
             this._Analis = parent;

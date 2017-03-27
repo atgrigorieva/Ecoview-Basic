@@ -13,8 +13,8 @@ namespace Ecoview_V2._0
 
         public partial class Parametr1 : Form
         {
-            Ecoview _Analis;
-            public Parametr1(Ecoview parent)
+            EcoviewProfessional1 _Analis;
+            public Parametr1(EcoviewProfessional1 parent)
             {
                 InitializeComponent();
                 this._Analis = parent;

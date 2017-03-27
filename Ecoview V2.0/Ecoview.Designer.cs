@@ -1,6 +1,6 @@
 ﻿namespace Ecoview_V2._0
 {
-    partial class Ecoview
+    partial class EcoviewProfessional1
     {
         /// <summary>
         /// Required designer variable.
@@ -29,10 +29,10 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Ecoview));
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea5 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Series series9 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series10 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EcoviewProfessional1));
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.radioButton3 = new System.Windows.Forms.RadioButton();
             this.radioButton2 = new System.Windows.Forms.RadioButton();
@@ -151,8 +151,26 @@
             this.textBox10 = new System.Windows.Forms.TextBox();
             this.label30 = new System.Windows.Forms.Label();
             this.tabControl2 = new System.Windows.Forms.TabControl();
+            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.button15 = new System.Windows.Forms.Button();
+            this.button16 = new System.Windows.Forms.Button();
+            this.IzmerenieFR_Table = new System.Windows.Forms.DataGridView();
+            this.N = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.NameIzmerenie = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Walve = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ABS = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.T = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.KOne = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Concetracia = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.tabPage5 = new System.Windows.Forms.TabPage();
+            this.tabPage6 = new System.Windows.Forms.TabPage();
+            this.tabPage7 = new System.Windows.Forms.TabPage();
+            this.tabPage8 = new System.Windows.Forms.TabPage();
             this.dataSet1 = new System.Data.DataSet();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
+            this.label33 = new System.Windows.Forms.Label();
+            this.button13 = new System.Windows.Forms.Button();
             this.button11 = new System.Windows.Forms.Button();
             this.button12 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
@@ -166,7 +184,8 @@
             this.button4 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
-            this.label33 = new System.Windows.Forms.Label();
+            this.IzmerenieFRprintPreviewTable1 = new System.Windows.Forms.PrintPreviewDialog();
+            this.IzmerenieFRprintTable1 = new System.Drawing.Printing.PrintDocument();
             this.groupBox3.SuspendLayout();
             this.groupBox6.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Table1)).BeginInit();
@@ -182,6 +201,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.tabPage3.SuspendLayout();
             this.tabControl2.SuspendLayout();
+            this.tabPage1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.IzmerenieFR_Table)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataSet1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -724,7 +745,7 @@
             this.label28.AutoSize = true;
             this.label28.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.label28.ForeColor = System.Drawing.SystemColors.Highlight;
-            this.label28.Location = new System.Drawing.Point(825, 68);
+            this.label28.Location = new System.Drawing.Point(887, 68);
             this.label28.Name = "label28";
             this.label28.Size = new System.Drawing.Size(26, 29);
             this.label28.TabIndex = 73;
@@ -736,7 +757,7 @@
             this.label27.AutoSize = true;
             this.label27.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.label27.ForeColor = System.Drawing.SystemColors.Highlight;
-            this.label27.Location = new System.Drawing.Point(551, 70);
+            this.label27.Location = new System.Drawing.Point(613, 70);
             this.label27.Name = "label27";
             this.label27.Size = new System.Drawing.Size(26, 29);
             this.label27.TabIndex = 72;
@@ -748,7 +769,7 @@
             this.label26.AutoSize = true;
             this.label26.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.label26.ForeColor = System.Drawing.SystemColors.Highlight;
-            this.label26.Location = new System.Drawing.Point(505, 70);
+            this.label26.Location = new System.Drawing.Point(567, 70);
             this.label26.Name = "label26";
             this.label26.Size = new System.Drawing.Size(26, 29);
             this.label26.TabIndex = 71;
@@ -760,7 +781,7 @@
             this.label25.AutoSize = true;
             this.label25.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.label25.ForeColor = System.Drawing.SystemColors.Highlight;
-            this.label25.Location = new System.Drawing.Point(464, 70);
+            this.label25.Location = new System.Drawing.Point(526, 70);
             this.label25.Name = "label25";
             this.label25.Size = new System.Drawing.Size(26, 29);
             this.label25.TabIndex = 70;
@@ -772,7 +793,7 @@
             this.label24.AutoSize = true;
             this.label24.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.label24.ForeColor = System.Drawing.SystemColors.Highlight;
-            this.label24.Location = new System.Drawing.Point(374, 68);
+            this.label24.Location = new System.Drawing.Point(436, 68);
             this.label24.Name = "label24";
             this.label24.Size = new System.Drawing.Size(26, 29);
             this.label24.TabIndex = 69;
@@ -914,36 +935,36 @@
             // 
             // chart1
             // 
-            chartArea5.AxisX.MajorTickMark.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.NotSet;
-            chartArea5.AxisX.MinorGrid.Enabled = true;
-            chartArea5.AxisX.MinorGrid.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.NotSet;
-            chartArea5.AxisX.MinorTickMark.Enabled = true;
-            chartArea5.AxisX.MinorTickMark.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.NotSet;
-            chartArea5.AxisX.Title = "Оптическая плотность, А";
-            chartArea5.AxisX2.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.NotSet;
-            chartArea5.AxisX2.MajorGrid.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.NotSet;
-            chartArea5.AxisX2.MajorTickMark.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.NotSet;
-            chartArea5.AxisX2.MinorGrid.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.NotSet;
-            chartArea5.AxisX2.MinorTickMark.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.NotSet;
-            chartArea5.AxisY.MajorGrid.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.NotSet;
-            chartArea5.AxisY.Title = "Концетрация";
-            chartArea5.Name = "ChartArea1";
-            this.chart1.ChartAreas.Add(chartArea5);
+            chartArea2.AxisX.MajorTickMark.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.NotSet;
+            chartArea2.AxisX.MinorGrid.Enabled = true;
+            chartArea2.AxisX.MinorGrid.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.NotSet;
+            chartArea2.AxisX.MinorTickMark.Enabled = true;
+            chartArea2.AxisX.MinorTickMark.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.NotSet;
+            chartArea2.AxisX.Title = "Оптическая плотность, А";
+            chartArea2.AxisX2.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.NotSet;
+            chartArea2.AxisX2.MajorGrid.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.NotSet;
+            chartArea2.AxisX2.MajorTickMark.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.NotSet;
+            chartArea2.AxisX2.MinorGrid.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.NotSet;
+            chartArea2.AxisX2.MinorTickMark.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.NotSet;
+            chartArea2.AxisY.MajorGrid.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.NotSet;
+            chartArea2.AxisY.Title = "Концетрация";
+            chartArea2.Name = "ChartArea1";
+            this.chart1.ChartAreas.Add(chartArea2);
             this.chart1.Cursor = System.Windows.Forms.Cursors.Default;
             this.chart1.Location = new System.Drawing.Point(9, 72);
             this.chart1.Name = "chart1";
             this.chart1.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.SeaGreen;
             this.chart1.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            series9.ChartArea = "ChartArea1";
-            series9.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
-            series9.IsVisibleInLegend = false;
-            series9.Name = "Series1";
-            series10.ChartArea = "ChartArea1";
-            series10.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series10.IsVisibleInLegend = false;
-            series10.Name = "Series2";
-            this.chart1.Series.Add(series9);
-            this.chart1.Series.Add(series10);
+            series3.ChartArea = "ChartArea1";
+            series3.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
+            series3.IsVisibleInLegend = false;
+            series3.Name = "Series1";
+            series4.ChartArea = "ChartArea1";
+            series4.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series4.IsVisibleInLegend = false;
+            series4.Name = "Series2";
+            this.chart1.Series.Add(series3);
+            this.chart1.Series.Add(series4);
             this.chart1.Size = new System.Drawing.Size(566, 321);
             this.chart1.TabIndex = 14;
             this.chart1.Text = "chart1";
@@ -1351,22 +1372,195 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tabControl2.Controls.Add(this.tabPage3);
             this.tabControl2.Controls.Add(this.tabPage4);
-            this.tabControl2.Location = new System.Drawing.Point(28, 108);
+            this.tabControl2.Controls.Add(this.tabPage1);
+            this.tabControl2.Controls.Add(this.tabPage2);
+            this.tabControl2.Controls.Add(this.tabPage5);
+            this.tabControl2.Controls.Add(this.tabPage6);
+            this.tabControl2.Controls.Add(this.tabPage7);
+            this.tabControl2.Controls.Add(this.tabPage8);
+            this.tabControl2.Location = new System.Drawing.Point(32, 108);
             this.tabControl2.Name = "tabControl2";
             this.tabControl2.SelectedIndex = 0;
             this.tabControl2.Size = new System.Drawing.Size(965, 582);
             this.tabControl2.TabIndex = 52;
             this.tabControl2.SelectedIndexChanged += new System.EventHandler(this.tabControl2_SelectedIndexChanged);
             // 
+            // tabPage1
+            // 
+            this.tabPage1.Controls.Add(this.button15);
+            this.tabPage1.Controls.Add(this.button16);
+            this.tabPage1.Controls.Add(this.IzmerenieFR_Table);
+            this.tabPage1.Location = new System.Drawing.Point(4, 22);
+            this.tabPage1.Name = "tabPage1";
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage1.Size = new System.Drawing.Size(957, 556);
+            this.tabPage1.TabIndex = 2;
+            this.tabPage1.Text = "Измерение ФР";
+            this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // button15
+            // 
+            this.button15.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.button15.Image = global::Ecoview_V2._0.Properties.Resources.add1__2547;
+            this.button15.Location = new System.Drawing.Point(872, 6);
+            this.button15.Name = "button15";
+            this.button15.Size = new System.Drawing.Size(29, 27);
+            this.button15.TabIndex = 66;
+            this.button15.UseVisualStyleBackColor = false;
+            this.button15.Click += new System.EventHandler(this.button15_Click);
+            // 
+            // button16
+            // 
+            this.button16.Image = global::Ecoview_V2._0.Properties.Resources.delete_5424;
+            this.button16.Location = new System.Drawing.Point(907, 6);
+            this.button16.Name = "button16";
+            this.button16.Size = new System.Drawing.Size(29, 27);
+            this.button16.TabIndex = 65;
+            this.button16.UseVisualStyleBackColor = true;
+            this.button16.Click += new System.EventHandler(this.button16_Click);
+            // 
+            // IzmerenieFR_Table
+            // 
+            this.IzmerenieFR_Table.BackgroundColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.IzmerenieFR_Table.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.IzmerenieFR_Table.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.N,
+            this.NameIzmerenie,
+            this.Walve,
+            this.ABS,
+            this.T,
+            this.KOne,
+            this.Concetracia});
+            this.IzmerenieFR_Table.Location = new System.Drawing.Point(19, 39);
+            this.IzmerenieFR_Table.Name = "IzmerenieFR_Table";
+            this.IzmerenieFR_Table.Size = new System.Drawing.Size(917, 510);
+            this.IzmerenieFR_Table.TabIndex = 0;
+            // 
+            // N
+            // 
+            this.N.Frozen = true;
+            this.N.HeaderText = "N";
+            this.N.Name = "N";
+            this.N.ReadOnly = true;
+            // 
+            // NameIzmerenie
+            // 
+            this.NameIzmerenie.Frozen = true;
+            this.NameIzmerenie.HeaderText = "Наименование";
+            this.NameIzmerenie.Name = "NameIzmerenie";
+            // 
+            // Walve
+            // 
+            this.Walve.Frozen = true;
+            this.Walve.HeaderText = "Длина волны";
+            this.Walve.Name = "Walve";
+            this.Walve.ReadOnly = true;
+            // 
+            // ABS
+            // 
+            this.ABS.Frozen = true;
+            this.ABS.HeaderText = "Оптическая плотность";
+            this.ABS.Name = "ABS";
+            this.ABS.ReadOnly = true;
+            // 
+            // T
+            // 
+            this.T.Frozen = true;
+            this.T.HeaderText = "%T";
+            this.T.Name = "T";
+            this.T.ReadOnly = true;
+            // 
+            // KOne
+            // 
+            this.KOne.Frozen = true;
+            this.KOne.HeaderText = "K1";
+            this.KOne.Name = "KOne";
+            this.KOne.ReadOnly = true;
+            // 
+            // Concetracia
+            // 
+            this.Concetracia.Frozen = true;
+            this.Concetracia.HeaderText = "Концентрация";
+            this.Concetracia.Name = "Concetracia";
+            this.Concetracia.ReadOnly = true;
+            // 
+            // tabPage2
+            // 
+            this.tabPage2.Location = new System.Drawing.Point(4, 22);
+            this.tabPage2.Name = "tabPage2";
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage2.Size = new System.Drawing.Size(957, 556);
+            this.tabPage2.TabIndex = 3;
+            this.tabPage2.Text = "Измерение МР";
+            this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // tabPage5
+            // 
+            this.tabPage5.Location = new System.Drawing.Point(4, 22);
+            this.tabPage5.Name = "tabPage5";
+            this.tabPage5.Size = new System.Drawing.Size(957, 556);
+            this.tabPage5.TabIndex = 4;
+            this.tabPage5.Text = "Измерение КР";
+            this.tabPage5.UseVisualStyleBackColor = true;
+            // 
+            // tabPage6
+            // 
+            this.tabPage6.Location = new System.Drawing.Point(4, 22);
+            this.tabPage6.Name = "tabPage6";
+            this.tabPage6.Size = new System.Drawing.Size(957, 556);
+            this.tabPage6.TabIndex = 5;
+            this.tabPage6.Text = "Измерение С";
+            this.tabPage6.UseVisualStyleBackColor = true;
+            // 
+            // tabPage7
+            // 
+            this.tabPage7.Location = new System.Drawing.Point(4, 22);
+            this.tabPage7.Name = "tabPage7";
+            this.tabPage7.Size = new System.Drawing.Size(957, 556);
+            this.tabPage7.TabIndex = 6;
+            this.tabPage7.Text = "Градуировка Агро";
+            this.tabPage7.UseVisualStyleBackColor = true;
+            // 
+            // tabPage8
+            // 
+            this.tabPage8.Location = new System.Drawing.Point(4, 22);
+            this.tabPage8.Name = "tabPage8";
+            this.tabPage8.Size = new System.Drawing.Size(957, 556);
+            this.tabPage8.TabIndex = 7;
+            this.tabPage8.Text = "Измерение Агро";
+            this.tabPage8.UseVisualStyleBackColor = true;
+            // 
             // dataSet1
             // 
             this.dataSet1.DataSetName = "NewDataSet";
+            // 
+            // label33
+            // 
+            this.label33.AutoSize = true;
+            this.label33.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label33.ForeColor = System.Drawing.SystemColors.Highlight;
+            this.label33.Location = new System.Drawing.Point(936, 68);
+            this.label33.Name = "label33";
+            this.label33.Size = new System.Drawing.Size(26, 29);
+            this.label33.TabIndex = 75;
+            this.label33.Text = "↑";
+            this.label33.Visible = false;
+            // 
+            // button13
+            // 
+            this.button13.Image = global::Ecoview_V2._0.Properties.Resources.aimexpress1;
+            this.button13.Location = new System.Drawing.Point(300, 28);
+            this.button13.Name = "button13";
+            this.button13.Size = new System.Drawing.Size(42, 37);
+            this.button13.TabIndex = 76;
+            this.button13.UseVisualStyleBackColor = true;
+            this.button13.Click += new System.EventHandler(this.button13_Click);
             // 
             // button11
             // 
             this.button11.Enabled = false;
             this.button11.Image = global::Ecoview_V2._0.Properties.Resources.Manual_btn;
-            this.button11.Location = new System.Drawing.Point(864, 28);
+            this.button11.Location = new System.Drawing.Point(926, 28);
             this.button11.Name = "button11";
             this.button11.Size = new System.Drawing.Size(42, 37);
             this.button11.TabIndex = 74;
@@ -1376,7 +1570,7 @@
             // button12
             // 
             this.button12.Image = global::Ecoview_V2._0.Properties.Resources.Reziro_btn;
-            this.button12.Location = new System.Drawing.Point(771, 28);
+            this.button12.Location = new System.Drawing.Point(833, 28);
             this.button12.Name = "button12";
             this.button12.Size = new System.Drawing.Size(39, 37);
             this.button12.TabIndex = 63;
@@ -1388,7 +1582,7 @@
             this.button3.BackColor = System.Drawing.SystemColors.Control;
             this.button3.Enabled = false;
             this.button3.Image = global::Ecoview_V2._0.Properties.Resources.Print_btn;
-            this.button3.Location = new System.Drawing.Point(588, 28);
+            this.button3.Location = new System.Drawing.Point(650, 28);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(42, 37);
             this.button3.TabIndex = 66;
@@ -1399,7 +1593,7 @@
             // 
             this.button14.Enabled = false;
             this.button14.Image = global::Ecoview_V2._0.Properties.Resources.Meas_btn;
-            this.button14.Location = new System.Drawing.Point(816, 28);
+            this.button14.Location = new System.Drawing.Point(878, 28);
             this.button14.Name = "button14";
             this.button14.Size = new System.Drawing.Size(42, 37);
             this.button14.TabIndex = 65;
@@ -1410,7 +1604,7 @@
             // 
             this.button10.Enabled = false;
             this.button10.Image = global::Ecoview_V2._0.Properties.Resources.Setup_btn;
-            this.button10.Location = new System.Drawing.Point(725, 28);
+            this.button10.Location = new System.Drawing.Point(787, 28);
             this.button10.Name = "button10";
             this.button10.Size = new System.Drawing.Size(40, 37);
             this.button10.TabIndex = 61;
@@ -1421,7 +1615,7 @@
             // 
             this.button9.Enabled = false;
             this.button9.Image = global::Ecoview_V2._0.Properties.Resources.pdfIcon;
-            this.button9.Location = new System.Drawing.Point(679, 28);
+            this.button9.Location = new System.Drawing.Point(741, 28);
             this.button9.Name = "button9";
             this.button9.Size = new System.Drawing.Size(40, 37);
             this.button9.TabIndex = 60;
@@ -1431,7 +1625,7 @@
             // button8
             // 
             this.button8.Image = global::Ecoview_V2._0.Properties.Resources.excelicon;
-            this.button8.Location = new System.Drawing.Point(636, 28);
+            this.button8.Location = new System.Drawing.Point(698, 28);
             this.button8.Name = "button8";
             this.button8.Size = new System.Drawing.Size(37, 37);
             this.button8.TabIndex = 59;
@@ -1441,7 +1635,7 @@
             // button7
             // 
             this.button7.Image = global::Ecoview_V2._0.Properties.Resources.Save_btn;
-            this.button7.Location = new System.Drawing.Point(543, 28);
+            this.button7.Location = new System.Drawing.Point(605, 28);
             this.button7.Name = "button7";
             this.button7.Size = new System.Drawing.Size(39, 37);
             this.button7.TabIndex = 58;
@@ -1451,7 +1645,7 @@
             // button6
             // 
             this.button6.Image = global::Ecoview_V2._0.Properties.Resources.Open_btn;
-            this.button6.Location = new System.Drawing.Point(499, 28);
+            this.button6.Location = new System.Drawing.Point(561, 28);
             this.button6.Name = "button6";
             this.button6.Size = new System.Drawing.Size(38, 37);
             this.button6.TabIndex = 57;
@@ -1462,7 +1656,7 @@
             // 
             this.button5.BackColor = System.Drawing.SystemColors.Control;
             this.button5.Image = global::Ecoview_V2._0.Properties.Resources.NewSetup_btn;
-            this.button5.Location = new System.Drawing.Point(456, 28);
+            this.button5.Location = new System.Drawing.Point(522, 28);
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(37, 37);
             this.button5.TabIndex = 56;
@@ -1472,7 +1666,7 @@
             // button4
             // 
             this.button4.Image = global::Ecoview_V2._0.Properties.Resources.DevInfo_btn;
-            this.button4.Location = new System.Drawing.Point(410, 28);
+            this.button4.Location = new System.Drawing.Point(472, 28);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(40, 37);
             this.button4.TabIndex = 55;
@@ -1482,7 +1676,7 @@
             // button2
             // 
             this.button2.Image = global::Ecoview_V2._0.Properties.Resources.Connect_btn;
-            this.button2.Location = new System.Drawing.Point(370, 28);
+            this.button2.Location = new System.Drawing.Point(432, 28);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(34, 37);
             this.button2.TabIndex = 54;
@@ -1493,32 +1687,35 @@
             // 
             this.button1.Enabled = false;
             this.button1.Image = global::Ecoview_V2._0.Properties.Resources.Exit_btn;
-            this.button1.Location = new System.Drawing.Point(332, 28);
+            this.button1.Location = new System.Drawing.Point(387, 28);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(32, 37);
+            this.button1.Size = new System.Drawing.Size(42, 37);
             this.button1.TabIndex = 53;
             this.button1.TextAlign = System.Drawing.ContentAlignment.TopRight;
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
-            // label33
+            // IzmerenieFRprintPreviewTable1
             // 
-            this.label33.AutoSize = true;
-            this.label33.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label33.ForeColor = System.Drawing.SystemColors.Highlight;
-            this.label33.Location = new System.Drawing.Point(874, 68);
-            this.label33.Name = "label33";
-            this.label33.Size = new System.Drawing.Size(26, 29);
-            this.label33.TabIndex = 75;
-            this.label33.Text = "↑";
-            this.label33.Visible = false;
+            this.IzmerenieFRprintPreviewTable1.AutoScrollMargin = new System.Drawing.Size(0, 0);
+            this.IzmerenieFRprintPreviewTable1.AutoScrollMinSize = new System.Drawing.Size(0, 0);
+            this.IzmerenieFRprintPreviewTable1.ClientSize = new System.Drawing.Size(400, 300);
+            this.IzmerenieFRprintPreviewTable1.Enabled = true;
+            this.IzmerenieFRprintPreviewTable1.Icon = ((System.Drawing.Icon)(resources.GetObject("IzmerenieFRprintPreviewTable1.Icon")));
+            this.IzmerenieFRprintPreviewTable1.Name = "printPreviewDialog1";
+            this.IzmerenieFRprintPreviewTable1.Visible = false;
             // 
-            // Ecoview
+            // IzmerenieFRprintTable1
+            // 
+            this.IzmerenieFRprintTable1.PrintPage += new System.Drawing.Printing.PrintPageEventHandler(this.IzmerenieFRprintTable1_PrintPage);
+            // 
+            // EcoviewProfessional1
             // 
             this.AccessibleRole = System.Windows.Forms.AccessibleRole.ScrollBar;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1009, 691);
+            this.Controls.Add(this.button13);
             this.Controls.Add(this.label33);
             this.Controls.Add(this.button11);
             this.Controls.Add(this.label28);
@@ -1551,9 +1748,9 @@
             this.Controls.Add(this.menuStrip1);
             this.Controls.Add(this.tabControl2);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Name = "Ecoview";
+            this.Name = "EcoviewProfessional1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Ecoview Basic v2.6.4";
+            this.Text = "Ecoview Professional v1.0";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Ecoview_FormClosing);
             this.Load += new System.EventHandler(this.Ecoview_Load);
             this.groupBox3.ResumeLayout(false);
@@ -1580,6 +1777,8 @@
             this.tabPage3.ResumeLayout(false);
             this.tabPage3.PerformLayout();
             this.tabControl2.ResumeLayout(false);
+            this.tabPage1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.IzmerenieFR_Table)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataSet1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -1707,7 +1906,6 @@
         private System.Windows.Forms.Label label2;
         public System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TabPage tabPage3;
         public System.Windows.Forms.TabControl tabControl2;
         private System.Data.DataSet dataSet1;
         private System.ComponentModel.BackgroundWorker backgroundWorker1;
@@ -1722,5 +1920,25 @@
         private System.Windows.Forms.Label label30;
         public System.Windows.Forms.Button button11;
         public System.Windows.Forms.Label label33;
+        public System.Windows.Forms.TabPage tabPage1;
+        public System.Windows.Forms.TabPage tabPage2;
+        public System.Windows.Forms.TabPage tabPage5;
+        public System.Windows.Forms.TabPage tabPage6;
+        public System.Windows.Forms.TabPage tabPage7;
+        public System.Windows.Forms.TabPage tabPage8;
+        public System.Windows.Forms.TabPage tabPage3;
+        public System.Windows.Forms.DataGridView IzmerenieFR_Table;
+        private System.Windows.Forms.Button button13;
+        private System.Windows.Forms.Button button15;
+        private System.Windows.Forms.Button button16;
+        private System.Windows.Forms.DataGridViewTextBoxColumn N;
+        private System.Windows.Forms.DataGridViewTextBoxColumn NameIzmerenie;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Walve;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ABS;
+        private System.Windows.Forms.DataGridViewTextBoxColumn T;
+        private System.Windows.Forms.DataGridViewTextBoxColumn KOne;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Concetracia;
+        private System.Windows.Forms.PrintPreviewDialog IzmerenieFRprintPreviewTable1;
+        private System.Drawing.Printing.PrintDocument IzmerenieFRprintTable1;
     }
 }

@@ -15,12 +15,14 @@ using System.Drawing.Printing;
 using System.Text.RegularExpressions;
 using System.Linq;
 using System.Globalization;
+using Microsoft.Win32;
+using System.Xml.Linq;
 
 namespace Ecoview_V2._0
 {
-    public partial class Ecoview : Form
+    public partial class EcoviewProfessional1 : Form
     {
-        public Ecoview()
+        public EcoviewProfessional1()
         {
             InitializeComponent();
            // this.StartPosition = FormStartPosition.WindowsDefaultBounds;
@@ -143,8 +145,10 @@ namespace Ecoview_V2._0
         double k1_1 = 0;
         double k2_1 = 0;
         bool USE_KO_1 = false;
+        public int selet_rezim = 2;
         public void Ecoview_Load(object sender, EventArgs e)
         {
+
             edconctr = "%";
             SposobZadan = "По СО";
 
@@ -174,8 +178,16 @@ namespace Ecoview_V2._0
             t1.SetToolTip(Add_Table2, "Добавить образец");
             ToolTip t = new ToolTip();
             t.SetToolTip(Remove_Table2, "Удалить текущий образец");
-
+            Select_modules();
         }
+        public string Ecoview_Header = "";
+        public void Select_modules()
+        {
+            Select _Select = new Select(this);
+            _Select.ShowDialog();
+            this.Text = Ecoview_Header;
+        }
+
         private void button2_Click(object sender, EventArgs e)
         {
             podcluchenie();
@@ -529,7 +541,7 @@ namespace Ecoview_V2._0
 
             double OptPlot1 = OptPlot - Math.Truncate(OptPlot);
             OptichPlot.Text = string.Format("{0:0.0000}", OptPlot1);
-            while (Convert.ToInt32(GE5_1) > 30000 && countSA > 1)
+            while (Convert.ToInt32(GE5_1) > 10000 && countSA > 1)
             {
                 countSA--;
                 newPort.Write("SA " + countSA + "\r");
@@ -730,6 +742,7 @@ namespace Ecoview_V2._0
 
             LogoForm2.Show();
         }
+        string[] RDstring;
         public void RD()
         {
             newPort.Write("RD\r");
@@ -737,7 +750,7 @@ namespace Ecoview_V2._0
             Thread.Sleep(500);
             //  byte[] buffer1 = new byte[byteRecieved1];
             string indata = newPort.ReadExisting();
-
+            string indata_0 = "";
             bool indata_bool = true;
             while (indata_bool == true)
             {
@@ -749,10 +762,20 @@ namespace Ecoview_V2._0
                 }
 
                 else {
+                    
                     indata = newPort.ReadExisting();
+                    
                 }
             }
-
+            
+            string substring = "\r";
+            int count = (indata.Length - indata.Replace(substring, "").Length) / substring.Length;
+            RDstring = new string[count];
+            // Regex regex = new Regex(@"\W");
+            for (int i = 0; i < count; i++)
+            {
+                RDstring[i] = indata.Split('\r')[i]; ;
+            }
 
         }
         public void Analis__Activated()
@@ -878,15 +901,38 @@ namespace Ecoview_V2._0
 
         private void button5_Click(object sender, EventArgs e)
         {
-            Izmerenie1 = true;
-            if (tabControl2.SelectedIndex == 0)
+            if (selet_rezim == 2)
             {
-                NewGraduirovca(ref CountInSeriya, ref CountSeriya);
+                Izmerenie1 = true;
+                if (tabControl2.SelectedIndex == 0)
+                {
+                    NewGraduirovca(ref CountInSeriya, ref CountSeriya);
+                }
+                else
+                {
+                    NewIzmerenie();
+                }
             }
             else
             {
-                NewIzmerenie();
+                if (selet_rezim == 1)
+                {
+                    if (ComPodkl == true)
+                    {
+                        IzmerenieFR_new();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Для проведения измерений необхдимо подключиться к прибору!");
+                    }
+                }
             }
+            
+        }
+       public void IzmerenieFR_new()
+        {
+            IzmerenieFR _IzmerenieFR = new IzmerenieFR(this);
+            _IzmerenieFR.ShowDialog();
         }
        public string CountSeriya1 = "";
        public string CountInSeriya1 = "";
@@ -1099,16 +1145,27 @@ namespace Ecoview_V2._0
 
         private void button6_Click(object sender, EventArgs e)
         {
-            Izmerenie1 = true;
-            if (tabControl2.SelectedIndex == 0)
+            if (selet_rezim == 2)
             {
-                Open();
+                Izmerenie1 = true;
+                if (tabControl2.SelectedIndex == 0)
+                {
+                    Open();
+                }
+                else
+                {
+                    Open1();
+                }
             }
             else
             {
-                Open1();
+                if(selet_rezim == 1)
+                {
+                    IzmerenieFR_Open();
+                }
             }
         }
+
         public string F1;
         public string F2;
         bool USE_KO_Izmer = false;
@@ -1167,32 +1224,35 @@ namespace Ecoview_V2._0
                 radioButton5.Enabled = true;
                 button3.Enabled = true;
                 button9.Enabled = true;
-            }
-            Podskazka.Text = "Перейдите в Измерения!";
-            label27.Visible = false;
-            label24.Visible = false;
-            label25.Visible = false;
-            label26.Visible = false;
-            label28.Visible = false;
-            if (Convert.ToInt32(CountInSeriya) < 3)
-            {
-                radioButton3.Enabled = false;
-            }
-            else
-            {
-                if (Convert.ToInt32(CountInSeriya) < 2)
+
+
+                Podskazka.Text = "Перейдите в Измерения!";
+                label27.Visible = false;
+                label24.Visible = false;
+                label25.Visible = false;
+                label26.Visible = false;
+                label28.Visible = false;
+                if (Convert.ToInt32(CountInSeriya) < 3)
                 {
-                    radioButton2.Enabled = false;
                     radioButton3.Enabled = false;
                 }
                 else
                 {
-                    radioButton1.Enabled = true;
-                    radioButton2.Enabled = true;
-                    radioButton3.Enabled = true;
+                    if (Convert.ToInt32(CountInSeriya) < 2)
+                    {
+                        radioButton2.Enabled = false;
+                        radioButton3.Enabled = false;
+                    }
+                    else
+                    {
+                        radioButton1.Enabled = true;
+                        radioButton2.Enabled = true;
+                        radioButton3.Enabled = true;
+                    }
                 }
+
+                tabPage4.Parent = tabControl2;
             }
-            tabPage4.Parent = tabControl2;
         }
         public void TableWrite()
         {
@@ -1659,6 +1719,29 @@ namespace Ecoview_V2._0
 
 
         }
+        string filepathIzmarFR;
+        public void IzmerenieFR_Open()
+        {
+            openFileDialog1.InitialDirectory = "C";
+            openFileDialog1.Title = "Open File";
+            openFileDialog1.FileName = "";
+            openFileDialog1.Filter = "ISFR файл|*.isfr2";
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    filepathIzmarFR = openFileDialog1.FileName;
+                    // получаем выбранный файл
+                    IzmerenieFR_openFile(ref filepathIzmarFR);
+                    button11.Enabled = true;
+                  //  button10.Enabled = true;
+                    button3.Enabled = true;
+                    button9.Enabled = true;
+                }
+                catch (Exception t) { MessageBox.Show("exeption" + t.Message); }
+            }
+        }
+
         public void Open1()
         {
             openFileDialog1.InitialDirectory = "C";
@@ -1677,6 +1760,77 @@ namespace Ecoview_V2._0
 
 
             }
+        }
+        public void IzmerenieFR_openFile(ref string filepathIzmarFR)
+        {
+            IzmerenieFR_RowsRemove2();
+            string RowsCount = "";
+            XmlDocument xDoc = new XmlDocument();
+            xDoc.Load(@filepathIzmarFR);
+
+            XmlNodeList nodes = xDoc.ChildNodes;
+            XDocument xdoc = XDocument.Load(filepathIzmarFR);
+            foreach (XElement IzmerenieElement in xdoc.Element("Data_Izmerenie").Elements("Izmerenie"))
+            {
+                XElement countIzmer1Element = IzmerenieElement.Element("countIzmer1");
+                XElement DescriptionElement = IzmerenieElement.Element("Description");
+                XElement DateTimeElement = IzmerenieElement.Element("DateTime");
+                XElement IspolnitelElement = IzmerenieElement.Element("Ispolnitel");
+                if (countIzmer1Element != null && DescriptionElement != null && DateTimeElement != null && IspolnitelElement != null) 
+                {
+                    DateTime = DateTimeElement.Value;
+                    Description = DescriptionElement.Value;
+                    Ispolnitel = IspolnitelElement.Value;
+                    RowsCount = countIzmer1Element.Value; //Количество строк
+
+                    for (int i = 0; i < Convert.ToInt32(RowsCount); i++)
+                    {
+                        IzmerenieFR_Table.Rows.Add();
+                    }
+                    StolbecCol_1 = 7;
+
+                    Stolbec_1 = new string[Convert.ToInt32(RowsCount), StolbecCol_1];
+                }
+            }
+
+            int stroka = 0;
+
+            // Читаем в цикле вложенные значения Stroka
+            foreach (XmlNode n in nodes)
+            {
+                if ("Data_Izmerenie".Equals(n.Name))
+                {
+                    for (XmlNode d = n.FirstChild; d != null; d = d.NextSibling)
+                    {
+
+                        // Обрабатываем в цикле только Stroka
+                        if ("Stroka".Equals(d.Name))
+                        {
+                            int stolbec = 0;
+                            //Можно, например, в этом цикле, да и не только..., взять какие-то данные
+                            for (XmlNode k = d.FirstChild; k != null; k = k.NextSibling)
+                            {
+
+
+                                if ("Stolbec".Equals(k.Name) && k.FirstChild != null)
+                                {
+
+                                    Stolbec_1[stroka, stolbec] = k.FirstChild.Value;
+
+
+                                    stolbec++;
+                                }
+
+                            }
+                            stroka++;
+                        }
+
+                    }
+                }
+            }
+            IzmerenieFR_Table_Write();
+        
+            
         }
         public void openFile2(ref string filepath2, ref string filepath)
         {
@@ -1953,6 +2107,19 @@ namespace Ecoview_V2._0
 
 
 
+        }
+       public void IzmerenieFR_Table_Write()
+        {
+            int StolbecCol_1 = 7;
+            for (int i = 0; i < (Stolbec_1.Length/StolbecCol_1); i++)
+            {
+                for (int j = 0; j < StolbecCol_1; j++)
+                {
+
+                    IzmerenieFR_Table.Rows[i].Cells[j].Value = Stolbec_1[i, j];
+                }
+
+            }
         }
         public void TableWrite2()
         {
@@ -4904,30 +5071,66 @@ namespace Ecoview_V2._0
 
         private void button7_Click(object sender, EventArgs e)
         {
-            if (tabControl2.SelectedIndex == 0)
+            if (selet_rezim == 2)
             {
-                if ((Table1.RowCount < 1) && SposobZadan == "По СО")
+                if (tabControl2.SelectedIndex == 0)
                 {
-                    MessageBox.Show("Создайте Градуировку");
-                    
+                    if ((Table1.RowCount < 1) && SposobZadan == "По СО")
+                    {
+                        MessageBox.Show("Создайте Градуировку");
+
+                    }
+                    else
+                    {
+                        Save();
+                    }
                 }
                 else
                 {
-                    Save();
+                    if (Table2.RowCount > 0)
+                    {
+                        Save1();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Создайте Измерение");
+                    }
                 }
             }
             else
             {
-                if (Table2.RowCount > 0)
+                if (selet_rezim == 1)
                 {
-                    Save1();
-                }
-                else
-                {
-                    MessageBox.Show("Создайте Измерение");
+                    SaveFR();
                 }
             }
         }
+        public void SaveFR()
+        {
+            bool doNotWrite = false;
+            for (int j = 0; j < IzmerenieFR_Table.Rows.Count - 1; j++)
+            {
+
+                for (int i = 3; i < IzmerenieFR_Table.Rows[j].Cells.Count; i++)
+                {
+                    if (IzmerenieFR_Table.Rows[j].Cells[i].Value == null)
+                    {
+                        doNotWrite = true;
+                        break;
+
+                    }
+                }
+            }
+            if (doNotWrite == true)
+            {
+                MessageBox.Show("Не вся поля таблицы были заполнены!");
+            }
+            else
+            {
+                SaveAsIzmerenieFR();
+            }
+        }
+
         public void Save()
         {
             if (SposobZadan != "Ввод коэффициентов")
@@ -5013,6 +5216,24 @@ namespace Ecoview_V2._0
                 label33.Visible = false;
             }
         }
+        public void SaveAsIzmerenieFR()
+        {
+            saveFileDialog1.InitialDirectory = "C";
+            saveFileDialog1.Title = "Save as XML File";
+            saveFileDialog1.FileName = "";
+            saveFileDialog1.Filter = "ISFR файл|*.isfr2";
+
+            if (saveFileDialog1.ShowDialog() != DialogResult.Cancel)
+            {
+                CreateXMLDocumentIzmerenieFR(ref filepath);
+                WriteXmlIzmerenieFR(ref filepath);
+                button3.Enabled = true;
+                button9.Enabled = true;
+                печатьToolStripMenuItem1.Enabled = true;
+
+            }
+        }
+
         private void CreateXMLDocument(ref string filepath)
         {
 
@@ -5339,6 +5560,77 @@ namespace Ecoview_V2._0
             xd.Save(filepath2); // Сохраняем файл  
 
         }
+        public void CreateXMLDocumentIzmerenieFR(ref string filepath)
+        {
+            filepath = saveFileDialog1.FileName;
+            XmlTextWriter xtw = new XmlTextWriter(filepath, Encoding.UTF8);
+            xtw.WriteStartDocument();
+            xtw.WriteStartElement("Data_Izmerenie");
+            xtw.WriteEndDocument();
+            xtw.Close();
+        }
+        public void WriteXmlIzmerenieFR(ref string filepath)
+        {
+            XmlDocument xd = new XmlDocument();
+            FileStream fs = new FileStream(filepath, FileMode.Open);
+            xd.Load(fs);
+
+            XmlNode Izmerenie = xd.CreateElement("Izmerenie");
+
+            XmlNode Version = xd.CreateElement("Version"); // Версия программы
+            Version.InnerText = version; // и значение
+            Izmerenie.AppendChild(Version); // и указываем кому принадлежит
+            XmlNode Ispolnitel1 = xd.CreateElement("Ispolnitel"); // Примечание
+            Ispolnitel1.InnerText = Ispolnitel; // и значение
+            Izmerenie.AppendChild(Ispolnitel1); // и указываем кому принадлежит
+            XmlNode Description1 = xd.CreateElement("Description"); // Примечание
+            Description1.InnerText = Description; // и значение
+            Izmerenie.AppendChild(Description1); // и указываем кому принадлежит
+
+            XmlNode DateTime1 = xd.CreateElement("DateTime"); // дата создания градуировки
+            DateTime1.InnerText = DateTime; // и значение
+            Izmerenie.AppendChild(DateTime1); // и указываем кому принадлежит
+            int countIzmer = IzmerenieFR_Table.Rows.Count - 1;
+            XmlNode countIzmer1 = xd.CreateElement("countIzmer1");
+            countIzmer1.InnerText = Convert.ToString(countIzmer);
+            Izmerenie.AppendChild(countIzmer1);
+            xd.DocumentElement.AppendChild(Izmerenie);
+            HeaderCells = new string[this.IzmerenieFR_Table.Columns.Count];
+            Cells1 = new string[this.IzmerenieFR_Table.Rows.Count - 1, this.IzmerenieFR_Table.Columns.Count];
+            for (int i = 0; i < this.IzmerenieFR_Table.Rows.Count - 1; i++)
+            {
+                XmlNode Cells2 = xd.CreateElement("Stroka");
+
+                XmlAttribute attribute1 = xd.CreateAttribute("Nomer");
+                attribute1.Value = Convert.ToString(i); // устанавливаем значение атрибута
+                Cells2.Attributes.Append(attribute1); // добавляем атрибут
+                for (int j = 0; j < this.IzmerenieFR_Table.Columns.Count; j++)
+                {
+
+                    Cells1[i, j] = Convert.ToString(this.IzmerenieFR_Table.Rows[i].Cells[j].Value);
+
+                    HeaderCells[j] = this.IzmerenieFR_Table.Columns[j].HeaderText;
+                    XmlNode HeaderCells1 = xd.CreateElement("Stolbec"); // Столбец
+                    if (Cells1[i, j] != "")
+                    {
+                        HeaderCells1.InnerText = Cells1[i, j]; // и значение
+                    }
+                    else
+                    {
+                        HeaderCells1.InnerText = "-";
+                    }
+                    Cells2.AppendChild(HeaderCells1); // и указываем кому принадлежит
+                    XmlAttribute attribute = xd.CreateAttribute("Header");
+                    attribute.Value = HeaderCells[j]; // устанавливаем значение атрибута
+                    HeaderCells1.Attributes.Append(attribute); // добавляем атрибут                    
+                }
+                xd.DocumentElement.AppendChild(Cells2);
+            }
+
+            fs.Close();         // Закрываем поток  
+            xd.Save(filepath); // Сохраняем файл  
+
+        }
 
         private void сохранитьToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -5450,6 +5742,7 @@ namespace Ecoview_V2._0
             }
 
         }
+
         public void WLADD2()
         {
             if (NoCaIzm1 >= 2)
@@ -5516,16 +5809,61 @@ namespace Ecoview_V2._0
 
         private void button8_Click(object sender, EventArgs e)
         {
-            if (tabControl2.SelectedIndex == 0 && SposobZadan == "По СО")
+            RegistryKey hkcr = Registry.ClassesRoot;
+            RegistryKey excelKey = hkcr.OpenSubKey("Excel.Application");
+            bool excelInstalled = excelKey == null ? false : true;
+            if (excelInstalled == true)
             {
-                SaveExcel();
+                if (selet_rezim == 2)
+                {
+                    if (tabControl2.SelectedIndex == 0 && SposobZadan == "По СО")
+                    {
+                        SaveExcel();
+                    }
+                    else
+                    {
+                        if (tabControl2.SelectedIndex != 0 && SposobZadan == "По СО")
+                        {
+                            SaveExcel1();
+                        }
+                    }
+                }
+                else
+                {
+                    if (selet_rezim == 1)
+                    {
+                        IzmerenieFR_TableSaveExcel();
+                    }
+                }
             }
             else
             {
-                if (tabControl2.SelectedIndex != 0 && SposobZadan == "По СО")
+                MessageBox.Show("Внимание!! Экспорт в Ecxel не возможен! Отсутствует Excel!");
+            }
+        }
+        public void IzmerenieFR_TableSaveExcel()
+        {
+            bool doNotWrite = false;
+            for (int j = 0; j < IzmerenieFR_Table.Rows.Count - 1; j++)
+            {
+
+                for (int i = 3; i < IzmerenieFR_Table.Rows[j].Cells.Count; i++)
                 {
-                    SaveExcel1();
+                    if (IzmerenieFR_Table.Rows[j].Cells[i].Value == null)
+                    {
+                        doNotWrite = true;
+                        break;
+
+                    }
                 }
+            }
+            if (doNotWrite == true)
+            {
+                MessageBox.Show("Не вся поля таблицы были заполнены!");
+            }
+            else
+            {
+                ExportToExcelIzmerenieFR();
             }
         }
         public void SaveExcel()
@@ -5578,6 +5916,44 @@ namespace Ecoview_V2._0
                     for (int j = 0; j < this.Table1.Columns.Count; j++)
                     {
                         exApp.Cells[i + 2, j + 1] = this.Table1.Rows[i].Cells[j].Value;
+                    }
+                }
+
+                exApp.ActiveWorkbook.SaveCopyAs(saveFileDialog1.FileName.ToString());
+                exApp.ActiveWorkbook.Saved = true;
+                exApp.Visible = true;
+                //  exApp.Quit();
+
+            }
+        }
+        public void ExportToExcelIzmerenieFR()
+        {
+            saveFileDialog1.InitialDirectory = "C";
+            saveFileDialog1.Title = "Save as Excel File";
+            saveFileDialog1.FileName = "";
+            saveFileDialog1.Filter = "Excel Files(2003)|*.xls|Excel Files(2007)|*.xlsx";
+
+            if (saveFileDialog1.ShowDialog() != DialogResult.Cancel)
+            {
+                Microsoft.Office.Interop.Excel.Application exApp = new Microsoft.Office.Interop.Excel.Application();
+                //Excel.Application exApp = new Excel.Application();
+                exApp.Application.Workbooks.Add(Type.Missing);
+
+                exApp.Columns.ColumnWidth = 20;
+                for (int i = 1; i < this.IzmerenieFR_Table.Columns.Count + 1; i++)
+                {
+                    exApp.Cells[1, i] = this.IzmerenieFR_Table.Columns[i - 1].HeaderText;
+                }
+                Thread.Sleep(500);
+                for (int i = 0; i < this.IzmerenieFR_Table.Rows.Count; i++)
+                {
+                    Thread.Sleep(2000);
+                    for (int j = 0; j < this.IzmerenieFR_Table.Columns.Count; j++)
+                    {
+                        string value = Convert.ToString(this.IzmerenieFR_Table.Rows[i].Cells[j].Value);
+                        value = value.Replace(",", ".");
+                        exApp.Cells[i + 2, j + 1] = value;
+                       
                     }
                 }
 
@@ -6028,20 +6404,55 @@ namespace Ecoview_V2._0
 
         private void button9_Click(object sender, EventArgs e)
         {
-            if (tabControl2.SelectedIndex == 0 && SposobZadan == "По СО")
+            if (selet_rezim == 2)
             {
-                SaveToPdf();
-            }
-            else
-            {
-                if (tabControl2.SelectedIndex == 0 && SposobZadan != "По СО")
+                if (tabControl2.SelectedIndex == 0 && SposobZadan == "По СО")
                 {
-                    SaveToPdf1();
+                    SaveToPdf();
                 }
                 else
                 {
-                    SaveTpPdf2();
+                    if (tabControl2.SelectedIndex == 0 && SposobZadan != "По СО")
+                    {
+                        SaveToPdf1();
+                    }
+                    else
+                    {
+                        SaveTpPdf2();
+                    }
                 }
+            }
+            else
+            {
+                if(selet_rezim == 1)
+                {
+                    IzmerenieFRSavePDF();
+                }
+            }
+        }
+        public void IzmerenieFRSavePDF()
+        {
+            bool doNotWrite = false;
+            for (int j = 0; j < IzmerenieFR_Table.Rows.Count - 1; j++)
+            {
+
+                for (int i = 3; i < IzmerenieFR_Table.Rows[j].Cells.Count; i++)
+                {
+                    if (IzmerenieFR_Table.Rows[j].Cells[i].Value == null)
+                    {
+                        doNotWrite = true;
+                        break;
+
+                    }
+                }
+            }
+            if (doNotWrite == true)
+            {
+                MessageBox.Show("Не вся поля таблицы были заполнены!");
+            }
+            else
+            {
+                IzmerenieFRExportToPdf();
             }
         }
         public void SaveToPdf()
@@ -6073,6 +6484,7 @@ namespace Ecoview_V2._0
         {
             ExportToPDF1();
         }
+        
         public void ExportToPDF1()
         {
             BaseFont baseFont = BaseFont.CreateFont("C:\\Windows\\Fonts\\georgia.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
@@ -6296,24 +6708,33 @@ namespace Ecoview_V2._0
                 Paragraph Table1 = new Paragraph("Таблица исходных данных\n\n", font);
 
                 Paragraph InformationAboutPribor = new Paragraph("Информация о приборе\n", font);
-                string model = @"pribor/model";
+                var applicationDirectory = Path.GetDirectoryName(Application.ExecutablePath);
+                const string model = @"pribor/model";
+                var model_var = Path.Combine(applicationDirectory, model);
                 string SerNomer_Text = @"pribor/SerNomer";
+                var SerNomer_Text_var = Path.Combine(applicationDirectory, SerNomer_Text);
+
                 string InventarNomer_Text = @"pribor/InventarNomer";
+                var InventarNomer_Text_var = Path.Combine(applicationDirectory, InventarNomer_Text);
+
                 string SrokIstech_Text = @"pribor/SrokIstech";
+                var SrokIstech_Text_var = Path.Combine(applicationDirectory, SrokIstech_Text);
+
                 string Poveren_Text = @"pribor/Poveren";
-                StreamReader fs = new StreamReader(model);
+                var Poveren_Text_var = Path.Combine(applicationDirectory, Poveren_Text);
+                StreamReader fs = new StreamReader(model_var);
                 Paragraph Model = new Paragraph("Модель\n" + fs.ReadLine(), font);
                 fs.Close();
 
-                StreamReader fs1 = new StreamReader(SerNomer_Text);
+                StreamReader fs1 = new StreamReader(SerNomer_Text_var);
                 Paragraph SerNomer = new Paragraph("Серийный номер\n" + fs1.ReadLine(), font);
                 fs1.Close();
 
-                StreamReader fs2 = new StreamReader(InventarNomer_Text);
+                StreamReader fs2 = new StreamReader(InventarNomer_Text_var);
                 Paragraph InventarNomer = new Paragraph("Инвентарный номер\n" + fs2.ReadLine(), font);
                 fs2.Close();
 
-                StreamReader fs3 = new StreamReader(Poveren_Text);
+                StreamReader fs3 = new StreamReader(Poveren_Text_var);
                 DateTime data = Convert.ToDateTime(fs3.ReadLine());
                 // data.Date.ToString("d.mm.yyyy"); 
                 //  MessageBox.Show(Convert.ToString(data));   
@@ -6474,9 +6895,136 @@ namespace Ecoview_V2._0
                */
         }
 
-    
+        public void IzmerenieFRExportToPdf()
+        {
+            BaseFont baseFont = BaseFont.CreateFont("C:\\Windows\\Fonts\\georgia.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
 
-public void WLADDSTR2()
+            iTextSharp.text.Font font = new iTextSharp.text.Font(baseFont, 10f, iTextSharp.text.Font.NORMAL);
+            iTextSharp.text.Font fontBold = new iTextSharp.text.Font(baseFont, 18f, iTextSharp.text.Font.BOLD);
+            iTextSharp.text.Font fontBold1 = new iTextSharp.text.Font(baseFont, 10f, iTextSharp.text.Font.BOLD);
+            iTextSharp.text.Font font1 = new iTextSharp.text.Font(baseFont, 5f, iTextSharp.text.Font.BOLD);
+            iTextSharp.text.Rectangle orient = PageSize.A4;
+            float margintop = 20;
+            float marginleft = 25;
+            float marginright = 25;
+            float marginbottom = 5;
+            PdfPTable pdfTable = new PdfPTable(IzmerenieFR_Table.ColumnCount);
+            pdfTable = new PdfPTable(IzmerenieFR_Table.ColumnCount);
+            pdfTable.DefaultCell.Padding = 5;
+            pdfTable.WidthPercentage = 100;
+            pdfTable.HorizontalAlignment = Element.ALIGN_LEFT;
+            pdfTable.DefaultCell.BorderWidth = 1;
+            PdfPCell cell;
+            for (int i = 0; i < IzmerenieFR_Table.ColumnCount; i++)
+            {
+                cell = new PdfPCell(new Phrase(IzmerenieFR_Table.Columns[i].HeaderText, fontBold1));
+                cell.HorizontalAlignment = Element.ALIGN_CENTER;
+                cell.VerticalAlignment = Element.ALIGN_MIDDLE;
+                //cell.BackgroundColor = new iTextSharp.text.Color(161, 235, 157);
+                cell.BorderWidth = 1;
+                cell.Padding = 1;
+                cell.PaddingBottom = 5;
+                pdfTable.AddCell(cell);
+            }
+            for (int j = 0; j < IzmerenieFR_Table.Rows.Count; j++)
+            {
+                for (int i = 0; i < IzmerenieFR_Table.ColumnCount; i++)
+                {
+                    pdfTable.AddCell(new Phrase(Convert.ToString(IzmerenieFR_Table.Rows[j].Cells[i].Value), font));
+                }
+            }
+            SaveFileDialog sfd = new SaveFileDialog();
+            sfd.Filter = "Pdf File |*.pdf";
+            if (sfd.ShowDialog() == DialogResult.OK)
+            {
+                Document doc = new Document(orient, marginleft, marginright, margintop, marginbottom);
+                PdfWriter wri = PdfWriter.GetInstance(doc, new FileStream(sfd.FileName, FileMode.Create));
+
+                doc.Open();
+                Paragraph welcomeParagraph1 = new Paragraph("\n", fontBold);
+                Paragraph welcomeParagraph = new Paragraph("Измерения в фотометрическом режиме\n", fontBold);
+                welcomeParagraph.Alignment = iTextSharp.text.Element.ALIGN_CENTER;
+                Paragraph Description2 = new Paragraph("Примечание: " + Description, font);
+                Paragraph DateTime2 = new Paragraph("Дата: " + DateTime, font);
+                Paragraph Ispolnitel2 = new Paragraph("Исполнитель: " + Ispolnitel, font);
+
+                Paragraph InformationAboutPribor = new Paragraph("Информация о приборе:\n", font);
+                var applicationDirectory = Path.GetDirectoryName(Application.ExecutablePath);
+                const string model = @"pribor/model";
+                var model_var = Path.Combine(applicationDirectory, model);
+                string SerNomer_Text = @"pribor/SerNomer";
+                var SerNomer_Text_var = Path.Combine(applicationDirectory, SerNomer_Text);
+
+                string InventarNomer_Text = @"pribor/InventarNomer";
+                var InventarNomer_Text_var = Path.Combine(applicationDirectory, InventarNomer_Text);
+
+                string SrokIstech_Text = @"pribor/SrokIstech";
+                var SrokIstech_Text_var = Path.Combine(applicationDirectory, SrokIstech_Text);
+
+                string Poveren_Text = @"pribor/Poveren";
+                var Poveren_Text_var = Path.Combine(applicationDirectory, Poveren_Text);
+                StreamReader fs = new StreamReader(model_var);
+                Paragraph Model = new Paragraph("Модель\n" + fs.ReadLine(), font);
+                fs.Close();
+
+                StreamReader fs1 = new StreamReader(SerNomer_Text_var);
+                Paragraph SerNomer = new Paragraph("Серийный номер\n" + fs1.ReadLine(), font);
+                fs1.Close();
+
+                StreamReader fs2 = new StreamReader(InventarNomer_Text_var);
+                Paragraph InventarNomer = new Paragraph("Инвентарный номер\n" + fs2.ReadLine(), font);
+                fs2.Close();
+
+                StreamReader fs3 = new StreamReader(Poveren_Text_var);
+                DateTime data = Convert.ToDateTime(fs3.ReadLine());
+                // data.Date.ToString("d.mm.yyyy"); 
+                //  MessageBox.Show(Convert.ToString(data));   
+                data = data.AddYears(1);
+                fs3.Close();
+                Paragraph Poveren = new Paragraph("Поверка действительна до\n" + data.Date.ToString("dd.MM.yyyy"), font);
+                PdfPTable Information = new PdfPTable(6);
+                PdfPCell Informationcell = new PdfPCell(Model);
+                Informationcell.BorderWidth = 0;
+                Informationcell.Colspan = 3;
+                Information.AddCell(Informationcell);
+
+                Informationcell = new PdfPCell(SerNomer);
+                Informationcell.BorderWidth = 0;
+                Informationcell.Colspan = 3;
+                Information.AddCell(Informationcell);
+
+                Informationcell = new PdfPCell(Poveren);
+                Informationcell.BorderWidth = 0;
+                Informationcell.Colspan = 3;
+                Information.AddCell(Informationcell);
+
+                Informationcell = new PdfPCell(InventarNomer);
+                Informationcell.BorderWidth = 0;
+                Informationcell.Colspan = 3;
+                Information.AddCell(Informationcell);
+                Paragraph Table1 = new Paragraph("Таблица исходных данных\n\n", font);
+
+                doc.Add(welcomeParagraph);
+                doc.Add(welcomeParagraph1);
+                doc.Add(Description2);
+                doc.Add(welcomeParagraph1);
+                doc.Add(InformationAboutPribor);
+                doc.Add(welcomeParagraph1);
+                doc.Add(Information);
+                doc.Add(welcomeParagraph1);
+                doc.Add(Table1);
+                doc.Add(welcomeParagraph1);
+                doc.Add(pdfTable);
+                doc.Add(welcomeParagraph1);
+                doc.Add(DateTime2);
+                doc.Add(welcomeParagraph1);
+                doc.Add(Ispolnitel2);
+                doc.Add(welcomeParagraph1);
+                doc.Close();
+            }
+        }
+
+        public void WLADDSTR2()
         {
             count = 0;
             if (USE_KO == false)
@@ -6559,23 +7107,50 @@ public void WLADDSTR2()
             Table2.Rows.Clear();
 
         }
+        public void IzmerenieFR_RowsRemove2()
+        {
+            IzmerenieFR_Table.Rows.Clear();
+        }
 
         private void button3_Click(object sender, EventArgs e)
         {
-            if (tabControl2.SelectedIndex == 0 && SposobZadan == "По СО")
+            string str = "";
+            for (int i = 0; i < PrinterSettings.InstalledPrinters.Count; i++)
             {
-                PrintDoc();
+                str += PrinterSettings.InstalledPrinters[i] + "\n";
             }
-            else
+            
+            if (str != "")
             {
-                if (tabControl2.SelectedIndex == 0 && SposobZadan != "По СО")
+                if (selet_rezim == 2)
                 {
-                    PrintDoc1();
+                    if (tabControl2.SelectedIndex == 0 && SposobZadan == "По СО")
+                    {
+                        PrintDoc();
+                    }
+                    else
+                    {
+                        if (tabControl2.SelectedIndex == 0 && SposobZadan != "По СО")
+                        {
+                            PrintDoc1();
+                        }
+                        else
+                        {
+                            PrintDoc2();
+                        }
+                    }
                 }
                 else
                 {
-                    PrintDoc2();
+                    if(selet_rezim == 1)
+                    {
+                        IzmerenieFR_TablePrintDoc();
+                    }
                 }
+            }
+            else
+            {
+                MessageBox.Show("Внимание! Принтер не найден! Подключите принтер!");
             }
         }
         public void PrintDoc()
@@ -6602,6 +7177,32 @@ public void WLADDSTR2()
             {
                 printPreviewTable1.Document = printTable1;
                 printPreviewTable1.ShowDialog();
+            }
+        }
+        public void IzmerenieFR_TablePrintDoc()
+        {
+            bool doNotWrite = false;
+            for (int j = 0; j < IzmerenieFR_Table.Rows.Count - 1; j++)
+            {
+
+                for (int i = 3; i < IzmerenieFR_Table.Rows[j].Cells.Count; i++)
+                {
+                    if (IzmerenieFR_Table.Rows[j].Cells[i].Value == null)
+                    {
+                        doNotWrite = true;
+                        break;
+
+                    }
+                }
+            }
+            if (doNotWrite == true)
+            {
+                MessageBox.Show("Не вся поля таблицы были заполнены!");
+            }
+            else
+            {
+                IzmerenieFRprintPreviewTable1.Document = IzmerenieFRprintTable1;
+                IzmerenieFRprintPreviewTable1.ShowDialog();
             }
         }
         public void PrintDoc1()
@@ -6631,12 +7232,92 @@ public void WLADDSTR2()
             }
             else
             {
-                printPreviewTable2.Document = printTable2;
-                printPreviewTable2.ShowDialog();
+                if (Table2.Rows.Count >= 1)
+                {
+                    printPreviewTable2.Document = printTable2;
+                    printPreviewTable2.ShowDialog();
+                }
+                else
+                {
+                    MessageBox.Show("Создайте таблицу измерений!");
+                }
             }
         }
+        private string stringToPrint;
+        private void IzmerenieFRprintTable1_PrintPage(object sender, PrintPageEventArgs e)
+        {
+           /* int charactersOnPage = 0;
+            int linesPerPage = 0;
+
+            e.Graphics.MeasureString(stringToPrint, this.Font,
+       e.MarginBounds.Size, StringFormat.GenericTypographic,
+       out charactersOnPage, out linesPerPage);
+            e.Graphics.DrawString(stringToPrint, this.Font, Brushes.Black,
+        e.MarginBounds, StringFormat.GenericTypographic);*/
+
+
+            e.Graphics.DrawString("Измерение в фототметрическом режиме\n\n", new System.Drawing.Font("Times New Roman", 20, FontStyle.Bold), Brushes.Black, 100, 50);
+            e.Graphics.DrawString("Примечание:", new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, 25, 110);
+            e.Graphics.DrawString(Description, new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, 155, 110);
+            e.Graphics.DrawString("Информация о приборе:\n", new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, new Point(25, 130));
+            var applicationDirectory = Path.GetDirectoryName(Application.ExecutablePath);
+            const string model = @"pribor/model";
+            var filePathToOpen = Path.Combine(applicationDirectory, model);
+
+
+
+            StreamReader fs = new StreamReader(filePathToOpen);
+            e.Graphics.DrawString("Модель: ", new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, new Point(200, 150));
+            e.Graphics.DrawString(fs.ReadLine(), new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, new Point(310, 150));
+            fs.Close();
+
+
+            const string SerNomer_Text = @"pribor/SerNomer";
+            filePathToOpen = Path.Combine(applicationDirectory, SerNomer_Text);
+
+            StreamReader fs1 = new StreamReader(filePathToOpen);
+            e.Graphics.DrawString("Серийный номер: ", new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, new Point(530, 150));
+            e.Graphics.DrawString(fs1.ReadLine(), new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, new Point(700, 150));
+            fs1.Close();
+
+
+            const string InventarNomer_Text = @"pribor/InventarNomer";
+            filePathToOpen = Path.Combine(applicationDirectory, InventarNomer_Text);
+
+            StreamReader fs2 = new StreamReader(filePathToOpen);
+            e.Graphics.DrawString("Инвентарный номер: ", new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, new Point(500, 170));
+            e.Graphics.DrawString(fs2.ReadLine(), new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, new Point(705, 170));
+            fs2.Close();
+
+            string Poveren_Text = @"pribor/Poveren";
+            filePathToOpen = Path.Combine(applicationDirectory, Poveren_Text);
+
+            StreamReader fs3 = new StreamReader(filePathToOpen);
+            DateTime data = Convert.ToDateTime(fs3.ReadLine());
+            // data.Date.ToString("d.mm.yyyy"); 
+            //  MessageBox.Show(Convert.ToString(data));   
+            data = data.AddYears(1);
+            fs3.Close();
+            e.Graphics.DrawString("Поверка действительна до: ", new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, new Point(60, 170));
+            e.Graphics.DrawString(data.Date.ToString("dd.MM.yyyy"), new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, new Point(315, 170));
+            e.Graphics.DrawString("Таблица исходных данных", new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, 25, 200);
+            IzmerenieFRPrintViewer1(sender, e);
+
+            e.Graphics.DrawString("Дата:", new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, 25, cordY);
+            e.Graphics.DrawString(DateTime, new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, 80, cordY);
+            e.Graphics.DrawString("Исполнитель:", new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, 25, cordY + 30);
+            e.Graphics.DrawString(Ispolnitel + "   _______________________", new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, 160, cordY + 30);
+           /* stringToPrint = stringToPrint.Substring(charactersOnPage);
+
+            // Check to see if more pages are to be printed.
+            e.HasMorePages = (stringToPrint.Length > 0);*/
+
+        }
+        
         private void printDocument1_PrintPage_2(object sender, PrintPageEventArgs e)
         {
+            /* int charactersOnPage = 0;
+             int linesPerPage = 0;*/
 
             e.Graphics.DrawString("Расчет линейного градуировочного графика\n\n", new System.Drawing.Font("Times New Roman", 20, FontStyle.Bold), Brushes.Black, 100, 50);
             e.Graphics.DrawString("Вещесво:", new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, 25, 110);
@@ -6659,27 +7340,39 @@ public void WLADDSTR2()
 
 
             e.Graphics.DrawString("Информация о приборе:\n", new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, new Point(25, 260));
-            string model = @"pribor/model";
-            string SerNomer_Text = @"pribor/SerNomer";
-            string InventarNomer_Text = @"pribor/InventarNomer";
-            string SrokIstech_Text = @"pribor/SrokIstech";
-            string Poveren_Text = @"pribor/Poveren";
-            StreamReader fs = new StreamReader(model);
+            var applicationDirectory = Path.GetDirectoryName(Application.ExecutablePath);
+            const string model = @"pribor/model";
+            var filePathToOpen = Path.Combine(applicationDirectory, model);
+
+            
+
+            StreamReader fs = new StreamReader(filePathToOpen);
             e.Graphics.DrawString("Модель: ", new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, new Point(200, 280));
             e.Graphics.DrawString(fs.ReadLine(), new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, new Point(310, 280));
             fs.Close();
 
-            StreamReader fs1 = new StreamReader(SerNomer_Text);
+
+            const string SerNomer_Text = @"pribor/SerNomer";
+            filePathToOpen = Path.Combine(applicationDirectory, SerNomer_Text);          
+
+            StreamReader fs1 = new StreamReader(filePathToOpen);
             e.Graphics.DrawString("Серийный номер: ", new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, new Point(530, 280));
             e.Graphics.DrawString(fs1.ReadLine(), new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, new Point(700, 280));
             fs1.Close();
 
-            StreamReader fs2 = new StreamReader(InventarNomer_Text);
+
+            const string InventarNomer_Text = @"pribor/InventarNomer";
+            filePathToOpen = Path.Combine(applicationDirectory, InventarNomer_Text);
+
+            StreamReader fs2 = new StreamReader(filePathToOpen);
             e.Graphics.DrawString("Инвентарный номер: ", new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, new Point(500, 300));
             e.Graphics.DrawString(fs2.ReadLine(), new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, new Point(705, 300));
             fs2.Close();
 
-            StreamReader fs3 = new StreamReader(Poveren_Text);
+            string Poveren_Text = @"pribor/Poveren";
+            filePathToOpen = Path.Combine(applicationDirectory, Poveren_Text);
+
+            StreamReader fs3 = new StreamReader(filePathToOpen);
             DateTime data = Convert.ToDateTime(fs3.ReadLine());
             // data.Date.ToString("d.mm.yyyy"); 
             //  MessageBox.Show(Convert.ToString(data));   
@@ -6725,11 +7418,123 @@ public void WLADDSTR2()
             e.Graphics.DrawString(DateTime, new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, 80, cordY);
             e.Graphics.DrawString("Исполнитель:", new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, 25, cordY + 30);
             e.Graphics.DrawString(Ispolnitel + "   _______________________", new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, 160, cordY + 30);
-
+            
             //  Paragraph Ispolnitel2 = new Paragraph("Исполнитель: " + Ispolnitel, font);
 
+       //     stringToPrint = stringToPrint.Substring(charactersOnPage);
+
+            // Check to see if more pages are to be printed.
+           /* e.HasMorePages = (stringToPrint.Length > 0);*/
 
 
+        }
+        public void IzmerenieFRPrintViewer1(object sender, PrintPageEventArgs e)
+        {
+            int height = 230;
+            int width = 25;
+
+            Pen p = new Pen(Brushes.Black, 2.5f);
+            e.Graphics.FillRectangle(Brushes.White, new System.Drawing.Rectangle(width, height, IzmerenieFR_Table.Columns[0].Width + 5, IzmerenieFR_Table.Rows[0].Height * 2));
+            e.Graphics.DrawRectangle(p, new System.Drawing.Rectangle(width, height, IzmerenieFR_Table.Columns[0].Width + 5, IzmerenieFR_Table.Rows[0].Height * 2));
+            e.Graphics.DrawString(IzmerenieFR_Table.Columns[0].HeaderText, new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, new System.Drawing.Rectangle(width + 10, height, IzmerenieFR_Table.Columns[0].Width + 5, IzmerenieFR_Table.Rows[0].Height * 2));
+            width = width + IzmerenieFR_Table.Columns[0].Width + 5;
+            e.Graphics.FillRectangle(Brushes.White, new System.Drawing.Rectangle(width, height, IzmerenieFR_Table.Columns[1].Width + 5, IzmerenieFR_Table.Rows[0].Height * 2));
+            e.Graphics.DrawRectangle(p, new System.Drawing.Rectangle(width, height, IzmerenieFR_Table.Columns[1].Width + 5, IzmerenieFR_Table.Rows[0].Height * 2));
+            e.Graphics.DrawString(IzmerenieFR_Table.Columns[1].HeaderText, new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, new System.Drawing.Rectangle(width + 10, height, IzmerenieFR_Table.Columns[1].Width + 5, IzmerenieFR_Table.Rows[0].Height * 2));
+            width = width + IzmerenieFR_Table.Columns[1].Width+5;
+            e.Graphics.FillRectangle(Brushes.White, new System.Drawing.Rectangle(width, height, IzmerenieFR_Table.Columns[2].Width + 5, IzmerenieFR_Table.Rows[0].Height * 2));
+            e.Graphics.DrawRectangle(p, new System.Drawing.Rectangle(width, height, IzmerenieFR_Table.Columns[2].Width + 5, IzmerenieFR_Table.Rows[0].Height * 2));
+            e.Graphics.DrawString(IzmerenieFR_Table.Columns[2].HeaderText, new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, new System.Drawing.Rectangle(width + 10, height, IzmerenieFR_Table.Columns[2].Width + 5, IzmerenieFR_Table.Rows[0].Height * 2));
+            width = width + IzmerenieFR_Table.Columns[2].Width + 5;
+            e.Graphics.FillRectangle(Brushes.White, new System.Drawing.Rectangle(width, height, IzmerenieFR_Table.Columns[3].Width + 5, IzmerenieFR_Table.Rows[0].Height * 2));
+            e.Graphics.DrawRectangle(p, new System.Drawing.Rectangle(width, height, IzmerenieFR_Table.Columns[3].Width + 5, IzmerenieFR_Table.Rows[0].Height * 2));
+            e.Graphics.DrawString(IzmerenieFR_Table.Columns[3].HeaderText, new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, new System.Drawing.Rectangle(width + 10, height, IzmerenieFR_Table.Columns[3].Width + 5, IzmerenieFR_Table.Rows[0].Height * 2));
+            width = width + IzmerenieFR_Table.Columns[3].Width + 5;
+            e.Graphics.FillRectangle(Brushes.White, new System.Drawing.Rectangle(width, height, IzmerenieFR_Table.Columns[4].Width + 5, IzmerenieFR_Table.Rows[0].Height * 2));
+            e.Graphics.DrawRectangle(p, new System.Drawing.Rectangle(width, height, IzmerenieFR_Table.Columns[4].Width + 5, IzmerenieFR_Table.Rows[0].Height * 2));
+            e.Graphics.DrawString(IzmerenieFR_Table.Columns[4].HeaderText, new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, new System.Drawing.Rectangle(width + 10, height, IzmerenieFR_Table.Columns[4].Width + 5, IzmerenieFR_Table.Rows[0].Height * 2));
+            width = width + IzmerenieFR_Table.Columns[4].Width + 5;
+            e.Graphics.FillRectangle(Brushes.White, new System.Drawing.Rectangle(width, height, IzmerenieFR_Table.Columns[5].Width + 5, IzmerenieFR_Table.Rows[0].Height * 2));
+            e.Graphics.DrawRectangle(p, new System.Drawing.Rectangle(width, height, IzmerenieFR_Table.Columns[5].Width + 5, IzmerenieFR_Table.Rows[0].Height * 2));
+            e.Graphics.DrawString(IzmerenieFR_Table.Columns[5].HeaderText, new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, new System.Drawing.Rectangle(width + 10, height, IzmerenieFR_Table.Columns[5].Width + 5, IzmerenieFR_Table.Rows[0].Height * 2));
+            width = width + IzmerenieFR_Table.Columns[5].Width + 5;
+            e.Graphics.FillRectangle(Brushes.White, new System.Drawing.Rectangle(width, height, IzmerenieFR_Table.Columns[6].Width + 5, IzmerenieFR_Table.Rows[0].Height * 2));
+            e.Graphics.DrawRectangle(p, new System.Drawing.Rectangle(width, height, IzmerenieFR_Table.Columns[6].Width + 5, IzmerenieFR_Table.Rows[0].Height * 2));
+            e.Graphics.DrawString(IzmerenieFR_Table.Columns[6].HeaderText, new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, new System.Drawing.Rectangle(width + 10, height, IzmerenieFR_Table.Columns[6].Width + 5, IzmerenieFR_Table.Rows[0].Height * 2));
+            width = width + IzmerenieFR_Table.Columns[6].Width + 5;
+            height = height + IzmerenieFR_Table.Rows[0].Height * 2;
+            width = 25;
+            int height1 = height;
+            int width1_1 = width;
+            for (int j = 0; j < IzmerenieFR_Table.Rows.Count - 1; j++)
+            {
+                e.Graphics.FillRectangle(Brushes.White, new System.Drawing.Rectangle(width, height, IzmerenieFR_Table.Columns[0].Width + 5, IzmerenieFR_Table.Rows[j].Height));
+                e.Graphics.DrawRectangle(p, new System.Drawing.Rectangle(width, height, IzmerenieFR_Table.Columns[0].Width + 5, IzmerenieFR_Table.Rows[j].Height));
+                e.Graphics.DrawString(IzmerenieFR_Table.Rows[j].Cells[0].Value.ToString(), new System.Drawing.Font("Times New Roman", 10, FontStyle.Regular), Brushes.Black, new System.Drawing.Rectangle(width + 10, height, IzmerenieFR_Table.Columns[0].Width + 5, IzmerenieFR_Table.Rows[j].Height));
+                // width = width + IzmerenieFR_Table.Columns[0].Width;
+                height += IzmerenieFR_Table.Rows[j].Height;
+            }
+            height = height1;
+            width = width + IzmerenieFR_Table.Columns[0].Width + 5;
+            for (int j = 0; j < IzmerenieFR_Table.Rows.Count - 1; j++)
+            {
+                e.Graphics.FillRectangle(Brushes.White, new System.Drawing.Rectangle(width, height, IzmerenieFR_Table.Columns[1].Width+5, IzmerenieFR_Table.Rows[j].Height));
+                e.Graphics.DrawRectangle(p, new System.Drawing.Rectangle(width, height, IzmerenieFR_Table.Columns[1].Width+5, IzmerenieFR_Table.Rows[j].Height));
+                e.Graphics.DrawString(IzmerenieFR_Table.Rows[j].Cells[1].Value.ToString(), new System.Drawing.Font("Times New Roman", 10, FontStyle.Regular), Brushes.Black, new System.Drawing.Rectangle(width + 10, height, IzmerenieFR_Table.Columns[1].Width + 5, IzmerenieFR_Table.Rows[j].Height));
+                // width = width + IzmerenieFR_Table.Columns[1].Width;
+                height += IzmerenieFR_Table.Rows[j].Height;
+            }
+            height = height1;
+            width = width + IzmerenieFR_Table.Columns[0].Width+5;
+            for (int j = 0; j < IzmerenieFR_Table.Rows.Count - 1; j++)
+            {
+                e.Graphics.FillRectangle(Brushes.White, new System.Drawing.Rectangle(width, height, IzmerenieFR_Table.Columns[2].Width + 5, IzmerenieFR_Table.Rows[j].Height));
+                e.Graphics.DrawRectangle(p, new System.Drawing.Rectangle(width, height, IzmerenieFR_Table.Columns[2].Width + 5, IzmerenieFR_Table.Rows[j].Height));
+                e.Graphics.DrawString(IzmerenieFR_Table.Rows[j].Cells[2].Value.ToString(), new System.Drawing.Font("Times New Roman", 10, FontStyle.Regular), Brushes.Black, new System.Drawing.Rectangle(width + 10, height, IzmerenieFR_Table.Columns[2].Width + 5, IzmerenieFR_Table.Rows[j].Height));
+                // width = width + IzmerenieFR_Table.Columns[2].Width;
+                height += IzmerenieFR_Table.Rows[j].Height;
+            }
+            height = height1;
+            width = width + IzmerenieFR_Table.Columns[0].Width+5;
+            for (int j = 0; j < IzmerenieFR_Table.Rows.Count - 1; j++)
+            {
+                e.Graphics.FillRectangle(Brushes.White, new System.Drawing.Rectangle(width, height, IzmerenieFR_Table.Columns[3].Width + 5, IzmerenieFR_Table.Rows[j].Height));
+                e.Graphics.DrawRectangle(p, new System.Drawing.Rectangle(width, height, IzmerenieFR_Table.Columns[3].Width + 5, IzmerenieFR_Table.Rows[j].Height));
+                e.Graphics.DrawString(IzmerenieFR_Table.Rows[j].Cells[3].Value.ToString(), new System.Drawing.Font("Times New Roman", 10, FontStyle.Regular), Brushes.Black, new System.Drawing.Rectangle(width + 10, height, IzmerenieFR_Table.Columns[3].Width+5, IzmerenieFR_Table.Rows[j].Height));
+                // width = width + IzmerenieFR_Table.Columns[1].Width;
+                height += IzmerenieFR_Table.Rows[j].Height;
+            }
+            height = height1;
+            width = width + IzmerenieFR_Table.Columns[0].Width+5;
+            for (int j = 0; j < IzmerenieFR_Table.Rows.Count - 1; j++)
+            {
+                e.Graphics.FillRectangle(Brushes.White, new System.Drawing.Rectangle(width, height, IzmerenieFR_Table.Columns[4].Width + 5, IzmerenieFR_Table.Rows[j].Height));
+                e.Graphics.DrawRectangle(p, new System.Drawing.Rectangle(width, height, IzmerenieFR_Table.Columns[4].Width + 5, IzmerenieFR_Table.Rows[j].Height));
+                e.Graphics.DrawString(IzmerenieFR_Table.Rows[j].Cells[4].Value.ToString(), new System.Drawing.Font("Times New Roman", 10, FontStyle.Regular), Brushes.Black, new System.Drawing.Rectangle(width + 10, height, IzmerenieFR_Table.Columns[4].Width+5, IzmerenieFR_Table.Rows[j].Height));
+                // width = width + IzmerenieFR_Table.Columns[4].Width;
+                height += IzmerenieFR_Table.Rows[j].Height;
+            }
+            height = height1;
+            width = width + IzmerenieFR_Table.Columns[0].Width+5;
+            for (int j = 0; j < IzmerenieFR_Table.Rows.Count - 1; j++)
+            {
+                e.Graphics.FillRectangle(Brushes.White, new System.Drawing.Rectangle(width, height, IzmerenieFR_Table.Columns[5].Width + 5, IzmerenieFR_Table.Rows[j].Height));
+                e.Graphics.DrawRectangle(p, new System.Drawing.Rectangle(width, height, IzmerenieFR_Table.Columns[5].Width + 5, IzmerenieFR_Table.Rows[j].Height));
+                e.Graphics.DrawString(IzmerenieFR_Table.Rows[j].Cells[5].Value.ToString(), new System.Drawing.Font("Times New Roman", 10, FontStyle.Regular), Brushes.Black, new System.Drawing.Rectangle(width + 10, height, IzmerenieFR_Table.Columns[5].Width+5, IzmerenieFR_Table.Rows[j].Height));
+                // width = width + IzmerenieFR_Table.Columns[5].Width;
+                height += IzmerenieFR_Table.Rows[j].Height;
+            }
+            height = height1;
+            width = width + IzmerenieFR_Table.Columns[0].Width+5;
+            for (int j = 0; j < IzmerenieFR_Table.Rows.Count - 1; j++)
+            {
+                e.Graphics.FillRectangle(Brushes.White, new System.Drawing.Rectangle(width, height, IzmerenieFR_Table.Columns[6].Width + 5, IzmerenieFR_Table.Rows[j].Height));
+                e.Graphics.DrawRectangle(p, new System.Drawing.Rectangle(width, height, IzmerenieFR_Table.Columns[6].Width + 5, IzmerenieFR_Table.Rows[j].Height));
+                e.Graphics.DrawString(IzmerenieFR_Table.Rows[j].Cells[6].Value.ToString(), new System.Drawing.Font("Times New Roman", 10, FontStyle.Regular), Brushes.Black, new System.Drawing.Rectangle(width + 10, height, IzmerenieFR_Table.Columns[6].Width+5, IzmerenieFR_Table.Rows[j].Height));
+                // width = width + IzmerenieFR_Table.Columns[6].Width;
+                height += IzmerenieFR_Table.Rows[j].Height;
+            }
+            cordY = height+10;
 
         }
         ///Если меньше или равно 3
@@ -7221,27 +8026,36 @@ public void WLADDSTR2()
             e.Graphics.DrawString(RR.Text + "                                               " + SKO.Text + "\n" + label21.Text + "          " + label22.Text, new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, 140, 380);
             e.Graphics.DrawString("Информация о приборе:\n", new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, new Point(25, 430));
 
-            string model = @"pribor/model";
+            var applicationDirectory = Path.GetDirectoryName(Application.ExecutablePath);
+            const string model = @"pribor/model";
+            var model_var = Path.Combine(applicationDirectory, model);
             string SerNomer_Text = @"pribor/SerNomer";
+            var SerNomer_Text_var = Path.Combine(applicationDirectory, SerNomer_Text);
+
             string InventarNomer_Text = @"pribor/InventarNomer";
+            var InventarNomer_Text_var = Path.Combine(applicationDirectory, InventarNomer_Text);
+
             string SrokIstech_Text = @"pribor/SrokIstech";
+            var SrokIstech_Text_var = Path.Combine(applicationDirectory, SrokIstech_Text);
+
             string Poveren_Text = @"pribor/Poveren";
-            StreamReader fs = new StreamReader(model);
+            var Poveren_Text_var = Path.Combine(applicationDirectory, Poveren_Text);
+            StreamReader fs = new StreamReader(model_var);
             e.Graphics.DrawString("Модель: ", new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, new Point(60, 450));
             e.Graphics.DrawString(fs.ReadLine(), new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, new Point(140, 450));
             fs.Close();
 
-            StreamReader fs1 = new StreamReader(SerNomer_Text);
+            StreamReader fs1 = new StreamReader(SerNomer_Text_var);
             e.Graphics.DrawString("Серийный номер: ", new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, new Point(500, 450));
             e.Graphics.DrawString(fs1.ReadLine(), new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, new Point(700, 450));
             fs1.Close();
 
-            StreamReader fs2 = new StreamReader(InventarNomer_Text);
+            StreamReader fs2 = new StreamReader(InventarNomer_Text_var);
             e.Graphics.DrawString("Инвентарный номер: ", new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, new Point(500, 470));
             e.Graphics.DrawString(fs2.ReadLine(), new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, new Point(705, 470));
             fs2.Close();
 
-            StreamReader fs3 = new StreamReader(Poveren_Text);
+            StreamReader fs3 = new StreamReader(Poveren_Text_var);
             DateTime data = Convert.ToDateTime(fs3.ReadLine());
             // data.Date.ToString("d.mm.yyyy"); 
             //  MessageBox.Show(Convert.ToString(data));   
@@ -7744,55 +8558,66 @@ public void WLADDSTR2()
 
         private void button14_Click(object sender, EventArgs e)
         {
-            if (tabControl2.SelectedIndex == 0)
+            if (selet_rezim == 2)
             {
-                if (Table1.RowCount > 1)
+                if (tabControl2.SelectedIndex == 0)
                 {
-                    if(textBox10.Text != GWNew.Text)
+                    if (Table1.RowCount > 1)
                     {
-                        MessageBox.Show("Длина волны градуировки отличается от длины волны, установленной на приборе!\rИзмените настройки градуировки!");
+                        if (textBox10.Text != GWNew.Text)
+                        {
+                            MessageBox.Show("Длина волны градуировки отличается от длины волны, установленной на приборе!\rИзмените настройки градуировки!");
+                        }
+                        Graduirovka(sender, e);
                     }
-                    Graduirovka(sender, e);
+                    else
+                    {
+                        MessageBox.Show("Создайте градуировку по СО");
+                    }
                 }
+
+
                 else
                 {
-                    MessageBox.Show("Создайте градуировку по СО");
+                    if (Table2.RowCount > 1)
+                    {
+                        if (textBox10.Text != GWNew.Text)
+                        {
+                            MessageBox.Show("Длина волны градуировки отличается от длины волны, установленной на приборе!\rИзмените настройки градуировки!");
+                        }
+                        Izmerenie(sender, e);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Создайте измерение");
+                    }
                 }
             }
             else
             {
-                if (Table2.RowCount > 1)
+                if (selet_rezim == 1)
                 {
-                    if (textBox10.Text != GWNew.Text)
+                    if (IzmerenieFR_Table.RowCount > 1)
                     {
-                        MessageBox.Show("Длина волны градуировки отличается от длины волны, установленной на приборе!\rИзмените настройки градуировки!");
+                        IzmerenieFr_izmer();
                     }
-                    Izmerenie(sender, e);
-                }
-                else
-                {
-                    MessageBox.Show("Создайте измерение");
+                    else
+                    {
+                        MessageBox.Show("Данная опреция невозможна! Создайте новое измерение!");
+                    }
                 }
             }
         }
-        public void Graduirovka(object sender, EventArgs e)
+        public void IzmerenieFr_izmer()
         {
-            
-            double sum = 0.0;
-            int startIndexCell = 2;
-            int endIndexCell = startIndexCell + NoCaIzm;
-            int rowIndex = Table1.CurrentRow.Index;
+            int startIndexCell = 3;
+            int endIndexCell = 6;
+            int rowIndex = IzmerenieFR_Table.CurrentRow.Index;
 
             bool doNotWrite = false;
             string SWAnalis = WL_grad1;
             string GE5Izmer = "";
             string GE5_1_1 = "";
-            /*newPort.Write("SW " + SWAnalis + "\r");
-            int SWAnalisByteRecieved1 = newPort.ReadBufferSize;
-            Thread.Sleep(100);
-            byte[] SWAnalisBuffer1 = new byte[SWAnalisByteRecieved1];
-            newPort.Read(SWAnalisBuffer1, 0, SWAnalisByteRecieved1);*/
-
             newPort.Write("SA " + countSA + "\r");
             string indata = newPort.ReadExisting();
             string indata_0;
@@ -7844,14 +8669,132 @@ public void WLADDSTR2()
             }
             Regex regex = new Regex(@"\W");
             GE5Izmer = regex.Replace(indata_0, "");
-
+            //  MessageBox.Show("Измерение: " + GE5Izmer + "\rКалибровка: " + GE5_1_0 + "\rОтклонение: " + Convert.ToString(Convert.ToDouble(GE5_1_0) / (Convert.ToDouble(GE5Izmer))) +
+            //    "\rПоправочный коэффициент: " + RDstring[countSA]);
 
 
             GEText.Text = GE5Izmer;
-            // MessageBox.Show(GE5Izmer);
+
             double Aser = Convert.ToDouble(GE5Izmer) / Convert.ToDouble(GE5_1_0) * 100;
-            double OptPlot1 = Math.Log10(Convert.ToDouble(GE5_1_0) / Convert.ToDouble(GE5Izmer));
-            double OptPlot1_1 = OptPlot1 - Math.Truncate(OptPlot1);
+            double OptPlot1 = 0;
+
+            OptPlot1 = Math.Log10((Convert.ToDouble(GE5_1_0) - Convert.ToDouble(RDstring[countSA])) / (Convert.ToDouble(GE5Izmer) - Convert.ToDouble(RDstring[countSA])));
+
+
+
+            double OptPlot1_1 = OptPlot1;
+            IzmerenieFR_Table.Rows[rowIndex].Cells["Walve"].Value = string.Format("{0:0.0}", GWNew.Text);
+            if (IzmerenieFR_Table.CurrentCell.ColumnIndex != 5)
+            {
+                if ((IzmerenieFR_Table.CurrentCell.ReadOnly != true && rowIndex != IzmerenieFR_Table.Rows.Count - 1) || IzmerenieFR_Table.CurrentCell.ColumnIndex == 3)
+                {
+                    IzmerenieFR_Table.Rows[rowIndex].Cells["ABS"].Value = string.Format("{0:0.0000}", OptPlot1_1);
+                    string k1 = Convert.ToString(IzmerenieFR_Table.Rows[rowIndex].Cells["KOne"].Value);
+                    k1 = k1.Replace(".", ",");
+                    IzmerenieFR_Table.Rows[rowIndex].Cells["T"].Value = string.Format("{0:0.0}", ((Convert.ToDouble(GE5_1_0) - Convert.ToDouble(RDstring[countSA])) / (Convert.ToDouble(GE5Izmer) - Convert.ToDouble(RDstring[countSA]))) * 100);
+                    IzmerenieFR_Table.Rows[rowIndex].Cells["Concetracia"].Value = string.Format("{0:0.0000}", (OptPlot1_1 * Convert.ToDouble(k1)));
+                    int curentIndex = IzmerenieFR_Table.CurrentCell.ColumnIndex;
+                    if (curentIndex != IzmerenieFR_Table.ColumnCount - 1 || rowIndex != IzmerenieFR_Table.Rows.Count - 1)
+                    {
+                        if (rowIndex != IzmerenieFR_Table.Rows.Count - 2)
+                        {
+                            IzmerenieFR_Table.CurrentCell = this.IzmerenieFR_Table[curentIndex, rowIndex + 1];
+                        }
+                        else
+                        {
+                            MessageBox.Show("Измерения были проведены!");
+                        }
+                    }
+
+                }
+                else
+                {
+                    MessageBox.Show("Запись запрещена!");
+                }
+            }
+            else
+            {
+                MessageBox.Show("Производить измерения в данную ячейку запрещено! Только ручное изменение!");
+            }
+            
+        }
+        public void Graduirovka(object sender, EventArgs e)
+        {
+            
+            double sum = 0.0;
+            int startIndexCell = 2;
+            int endIndexCell = startIndexCell + NoCaIzm;
+            int rowIndex = Table1.CurrentRow.Index;
+
+            bool doNotWrite = false;
+            string SWAnalis = WL_grad1;
+            string GE5Izmer = "";
+            string GE5_1_1 = "";
+            newPort.Write("SA " + countSA + "\r");
+            string indata = newPort.ReadExisting();
+            string indata_0;
+            bool indata_bool = true;
+            while (indata_bool == true)
+            {
+
+                if (indata.Contains(">"))
+                {
+
+                    indata_bool = false;
+
+                }
+
+                else
+                {
+                    indata = newPort.ReadExisting();
+
+                }
+            }
+
+            newPort.Write("GE 1\r");
+
+            GE5Izmer = "";
+            int GEbyteRecieved4_1 = newPort.ReadBufferSize;
+            byte[] GEbuffer4_1 = new byte[GEbyteRecieved4_1];
+            newPort.Read(GEbuffer4_1, 0, GEbyteRecieved4_1);
+
+            indata = newPort.ReadExisting();
+
+            indata_0 = "";
+            indata_bool = true;
+            while (indata_bool == true)
+            {
+
+                if (indata.Contains(">"))
+                {
+
+                    indata_bool = false;
+
+                }
+
+                else
+                {
+
+                    indata = newPort.ReadExisting();
+                    indata_0 += indata;
+                }
+            }
+            Regex regex = new Regex(@"\W");
+            GE5Izmer = regex.Replace(indata_0, "");
+          //  MessageBox.Show("Измерение: " + GE5Izmer + "\rКалибровка: " + GE5_1_0 + "\rОтклонение: " + Convert.ToString(Convert.ToDouble(GE5_1_0) / (Convert.ToDouble(GE5Izmer))) +
+            //    "\rПоправочный коэффициент: " + RDstring[countSA]);
+
+
+            GEText.Text = GE5Izmer;
+            
+            double Aser = Convert.ToDouble(GE5Izmer) / Convert.ToDouble(GE5_1_0) * 100;
+            double OptPlot1 = 0;
+            
+                OptPlot1 = Math.Log10((Convert.ToDouble(GE5_1_0) - Convert.ToDouble(RDstring[countSA])) / (Convert.ToDouble(GE5Izmer) - Convert.ToDouble(RDstring[countSA])));
+
+               
+            
+            double OptPlot1_1 = OptPlot1;
             if (Table1.CurrentCell.ReadOnly != true)
             {
                 Table1.CurrentCell.Value = string.Format("{0:0.0000}", OptPlot1_1);
@@ -8106,7 +9049,7 @@ public void WLADDSTR2()
 
             double Aser = Convert.ToDouble(GE5Izmer) / Convert.ToDouble(GE5_1_0) * 100;
 
-            double OptPlot1 = Math.Log10(Convert.ToDouble(GE5_1_0) / Convert.ToDouble(GE5Izmer));
+            double OptPlot1 = Math.Log10((Convert.ToDouble(GE5_1_0) - Convert.ToDouble(RDstring[countSA])) / (Convert.ToDouble(GE5Izmer) - Convert.ToDouble(RDstring[countSA])));
 
             double OptPlot1_1 = OptPlot1 - Math.Truncate(OptPlot1);
 
@@ -9210,31 +10153,133 @@ public void WLADDSTR2()
 
         private void button11_Click(object sender, EventArgs e)
         {
-            if(tabControl2.SelectedIndex == 0)
-            {
-                if (Table1.CurrentCell.ColumnIndex >= 3 && Table1.CurrentCell.ReadOnly != true)
+            if (selet_rezim == 2) {
+                if (tabControl2.SelectedIndex == 0)
                 {
-
-                    if (Table1.CurrentCell.Value != "" && Table1.CurrentCell.Value != null)
+                    if (Table1.CurrentCell.ColumnIndex >= 3 && Table1.CurrentCell.ReadOnly != true)
                     {
-                        CellOpt = Convert.ToDouble(Table1.CurrentCell.Value.ToString());
+
+                        if (Table1.CurrentCell.Value != "" && Table1.CurrentCell.Value != null)
+                        {
+                            CellOpt = Convert.ToDouble(Table1.CurrentCell.Value.ToString());
+                        }
+
+                        ZapicInTable1();
+
                     }
+                }
+                else
+                {
+                    if (Table2.CurrentCell.ColumnIndex >= 2 && Table2.CurrentCell.ReadOnly != true)
+                    {
+                        if (Table2.CurrentCell.Value != "" && Table2.CurrentCell.Value != null)
+                        {
+                            CellOpt = Convert.ToDouble(Table2.CurrentCell.Value.ToString());
+                        }
 
-                    ZapicInTable1();
+                        ZapicInTable2();
+                    }
+                }
 
+            }
+            else {
+                if (selet_rezim == 1)
+                {
+                    if (IzmerenieFR_Table.CurrentCell.ColumnIndex == 5)
+                    {
+                        IzmerenieFR_Table_Zapic();
+                    }
+                    else
+                    {
+                        if (IzmerenieFR_Table.CurrentCell.ReadOnly == true)
+                        {
+                            MessageBox.Show("Изменения запрещены");
+                        }
+                    }
+                }
+            }
+        }
+        public void IzmerenieFR_Table_Zapic()
+        {
+            InputBox _InputBox = new InputBox(this);
+            _InputBox.ShowDialog();
+
+            IzmerenieFR_Table.CurrentCell.Value = string.Format("{0:0.0}", CellOpt);
+            CellOpt = 0;
+            IzmerenieFR_Table.Rows[IzmerenieFR_Table.CurrentRow.Index].Cells[6].Value = string.Format("{0:0.0000}", 
+                Convert.ToDouble(IzmerenieFR_Table.Rows[IzmerenieFR_Table.CurrentRow.Index].Cells[3].Value)
+                * Convert.ToDouble(IzmerenieFR_Table.Rows[IzmerenieFR_Table.CurrentRow.Index].Cells[5].Value));
+        }
+        private void button13_Click(object sender, EventArgs e)
+        {
+            if (ComPodkl == true)
+            {
+                WalveNew();
+            }
+            else
+            {
+                MessageBox.Show("Подключитесь к прибору!");
+            }
+        }
+        public void WalveNew()
+        {
+            NewWalve _NewWalve = new NewWalve(this);
+            _NewWalve.ShowDialog();
+        }
+        int IzmerFr_count = 0;
+        private void button15_Click(object sender, EventArgs e)
+        {
+            if (IzmerenieFR_Table.RowCount <= 35)
+            {
+                if (IzmerenieFR_Table.RowCount > 1)
+                {
+                    IzmerFr_count = IzmerenieFR_Table.RowCount - 1;
+                    IzmerenieFR_Table.Rows.Add();
+                    IzmerenieFR_Table.Rows[IzmerFr_count].Cells["N"].Value = IzmerFr_count + 1;
+                    IzmerenieFR_Table.Rows[IzmerFr_count].Cells["Walve"].Value = GWNew.Text;
+                    IzmerenieFR_Table.Rows[IzmerFr_count].Cells["KOne"].Value = "0.0";
+                }
+                else
+                {
+                    MessageBox.Show("Создайте новое Измерение");
                 }
             }
             else
             {
-                if (Table2.CurrentCell.ColumnIndex >= 2 && Table2.CurrentCell.ReadOnly != true)
-                {
-                    if (Table2.CurrentCell.Value != "" && Table2.CurrentCell.Value != null)
-                    {
-                        CellOpt = Convert.ToDouble(Table2.CurrentCell.Value.ToString());
-                    }
+                MessageBox.Show("Строк не более 35");
+            }
+        }
 
-                    ZapicInTable2();
+        private void button16_Click(object sender, EventArgs e)
+        {
+            if (IzmerenieFR_Table.RowCount > 1)
+            {
+                if (IzmerenieFR_Table.RowCount > 2)
+                {
+                    if (IzmerenieFR_Table.CurrentCell.RowIndex != IzmerenieFR_Table.RowCount - 1)
+                    {
+                        IzmerenieFR_Table.Rows.RemoveAt(IzmerenieFR_Table.CurrentCell.RowIndex);
+                        for (int i = 0; i < IzmerenieFR_Table.RowCount - 1; i++)
+                        {
+                            IzmerenieFR_Table.Rows[i].Cells[0].Value = i + 1;
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("Удаление запрещено!");
+                    }
                 }
+
+                else
+                {
+                    MessageBox.Show("Количество образцов не может быть меньше 1 !");
+                }
+
+
+            }
+            else
+            {
+                MessageBox.Show("Таблица не содержит строк!");
             }
         }
 
@@ -9260,7 +10305,14 @@ public void WLADDSTR2()
             }
             else
             {
-                ExportToPDF();
+                if (Table2.Rows.Count >= 1)
+                {
+                    ExportToPDF();
+                }
+                else
+                {
+                    MessageBox.Show("Создайте таблицу измерений!");
+                }
             }
         }
         public void ExportToPDF()
@@ -9489,24 +10541,33 @@ public void WLADDSTR2()
                 Paragraph DateIzmer2 = new Paragraph("Данные измерений: ", font);
 
                 Paragraph InformationAboutPribor = new Paragraph("Информация о приборе\n", font);
-                string model = @"pribor/model";
+                var applicationDirectory = Path.GetDirectoryName(Application.ExecutablePath);
+                const string model = @"pribor/model";
+                var model_var = Path.Combine(applicationDirectory, model);
                 string SerNomer_Text = @"pribor/SerNomer";
+                var SerNomer_Text_var = Path.Combine(applicationDirectory, SerNomer_Text);
+
                 string InventarNomer_Text = @"pribor/InventarNomer";
+                var InventarNomer_Text_var = Path.Combine(applicationDirectory, InventarNomer_Text);
+
                 string SrokIstech_Text = @"pribor/SrokIstech";
+                var SrokIstech_Text_var = Path.Combine(applicationDirectory, SrokIstech_Text);
+
                 string Poveren_Text = @"pribor/Poveren";
-                StreamReader fs = new StreamReader(model);
+                var Poveren_Text_var = Path.Combine(applicationDirectory, Poveren_Text); ;
+                StreamReader fs = new StreamReader(model_var);
                 Paragraph Model = new Paragraph("Модель\n" + fs.ReadLine(), font);
                 fs.Close();
 
-                StreamReader fs1 = new StreamReader(SerNomer_Text);
+                StreamReader fs1 = new StreamReader(SerNomer_Text_var);
                 Paragraph SerNomer = new Paragraph("Серийный номер\n" + fs1.ReadLine(), font);
                 fs1.Close();
 
-                StreamReader fs2 = new StreamReader(InventarNomer_Text);
+                StreamReader fs2 = new StreamReader(InventarNomer_Text_var);
                 Paragraph InventarNomer = new Paragraph("Инвентарный номер\n" + fs2.ReadLine(), font);
                 fs2.Close();
 
-                StreamReader fs3 = new StreamReader(Poveren_Text);
+                StreamReader fs3 = new StreamReader(Poveren_Text_var);
                 DateTime data = Convert.ToDateTime(fs3.ReadLine());
                 // data.Date.ToString("d.mm.yyyy"); 
                 //  MessageBox.Show(Convert.ToString(data));   

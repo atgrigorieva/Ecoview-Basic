@@ -36,6 +36,7 @@ Global
 		{890B4268-5993-4BC6-A13C-E9E569CA7997}.Release|x64.Build.0 = Release|x64
 		{890B4268-5993-4BC6-A13C-E9E569CA7997}.Release|x86.ActiveCfg = Release|x86
 		{890B4268-5993-4BC6-A13C-E9E569CA7997}.Release|x86.Build.0 = Release|x86
+		{890B4268-5993-4BC6-A13C-E9E569CA7997}.Release|x86.Deploy.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

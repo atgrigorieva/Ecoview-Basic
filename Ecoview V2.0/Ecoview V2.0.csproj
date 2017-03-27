@@ -8,10 +8,26 @@
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Ecoview_V2._0</RootNamespace>
-    <AssemblyName>Ecoview Basic V2.6.4</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <AssemblyName>Ecoview Professional V1.0</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <TargetFrameworkProfile />
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -22,6 +38,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -31,6 +48,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <DebugSymbols>true</DebugSymbols>
@@ -75,14 +93,19 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <PlatformTarget>x86</PlatformTarget>
     <OutputPath>bin\x86\Debug\</OutputPath>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
     <PlatformTarget>x86</PlatformTarget>
     <OutputPath>bin\x86\Release\</OutputPath>
+    <Prefer32Bit>true</Prefer32Bit>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <Optimize>false</Optimize>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Ecoview v2.0 x86|x86'">
     <PlatformTarget>x86</PlatformTarget>
     <OutputPath>bin\x86\Ecoview v2.0 x86\</OutputPath>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>Analys200.ico</ApplicationIcon>
@@ -126,6 +149,12 @@
     <Compile Include="InputBox.Designer.cs">
       <DependentUpon>InputBox.cs</DependentUpon>
     </Compile>
+    <Compile Include="IzmerenieFR.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="IzmerenieFR.Designer.cs">
+      <DependentUpon>IzmerenieFR.cs</DependentUpon>
+    </Compile>
     <Compile Include="New.cs">
       <SubType>Form</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -141,6 +170,12 @@
     <Compile Include="NewGraduirovka.Designer.cs">
       <DependentUpon>NewGraduirovka.cs</DependentUpon>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="NewWalve.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="NewWalve.Designer.cs">
+      <DependentUpon>NewWalve.cs</DependentUpon>
     </Compile>
     <Compile Include="Parametr1.cs">
       <SubType>Form</SubType>
@@ -168,6 +203,12 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Select.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Select.Designer.cs">
+      <DependentUpon>Select.cs</DependentUpon>
+    </Compile>
     <Compile Include="SettingPort.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -181,6 +222,9 @@
     <EmbeddedResource Include="InputBox.resx">
       <DependentUpon>InputBox.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="IzmerenieFR.resx">
+      <DependentUpon>IzmerenieFR.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="New.resx">
       <DependentUpon>New.cs</DependentUpon>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -188,6 +232,9 @@
     <EmbeddedResource Include="NewGraduirovka.resx">
       <DependentUpon>NewGraduirovka.cs</DependentUpon>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="NewWalve.resx">
+      <DependentUpon>NewWalve.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Parametr1.resx">
       <DependentUpon>Parametr1.cs</DependentUpon>
@@ -211,6 +258,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="Select.resx">
+      <DependentUpon>Select.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="SettingPort.resx">
       <DependentUpon>SettingPort.cs</DependentUpon>
     </EmbeddedResource>
@@ -268,11 +318,30 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Analys200.ico" />
+    <None Include="Resources\aimexpress1.png" />
+    <None Include="Resources\aimexpress.png" />
     <None Include="Resources\Manual_btn.bmp" />
     <None Include="Resources\add1-_2547.png" />
     <None Include="Resources\delete_5424.png" />
     <None Include="Resources\add.png" />
     <None Include="Resources\edit_remove_7872.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.0">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4 %28x86 и x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.4.5">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 4.5</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

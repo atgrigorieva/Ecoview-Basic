@@ -83,6 +83,26 @@ namespace Ecoview_V2._0.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap aimexpress {
+            get {
+                object obj = ResourceManager.GetObject("aimexpress", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap aimexpress1 {
+            get {
+                object obj = ResourceManager.GetObject("aimexpress1", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Connect_btn {
             get {
                 object obj = ResourceManager.GetObject("Connect_btn", resourceCulture);

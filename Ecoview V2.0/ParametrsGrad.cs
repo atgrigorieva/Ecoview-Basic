@@ -7,10 +7,10 @@ namespace Ecoview_V2._0
 {
     public partial class ParametrsGrad : Form
     {
-        Ecoview _Analis;
+        EcoviewProfessional1 _Analis;
         public int oldValue = 3;
         public int USE_KO_count = 0;
-        public ParametrsGrad(Ecoview parent)
+        public ParametrsGrad(EcoviewProfessional1 parent)
         {
             InitializeComponent();
             this._Analis = parent;

@@ -12,8 +12,8 @@ namespace Ecoview_V2._0
 {
     public partial class New : Form
     {
-        Ecoview _Analis;
-        public New(Ecoview parent)
+        EcoviewProfessional1 _Analis;
+        public New(EcoviewProfessional1 parent)
         {
             InitializeComponent();
             this._Analis = parent;
