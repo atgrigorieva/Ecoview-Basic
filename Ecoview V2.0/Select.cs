@@ -106,17 +106,18 @@ namespace Ecoview_V2._0
                             }
                             else
                             {
-                                _Analis.tabControl2.TabPages.Remove(_Analis.tabPage3);
-                                _Analis.tabControl2.TabPages.Remove(_Analis.tabPage4);
+                                _Analis.tabControl2.TabPages.Remove(_Analis.tabPage7);
+                                _Analis.tabControl2.TabPages.Remove(_Analis.tabPage8);
                                 _Analis.tabControl2.TabPages.Remove(_Analis.tabPage2);
                                 _Analis.tabControl2.TabPages.Remove(_Analis.tabPage5);
                                 _Analis.tabControl2.TabPages.Remove(_Analis.tabPage6);
                                 _Analis.tabControl2.TabPages.Remove(_Analis.tabPage1);
                                 _Analis.Ecoview_Header = "Eciview Professional v1.0 Агро режим";
                                 _Analis.tabControl2.SelectedIndex = 6;
-                                _Analis.tabControl2.SelectTab(_Analis.tabPage7);
+                                _Analis.tabControl2.SelectTab(_Analis.tabPage3);
                                 _Analis.selet_rezim = 6;
-
+                                _Analis.tabControl2.TabPages[0].Text = "Градуировка Агро";
+                                
                             }
                         }
                     }

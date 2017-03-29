@@ -592,6 +592,7 @@
             this.USE_KO.Text = "Использовать контрольный опыт КО";
             this.USE_KO.UseVisualStyleBackColor = true;
             this.USE_KO.CheckedChanged += new System.EventHandler(this.USE_KO_CheckedChanged);
+            this.USE_KO.Click += new System.EventHandler(this.USE_KO_Click);
             // 
             // Opt_dlin_cuvet
             // 

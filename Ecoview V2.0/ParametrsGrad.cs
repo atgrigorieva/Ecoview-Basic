@@ -16,7 +16,9 @@ namespace Ecoview_V2._0
             this._Analis = parent;
 
             Ed.SelectedIndex = 9;
-            if(_Analis.USE_KO == true)
+
+
+            if (_Analis.USE_KO == true)
             {
                 _Analis.USE_KO = false;
                 USE_KO_count = 1;
@@ -44,7 +46,16 @@ namespace Ecoview_V2._0
 
         private void ParametrsGrad_Load(object sender, EventArgs e)
         {
+
             _Analis.countOpenGrad++;
+            if (_Analis.selet_rezim == 6)
+            {
+                USE_KO.Checked = true;
+            }
+            else
+            {
+                USE_KO.Checked = false;
+            }
             _Analis.SposobZadan = "По СО";
             var height = 22;
             var labelx = 6;
@@ -116,9 +127,9 @@ namespace Ecoview_V2._0
             //  radioButton1.Checked = true;
             radioButton4.Checked = true;
             radioButton6.Checked = true;
-            k0Text.Text = string.Format("{0:0.0000}", _Analis.textBox4.Text);
-            k1Text.Text = string.Format("{0:0.0000}", _Analis.textBox5.Text);
-            k2Text.Text = string.Format("{0:0.0000}", _Analis.textBox6.Text);
+            k0Text.Text = string.Format("{0:0.0000}", _Analis.AgroText0.Text);
+            k1Text.Text = string.Format("{0:0.0000}", _Analis.AgroText1.Text);
+            k2Text.Text = string.Format("{0:0.0000}", _Analis.AgroText2.Text);
 
             _Analis.Veshestvo1 = Veshestvo.Text;
             //  _Analis.wavelength1 = WL_grad.Text;
@@ -163,7 +174,7 @@ namespace Ecoview_V2._0
             {
                 radioButton1.Checked = true;
 
-                k1Text.Text = string.Format("{0:0.0000}", _Analis.textBox5.Text);
+                k1Text.Text = string.Format("{0:0.0000}", _Analis.AgroText1.Text);
                 //k2Text.Text = string.Format("{0:0.0000}", _Analis.textBox6.Text);
             }
             else
@@ -172,16 +183,16 @@ namespace Ecoview_V2._0
                 {
                     radioButton2.Checked = true;
 
-                    k1Text.Text = string.Format("{0:0.0000}", _Analis.textBox5.Text);
-                    k0Text.Text = string.Format("{0:0.0000}", _Analis.textBox4.Text);
+                    k1Text.Text = string.Format("{0:0.0000}", _Analis.AgroText1.Text);
+                    k0Text.Text = string.Format("{0:0.0000}", _Analis.AgroText0.Text);
                 }
                 else
                 {
                     radioButton3.Checked = true;
 
-                    k1Text.Text = string.Format("{0:0.0000}", _Analis.textBox5.Text);
-                    k2Text.Text = string.Format("{0:0.0000}", _Analis.textBox6.Text);
-                    k0Text.Text = string.Format("{0:0.0000}", _Analis.textBox4.Text);
+                    k1Text.Text = string.Format("{0:0.0000}", _Analis.AgroText1.Text);
+                    k2Text.Text = string.Format("{0:0.0000}", _Analis.AgroText2.Text);
+                    k0Text.Text = string.Format("{0:0.0000}", _Analis.AgroText0.Text);
                 }
             }
         }
@@ -641,18 +652,18 @@ namespace Ecoview_V2._0
                         _Analis.Zavisimoct = "A(C)";
                         radioButton4.Checked = true;
                         label14.Text = "A(C)";
-                        _Analis.textBox4.Text = "";
-                        _Analis.textBox5.Text = "";
-                        _Analis.textBox6.Text = "";
+                        _Analis.AgroText0.Text = "";
+                        _Analis.AgroText1.Text = "";
+                        _Analis.AgroText2.Text = "";
                     }
                     else
                     {
                         _Analis.Zavisimoct = "C(A)";
                         _Analis.radioButton5.Checked = true;
                         _Analis.label14.Text = "C(A)";
-                        _Analis.textBox4.Text = "";
-                        _Analis.textBox5.Text = "";
-                        _Analis.textBox6.Text = "";
+                        _Analis.AgroText0.Text = "";
+                        _Analis.AgroText1.Text = "";
+                        _Analis.AgroText2.Text = "";
 
                     }
                     if (radioButton1.Checked == true)
@@ -679,12 +690,12 @@ namespace Ecoview_V2._0
                     {
                         _Analis.SposobZadan = "Ввод коэффициентов";
                      //   _Analis.button14.Enabled = false;
-                        _Analis.textBox4.Text = k0Text.Text;
-                        _Analis.textBox5.Text = k1Text.Text;
-                        _Analis.textBox6.Text = k2Text.Text;
-                        _Analis.k0 = Convert.ToDouble(_Analis.textBox4.Text);
-                        _Analis.k1 = Convert.ToDouble(_Analis.textBox5.Text);
-                        _Analis.k2 = Convert.ToDouble(_Analis.textBox6.Text);
+                        _Analis.AgroText0.Text = k0Text.Text;
+                        _Analis.AgroText1.Text = k1Text.Text;
+                        _Analis.AgroText2.Text = k2Text.Text;
+                        _Analis.k0 = Convert.ToDouble(_Analis.AgroText0.Text);
+                        _Analis.k1 = Convert.ToDouble(_Analis.AgroText1.Text);
+                        _Analis.k2 = Convert.ToDouble(_Analis.AgroText2.Text);
                         _Analis.button11.Enabled = false;
 
                     }
@@ -1166,6 +1177,15 @@ namespace Ecoview_V2._0
             {
                 e.Handled = true;
                 MessageBox.Show("В данное поле можно вводить цифры, знаки ','");
+            }
+        }
+
+        private void USE_KO_Click(object sender, EventArgs e)
+        {
+            if (_Analis.selet_rezim == 6)
+            {
+                if (sender is CheckBox)
+                    ((CheckBox)sender).Checked = !((CheckBox)sender).Checked;
             }
         }
     }

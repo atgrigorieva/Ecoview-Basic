@@ -16,10 +16,11 @@ namespace Ecoview_V2._0
             {
                 InitializeComponent();
                 this._Analis = parent;
+
                 //   MessageBox.Show(_Analis.aproksim);
-                k1Text.Text = string.Format("{0:0.0000}", _Analis.textBox5.Text);
-                k2Text.Text = string.Format("{0:0.0000}", _Analis.textBox6.Text);
-                k0Text.Text = string.Format("{0:0.0000}", _Analis.textBox4.Text);
+                k1Text.Text = string.Format("{0:0.0000}", _Analis.AgroText1.Text);
+                k2Text.Text = string.Format("{0:0.0000}", _Analis.AgroText2.Text);
+                k0Text.Text = string.Format("{0:0.0000}", _Analis.AgroText0.Text);
 
 
                 // radioButton1.Checked = true;
@@ -41,9 +42,16 @@ namespace Ecoview_V2._0
 
             private void NewGraduirovka_Load(object sender, EventArgs e)
             {
-
-                //_Analis.SposobZadan = "По СО";
-                var height = 22;
+            if (_Analis.selet_rezim == 6)
+            {
+                USE_KO.Checked = true;
+            }
+            else
+            {
+              //  USE_KO.Checked = false;
+            }
+            //_Analis.SposobZadan = "По СО";
+            var height = 22;
                 var labelx = 6;
                 for (int i = 0; i <= 9; i++)
                 {
@@ -214,7 +222,7 @@ namespace Ecoview_V2._0
                 {
                     radioButton1.Checked = true;
 
-                    k1Text.Text = string.Format("{0:0.0000}", _Analis.textBox5.Text);
+                    k1Text.Text = string.Format("{0:0.0000}", _Analis.AgroText1.Text);
                     //k2Text.Text = string.Format("{0:0.0000}", _Analis.textBox6.Text);
                 }
                 else
@@ -223,16 +231,16 @@ namespace Ecoview_V2._0
                     {
                         radioButton2.Checked = true;
 
-                        k1Text.Text = string.Format("{0:0.0000}", _Analis.textBox5.Text);
-                        k0Text.Text = string.Format("{0:0.0000}", _Analis.textBox4.Text);
+                        k1Text.Text = string.Format("{0:0.0000}", _Analis.AgroText1.Text);
+                        k0Text.Text = string.Format("{0:0.0000}", _Analis.AgroText0.Text);
                     }
                     else
                     {
                         radioButton3.Checked = true;
 
-                        k1Text.Text = string.Format("{0:0.0000}", _Analis.textBox5.Text);
-                        k2Text.Text = string.Format("{0:0.0000}", _Analis.textBox6.Text);
-                        k0Text.Text = string.Format("{0:0.0000}", _Analis.textBox4.Text);
+                        k1Text.Text = string.Format("{0:0.0000}", _Analis.AgroText1.Text);
+                        k2Text.Text = string.Format("{0:0.0000}", _Analis.AgroText2.Text);
+                        k0Text.Text = string.Format("{0:0.0000}", _Analis.AgroText0.Text);
                     }
                 }
             }
@@ -289,9 +297,9 @@ namespace Ecoview_V2._0
                     k2Text.Enabled = false;
                     //   k0Text.Text = string.Format("{0:0.0000}", 0);
                     //    k2Text.Text = string.Format("{0:0.0000}", 0);
-                    _Analis.textBox4.Text = string.Format("{0:0.0000}", k0Text.Text);
-                    _Analis.textBox5.Text = string.Format("{0:0.0000}", k1Text.Text);
-                    _Analis.textBox6.Text = string.Format("{0:0.0000}", k2Text.Text);
+                    _Analis.AgroText0.Text = string.Format("{0:0.0000}", k0Text.Text);
+                    _Analis.AgroText1.Text = string.Format("{0:0.0000}", k1Text.Text);
+                    _Analis.AgroText2.Text = string.Format("{0:0.0000}", k2Text.Text);
                 }
                 else
                 {
@@ -302,9 +310,9 @@ namespace Ecoview_V2._0
                         k2Text.Enabled = false;
 
                         //  k2Text.Text = string.Format("{0:0.0000}", 0);
-                        _Analis.textBox4.Text = string.Format("{0:0.0000}", k0Text.Text);
-                        _Analis.textBox5.Text = string.Format("{0:0.0000}", k1Text.Text);
-                        _Analis.textBox6.Text = string.Format("{0:0.0000}", k2Text.Text);
+                        _Analis.AgroText0.Text = string.Format("{0:0.0000}", k0Text.Text);
+                        _Analis.AgroText1.Text = string.Format("{0:0.0000}", k1Text.Text);
+                        _Analis.AgroText2.Text = string.Format("{0:0.0000}", k2Text.Text);
                     }
                     else
                     {
@@ -312,9 +320,9 @@ namespace Ecoview_V2._0
                         k1Text.Enabled = true;
                         k2Text.Enabled = true;
 
-                        _Analis.textBox4.Text = string.Format("{0:0.0000}", k0Text.Text);
-                        _Analis.textBox5.Text = string.Format("{0:0.0000}", k1Text.Text);
-                        _Analis.textBox6.Text = string.Format("{0:0.0000}", k2Text.Text);
+                        _Analis.AgroText0.Text = string.Format("{0:0.0000}", k0Text.Text);
+                        _Analis.AgroText1.Text = string.Format("{0:0.0000}", k1Text.Text);
+                        _Analis.AgroText2.Text = string.Format("{0:0.0000}", k2Text.Text);
                     }
                 }
 
@@ -332,9 +340,9 @@ namespace Ecoview_V2._0
                         k2Text.Enabled = false;
                         //   k0Text.Text = string.Format("{0:0.0000}", 0);
                         //    k2Text.Text = string.Format("{0:0.0000}", 0);
-                        _Analis.textBox4.Text = string.Format("{0:0.0000}", k0Text.Text);
-                        _Analis.textBox5.Text = string.Format("{0:0.0000}", k1Text.Text);
-                        _Analis.textBox6.Text = string.Format("{0:0.0000}", k2Text.Text);
+                        _Analis.AgroText0.Text = string.Format("{0:0.0000}", k0Text.Text);
+                        _Analis.AgroText1.Text = string.Format("{0:0.0000}", k1Text.Text);
+                        _Analis.AgroText2.Text = string.Format("{0:0.0000}", k2Text.Text);
                     }
                     else
                     {
@@ -345,9 +353,9 @@ namespace Ecoview_V2._0
                             k2Text.Enabled = false;
 
                             //        k2Text.Text = string.Format("{0:0.0000}", 0);
-                            _Analis.textBox4.Text = string.Format("{0:0.0000}", k0Text.Text);
-                            _Analis.textBox5.Text = string.Format("{0:0.0000}", k1Text.Text);
-                            _Analis.textBox6.Text = string.Format("{0:0.0000}", k2Text.Text);
+                            _Analis.AgroText0.Text = string.Format("{0:0.0000}", k0Text.Text);
+                            _Analis.AgroText1.Text = string.Format("{0:0.0000}", k1Text.Text);
+                            _Analis.AgroText2.Text = string.Format("{0:0.0000}", k2Text.Text);
                         }
                         else
                         {
@@ -355,9 +363,9 @@ namespace Ecoview_V2._0
                             k1Text.Enabled = true;
                             k2Text.Enabled = true;
 
-                            _Analis.textBox4.Text = string.Format("{0:0.0000}", k0Text.Text);
-                            _Analis.textBox5.Text = string.Format("{0:0.0000}", k1Text.Text);
-                            _Analis.textBox6.Text = string.Format("{0:0.0000}", k2Text.Text);
+                            _Analis.AgroText0.Text = string.Format("{0:0.0000}", k0Text.Text);
+                            _Analis.AgroText1.Text = string.Format("{0:0.0000}", k1Text.Text);
+                            _Analis.AgroText2.Text = string.Format("{0:0.0000}", k2Text.Text);
                         }
                     }
                 }
@@ -376,9 +384,9 @@ namespace Ecoview_V2._0
                         k2Text.Enabled = false;
                         // k0Text.Text = string.Format("{0:0.0000}", 0);
                         //  k2Text.Text = string.Format("{0:0.0000}", 0);
-                        _Analis.textBox4.Text = string.Format("{0:0.0000}", k0Text.Text);
-                        _Analis.textBox5.Text = string.Format("{0:0.0000}", k1Text.Text);
-                        _Analis.textBox6.Text = string.Format("{0:0.0000}", k2Text.Text);
+                        _Analis.AgroText0.Text = string.Format("{0:0.0000}", k0Text.Text);
+                        _Analis.AgroText1.Text = string.Format("{0:0.0000}", k1Text.Text);
+                        _Analis.AgroText2.Text = string.Format("{0:0.0000}", k2Text.Text);
                     }
                     else
                     {
@@ -389,9 +397,9 @@ namespace Ecoview_V2._0
                             k2Text.Enabled = false;
 
                             k2Text.Text = string.Format("{0:0.0000}", 0);
-                            _Analis.textBox4.Text = string.Format("{0:0.0000}", k0Text.Text);
-                            _Analis.textBox5.Text = string.Format("{0:0.0000}", k1Text.Text);
-                            _Analis.textBox6.Text = string.Format("{0:0.0000}", k2Text.Text);
+                            _Analis.AgroText0.Text = string.Format("{0:0.0000}", k0Text.Text);
+                            _Analis.AgroText1.Text = string.Format("{0:0.0000}", k1Text.Text);
+                            _Analis.AgroText2.Text = string.Format("{0:0.0000}", k2Text.Text);
                         }
                         else
                         {
@@ -399,9 +407,9 @@ namespace Ecoview_V2._0
                             k1Text.Enabled = true;
                             k2Text.Enabled = true;
 
-                            _Analis.textBox4.Text = string.Format("{0:0.0000}", k0Text.Text);
-                            _Analis.textBox5.Text = string.Format("{0:0.0000}", k1Text.Text);
-                            _Analis.textBox6.Text = string.Format("{0:0.0000}", k2Text.Text);
+                            _Analis.AgroText0.Text = string.Format("{0:0.0000}", k0Text.Text);
+                            _Analis.AgroText1.Text = string.Format("{0:0.0000}", k1Text.Text);
+                            _Analis.AgroText2.Text = string.Format("{0:0.0000}", k2Text.Text);
                         }
                     }
                 }
@@ -421,9 +429,9 @@ namespace Ecoview_V2._0
                         k2Text.Enabled = false;
                         //   k0Text.Text = string.Format("{0:0.0000}", 0);
                         //  k2Text.Text = string.Format("{0:0.0000}", 0);
-                        _Analis.textBox4.Text = string.Format("{0:0.0000}", k0Text.Text);
-                        _Analis.textBox5.Text = string.Format("{0:0.0000}", k1Text.Text);
-                        _Analis.textBox6.Text = string.Format("{0:0.0000}", k2Text.Text);
+                        _Analis.AgroText0.Text = string.Format("{0:0.0000}", k0Text.Text);
+                        _Analis.AgroText1.Text = string.Format("{0:0.0000}", k1Text.Text);
+                        _Analis.AgroText2.Text = string.Format("{0:0.0000}", k2Text.Text);
                     }
                     else
                     {
@@ -434,9 +442,9 @@ namespace Ecoview_V2._0
                             k2Text.Enabled = false;
 
                             //   k2Text.Text = string.Format("{0:0.0000}", 0);
-                            _Analis.textBox4.Text = string.Format("{0:0.0000}", k0Text.Text);
-                            _Analis.textBox5.Text = string.Format("{0:0.0000}", k1Text.Text);
-                            _Analis.textBox6.Text = string.Format("{0:0.0000}", k2Text.Text);
+                            _Analis.AgroText0.Text = string.Format("{0:0.0000}", k0Text.Text);
+                            _Analis.AgroText1.Text = string.Format("{0:0.0000}", k1Text.Text);
+                            _Analis.AgroText2.Text = string.Format("{0:0.0000}", k2Text.Text);
                         }
                         else
                         {
@@ -444,9 +452,9 @@ namespace Ecoview_V2._0
                             k1Text.Enabled = true;
                             k2Text.Enabled = true;
 
-                            _Analis.textBox4.Text = string.Format("{0:0.0000}", k0Text.Text);
-                            _Analis.textBox5.Text = string.Format("{0:0.0000}", k1Text.Text);
-                            _Analis.textBox6.Text = string.Format("{0:0.0000}", k2Text.Text);
+                            _Analis.AgroText0.Text = string.Format("{0:0.0000}", k0Text.Text);
+                            _Analis.AgroText1.Text = string.Format("{0:0.0000}", k1Text.Text);
+                            _Analis.AgroText2.Text = string.Format("{0:0.0000}", k2Text.Text);
                         }
                     }
                 }
@@ -563,9 +571,9 @@ namespace Ecoview_V2._0
                                     k2Text.Enabled = false;
                                     k0Text.Text = string.Format("{0:0.0000}", 0);
                                     k2Text.Text = string.Format("{0:0.0000}", 0);
-                                    _Analis.textBox4.Text = string.Format("{0:0.0000}", k0Text.Text);
-                                    _Analis.textBox5.Text = string.Format("{0:0.0000}", k1Text.Text);
-                                    _Analis.textBox6.Text = string.Format("{0:0.0000}", k2Text.Text);
+                                    _Analis.AgroText0.Text = string.Format("{0:0.0000}", k0Text.Text);
+                                    _Analis.AgroText1.Text = string.Format("{0:0.0000}", k1Text.Text);
+                                    _Analis.AgroText2.Text = string.Format("{0:0.0000}", k2Text.Text);
                                     double k0 = Convert.ToDouble(k0Text.Text);
                                     double k1 = Convert.ToDouble(k1Text.Text);
                                     double k2 = Convert.ToDouble(k2Text.Text);
@@ -596,9 +604,9 @@ namespace Ecoview_V2._0
                                         k2Text.Enabled = false;
 
                                         k2Text.Text = string.Format("{0:0.0000}", 0);
-                                        _Analis.textBox4.Text = string.Format("{0:0.0000}", k0Text.Text);
-                                        _Analis.textBox5.Text = string.Format("{0:0.0000}", k1Text.Text);
-                                        _Analis.textBox6.Text = string.Format("{0:0.0000}", k2Text.Text);
+                                        _Analis.AgroText0.Text = string.Format("{0:0.0000}", k0Text.Text);
+                                        _Analis.AgroText1.Text = string.Format("{0:0.0000}", k1Text.Text);
+                                        _Analis.AgroText2.Text = string.Format("{0:0.0000}", k2Text.Text);
                                         double k0 = Convert.ToDouble(k0Text.Text);
                                         double k1 = Convert.ToDouble(k1Text.Text);
                                         double k2 = Convert.ToDouble(k2Text.Text);
@@ -623,9 +631,9 @@ namespace Ecoview_V2._0
                                         k1Text.Enabled = true;
                                         k2Text.Enabled = true;
 
-                                        _Analis.textBox4.Text = string.Format("{0:0.0000}", k0Text.Text);
-                                        _Analis.textBox5.Text = string.Format("{0:0.0000}", k1Text.Text);
-                                        _Analis.textBox6.Text = string.Format("{0:0.0000}", k2Text.Text);
+                                        _Analis.AgroText0.Text = string.Format("{0:0.0000}", k0Text.Text);
+                                        _Analis.AgroText1.Text = string.Format("{0:0.0000}", k1Text.Text);
+                                        _Analis.AgroText2.Text = string.Format("{0:0.0000}", k2Text.Text);
                                         double k0 = Convert.ToDouble(k0Text.Text);
                                         double k1 = Convert.ToDouble(k1Text.Text);
                                         double k2 = Convert.ToDouble(k2Text.Text);
@@ -703,9 +711,9 @@ namespace Ecoview_V2._0
                                     k2Text.Enabled = false;
                                     k0Text.Text = string.Format("{0:0.0000}", 0);
                                     k2Text.Text = string.Format("{0:0.0000}", 0);
-                                    _Analis.textBox4.Text = string.Format("{0:0.0000}", k0Text.Text);
-                                    _Analis.textBox5.Text = string.Format("{0:0.0000}", k1Text.Text);
-                                    _Analis.textBox6.Text = string.Format("{0:0.0000}", k2Text.Text);
+                                    _Analis.AgroText0.Text = string.Format("{0:0.0000}", k0Text.Text);
+                                    _Analis.AgroText1.Text = string.Format("{0:0.0000}", k1Text.Text);
+                                    _Analis.AgroText2.Text = string.Format("{0:0.0000}", k2Text.Text);
                                     double k0 = Convert.ToDouble(k0Text.Text);
                                     double k1 = Convert.ToDouble(k1Text.Text);
                                     double k2 = Convert.ToDouble(k2Text.Text);
@@ -734,9 +742,9 @@ namespace Ecoview_V2._0
                                         k2Text.Enabled = false;
 
                                         k2Text.Text = string.Format("{0:0.0000}", 0);
-                                        _Analis.textBox4.Text = string.Format("{0:0.0000}", k0Text.Text);
-                                        _Analis.textBox5.Text = string.Format("{0:0.0000}", k1Text.Text);
-                                        _Analis.textBox6.Text = string.Format("{0:0.0000}", k2Text.Text);
+                                        _Analis.AgroText0.Text = string.Format("{0:0.0000}", k0Text.Text);
+                                        _Analis.AgroText1.Text = string.Format("{0:0.0000}", k1Text.Text);
+                                        _Analis.AgroText2.Text = string.Format("{0:0.0000}", k2Text.Text);
                                         double k0 = Convert.ToDouble(k0Text.Text);
                                         double k1 = Convert.ToDouble(k1Text.Text);
                                         double k2 = Convert.ToDouble(k2Text.Text);
@@ -761,9 +769,9 @@ namespace Ecoview_V2._0
                                         k1Text.Enabled = true;
                                         k2Text.Enabled = true;
 
-                                        _Analis.textBox4.Text = string.Format("{0:0.0000}", k0Text.Text);
-                                        _Analis.textBox5.Text = string.Format("{0:0.0000}", k1Text.Text);
-                                        _Analis.textBox6.Text = string.Format("{0:0.0000}", k2Text.Text);
+                                        _Analis.AgroText0.Text = string.Format("{0:0.0000}", k0Text.Text);
+                                        _Analis.AgroText1.Text = string.Format("{0:0.0000}", k1Text.Text);
+                                        _Analis.AgroText2.Text = string.Format("{0:0.0000}", k2Text.Text);
                                         double k0 = Convert.ToDouble(k0Text.Text);
                                         double k1 = Convert.ToDouble(k1Text.Text);
                                         double k2 = Convert.ToDouble(k2Text.Text);
@@ -1244,7 +1252,9 @@ namespace Ecoview_V2._0
                 }
             }
 
-            private void USE_KO_CheckedChanged(object sender, EventArgs e)
+        private void USE_KO_CheckedChanged(object sender, EventArgs e)
+        {
+            if (_Analis.selet_rezim != 6)
             {
                 if (USE_KO.Checked == true)
                 {
@@ -1255,6 +1265,12 @@ namespace Ecoview_V2._0
                     _Analis.USE_KO = false;
                 }
             }
+            else
+            {
+                USE_KO.Checked = true;
+                _Analis.USE_KO = true;
+            }
+        }
 
             private void Cancel_Click(object sender, EventArgs e)
             {
@@ -1289,6 +1305,195 @@ namespace Ecoview_V2._0
             {
                 e.Handled = true;
                 MessageBox.Show("В данное поле можно вводить цифры, знаки '.'");
+            }
+        }
+
+        private void k1Text_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void k0Text_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Description_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void k2Text_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void groupBox8_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label14_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label13_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Up_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Down_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Veshestvo_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void groupBox7_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox4_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label19_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void ND_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label15_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void groupBox6_Enter_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label12_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label11_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void groupBox3_Enter_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Ispolnitel_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label6_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void numericUpDown1_ValueChanged_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label3_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void dateTimePicker1_ValueChanged_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void groupBox4_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void groupBox2_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label5_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label4_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void groupBox5_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label10_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label9_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label8_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label7_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void groupBox1_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void USE_KO_Click(object sender, EventArgs e)
+        {
+            if(_Analis.selet_rezim == 6)
+            {
+                if (sender is CheckBox)
+                    ((CheckBox)sender).Checked = !((CheckBox)sender).Checked;
             }
         }
     }

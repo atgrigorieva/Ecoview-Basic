@@ -135,6 +135,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AgroGrad_new.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AgroGrad_new.Designer.cs">
+      <DependentUpon>AgroGrad_new.cs</DependentUpon>
+    </Compile>
     <Compile Include="Ecoview.cs">
       <SubType>Form</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -142,6 +148,12 @@
     <Compile Include="Ecoview.Designer.cs">
       <DependentUpon>Ecoview.cs</DependentUpon>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="FotometrScan.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FotometrScan.Designer.cs">
+      <DependentUpon>FotometrScan.cs</DependentUpon>
     </Compile>
     <Compile Include="InputBox.cs">
       <SubType>Form</SubType>
@@ -215,9 +227,15 @@
     <Compile Include="SettingPort.Designer.cs">
       <DependentUpon>SettingPort.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="AgroGrad_new.resx">
+      <DependentUpon>AgroGrad_new.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Ecoview.resx">
       <DependentUpon>Ecoview.cs</DependentUpon>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FotometrScan.resx">
+      <DependentUpon>FotometrScan.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="InputBox.resx">
       <DependentUpon>InputBox.cs</DependentUpon>

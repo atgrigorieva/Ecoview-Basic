@@ -22,6 +22,11 @@ namespace Ecoview_V2._0
 
             private void Parametr1_Load(object sender, EventArgs e)
             {
+            if (_Analis.selet_rezim == 6)
+            {
+                numericUpDown3.Enabled = false;
+                numericUpDown4.Enabled = false;
+            }
                 DLWave.Text = _Analis.wavelength1;
                 int index = Opt_dlin_cuvet.FindString(_Analis.Opt_dlin_cuvet.Text);
 
@@ -35,9 +40,9 @@ namespace Ecoview_V2._0
                 Aproksimaciya.Text = _Analis.aproksim;
                 label11.Text = Convert.ToString(_Analis.CountSeriya);
                 label10.Text = Convert.ToString(_Analis.CountInSeriya);
-                label9.Text = string.Format("{0:0.0000}", _Analis.textBox4.Text);
-                label8.Text = string.Format("{0:0.0000}", _Analis.textBox5.Text);
-                label7.Text = string.Format("{0:0.0000}", _Analis.textBox6.Text);
+                label9.Text = string.Format("{0:0.0000}", _Analis.AgroText0.Text);
+                label8.Text = string.Format("{0:0.0000}", _Analis.AgroText1.Text);
+                label7.Text = string.Format("{0:0.0000}", _Analis.AgroText2.Text);
                 label12.Text = _Analis.SposobZadan;
                 Ed_Izmer.Text = _Analis.edconctr;
                 dateTimePicker1.Text = _Analis.dateTimePicker2.Text;

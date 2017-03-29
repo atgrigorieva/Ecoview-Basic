@@ -49,9 +49,9 @@ namespace Ecoview_V2._0
             radioButton3.Enabled = false;
             radioButton4.Enabled = false;
             radioButton5.Enabled = false;
-            textBox4.Text = string.Format("{0:0.0000}", 0);
-            textBox5.Text = string.Format("{0:0.0000}", 0);
-            textBox6.Text = string.Format("{0:0.0000}", 0);
+            AgroText0.Text = string.Format("{0:0.0000}", 0);
+            AgroText1.Text = string.Format("{0:0.0000}", 0);
+            AgroText2.Text = string.Format("{0:0.0000}", 0);
         }
         public string version = "264";
         public bool nonPort;
@@ -146,6 +146,7 @@ namespace Ecoview_V2._0
         double k2_1 = 0;
         bool USE_KO_1 = false;
         public int selet_rezim = 2;
+        bool StopAgro = false;
         public void Ecoview_Load(object sender, EventArgs e)
         {
 
@@ -613,7 +614,152 @@ namespace Ecoview_V2._0
                 // InitializeTimer();
             }
         }
+        double[] scan_mass;
+        public void SAGEScan(ref int countSA, ref string GE5_1_0)
+        {
+            SW_Scan();
+            bool message1 = true;
+            if (versionPribor.Contains("2"))
+            { countSA = 8; }
+            else
+            {
+                countSA = 4;
+            }
 
+            LogoForm();
+
+            newPort.Write("SA " + countSA + "\r");
+
+            string indata = newPort.ReadExisting();
+            int indata_zero = 0;
+            string indata_0;
+            bool indata_bool = true;
+            while (indata_bool == true)
+            {
+
+                if (indata.Contains(">"))
+                {
+
+                    indata_bool = false;
+
+                }
+
+                else {
+                    indata = newPort.ReadExisting();
+
+                }
+            }
+
+            newPort.Write("GE 1\r");
+
+            string GE5_1 = "";
+            int GEbyteRecieved4_1 = newPort.ReadBufferSize;
+            byte[] GEbuffer4_1 = new byte[GEbyteRecieved4_1];
+            newPort.Read(GEbuffer4_1, 0, GEbyteRecieved4_1);
+
+            indata = newPort.ReadExisting();
+            indata_zero = 0;
+            indata_0 = "";
+            indata_bool = true;
+            while (indata_bool == true)
+            {
+
+                if (indata.Contains(">"))
+                {
+
+                    indata_bool = false;
+
+                }
+
+                else {
+
+                    indata = newPort.ReadExisting();
+                    indata_0 += indata;
+                }
+            }
+            Regex regex = new Regex(@"\W");
+            GE5_1 = regex.Replace(indata_0, "");
+            GE5_1_0 = regex.Replace(indata_0, "");
+            GEText.Text = GE5_1_0;
+            double GAText1 = (Convert.ToDouble(GE5_1_0) / Convert.ToDouble(GE5_1_0)) * 100;
+
+            GAText.Text = string.Format("{0:0.00}", GAText1);
+
+            double OptPlot = Math.Log10(Convert.ToDouble(GE5_1_0) / Convert.ToDouble(GE5_1));
+
+            double OptPlot1 = OptPlot - Math.Truncate(OptPlot);
+            OptichPlot.Text = string.Format("{0:0.0000}", OptPlot1);
+            while (Convert.ToInt32(GE5_1) > 10000 && countSA > 1)
+            {
+                countSA--;
+                newPort.Write("SA " + countSA + "\r");
+                int SAAnalisByteRecieved1_1_1 = newPort.ReadBufferSize;
+                // Thread.Sleep(100);
+                indata = newPort.ReadExisting();
+                indata_zero = 0;
+                indata_0 = "";
+                indata_bool = true;
+                while (indata_bool == true)
+                {
+
+                    if (indata.Contains(">"))
+                    {
+
+                        indata_bool = false;
+
+                    }
+
+                    else {
+                        indata = newPort.ReadExisting();
+                    }
+                }
+
+                newPort.Write("GE 1\r");
+                GEbyteRecieved4_1 = newPort.ReadBufferSize;
+                GEbuffer4_1 = new byte[GEbyteRecieved4_1];
+                newPort.Read(GEbuffer4_1, 0, GEbyteRecieved4_1);
+
+                indata = newPort.ReadExisting();
+                indata_zero = 0;
+                indata_0 = "";
+                indata_bool = true;
+                while (indata_bool == true)
+                {
+
+                    if (indata.Contains(">"))
+                    {
+
+                        indata_bool = false;
+
+                    }
+
+                    else {
+
+                        indata = newPort.ReadExisting();
+                        indata_0 += indata;
+                    }
+                }
+                regex = new Regex(@"\W");
+                GE5_1 = regex.Replace(indata_0, "");
+
+                GE5_1_0 = regex.Replace(indata_0, "");
+                GEText.Text = GE5_1_0;
+
+                GAText1 = (Convert.ToDouble(GE5_1_0) / Convert.ToDouble(GE5_1_0)) * 100;
+
+                GAText.Text = string.Format("{0:0.00}", GAText1);
+
+                OptPlot = Math.Log10(Convert.ToDouble(GE5_1_0) / Convert.ToDouble(GE5_1));
+
+                OptPlot1 = OptPlot - Math.Truncate(OptPlot);
+                OptichPlot.Text = string.Format("{0:0.0000}", OptPlot1);
+            }
+            SWF.Application.OpenForms["LogoFrm"].Close();
+
+            scan_mass[countscan] = Convert.ToDouble(GE5_1_0);
+            scan_massSA[countscan] = Convert.ToDouble(countSA);
+        }
+        double[] scan_massSA;
         public void CO()
         {
 
@@ -926,8 +1072,45 @@ namespace Ecoview_V2._0
                         MessageBox.Show("Для проведения измерений необхдимо подключиться к прибору!");
                     }
                 }
+                else
+                {
+                    if(selet_rezim == 6)
+                    {
+                        Izmerenie1 = true;
+                        if (tabControl2.SelectedIndex == 0)
+                        {
+                            NewGraduirovca(ref CountInSeriya, ref CountSeriya);
+                        }
+                        else
+                        {
+                            NewIzmerenie();
+                        }
+                    }
+                    else
+                    {
+                        if(selet_rezim == 5)
+                        {
+                            if (ComPodkl == true)
+                            {
+                                FotometrScan();
+                            }
+                            else
+                            {
+                                MessageBox.Show("Для проведения сканирования необхдимо подключиться к прибору!");
+                            }
+                        }
+                    }
+                }
             }
             
+        }
+       public double start = 0.0;
+       public double cancel = 0.0;
+        
+        public void FotometrScan()
+        {
+            FotometrScan _FotometrScan = new FotometrScan(this);
+            _FotometrScan.ShowDialog();
         }
        public void IzmerenieFR_new()
         {
@@ -938,6 +1121,7 @@ namespace Ecoview_V2._0
        public string CountInSeriya1 = "";
         public void NewGraduirovca(ref string CountInSeriya, ref string CountSeriya)
         {
+           
             CountSeriya1 = CountSeriya;
             CountInSeriya1 = CountInSeriya;
             ParametrsGrad _ParametrsGrad = new ParametrsGrad(this);
@@ -1002,12 +1186,12 @@ namespace Ecoview_V2._0
                 {
                     SposobZadan = "Ввод коэффициентов";
 
-                    textBox4.Text = _ParametrsGrad.k0Text.Text;
-                    textBox5.Text = _ParametrsGrad.k1Text.Text;
-                    textBox6.Text = _ParametrsGrad.k2Text.Text;
-                    k0 = Convert.ToDouble(textBox4.Text);
-                    k1 = Convert.ToDouble(textBox5.Text);
-                    k2 = Convert.ToDouble(textBox6.Text);
+                    AgroText0.Text = _ParametrsGrad.k0Text.Text;
+                    AgroText1.Text = _ParametrsGrad.k1Text.Text;
+                    AgroText2.Text = _ParametrsGrad.k2Text.Text;
+                    k0 = Convert.ToDouble(AgroText0.Text);
+                    k1 = Convert.ToDouble(AgroText1.Text);
+                    k2 = Convert.ToDouble(AgroText2.Text);
 
 
                 }
@@ -1118,6 +1302,17 @@ namespace Ecoview_V2._0
             }
 
         }
+        public void WLREMOVEAgro1()
+        {
+            while (true)
+            {
+                int i = AgroTable1.Columns.Count - 1;//С какого столбца начать
+                if (AgroTable1.Columns[i].Name == "AgroASred")
+                    break;
+                AgroTable1.Columns.RemoveAt(i);
+            }
+
+        }
         public void WLADD1()
         {
 
@@ -1142,6 +1337,30 @@ namespace Ecoview_V2._0
             }
             Concetr.HeaderText = "Конц " + edconctr;
         }
+        public void WLADDAgro1()
+        {
+
+            for (int i = 1; i <= NoCaIzm; i++)
+            {
+
+                DataGridViewTextBoxColumn firstColumn1 =
+                new DataGridViewTextBoxColumn();
+                firstColumn1.HeaderText = "A; Сер" + i;
+                firstColumn1.Name = "A;Ser (" + i;
+                firstColumn1.ValueType = Type.GetType("System.Double");
+
+                AgroTable1.Columns.Add(firstColumn1);
+                //firstColumn1.KeyPress += new System.Windows.Forms.KeyPressEventHandler(txt_KeyPress);
+                //   firstColumn1.EditingControlShowing
+
+            }
+
+            for (int i = 1; i <= NoCaIzm; i++)
+            {
+                AgroTable1.Columns["A;Ser (" + i].Width = 50;
+            }
+            Concetr.HeaderText = "Конц " + edconctr;
+        }
 
         private void button6_Click(object sender, EventArgs e)
         {
@@ -1163,6 +1382,21 @@ namespace Ecoview_V2._0
                 {
                     IzmerenieFR_Open();
                 }
+                else
+                {
+                    if (selet_rezim == 6)
+                    {
+                        Izmerenie1 = true;
+                        if (tabControl2.SelectedIndex == 0)
+                        {
+                            Open();
+                        }
+                        else
+                        {
+                            Open1();
+                        }
+                    }
+                }
             }
         }
 
@@ -1173,10 +1407,20 @@ namespace Ecoview_V2._0
         string filepath;
         public void Open()
         {
-            openFileDialog1.InitialDirectory = "C";
-            openFileDialog1.Title = "Open File";
-            openFileDialog1.FileName = "";
-            openFileDialog1.Filter = "QS2 файл|*.qs2";
+            if (selet_rezim == 2)
+            {
+                openFileDialog1.InitialDirectory = "C";
+                openFileDialog1.Title = "Open File";
+                openFileDialog1.FileName = "";
+                openFileDialog1.Filter = "QS2 файл|*.qs2";
+            }
+            else
+            {
+                openFileDialog1.InitialDirectory = "C";
+                openFileDialog1.Title = "Open File";
+                openFileDialog1.FileName = "";
+                openFileDialog1.Filter = "Agro QS2 файл|*.aq2";
+            }
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 chart1.Series[0].Points.Clear();
@@ -1196,9 +1440,9 @@ namespace Ecoview_V2._0
                     groupBox5.Enabled = true;
                     groupBox3.Enabled = true;
                     TableWrite();
-                    textBox4.Enabled = true;
-                    textBox5.Enabled = true;
-                    textBox6.Enabled = true;
+                    AgroText0.Enabled = true;
+                    AgroText1.Enabled = true;
+                    AgroText2.Enabled = true;
                     RR.Enabled = true;
                     SKO.Enabled = true;
                     label21.Enabled = true;
@@ -1252,6 +1496,10 @@ namespace Ecoview_V2._0
                 }
 
                 tabPage4.Parent = tabControl2;
+                if(selet_rezim == 6)
+                {
+                    tabControl2.TabPages[1].Text = "Измерение Агро";
+                }
             }
         }
         public void TableWrite()
@@ -1608,21 +1856,21 @@ namespace Ecoview_V2._0
                                 {
                                     if ("k0".Equals(k.Name) && k.FirstChild != null)
                                     {
-                                        textBox4.Text = k.FirstChild.Value;
-                                        k0 = Convert.ToDouble(textBox4.Text);
+                                        AgroText0.Text = k.FirstChild.Value;
+                                        k0 = Convert.ToDouble(AgroText0.Text);
 
                                     }
                                     if ("k1".Equals(k.Name) && k.FirstChild != null)
                                     {
-                                        textBox5.Text = k.FirstChild.Value;
-                                        k1 = Convert.ToDouble(textBox5.Text);
+                                        AgroText1.Text = k.FirstChild.Value;
+                                        k1 = Convert.ToDouble(AgroText1.Text);
 
                                     }
                                     if ("k2".Equals(k.Name) && k.FirstChild != null)
                                     {
-                                        textBox6.Text = k.FirstChild.Value;
+                                        AgroText2.Text = k.FirstChild.Value;
 
-                                        k2 = Convert.ToDouble(textBox6.Text);
+                                        k2 = Convert.ToDouble(AgroText2.Text);
                                     }
                                 }
 
@@ -2405,9 +2653,9 @@ namespace Ecoview_V2._0
             SKO.Enabled = true;
             label21.Enabled = true;
             label22.Enabled = true;
-            textBox4.Enabled = true;
-            textBox5.Enabled = true;
-            textBox6.Enabled = true;
+            AgroText0.Enabled = true;
+            AgroText1.Enabled = true;
+            AgroText2.Enabled = true;
         }
         int circle;
         public void lineinaya0()
@@ -2419,9 +2667,9 @@ namespace Ecoview_V2._0
             circle = 0;
             XY = 0;
             SUMMY2 = 0;
-            textBox4.Text = string.Format("{0:0.0000}", 0);
-            textBox5.Text = string.Format("{0:0.0000}", 0);
-            textBox6.Text = string.Format("{0:0.0000}", 0);
+            AgroText0.Text = string.Format("{0:0.0000}", 0);
+            AgroText1.Text = string.Format("{0:0.0000}", 0);
+            AgroText2.Text = string.Format("{0:0.0000}", 0);
             double max = -1;
             int index = -1;
             double[] SredOtklMatr = new double[Table1.Rows.Count - 1];
@@ -2577,9 +2825,9 @@ namespace Ecoview_V2._0
             SREDSUMMX = SUMMX / (Table1.Rows.Count - 1);
             k1 = XY / SUMMY2;
 
-            textBox4.Text = string.Format("{0:0.0000}", 0);
-            textBox5.Text = string.Format("{0:0.0000}", k1);
-            textBox4.Text = string.Format("{0:0.0000}", 0);
+            AgroText0.Text = string.Format("{0:0.0000}", 0);
+            AgroText1.Text = string.Format("{0:0.0000}", k1);
+            AgroText0.Text = string.Format("{0:0.0000}", 0);
             max = -1;
             for (int i = 0; i < Table1.Rows.Count - 1; i++)
             {
@@ -2819,9 +3067,9 @@ namespace Ecoview_V2._0
             SREDSUMMX = SUMMX / (Table1.Rows.Count - 1);
             k1 = XY / SUMMY2;
 
-            textBox4.Text = string.Format("{0:0.0000}", 0);
-            textBox5.Text = string.Format("{0:0.0000}", k1);
-            textBox4.Text = string.Format("{0:0.0000}", 0);
+            AgroText0.Text = string.Format("{0:0.0000}", 0);
+            AgroText1.Text = string.Format("{0:0.0000}", k1);
+            AgroText0.Text = string.Format("{0:0.0000}", 0);
 
             double[] Table1masStr1 = new double[Table1.Rows.Count - 1];
             max = -1;
@@ -2977,9 +3225,9 @@ namespace Ecoview_V2._0
             }
             k1 = XY / SUMMY2;
 
-            textBox4.Text = string.Format("{0:0.0000}", 0);
-            textBox5.Text = string.Format("{0:0.0000}", k1);
-            textBox4.Text = string.Format("{0:0.0000}", 0);
+            AgroText0.Text = string.Format("{0:0.0000}", 0);
+            AgroText1.Text = string.Format("{0:0.0000}", k1);
+            AgroText0.Text = string.Format("{0:0.0000}", 0);
             label14.Text = "C(A) = " + k1.ToString("0.0000 ;- 0.0000 ") + "*A";
             max = -1;
             for (int i = 0; i < Table1.Rows.Count - 1; i++)
@@ -3174,9 +3422,9 @@ namespace Ecoview_V2._0
             }
             k1 = XY / SUMMY2;
 
-            textBox4.Text = string.Format("{0:0.0000}", 0);
-            textBox5.Text = string.Format("{0:0.0000}", k1);
-            textBox4.Text = string.Format("{0:0.0000}", 0);
+            AgroText0.Text = string.Format("{0:0.0000}", 0);
+            AgroText1.Text = string.Format("{0:0.0000}", k1);
+            AgroText0.Text = string.Format("{0:0.0000}", 0);
             label14.Text = "C(A) = " + k1.ToString("0.0000 ;- 0.0000 ") + "*A";
             max = -1;
             for (int i = 0; i < Table1.Rows.Count - 1; i++)
@@ -3330,9 +3578,9 @@ namespace Ecoview_V2._0
             k0 = 0; k1 = 0; k2 = 0;
             SUM0 = 0; SUM1 = 0;
             SUMMX = 0; SUMMY = 0; XY = 0; SUMMY2 = 0;
-            textBox4.Text = string.Format("{0:0.0000}", 0);
-            textBox5.Text = string.Format("{0:0.0000}", 0);
-            textBox4.Text = string.Format("{0:0.0000}", 0);
+            AgroText0.Text = string.Format("{0:0.0000}", 0);
+            AgroText1.Text = string.Format("{0:0.0000}", 0);
+            AgroText0.Text = string.Format("{0:0.0000}", 0);
             max = -1;
             double[] Table1masStr_1 = new double[NoCaIzm];
             double[] Table1masStr1_1 = new double[Table1.Rows.Count - 1];
@@ -3519,9 +3767,9 @@ namespace Ecoview_V2._0
             }
             k0 = (SUMMY2 * SUMMX - SUMMY * XY) / ((NoCaSer) * SUMMY2 - SUMMY * SUMMY);
             k1 = ((NoCaSer) * XY - SUMMY * SUMMX) / ((NoCaSer) * SUMMY2 - SUMMY * SUMMY);
-            textBox4.Text = string.Format("{0:0.0000}", k0);
-            textBox5.Text = string.Format("{0:0.0000}", k1);
-            textBox6.Text = string.Format("{0:0.0000}", 0);
+            AgroText0.Text = string.Format("{0:0.0000}", k0);
+            AgroText1.Text = string.Format("{0:0.0000}", k1);
+            AgroText2.Text = string.Format("{0:0.0000}", 0);
             max = -1;
             double[] Table1masStr1 = new double[Table1.Rows.Count - 1];
             for (int i = 0; i < Table1.Rows.Count - 1; i++)
@@ -3625,9 +3873,9 @@ namespace Ecoview_V2._0
             k0 = 0; k1 = 0; k2 = 0;
             SUM0 = 0; SUM1 = 0;
             SUMMX = 0; SUMMY = 0; XY = 0; SUMMY2 = 0;
-            textBox4.Text = string.Format("{0:0.0000}", 0);
-            textBox5.Text = string.Format("{0:0.0000}", 0);
-            textBox4.Text = string.Format("{0:0.0000}", 0);
+            AgroText0.Text = string.Format("{0:0.0000}", 0);
+            AgroText1.Text = string.Format("{0:0.0000}", 0);
+            AgroText0.Text = string.Format("{0:0.0000}", 0);
             max = -1;
             double x1_1 = Convert.ToDouble(Table1.Rows[0].Cells["Asred"].Value);
             double y1_1 = Convert.ToDouble(Table1.Rows[0].Cells["Concetr"].Value);
@@ -3696,9 +3944,9 @@ namespace Ecoview_V2._0
             }
             k0 = (SUMMY2 * SUMMX - SUMMY * XY) / ((NoCaSer) * SUMMY2 - SUMMY * SUMMY);
             k1 = ((NoCaSer) * XY - SUMMY * SUMMX) / ((NoCaSer) * SUMMY2 - SUMMY * SUMMY);
-            textBox4.Text = string.Format("{0:0.0000}", k0);
-            textBox5.Text = string.Format("{0:0.0000}", k1);
-            textBox6.Text = string.Format("{0:0.0000}", 0);
+            AgroText0.Text = string.Format("{0:0.0000}", k0);
+            AgroText1.Text = string.Format("{0:0.0000}", k1);
+            AgroText2.Text = string.Format("{0:0.0000}", 0);
             double[] Table1masStr1 = new double[Table1.Rows.Count - 1];
             max = -1;
             for (int i = 0; i < Table1.Rows.Count - 1; i++)
@@ -3798,9 +4046,9 @@ namespace Ecoview_V2._0
             k0 = 0; k1 = 0; k2 = 0;
             SUM0 = 0; SUM1 = 0;
             SUMMX = 0; SUMMY = 0; XY = 0; SUMMY2 = 0;
-            textBox4.Text = string.Format("{0:0.0000}", 0);
-            textBox5.Text = string.Format("{0:0.0000}", 0);
-            textBox4.Text = string.Format("{0:0.0000}", 0);
+            AgroText0.Text = string.Format("{0:0.0000}", 0);
+            AgroText1.Text = string.Format("{0:0.0000}", 0);
+            AgroText0.Text = string.Format("{0:0.0000}", 0);
             max = -1;
             double x0 = Convert.ToDouble(Table1.Rows[0].Cells["Concetr"].Value);
             double y0 = Convert.ToDouble(Table1.Rows[0].Cells["Asred"].Value);
@@ -3826,9 +4074,9 @@ namespace Ecoview_V2._0
             }
             k0 = (SUMMY2 * SUMMX - SUMMY * XY) / ((NoCaSer) * SUMMY2 - SUMMY * SUMMY);
             k1 = ((NoCaSer) * XY - SUMMY * SUMMX) / ((NoCaSer) * SUMMY2 - SUMMY * SUMMY);
-            textBox4.Text = string.Format("{0:0.0000}", k0);
-            textBox5.Text = string.Format("{0:0.0000}", k1);
-            textBox6.Text = string.Format("{0:0.0000}", 0);
+            AgroText0.Text = string.Format("{0:0.0000}", k0);
+            AgroText1.Text = string.Format("{0:0.0000}", k1);
+            AgroText2.Text = string.Format("{0:0.0000}", 0);
             label14.Text = "C(A) = " + k1.ToString("0.0000 ;- 0.0000 ") + "*A " + k0.ToString("+ 0.0000 ;- 0.0000 ");
             max = -1;
             for (int i = 0; i < Table1.Rows.Count - 1; i++)
@@ -3965,9 +4213,9 @@ namespace Ecoview_V2._0
             double SREDSUMMX = 0;
             double SUMMX1 = 0;
 
-            textBox4.Text = string.Format("{0:0.0000}", 0);
-            textBox5.Text = string.Format("{0:0.0000}", 0);
-            textBox4.Text = string.Format("{0:0.0000}", 0);
+            AgroText0.Text = string.Format("{0:0.0000}", 0);
+            AgroText1.Text = string.Format("{0:0.0000}", 0);
+            AgroText0.Text = string.Format("{0:0.0000}", 0);
             max = -1;
             chart1.Series[0].Points.Clear();
             chart1.Series[1].Points.Clear();
@@ -3995,9 +4243,9 @@ namespace Ecoview_V2._0
             }
             k0 = (SUMMY2 * SUMMX - SUMMY * XY) / ((NoCaSer) * SUMMY2 - SUMMY * SUMMY);
             k1 = ((NoCaSer) * XY - SUMMY * SUMMX) / ((NoCaSer) * SUMMY2 - SUMMY * SUMMY);
-            textBox4.Text = string.Format("{0:0.0000}", k0);
-            textBox5.Text = string.Format("{0:0.0000}", k1);
-            textBox6.Text = string.Format("{0:0.0000}", 0);
+            AgroText0.Text = string.Format("{0:0.0000}", k0);
+            AgroText1.Text = string.Format("{0:0.0000}", k1);
+            AgroText2.Text = string.Format("{0:0.0000}", 0);
             label14.Text = "C(A) = " + k1.ToString("0.0000 ;- 0.0000 ") + "*A " + k0.ToString("+ 0.0000 ;- 0.0000 ");
             max = -1;
            for (int i = 0; i < Table1.Rows.Count - 1; i++)
@@ -4390,9 +4638,9 @@ namespace Ecoview_V2._0
             k2 = OpredA / Opred;
             k1 = OpredB / Opred;
             k0 = OpredC / Opred;
-            textBox4.Text = string.Format("{0:0.0000}", k0);
-            textBox5.Text = string.Format("{0:0.0000}", k1);
-            textBox6.Text = string.Format("{0:0.0000}", k2);
+            AgroText0.Text = string.Format("{0:0.0000}", k0);
+            AgroText1.Text = string.Format("{0:0.0000}", k1);
+            AgroText2.Text = string.Format("{0:0.0000}", k2);
             label14.Text = "A(C) = " + k0.ToString("0.0000 ;- 0.0000 ") + k1.ToString("+ 0.0000 ;- 0.0000 ") + "*C " + k2.ToString("+ 0.0000 ;- 0.0000 ") + "*C^2";
             max = -1;
             double[] Table1masStr1 = new double[Table1.Rows.Count - 1];
@@ -4565,9 +4813,9 @@ namespace Ecoview_V2._0
             k2 = OpredA / Opred;
             k1 = OpredB / Opred;
             k0 = OpredC / Opred;
-            textBox4.Text = string.Format("{0:0.0000}", k0);
-            textBox5.Text = string.Format("{0:0.0000}", k1);
-            textBox6.Text = string.Format("{0:0.0000}", k2);
+            AgroText0.Text = string.Format("{0:0.0000}", k0);
+            AgroText1.Text = string.Format("{0:0.0000}", k1);
+            AgroText2.Text = string.Format("{0:0.0000}", k2);
             label14.Text = "A(C) = " + k0.ToString("0.0000 ;- 0.0000 ") + k1.ToString("+ 0.0000;- 0.0000") + "*C " + k2.ToString("+ 0.0000;- 0.0000") + "*C^2";
             double[] Table1masStr1 = new double[Table1.Rows.Count - 1];
             max = -1;
@@ -4698,9 +4946,9 @@ namespace Ecoview_V2._0
             k2 = OpredA / Opred;
             k1 = OpredB / Opred;
             k0 = OpredC / Opred;
-            textBox4.Text = string.Format("{0:0.0000}", k0);
-            textBox5.Text = string.Format("{0:0.0000}", k1);
-            textBox6.Text = string.Format("{0:0.0000}", k2);
+            AgroText0.Text = string.Format("{0:0.0000}", k0);
+            AgroText1.Text = string.Format("{0:0.0000}", k1);
+            AgroText2.Text = string.Format("{0:0.0000}", k2);
             label14.Text = "C(A) = " + k0.ToString("0.0000 ;- 0.0000 ") + k1.ToString("+ 0.0000;- 0.0000") + "*A " + k2.ToString("+ 0.0000;- 0.0000") + "*A^2";
             max = -1;
             for (int i = 0; i < Table1.Rows.Count - 1; i++)
@@ -4864,9 +5112,9 @@ namespace Ecoview_V2._0
             k2 = OpredA / Opred;
             k1 = OpredB / Opred;
             k0 = OpredC / Opred;
-            textBox4.Text = string.Format("{0:0.0000}", k0);
-            textBox5.Text = string.Format("{0:0.0000}", k1);
-            textBox6.Text = string.Format("{0:0.0000}", k2);
+            AgroText0.Text = string.Format("{0:0.0000}", k0);
+            AgroText1.Text = string.Format("{0:0.0000}", k1);
+            AgroText2.Text = string.Format("{0:0.0000}", k2);
             label14.Text = "C(A) = " + k0.ToString("0.0000 ;- 0.0000 ") + k1.ToString("+ 0.0000;- 0.0000") + "*A " + k2.ToString("+ 0.0000;- 0.0000") + "*A^2";
             max = -1;
             for (int i = 0; i < Table1.Rows.Count - 1; i++)
@@ -5027,9 +5275,9 @@ namespace Ecoview_V2._0
             chart1.Series[0].Points.Clear();
             chart1.Series[1].Points.Clear();
             lineinaya0();
-            textBox4.Enabled = true;
-            textBox5.Enabled = true;
-            textBox6.Enabled = true;
+            AgroText0.Enabled = true;
+            AgroText1.Enabled = true;
+            AgroText2.Enabled = true;
             RR.Enabled = true;
             SKO.Enabled = true;
             label21.Enabled = true;
@@ -5043,9 +5291,9 @@ namespace Ecoview_V2._0
             chart1.Series[0].Points.Clear();
             chart1.Series[1].Points.Clear();
             lineinaya();
-            textBox4.Enabled = true;
-            textBox5.Enabled = true;
-            textBox6.Enabled = true;
+            AgroText0.Enabled = true;
+            AgroText1.Enabled = true;
+            AgroText2.Enabled = true;
             RR.Enabled = true;
             SKO.Enabled = true;
             label21.Enabled = true;
@@ -5059,9 +5307,9 @@ namespace Ecoview_V2._0
             chart1.Series[0].Points.Clear();
             chart1.Series[1].Points.Clear();
             kvadratichnaya();
-            textBox4.Enabled = true;
-            textBox5.Enabled = true;
-            textBox6.Enabled = true;
+            AgroText0.Enabled = true;
+            AgroText1.Enabled = true;
+            AgroText2.Enabled = true;
             RR.Enabled = true;
             SKO.Enabled = true;
             label21.Enabled = true;
@@ -5102,6 +5350,35 @@ namespace Ecoview_V2._0
                 if (selet_rezim == 1)
                 {
                     SaveFR();
+                }
+                else
+                {
+                    if (selet_rezim == 6)
+                    {
+                        if (tabControl2.SelectedIndex == 0)
+                        {
+                            if ((Table1.RowCount < 1) && SposobZadan == "По СО")
+                            {
+                                MessageBox.Show("Создайте Градуировку");
+
+                            }
+                            else
+                            {
+                                Save();
+                            }
+                        }
+                        else
+                        {
+                            if (Table2.RowCount > 0)
+                            {
+                                Save1();
+                            }
+                            else
+                            {
+                                MessageBox.Show("Создайте Измерение");
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -5194,11 +5471,20 @@ namespace Ecoview_V2._0
         }
         public void SaveAs1()
         {
-            saveFileDialog1.InitialDirectory = "C";
-            saveFileDialog1.Title = "Save as XML File";
-            saveFileDialog1.FileName = "";
-            saveFileDialog1.Filter = "QS2 файл|*.qs2";
-
+            if (selet_rezim == 2)
+            {
+                saveFileDialog1.InitialDirectory = "C";
+                saveFileDialog1.Title = "Save as XML File";
+                saveFileDialog1.FileName = "";
+                saveFileDialog1.Filter = "QS2 файл|*.qs2";
+            }
+            else
+            {
+                saveFileDialog1.InitialDirectory = "C";
+                saveFileDialog1.Title = "Save as XML File";
+                saveFileDialog1.FileName = "";
+                saveFileDialog1.Filter = "Agro QS2 файл|*.aq2";
+            }
             if (saveFileDialog1.ShowDialog() != DialogResult.Cancel)
             {
                 CreateXMLDocument(ref filepath);
@@ -5206,6 +5492,10 @@ namespace Ecoview_V2._0
                 button3.Enabled = true;
                 button9.Enabled = true;
                 печатьToolStripMenuItem1.Enabled = true;
+                if (selet_rezim == 6)
+                {
+                    tabControl2.TabPages[1].Text = "Измерение Агро";
+                }
                 tabPage4.Parent = tabControl2;
                 Podskazka.Text = "Перейдите в Измерения!";
                 label27.Visible = false;
@@ -5411,13 +5701,13 @@ namespace Ecoview_V2._0
             else
             {
                 XmlNode k_0 = xd.CreateElement("k0"); // Примечание
-                k_0.InnerText = textBox4.Text; // и значение
+                k_0.InnerText = AgroText0.Text; // и значение
                 Izmerenie.AppendChild(k_0); // и указываем кому принадлежит
                 XmlNode k_1 = xd.CreateElement("k1"); // Примечание
-                k_1.InnerText = textBox5.Text; // и значение
+                k_1.InnerText = AgroText1.Text; // и значение
                 Izmerenie.AppendChild(k_1); // и указываем кому принадлежит
                 XmlNode k_2 = xd.CreateElement("k2"); // Примечание
-                k_2.InnerText = textBox6.Text; // и значение
+                k_2.InnerText = AgroText2.Text; // и значение
                 Izmerenie.AppendChild(k_2); // и указываем кому принадлежит
             }
 
@@ -5726,9 +6016,69 @@ namespace Ecoview_V2._0
 
             button11.Enabled = true;
         }
+
+        public void WLADDSTRAgro1()
+        {
+            if (USE_KO == true)
+            {
+                AgroTable1.Rows.Add(0, Convert.ToDouble(0.000));
+
+                for (int i = 1; i <= NoCaSer; i++)
+                {
+                    AgroTable1.Rows.Add(i, textBoxCO[i - 1].Text);
+
+
+                }
+
+                AgroTable1.CurrentCell = this.AgroTable1[3, 0];
+
+            }
+            else
+            {
+                for (int i = 1; i <= NoCaSer; i++)
+                {
+                    AgroTable1.Rows.Add(i, textBoxCO[i - 1].Text);
+
+
+                }
+
+                AgroTable1.CurrentCell = this.AgroTable1[3, 0];
+            }
+            for (int i = 1; i <= NoCaIzm; i++)
+            {
+                if (USE_KO == false)
+                {
+                    AgroTable1.Rows[NoCaSer].Cells["A;Ser (" + i].ReadOnly = true;
+                }
+                else
+                {
+                    AgroTable1.Rows[NoCaSer + 1].Cells["A;Ser (" + i].ReadOnly = true;
+                }
+            }
+
+            if (USE_KO == false)
+            {
+                AgroTable1.Rows[NoCaSer].Cells["AgroNoCo"].ReadOnly = true;
+                AgroTable1.Rows[NoCaSer].Cells["AgroConcetr"].ReadOnly = true;
+                AgroTable1.Rows[NoCaSer].Cells["AgroASred"].ReadOnly = true;
+            }
+            else
+            {
+                AgroTable1.Rows[NoCaSer + 1].Cells["AgroNoCo"].ReadOnly = true;
+                AgroTable1.Rows[NoCaSer + 1].Cells["AgroConcetr"].ReadOnly = true;
+                AgroTable1.Rows[NoCaSer + 1].Cells["AgroASred"].ReadOnly = true;
+            }
+
+            button11.Enabled = true;
+        }
         public void WLREMOVESTR1()
         {
             Table1.Rows.Clear();
+
+        }
+        public void WLREMOVESTRAgro1()
+        {
+            AgroTable1.Rows.Clear();
 
         }
         public void WLREMOVE2()
@@ -5787,22 +6137,25 @@ namespace Ecoview_V2._0
                 firstColumn3_1.Width = 50;
                 firstColumn2_1.Width = 50;
             }
-            DataGridViewTextBoxColumn firstColumn4 =
-            new DataGridViewTextBoxColumn();
-            firstColumn4.HeaderText = "Cср, " + edconctr;
-            firstColumn4.Name = "Ccr";
-            firstColumn4.ValueType = Type.GetType("System.Double");
-            Table2.Columns.Add(firstColumn4);
-            firstColumn4.ReadOnly = true;
-            DataGridViewTextBoxColumn firstColumn5 =
-            new DataGridViewTextBoxColumn();
-            firstColumn5.HeaderText = "d, %";
-            firstColumn5.Name = "d%";
-            firstColumn5.ValueType = Type.GetType("System.Double");
-            firstColumn5.ReadOnly = true;
-            Table2.Columns.Add(firstColumn5);
-            firstColumn4.Width = 100;
-            firstColumn5.Width = 50;
+            if (selet_rezim == 2)
+            {
+                DataGridViewTextBoxColumn firstColumn4 =
+                new DataGridViewTextBoxColumn();
+                firstColumn4.HeaderText = "Cср, " + edconctr;
+                firstColumn4.Name = "Ccr";
+                firstColumn4.ValueType = Type.GetType("System.Double");
+                Table2.Columns.Add(firstColumn4);
+                firstColumn4.ReadOnly = true;
+                DataGridViewTextBoxColumn firstColumn5 =
+                new DataGridViewTextBoxColumn();
+                firstColumn5.HeaderText = "d, %";
+                firstColumn5.Name = "d%";
+                firstColumn5.ValueType = Type.GetType("System.Double");
+                firstColumn5.ReadOnly = true;
+                Table2.Columns.Add(firstColumn5);
+                firstColumn4.Width = 100;
+                firstColumn5.Width = 50;
+            }
 
 
         }
@@ -5833,6 +6186,23 @@ namespace Ecoview_V2._0
                     if (selet_rezim == 1)
                     {
                         IzmerenieFR_TableSaveExcel();
+                    }
+                    else
+                    {
+                        if(selet_rezim == 6)
+                        {
+                            if (tabControl2.SelectedIndex == 0 && SposobZadan == "По СО")
+                            {
+                                SaveExcel();
+                            }
+                            else
+                            {
+                                if (tabControl2.SelectedIndex != 0 && SposobZadan == "По СО")
+                                {
+                                    SaveExcel1();
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -6029,14 +6399,32 @@ namespace Ecoview_V2._0
         }
         private void button10_Click(object sender, EventArgs e)
         {
-            if (tabControl2.SelectedIndex == 0)
+            if (selet_rezim == 2)
             {
-                NewGrad(ref CountSeriya, ref CountInSeriya);
+                if (tabControl2.SelectedIndex == 0)
+                {
+                    NewGrad(ref CountSeriya, ref CountInSeriya);
+                }
+                else
+                {
+                    NewIzmer();
+                }
             }
             else
             {
-                NewIzmer();
+                if (selet_rezim == 6)
+                {                   
+                    if (tabControl2.SelectedIndex == 0)
+                    {
+                        NewGrad(ref CountSeriya, ref CountInSeriya);
+                    }
+                    else
+                    {
+                        ///NewIzmerenie();
+                    }
+                }
             }
+
         }
         public void NewGrad(ref string CountSeriya, ref string CountInSeriya)
         {
@@ -6063,9 +6451,9 @@ namespace Ecoview_V2._0
                 label6.Text = dateTimePicker1.Value.AddDays(Days).ToString("dd.MM.yyyy");
                 if (_NewGraduirovka.radioButton7.Checked == true)
                 {
-                    this.textBox4.Text = string.Format("{0:0.0000}", _NewGraduirovka.k0Text.Text);
-                    this.textBox5.Text = string.Format("{0:0.0000}", _NewGraduirovka.k1Text.Text);
-                    this.textBox6.Text = string.Format("{0:0.0000}", _NewGraduirovka.k2Text.Text);
+                    this.AgroText0.Text = string.Format("{0:0.0000}", _NewGraduirovka.k0Text.Text);
+                    this.AgroText1.Text = string.Format("{0:0.0000}", _NewGraduirovka.k1Text.Text);
+                    this.AgroText2.Text = string.Format("{0:0.0000}", _NewGraduirovka.k2Text.Text);
 
 
                 }
@@ -6119,12 +6507,12 @@ namespace Ecoview_V2._0
                 else
                 {
                     SposobZadan = "Ввод коэффициентов";
-                    textBox4.Text = _NewGraduirovka.k0Text.Text;
-                    textBox5.Text = _NewGraduirovka.k1Text.Text;
-                    textBox6.Text = _NewGraduirovka.k2Text.Text;
-                    k0 = Convert.ToDouble(textBox4.Text);
-                    k1 = Convert.ToDouble(textBox5.Text);
-                    k2 = Convert.ToDouble(textBox6.Text);
+                    AgroText0.Text = _NewGraduirovka.k0Text.Text;
+                    AgroText1.Text = _NewGraduirovka.k1Text.Text;
+                    AgroText2.Text = _NewGraduirovka.k2Text.Text;
+                    k0 = Convert.ToDouble(AgroText0.Text);
+                    k1 = Convert.ToDouble(AgroText1.Text);
+                    k2 = Convert.ToDouble(AgroText2.Text);
                     functionA();
                 }
                 if (_NewGraduirovka.USE_KO.Checked == true)
@@ -6244,10 +6632,10 @@ namespace Ecoview_V2._0
                                         count++;
                                         MessageBox.Show("Оптическая плотность контрольногго образца не может быть больше иззмеряемого!");
                                     }
-                                   
+
                                 }
 
-                                serValue = (Convert.ToDouble(Table2.Rows[i1].Cells["A;Ser" + i].Value.ToString()) - Convert.ToDouble(Table2.Rows[0].Cells["A;Ser" + i].Value.ToString())) / Convert.ToDouble(textBox5.Text);
+                                serValue = (Convert.ToDouble(Table2.Rows[i1].Cells["A;Ser" + i].Value.ToString()) - Convert.ToDouble(Table2.Rows[0].Cells["A;Ser" + i].Value.ToString())) / Convert.ToDouble(AgroText1.Text);
                             }
                             else
                             {
@@ -6274,7 +6662,7 @@ namespace Ecoview_V2._0
                                         MessageBox.Show("Оптическая плотность контрольногго образца не может быть больше иззмеряемого!");
                                     }
                                 }
-                                serValue = ((Convert.ToDouble(Table2.Rows[i1].Cells["A;Ser" + i].Value.ToString()) - Convert.ToDouble(Table2.Rows[0].Cells["A;Ser" + i].Value.ToString()) - Convert.ToDouble(textBox4.Text))) / Convert.ToDouble(textBox5.Text);
+                                serValue = ((Convert.ToDouble(Table2.Rows[i1].Cells["A;Ser" + i].Value.ToString()) - Convert.ToDouble(Table2.Rows[0].Cells["A;Ser" + i].Value.ToString()) - Convert.ToDouble(AgroText0.Text))) / Convert.ToDouble(AgroText1.Text);
                             }
                             else
                             {
@@ -6302,7 +6690,7 @@ namespace Ecoview_V2._0
                                         MessageBox.Show("Оптическая плотность контрольногго образца не может быть больше иззмеряемого!");
                                     }
                                 }
-                                serValue = ((Convert.ToDouble(Table2.Rows[i1].Cells["A;Ser" + i].Value.ToString()) - Convert.ToDouble(Table2.Rows[0].Cells["A;Ser" + i].Value.ToString()) - Convert.ToDouble(textBox4.Text))) / (Convert.ToDouble(textBox5.Text) + Convert.ToDouble(textBox6.Text));
+                                serValue = ((Convert.ToDouble(Table2.Rows[i1].Cells["A;Ser" + i].Value.ToString()) - Convert.ToDouble(Table2.Rows[0].Cells["A;Ser" + i].Value.ToString()) - Convert.ToDouble(AgroText0.Text))) / (Convert.ToDouble(AgroText1.Text) + Convert.ToDouble(AgroText2.Text));
                             }
                             else
                             {
@@ -6330,65 +6718,78 @@ namespace Ecoview_V2._0
                         }
                         if (Convert.ToDouble(Table2.Rows[0].Cells["A;Ser" + i].Value.ToString()) > Convert.ToDouble(Table2.Rows[i1].Cells["A;Ser" + i].Value.ToString()))
                         {
-                            Table2.Rows[i1].Cells["Ccr"].Value = "";
+                            if (selet_rezim == 2)
+                            {
+                                Table2.Rows[i1].Cells["Ccr"].Value = "";
+                            }
 
                         }
                         else {
-                            CCR = SredValue / NoCaIzm1;
-                            if (Convert.ToDouble(textBox7.Text) >= 1)
+                            if (selet_rezim == 2)
                             {
-                               
-                                Table2.Rows[i1].Cells["Ccr"].Value = string.Format("{0:0.0000}", CCR) + "±" + string.Format("{0:0.0000}", ((CCR * Convert.ToDouble(textBox7.Text))) / 100);
-                            }
-                            else
-                            {
-                               
-                                Table2.Rows[i1].Cells["Ccr"].Value = string.Format("{0:0.0000}", CCR);
-                            }
-                            //Table2.Rows[j].Cells["d%"].Value = El.Max();
-                            if (Table2.Rows[i1].Cells["C,edconctr;Ser." + i].Value == null)
-                            {
-                                cellnull++;
-                            }
-                            else
-                            {
-                                if (Table2.Rows[i1].Cells["C,edconctr;Ser." + i].Value.ToString() != "")
+                                CCR = SredValue / NoCaIzm1;
+                                if (Convert.ToDouble(textBox7.Text) >= 1)
                                 {
-                                    El[i - 1] = Convert.ToDouble(Table2.Rows[i1].Cells["C,edconctr;Ser." + i].Value.ToString());
+
+                                    Table2.Rows[i1].Cells["Ccr"].Value = string.Format("{0:0.0000}", CCR) + "±" + string.Format("{0:0.0000}", ((CCR * Convert.ToDouble(textBox7.Text))) / 100);
+                                }
+                                else
+                                {
+
+                                    Table2.Rows[i1].Cells["Ccr"].Value = string.Format("{0:0.0000}", CCR);
+                                }
+
+                                //Table2.Rows[j].Cells["d%"].Value = El.Max();
+                                if (Table2.Rows[i1].Cells["C,edconctr;Ser." + i].Value == null)
+                                {
+                                    cellnull++;
+                                }
+                                else
+                                {
+                                    if (Table2.Rows[i1].Cells["C,edconctr;Ser." + i].Value.ToString() != "")
+                                    {
+                                        El[i - 1] = Convert.ToDouble(Table2.Rows[i1].Cells["C,edconctr;Ser." + i].Value.ToString());
+                                    }
                                 }
                             }
                         }
 
 
 
-                     
+
                     }
                 }
-                Array.Sort(El);
-                maxEl = El[El.Length - 1];
-                minEl = El[0];
-                double a = ((maxEl - minEl) * 100) / Convert.ToDouble(CCR);
-                double b = a;
-
-
-                if (minEl == 0)
+                if (selet_rezim == 2)
                 {
-                    Table2.Rows[i1].Cells["d%"].Value = 0.0000;
-                }
-                else
-                {
-                    Table2.Rows[i1].Cells["d%"].Value = string.Format("{0:0.0}", b);
+                    Array.Sort(El);
+                    maxEl = El[El.Length - 1];
+                    minEl = El[0];
+                    double a = ((maxEl - minEl) * 100) / Convert.ToDouble(CCR);
+                    double b = a;
 
+
+                    if (minEl == 0)
+                    {
+                        Table2.Rows[i1].Cells["d%"].Value = 0.0000;
+                    }
+                    else
+                    {
+                        Table2.Rows[i1].Cells["d%"].Value = string.Format("{0:0.0}", b);
+
+                    }
                 }
             }
                 for (int i1 = 1; i1 <= NoCaIzm1; i1++)
                 {
                     Table2.Rows[0].Cells["C,edconctr;Ser." + i1].Value = "";
-                    Table2.Rows[0].Cells["Ccr"].Value = "";
-                    Table2.Rows[0].Cells["d%"].Value = "";
+                    if (selet_rezim == 2)
+                    {
+                        Table2.Rows[0].Cells["Ccr"].Value = "";
+                        Table2.Rows[0].Cells["d%"].Value = "";
+                    }
                 }
-            
-            
+
+
         }
         private void параметрыToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -6427,6 +6828,27 @@ namespace Ecoview_V2._0
                 if(selet_rezim == 1)
                 {
                     IzmerenieFRSavePDF();
+                }
+                else
+                {
+                    if(selet_rezim == 6)
+                    {
+                        if (tabControl2.SelectedIndex == 0 && SposobZadan == "По СО")
+                        {
+                            SaveToPdf();
+                        }
+                        else
+                        {
+                            if (tabControl2.SelectedIndex == 0 && SposobZadan != "По СО")
+                            {
+                                SaveToPdf1();
+                            }
+                            else
+                            {
+                                SaveTpPdf2();
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -7094,8 +7516,11 @@ namespace Ecoview_V2._0
             for (int i = 1; i <= NoCaIzm1; i++)
             {
                 Table2.Rows[0].Cells["C,edconctr;Ser." + i].ReadOnly = true;
-                Table2.Rows[0].Cells["Ccr"].ReadOnly = true;
-                Table2.Rows[0].Cells["d%"].ReadOnly = true;
+                if (selet_rezim == 2)
+                {
+                    Table2.Rows[0].Cells["Ccr"].ReadOnly = true;
+                    Table2.Rows[0].Cells["d%"].ReadOnly = true;
+                }
             }
             Table2.Rows[Table2.RowCount-1].ReadOnly = true;
             button11.Enabled = true;
@@ -7146,7 +7571,29 @@ namespace Ecoview_V2._0
                     {
                         IzmerenieFR_TablePrintDoc();
                     }
+                    else
+                    {
+                        if(selet_rezim == 6)
+                        {
+                            if (tabControl2.SelectedIndex == 0 && SposobZadan == "По СО")
+                            {
+                                PrintDoc();
+                            }
+                            else
+                            {
+                                if (tabControl2.SelectedIndex == 0 && SposobZadan != "По СО")
+                                {
+                                    PrintDoc1();
+                                }
+                                else
+                                {
+                                    PrintDoc2();
+                                }
+                            }
+                        }
+                    }
                 }
+
             }
             else
             {
@@ -8606,7 +9053,219 @@ namespace Ecoview_V2._0
                         MessageBox.Show("Данная опреция невозможна! Создайте новое измерение!");
                     }
                 }
+                else
+                {
+                    if(selet_rezim == 6)
+                    {
+                        if (tabControl2.SelectedIndex == 0)
+                        {
+                            if (Table1.RowCount > 1)
+                            {
+                                if (textBox10.Text != GWNew.Text)
+                                {
+                                    MessageBox.Show("Длина волны градуировки отличается от длины волны, установленной на приборе!\rИзмените настройки градуировки!");
+                                }
+                                Graduirovka(sender, e);
+                            }
+                            else
+                            {
+                                MessageBox.Show("Создайте градуировку по СО");
+                            }
+                        }
+
+
+                        else
+                        {
+                           if (Table2.RowCount > 1)
+                            {
+                                if (textBox10.Text != GWNew.Text)
+                                {
+                                    MessageBox.Show("Длина волны градуировки отличается от длины волны, установленной на приборе!\rИзмените настройки градуировки!");
+                                }
+                                Table2.Rows[0].ReadOnly = true;
+                                if (Table2.Rows[Table2.CurrentCell.RowIndex].ReadOnly == true)
+                                {
+                                    Table2.CurrentCell = this.Table2[2, Table2.CurrentCell.RowIndex + 1];
+                                }
+                                //Izmerenie(sender, e);
+                                while (StopAgro == false)
+                                {
+                                    Application.DoEvents();
+                                    Izmerenie(sender, e);
+                                    if (selet_rezim == 6)
+                                    {
+
+                                        Table2.Rows[Table2.CurrentCell.RowIndex].Cells["Obrazec"].Value = "Образец " + Table2.CurrentCell.RowIndex;
+                                        Table2.Rows.Add();
+                                        Table2.Rows[Table2.CurrentCell.RowIndex + 1].ReadOnly = false;
+                                        Table2.Rows[Table2.CurrentCell.RowIndex + 1].Cells["Column1"].Value =
+                                            Table2.CurrentCell.RowIndex + 1;
+                                        Table2.Rows[Table2.CurrentCell.RowIndex + 1].Cells["Column1"].ReadOnly = true;
+                                    }
+                                    Application.DoEvents();
+                                }
+                            }
+                            else
+                            {
+                                MessageBox.Show("Создайте измерение");
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if(selet_rezim == 5)
+                        {
+                            if (scan_mass != null)
+                            {
+                                TableScan();
+                            }
+                            else
+                            {
+                                MessageBox.Show("Вы забыли откалиброваться! Откалибруйтесь!");
+                            }
+                        }
+                    }
+                }
             }
+        }
+        int countscan = 0;
+        public void TableScan()
+        {
+            ///MessageBox.Show(Convert.ToString(scan_mass));
+            /*for (int i = 0; i < scan_mass.Length; i++)
+            {
+                listBox1.Items.Add(scan_mass[i].ToString());
+            }*/
+            double[] massWL = new double[ScanTable.Rows.Count - 1];
+            double[] massGE = new double[ScanTable.Rows.Count - 1];
+            countscan = 0;
+            ScanChart.Series[0].Points.Clear();
+            ScanChart.Series[1].Points.Clear();
+          //  ScanChart.ChartAreas[0].AxisX.MajorGrid.Interval = Convert.ToDouble(string.Format("{0:0.0}", ScanTable.Rows[0].Cells[0].Value)) - Convert.ToDouble(string.Format("{0:0.0}", ScanTable.Rows[1].Cells[0].Value));
+            
+            while (countscan != ScanTable.Rows.Count-1)
+            {
+                SW_Scan();
+                string GE5Izmer = "";
+                string GE5_1_1 = "";
+                newPort.Write("SA " + scan_massSA[countscan] + "\r");
+                string indata = newPort.ReadExisting();
+                string indata_0;
+                bool indata_bool = true;
+                while (indata_bool == true)
+                {
+                    if (indata.Contains(">"))
+                    {
+                        indata_bool = false;
+                    }
+
+                    else
+                    {
+                        indata = newPort.ReadExisting();
+                    }
+                }
+
+                newPort.Write("GE 1\r");
+
+                GE5Izmer = "";
+                int GEbyteRecieved4_1 = newPort.ReadBufferSize;
+                byte[] GEbuffer4_1 = new byte[GEbyteRecieved4_1];
+                newPort.Read(GEbuffer4_1, 0, GEbyteRecieved4_1);
+
+                indata = newPort.ReadExisting();
+
+                indata_0 = "";
+                indata_bool = true;
+                while (indata_bool == true)
+                {
+                    if (indata.Contains(">"))
+                    {
+                        indata_bool = false;
+                    }
+
+                    else
+                    {
+                        indata = newPort.ReadExisting();
+                        indata_0 += indata;
+                    }
+                }
+                Regex regex = new Regex(@"\W");
+                GE5Izmer = regex.Replace(indata_0, "");
+                //  MessageBox.Show("Измерение: " + GE5Izmer + "\rКалибровка: " + GE5_1_0 + "\rОтклонение: " + Convert.ToString(Convert.ToDouble(GE5_1_0) / (Convert.ToDouble(GE5Izmer))) +
+                //    "\rПоправочный коэффициент: " + RDstring[countSA]);
+                GEText.Text = GE5Izmer;
+                double Aser = Convert.ToDouble(GE5Izmer) / Convert.ToDouble(scan_mass[countscan]) * 100;
+                double OptPlot1 = 0;
+                //MessageBox.Show(RDstring[countSA]);
+                OptPlot1 = Math.Log10((Convert.ToDouble(scan_mass[countscan]) - Convert.ToDouble(RDstring[countSA])) / (Convert.ToDouble(GE5Izmer) - Convert.ToDouble(RDstring[countSA])));
+                double OptPlot1_1 = OptPlot1;
+                Application.DoEvents();
+                if (ScanTable.Columns["Abs_scan"].HeaderText == "Abs")
+                {
+                    ScanTable.Rows[countscan].Cells[1].Value = string.Format("{0:0.0000}", OptPlot1_1);
+                }
+                else
+                {
+                    ScanTable.Rows[countscan].Cells[1].Value = string.Format("{0:0.0}", ((Convert.ToDouble(scan_mass[countscan]) - Convert.ToDouble(RDstring[countSA])) / (Convert.ToDouble(GE5Izmer) - Convert.ToDouble(RDstring[countSA]))) * 100); ;
+                }
+                massWL[countscan] = Convert.ToDouble(ScanTable.Rows[countscan].Cells[0].Value);
+                massGE[countscan] = Convert.ToDouble(ScanTable.Rows[countscan].Cells[1].Value);
+                countscan++;
+            }
+            Array.Sort(massWL);
+            Array.Sort(massGE);
+            while (countscan != 0)
+            {
+               /* */
+
+                double x1 = Convert.ToDouble(ScanTable.Rows[countscan].Cells[0].Value);
+                double y1 = Convert.ToDouble(ScanTable.Rows[countscan].Cells[1].Value);
+                ScanChart.Series[0].Points.AddXY(x1, y1);
+                ScanChart.Series[0].ChartType = SeriesChartType.Point;
+                ScanChart.ChartAreas[0].AxisY.Crossing = 0;
+                ScanChart.ChartAreas[0].AxisX.Crossing = 0;
+                ScanChart.Series[1].Points.AddXY(x1, y1);
+                ScanChart.Series[1].ChartType = SeriesChartType.Line;
+                if (ScanTable.Rows[countscan].Cells["Abs_scan"].Value != null)
+                {
+                    ScanChart.ChartAreas[0].AxisX.Minimum = massWL[0];
+                    ScanChart.ChartAreas[0].AxisY.Minimum = massGE[0];
+                }
+                ScanChart.ChartAreas[0].AxisX.MajorGrid.Enabled = false;
+                ScanChart.ChartAreas[0].AxisY.MajorGrid.Enabled = false;
+                ScanChart.ChartAreas[0].AxisX.Title = ScanTable.Columns["WalveDl"].HeaderText;
+                ScanChart.ChartAreas[0].AxisY.Title = ScanTable.Columns["Abs_scan"].HeaderText;
+                countscan--;
+            }
+        }
+        public void SW_Scan()
+        {
+            LogoForm();
+            string SWText1 = ScanTable.Rows[countscan].Cells[0].Value.ToString();
+            double Walve_double = Convert.ToDouble(ScanTable.Rows[countscan].Cells[0].Value.ToString().Replace(".", ","));
+            newPort.Write("SW " + Walve_double.ToString(System.Globalization.CultureInfo.GetCultureInfo("en-US")) + "\r");
+          //  Thread.Sleep(2000);
+            string indata = newPort.ReadExisting();
+
+            bool indata_bool = true;
+            while (indata_bool == true)
+            {
+                if (indata.Contains(">"))
+                {
+
+                    indata_bool = false;
+
+                }
+
+                else
+                {
+                    indata = newPort.ReadExisting();
+                }
+            }
+            GWNew.Text = string.Format("{0:0.0}", ScanTable.Rows[countscan].Cells[0].Value.ToString());
+            SWF.Application.OpenForms["LogoFrm"].Close();
+            //Thread.Sleep(2000);
+            // _Analis.GW();
         }
         public void IzmerenieFr_izmer()
         {
@@ -9052,22 +9711,31 @@ namespace Ecoview_V2._0
             double OptPlot1 = Math.Log10((Convert.ToDouble(GE5_1_0) - Convert.ToDouble(RDstring[countSA])) / (Convert.ToDouble(GE5Izmer) - Convert.ToDouble(RDstring[countSA])));
 
             double OptPlot1_1 = OptPlot1 - Math.Truncate(OptPlot1);
-
-            if (Table2.CurrentCell.ReadOnly != true)
-
+            
+            if (selet_rezim == 6)
             {
-
-                Table2.CurrentCell.Value = string.Format("{0:0.0000}", OptPlot1_1);
+                Table2.Rows[0].ReadOnly = true;
+                if (Table2.Rows[Table2.CurrentCell.RowIndex].ReadOnly == true)
+                {
+                    Table2.CurrentCell = this.Table2[2, Table2.CurrentCell.RowIndex + 1];
+                }
             }
+            else {
+                if (Table2.CurrentCell.ReadOnly != true)
 
-            else
+                {
 
-            {
+                    Table2.CurrentCell.Value = string.Format("{0:0.0000}", OptPlot1_1);
+                }
 
-                MessageBox.Show("Запись запрещена!");
+                else
 
+                {
+
+                    MessageBox.Show("Запись запрещена!");
+
+                }
             }
-
 
 
             GAText.Text = string.Format("{0:0.00}", Aser);
@@ -9102,7 +9770,7 @@ namespace Ecoview_V2._0
                             {
                                 if (Table2.Rows[Table2.CurrentCell.RowIndex].Cells["A;Ser" + i1].Value.ToString() != "")
                                 {
-                                    serValue = Convert.ToDouble(Table2.Rows[Table2.CurrentCell.RowIndex].Cells["A;Ser" + i1].Value.ToString()) / Convert.ToDouble(textBox5.Text);
+                                    serValue = Convert.ToDouble(Table2.Rows[Table2.CurrentCell.RowIndex].Cells["A;Ser" + i1].Value.ToString()) / Convert.ToDouble(AgroText1.Text);
                                 }
                                 else
                                 {
@@ -9114,7 +9782,7 @@ namespace Ecoview_V2._0
                             {
                                 if (Table2.Rows[Table2.CurrentCell.RowIndex].Cells["A;Ser" + i1].Value.ToString() != "")
                                 {
-                                    serValue = ((Convert.ToDouble(Table2.Rows[Table2.CurrentCell.RowIndex].Cells["A;Ser" + i1].Value.ToString()) - Convert.ToDouble(textBox4.Text))) / Convert.ToDouble(textBox5.Text);
+                                    serValue = ((Convert.ToDouble(Table2.Rows[Table2.CurrentCell.RowIndex].Cells["A;Ser" + i1].Value.ToString()) - Convert.ToDouble(AgroText0.Text))) / Convert.ToDouble(AgroText1.Text);
                                 }
                                 else
                                 {
@@ -9125,7 +9793,7 @@ namespace Ecoview_V2._0
                             {
                                 if (Table2.Rows[Table2.CurrentCell.RowIndex].Cells["A;Ser" + i1].Value.ToString() != "")
                                 {
-                                    serValue = ((Convert.ToDouble(Table2.Rows[Table2.CurrentCell.RowIndex].Cells["A;Ser" + i1].Value.ToString()) - Convert.ToDouble(textBox4.Text))) / (Convert.ToDouble(textBox5.Text) + Convert.ToDouble(textBox6.Text));
+                                    serValue = ((Convert.ToDouble(Table2.Rows[Table2.CurrentCell.RowIndex].Cells["A;Ser" + i1].Value.ToString()) - Convert.ToDouble(AgroText0.Text))) / (Convert.ToDouble(AgroText1.Text) + Convert.ToDouble(AgroText2.Text));
                                 }
                                 else
                                 {
@@ -9191,8 +9859,11 @@ namespace Ecoview_V2._0
                 for (int i1 = 1; i1 <= NoCaIzm1; i1++)
                 {
                     Table2.Rows[0].Cells["C,edconctr;Ser." + i1].ReadOnly = true;
-                    Table2.Rows[0].Cells["Ccr"].ReadOnly = true;
-                    Table2.Rows[0].Cells["d%"].ReadOnly = true;
+                    if (selet_rezim == 2)
+                    {
+                        Table2.Rows[0].Cells["Ccr"].ReadOnly = true;
+                        Table2.Rows[0].Cells["d%"].ReadOnly = true;
+                    }
                 }
                 if (Table2.CurrentCell.Value == null && Table2.CurrentCell.ReadOnly != true)
                 {
@@ -9232,7 +9903,7 @@ namespace Ecoview_V2._0
                             {
                                 if (Table2.Rows[Table2.CurrentCell.RowIndex].Cells["A;Ser" + i1].Value.ToString() != "")
                                 {
-                                    serValue = Convert.ToDouble(Table2.Rows[Table2.CurrentCell.RowIndex].Cells["A;Ser" + i1].Value.ToString()) / Convert.ToDouble(textBox5.Text);
+                                    serValue = Convert.ToDouble(Table2.Rows[Table2.CurrentCell.RowIndex].Cells["A;Ser" + i1].Value.ToString()) / Convert.ToDouble(AgroText1.Text);
                                 }
                                 else
                                 {
@@ -9244,7 +9915,7 @@ namespace Ecoview_V2._0
                             {
                                 if (Table2.Rows[Table2.CurrentCell.RowIndex].Cells["A;Ser" + i1].Value.ToString() != "")
                                 {
-                                    serValue = ((Convert.ToDouble(Table2.Rows[Table2.CurrentCell.RowIndex].Cells["A;Ser" + i1].Value.ToString()) - Convert.ToDouble(textBox4.Text))) / Convert.ToDouble(textBox5.Text);
+                                    serValue = ((Convert.ToDouble(Table2.Rows[Table2.CurrentCell.RowIndex].Cells["A;Ser" + i1].Value.ToString()) - Convert.ToDouble(AgroText0.Text))) / Convert.ToDouble(AgroText1.Text);
                                 }
                                 else
                                 {
@@ -9255,7 +9926,7 @@ namespace Ecoview_V2._0
                             {
                                 if (Table2.Rows[Table2.CurrentCell.RowIndex].Cells["A;Ser" + i1].Value.ToString() != "")
                                 {
-                                    serValue = ((Convert.ToDouble(Table2.Rows[Table2.CurrentCell.RowIndex].Cells["A;Ser" + i1].Value.ToString()) - Convert.ToDouble(textBox4.Text))) / (Convert.ToDouble(textBox5.Text) + Convert.ToDouble(textBox6.Text));
+                                    serValue = ((Convert.ToDouble(Table2.Rows[Table2.CurrentCell.RowIndex].Cells["A;Ser" + i1].Value.ToString()) - Convert.ToDouble(AgroText0.Text))) / (Convert.ToDouble(AgroText1.Text) + Convert.ToDouble(AgroText2.Text));
                                 }
                                 else
                                 {
@@ -9429,7 +10100,7 @@ namespace Ecoview_V2._0
                             {
                                 if (Table2.Rows[Table2.CurrentCell.RowIndex].Cells["A;Ser" + i1].Value.ToString() != "")
                                 {
-                                    serValue = Convert.ToDouble(Table2.Rows[Table2.CurrentCell.RowIndex].Cells["A;Ser" + i1].Value.ToString()) / Convert.ToDouble(textBox5.Text);
+                                    serValue = Convert.ToDouble(Table2.Rows[Table2.CurrentCell.RowIndex].Cells["A;Ser" + i1].Value.ToString()) / Convert.ToDouble(AgroText1.Text);
                                 }
                                 else
                                 {
@@ -9441,7 +10112,7 @@ namespace Ecoview_V2._0
                             {
                                 if (Table2.Rows[Table2.CurrentCell.RowIndex].Cells["A;Ser" + i1].Value.ToString() != "")
                                 {
-                                    serValue = ((Convert.ToDouble(Table2.Rows[Table2.CurrentCell.RowIndex].Cells["A;Ser" + i1].Value.ToString()) - Convert.ToDouble(textBox4.Text))) / Convert.ToDouble(textBox5.Text);
+                                    serValue = ((Convert.ToDouble(Table2.Rows[Table2.CurrentCell.RowIndex].Cells["A;Ser" + i1].Value.ToString()) - Convert.ToDouble(AgroText0.Text))) / Convert.ToDouble(AgroText1.Text);
                                 }
                                 else
                                 {
@@ -9452,7 +10123,7 @@ namespace Ecoview_V2._0
                             {
                                 if (Table2.Rows[Table2.CurrentCell.RowIndex].Cells["A;Ser" + i1].Value.ToString() != "")
                                 {
-                                    serValue = ((Convert.ToDouble(Table2.Rows[Table2.CurrentCell.RowIndex].Cells["A;Ser" + i1].Value.ToString()) - Convert.ToDouble(textBox4.Text))) / (Convert.ToDouble(textBox5.Text) + Convert.ToDouble(textBox6.Text));
+                                    serValue = ((Convert.ToDouble(Table2.Rows[Table2.CurrentCell.RowIndex].Cells["A;Ser" + i1].Value.ToString()) - Convert.ToDouble(AgroText0.Text))) / (Convert.ToDouble(AgroText1.Text) + Convert.ToDouble(AgroText2.Text));
                                 }
                                 else
                                 {
@@ -9545,7 +10216,7 @@ namespace Ecoview_V2._0
                                 {
                                     if (Table2.Rows[0].Cells["A;Ser" + i1].Value.ToString() != "" && Table2.Rows[j].Cells["A;Ser" + i1].Value.ToString() != "")
                                     {
-                                        serValue = (Convert.ToDouble(Table2.Rows[j].Cells["A;Ser" + i1].Value.ToString()) - Convert.ToDouble(Table2.Rows[0].Cells["A;Ser" + i1].Value.ToString())) / Convert.ToDouble(textBox5.Text);
+                                        serValue = (Convert.ToDouble(Table2.Rows[j].Cells["A;Ser" + i1].Value.ToString()) - Convert.ToDouble(Table2.Rows[0].Cells["A;Ser" + i1].Value.ToString())) / Convert.ToDouble(AgroText1.Text);
                                     }
                                     else
                                     {
@@ -9564,7 +10235,7 @@ namespace Ecoview_V2._0
                                 {
                                     if (Table2.Rows[0].Cells["A;Ser" + i1].Value.ToString() != "" && Table2.Rows[j].Cells["A;Ser" + i1].Value.ToString() != "")
                                     {
-                                        serValue = ((Convert.ToDouble(Table2.Rows[j].Cells["A;Ser" + i1].Value.ToString()) - Convert.ToDouble(Table2.Rows[0].Cells["A;Ser" + i1].Value.ToString()) - Convert.ToDouble(textBox4.Text))) / Convert.ToDouble(textBox5.Text);
+                                        serValue = ((Convert.ToDouble(Table2.Rows[j].Cells["A;Ser" + i1].Value.ToString()) - Convert.ToDouble(Table2.Rows[0].Cells["A;Ser" + i1].Value.ToString()) - Convert.ToDouble(AgroText0.Text))) / Convert.ToDouble(AgroText1.Text);
                                     }
                                     else
                                     {
@@ -9584,7 +10255,7 @@ namespace Ecoview_V2._0
                                 {
                                     if (Table2.Rows[0].Cells["A;Ser" + i1].Value.ToString() != "" && Table2.Rows[j].Cells["A;Ser" + i1].Value.ToString() != "")
                                     {
-                                        serValue = ((Convert.ToDouble(Table2.Rows[j].Cells["A;Ser" + i1].Value.ToString()) - Convert.ToDouble(Table2.Rows[0].Cells["A;Ser" + i1].Value.ToString()) - Convert.ToDouble(textBox4.Text))) / (Convert.ToDouble(textBox5.Text) + Convert.ToDouble(textBox6.Text));
+                                        serValue = ((Convert.ToDouble(Table2.Rows[j].Cells["A;Ser" + i1].Value.ToString()) - Convert.ToDouble(Table2.Rows[0].Cells["A;Ser" + i1].Value.ToString()) - Convert.ToDouble(AgroText0.Text))) / (Convert.ToDouble(AgroText1.Text) + Convert.ToDouble(AgroText2.Text));
                                     }
                                     else
                                     {
@@ -9698,7 +10369,7 @@ namespace Ecoview_V2._0
                                 if (Table2.Rows[Table2.CurrentCell.RowIndex].Cells["A;Ser" + i1].Value.ToString() != "")
                                 {
 
-                                    serValue = Convert.ToDouble(Table2.Rows[Table2.CurrentCell.RowIndex].Cells["A;Ser" + i1].Value.ToString()) / Convert.ToDouble(textBox5.Text);
+                                    serValue = Convert.ToDouble(Table2.Rows[Table2.CurrentCell.RowIndex].Cells["A;Ser" + i1].Value.ToString()) / Convert.ToDouble(AgroText1.Text);
                                 }
                                 else
                                 {
@@ -9710,7 +10381,7 @@ namespace Ecoview_V2._0
                             {
                                 if (Table2.Rows[Table2.CurrentCell.RowIndex].Cells["A;Ser" + i1].Value.ToString() != "")
                                 {
-                                    serValue = ((Convert.ToDouble(Table2.Rows[Table2.CurrentCell.RowIndex].Cells["A;Ser" + i1].Value.ToString()) - Convert.ToDouble(textBox4.Text))) / Convert.ToDouble(textBox5.Text);
+                                    serValue = ((Convert.ToDouble(Table2.Rows[Table2.CurrentCell.RowIndex].Cells["A;Ser" + i1].Value.ToString()) - Convert.ToDouble(AgroText0.Text))) / Convert.ToDouble(AgroText1.Text);
                                 }
                                 else
                                 {
@@ -9721,7 +10392,7 @@ namespace Ecoview_V2._0
                             {
                                 if (Table2.Rows[Table2.CurrentCell.RowIndex].Cells["A;Ser" + i1].Value.ToString() != "")
                                 {
-                                    serValue = ((Convert.ToDouble(Table2.Rows[Table2.CurrentCell.RowIndex].Cells["A;Ser" + i1].Value.ToString()) - Convert.ToDouble(textBox4.Text))) / (Convert.ToDouble(textBox5.Text) + Convert.ToDouble(textBox6.Text));
+                                    serValue = ((Convert.ToDouble(Table2.Rows[Table2.CurrentCell.RowIndex].Cells["A;Ser" + i1].Value.ToString()) - Convert.ToDouble(AgroText0.Text))) / (Convert.ToDouble(AgroText1.Text) + Convert.ToDouble(AgroText2.Text));
                                 }
                                 else
                                 {
@@ -9842,7 +10513,24 @@ namespace Ecoview_V2._0
         }
         public void Calibrovka()
         {
-            SAGE(ref countSA, ref GE5_1_0);
+            if(selet_rezim == 5)
+            {
+                countscan = 0;
+                scan_massSA = new double[ScanTable.Rows.Count - 1];
+                scan_mass = new double[ScanTable.Rows.Count-1];
+                while (countscan != ScanTable.Rows.Count - 1)
+                {
+                    SAGEScan(ref countSA, ref GE5_1_0);
+                    countscan++;
+                }
+                MessageBox.Show("Калибровка закончена!");
+            }
+            else
+            {
+                SAGE(ref countSA, ref GE5_1_0);
+            }
+            
+
         }
 
         private void калибровкаToolStripMenuItem_Click(object sender, EventArgs e)
@@ -9868,9 +10556,9 @@ namespace Ecoview_V2._0
         {
             if (Table2.RowCount == 0)
             {
-                k0_1 = Convert.ToDouble(textBox4.Text);
-                k1_1 = Convert.ToDouble(textBox5.Text);
-                k2_1 = Convert.ToDouble(textBox6.Text);
+                k0_1 = Convert.ToDouble(AgroText0.Text);
+                k1_1 = Convert.ToDouble(AgroText1.Text);
+                k2_1 = Convert.ToDouble(AgroText2.Text);
                 USE_KO_1 = USE_KO;
                 button11.Enabled = false;
             }
@@ -9883,12 +10571,12 @@ namespace Ecoview_V2._0
                 label26.Visible = true;
                 label28.Visible = false;
                 label33.Visible = false;
-                if (Table2.RowCount > 0 && (k0_1 != Convert.ToDouble(textBox4.Text) || k1_1 != Convert.ToDouble(textBox5.Text) || k2_1 != Convert.ToDouble(textBox6.Text) || USE_KO_1 != USE_KO))
+                if (Table2.RowCount > 0 && (k0_1 != Convert.ToDouble(AgroText0.Text) || k1_1 != Convert.ToDouble(AgroText1.Text) || k2_1 != Convert.ToDouble(AgroText2.Text) || USE_KO_1 != USE_KO))
                 {
                     MessageBox.Show("Внимание: Грдуировка была изменена! Таблица Измерений будет пересчитана по новым коэффициентам!");
-                    k0_1 = Convert.ToDouble(string.Format("{0:0.0000}", textBox4.Text));
-                    k1_1 = Convert.ToDouble(string.Format("{0:0.0000}", textBox5.Text));
-                    k2_1 = Convert.ToDouble(string.Format("{0:0.0000}", textBox6.Text));
+                    k0_1 = Convert.ToDouble(string.Format("{0:0.0000}", AgroText0.Text));
+                    k1_1 = Convert.ToDouble(string.Format("{0:0.0000}", AgroText1.Text));
+                    k2_1 = Convert.ToDouble(string.Format("{0:0.0000}", AgroText2.Text));
                     if (USE_KO_1 != USE_KO && USE_KO == false)
                     {
                         Table2.Rows.RemoveAt(0);
@@ -9923,12 +10611,12 @@ namespace Ecoview_V2._0
                     label26.Visible = false;
                     label28.Visible = true;
                     label33.Visible = true;
-                    if (Table2.RowCount > 0 && (k0_1 != Convert.ToDouble(textBox4.Text) || k1_1 != Convert.ToDouble(textBox5.Text) || k2_1 != Convert.ToDouble(textBox6.Text) || USE_KO_1 != USE_KO))
+                    if (Table2.RowCount > 0 && (k0_1 != Convert.ToDouble(AgroText0.Text) || k1_1 != Convert.ToDouble(AgroText1.Text) || k2_1 != Convert.ToDouble(AgroText2.Text) || USE_KO_1 != USE_KO))
                     {
                         MessageBox.Show("Внимание: Грдуировка была изменена! Таблица Измерений будет пересчитана по новым коэффициентам!");
-                        k0_1 = Convert.ToDouble(string.Format("{0:0.0000}", textBox4.Text));
-                        k1_1 = Convert.ToDouble(string.Format("{0:0.0000}", textBox5.Text));
-                        k2_1 = Convert.ToDouble(string.Format("{0:0.0000}", textBox6.Text));
+                        k0_1 = Convert.ToDouble(string.Format("{0:0.0000}", AgroText0.Text));
+                        k1_1 = Convert.ToDouble(string.Format("{0:0.0000}", AgroText1.Text));
+                        k2_1 = Convert.ToDouble(string.Format("{0:0.0000}", AgroText2.Text));
                         if (USE_KO_1 != USE_KO && USE_KO == false)
                         {
                             Table2.Rows.RemoveAt(0);
@@ -10197,6 +10885,31 @@ namespace Ecoview_V2._0
                         }
                     }
                 }
+                else
+                {
+                    if (selet_rezim == 6)
+                    {
+                        if (tabControl2.SelectedIndex == 0)
+                        {
+                            if (Table1.CurrentCell.ColumnIndex >= 3 && Table1.CurrentCell.ReadOnly != true)
+                            {
+
+                                if (Table1.CurrentCell.Value != "" && Table1.CurrentCell.Value != null)
+                                {
+                                    CellOpt = Convert.ToDouble(Table1.CurrentCell.Value.ToString());
+                                }
+
+                                ZapicInTable1();
+
+                            }
+                        }
+                        else
+                        {
+                            StopAgro = true;
+                        }
+                    }
+                }
+                    
             }
         }
         public void IzmerenieFR_Table_Zapic()
@@ -10281,6 +10994,11 @@ namespace Ecoview_V2._0
             {
                 MessageBox.Show("Таблица не содержит строк!");
             }
+        }
+
+        private void tabPage7_Click(object sender, EventArgs e)
+        {
+
         }
 
         public void SaveTpPdf2()

@@ -196,5 +196,10 @@ namespace Ecoview_V2._0
                 Application.Exit();
             }
         }
+
+        private void IzmerenieFR_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

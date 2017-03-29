@@ -145,6 +145,7 @@
             this.k1Text.Name = "k1Text";
             this.k1Text.Size = new System.Drawing.Size(151, 20);
             this.k1Text.TabIndex = 11;
+            this.k1Text.TextChanged += new System.EventHandler(this.k1Text_TextChanged);
             this.k1Text.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.k1Text_KeyPress);
             // 
             // k0Text
@@ -153,11 +154,14 @@
             this.k0Text.Name = "k0Text";
             this.k0Text.Size = new System.Drawing.Size(151, 20);
             this.k0Text.TabIndex = 10;
+            this.k0Text.TextChanged += new System.EventHandler(this.k0Text_TextChanged);
             this.k0Text.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.k0Text_KeyPress);
             // 
             // USE_KO
             // 
             this.USE_KO.AutoSize = true;
+            this.USE_KO.Checked = true;
+            this.USE_KO.CheckState = System.Windows.Forms.CheckState.Checked;
             this.USE_KO.Location = new System.Drawing.Point(36, 255);
             this.USE_KO.Name = "USE_KO";
             this.USE_KO.Size = new System.Drawing.Size(215, 17);
@@ -165,6 +169,7 @@
             this.USE_KO.Text = "Использовать контрольный опыт КО";
             this.USE_KO.UseVisualStyleBackColor = true;
             this.USE_KO.CheckedChanged += new System.EventHandler(this.USE_KO_CheckedChanged);
+            this.USE_KO.Click += new System.EventHandler(this.USE_KO_Click);
             // 
             // Description
             // 
@@ -172,6 +177,7 @@
             this.Description.Name = "Description";
             this.Description.Size = new System.Drawing.Size(883, 20);
             this.Description.TabIndex = 0;
+            this.Description.TextChanged += new System.EventHandler(this.Description_TextChanged);
             // 
             // k2Text
             // 
@@ -179,6 +185,7 @@
             this.k2Text.Name = "k2Text";
             this.k2Text.Size = new System.Drawing.Size(151, 20);
             this.k2Text.TabIndex = 12;
+            this.k2Text.TextChanged += new System.EventHandler(this.k2Text_TextChanged);
             this.k2Text.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.k2Text_KeyPress);
             // 
             // Cancel
@@ -203,6 +210,7 @@
             this.groupBox8.TabIndex = 60;
             this.groupBox8.TabStop = false;
             this.groupBox8.Text = "Граница обнаружения";
+            this.groupBox8.Enter += new System.EventHandler(this.groupBox8_Enter);
             // 
             // label14
             // 
@@ -212,6 +220,7 @@
             this.label14.Size = new System.Drawing.Size(49, 13);
             this.label14.TabIndex = 3;
             this.label14.Text = "Верхняя";
+            this.label14.Click += new System.EventHandler(this.label14_Click);
             // 
             // label13
             // 
@@ -221,6 +230,7 @@
             this.label13.Size = new System.Drawing.Size(47, 13);
             this.label13.TabIndex = 2;
             this.label13.Text = "Нижняя";
+            this.label13.Click += new System.EventHandler(this.label13_Click);
             // 
             // Up
             // 
@@ -229,6 +239,7 @@
             this.Up.Size = new System.Drawing.Size(203, 20);
             this.Up.TabIndex = 1;
             this.Up.Text = "0,00";
+            this.Up.TextChanged += new System.EventHandler(this.Up_TextChanged);
             this.Up.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Up_KeyPress);
             // 
             // Down
@@ -238,6 +249,7 @@
             this.Down.Size = new System.Drawing.Size(202, 20);
             this.Down.TabIndex = 0;
             this.Down.Text = "0,00";
+            this.Down.TextChanged += new System.EventHandler(this.Down_TextChanged);
             this.Down.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Down_KeyPress);
             // 
             // label1
@@ -248,6 +260,7 @@
             this.label1.Size = new System.Drawing.Size(58, 13);
             this.label1.TabIndex = 54;
             this.label1.Text = "Вещество";
+            this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
             // Veshestvo
             // 
@@ -255,6 +268,7 @@
             this.Veshestvo.Name = "Veshestvo";
             this.Veshestvo.Size = new System.Drawing.Size(202, 20);
             this.Veshestvo.TabIndex = 56;
+            this.Veshestvo.TextChanged += new System.EventHandler(this.Veshestvo_TextChanged);
             // 
             // groupBox7
             // 
@@ -265,6 +279,7 @@
             this.groupBox7.TabIndex = 59;
             this.groupBox7.TabStop = false;
             this.groupBox7.Text = "Описание";
+            this.groupBox7.Enter += new System.EventHandler(this.groupBox7_Enter);
             // 
             // textBox4
             // 
@@ -273,6 +288,7 @@
             this.textBox4.Size = new System.Drawing.Size(100, 20);
             this.textBox4.TabIndex = 64;
             this.textBox4.Text = "0,00";
+            this.textBox4.TextChanged += new System.EventHandler(this.textBox4_TextChanged);
             this.textBox4.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox4_KeyPress);
             // 
             // label19
@@ -283,6 +299,7 @@
             this.label19.Size = new System.Drawing.Size(144, 13);
             this.label19.TabIndex = 63;
             this.label19.Text = "Погрешность методики (%)";
+            this.label19.Click += new System.EventHandler(this.label19_Click);
             // 
             // ND
             // 
@@ -290,6 +307,7 @@
             this.ND.Name = "ND";
             this.ND.Size = new System.Drawing.Size(255, 20);
             this.ND.TabIndex = 62;
+            this.ND.TextChanged += new System.EventHandler(this.ND_TextChanged);
             // 
             // label15
             // 
@@ -299,6 +317,7 @@
             this.label15.Size = new System.Drawing.Size(116, 13);
             this.label15.TabIndex = 61;
             this.label15.Text = "Методика измерений";
+            this.label15.Click += new System.EventHandler(this.label15_Click);
             // 
             // groupBox6
             // 
@@ -309,6 +328,7 @@
             this.groupBox6.TabIndex = 58;
             this.groupBox6.TabStop = false;
             this.groupBox6.Text = "Концетрации стандартных образцов";
+            this.groupBox6.Enter += new System.EventHandler(this.groupBox6_Enter_1);
             // 
             // Opt_dlin_cuvet
             // 
@@ -337,6 +357,7 @@
             this.label12.Size = new System.Drawing.Size(142, 13);
             this.label12.TabIndex = 55;
             this.label12.Text = "Оптическая длина кюветы";
+            this.label12.Click += new System.EventHandler(this.label12_Click);
             // 
             // button1
             // 
@@ -356,6 +377,7 @@
             this.label11.Size = new System.Drawing.Size(31, 13);
             this.label11.TabIndex = 6;
             this.label11.Text = "k2 = ";
+            this.label11.Click += new System.EventHandler(this.label11_Click);
             // 
             // groupBox3
             // 
@@ -368,6 +390,7 @@
             this.groupBox3.TabIndex = 51;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Аппроксимация";
+            this.groupBox3.Enter += new System.EventHandler(this.groupBox3_Enter_1);
             // 
             // radioButton3
             // 
@@ -412,6 +435,7 @@
             this.Ispolnitel.Name = "Ispolnitel";
             this.Ispolnitel.Size = new System.Drawing.Size(203, 20);
             this.Ispolnitel.TabIndex = 12;
+            this.Ispolnitel.TextChanged += new System.EventHandler(this.Ispolnitel_TextChanged);
             // 
             // label6
             // 
@@ -421,6 +445,7 @@
             this.label6.Size = new System.Drawing.Size(74, 13);
             this.label6.TabIndex = 11;
             this.label6.Text = "Исполнитель";
+            this.label6.Click += new System.EventHandler(this.label6_Click);
             // 
             // numericUpDown1
             // 
@@ -433,6 +458,7 @@
             0,
             0,
             0});
+            this.numericUpDown1.ValueChanged += new System.EventHandler(this.numericUpDown1_ValueChanged_1);
             // 
             // label3
             // 
@@ -442,6 +468,7 @@
             this.label3.Size = new System.Drawing.Size(82, 13);
             this.label3.TabIndex = 4;
             this.label3.Text = "Срок действия";
+            this.label3.Click += new System.EventHandler(this.label3_Click);
             // 
             // dateTimePicker1
             // 
@@ -450,6 +477,7 @@
             this.dateTimePicker1.Name = "dateTimePicker1";
             this.dateTimePicker1.Size = new System.Drawing.Size(200, 20);
             this.dateTimePicker1.TabIndex = 3;
+            this.dateTimePicker1.ValueChanged += new System.EventHandler(this.dateTimePicker1_ValueChanged_1);
             // 
             // label2
             // 
@@ -459,6 +487,7 @@
             this.label2.Size = new System.Drawing.Size(84, 13);
             this.label2.TabIndex = 3;
             this.label2.Text = "Дата создания";
+            this.label2.Click += new System.EventHandler(this.label2_Click);
             // 
             // WL_grad
             // 
@@ -480,6 +509,7 @@
             this.groupBox4.TabIndex = 52;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Зависимость";
+            this.groupBox4.Enter += new System.EventHandler(this.groupBox4_Enter);
             // 
             // radioButton5
             // 
@@ -516,6 +546,7 @@
             this.groupBox2.TabIndex = 50;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Концетрация";
+            this.groupBox2.Enter += new System.EventHandler(this.groupBox2_Enter);
             // 
             // Ed
             // 
@@ -546,6 +577,7 @@
             this.label5.Size = new System.Drawing.Size(50, 13);
             this.label5.TabIndex = 6;
             this.label5.Text = "Единица";
+            this.label5.Click += new System.EventHandler(this.label5_Click);
             // 
             // label4
             // 
@@ -555,6 +587,7 @@
             this.label4.Size = new System.Drawing.Size(75, 13);
             this.label4.TabIndex = 48;
             this.label4.Text = "Длина волны";
+            this.label4.Click += new System.EventHandler(this.label4_Click);
             // 
             // groupBox5
             // 
@@ -576,6 +609,7 @@
             this.groupBox5.TabIndex = 53;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Задание коэффициентов";
+            this.groupBox5.Enter += new System.EventHandler(this.groupBox5_Enter);
             // 
             // label10
             // 
@@ -585,6 +619,7 @@
             this.label10.Size = new System.Drawing.Size(31, 13);
             this.label10.TabIndex = 5;
             this.label10.Text = "k1 = ";
+            this.label10.Click += new System.EventHandler(this.label10_Click);
             // 
             // label9
             // 
@@ -594,6 +629,7 @@
             this.label9.Size = new System.Drawing.Size(31, 13);
             this.label9.TabIndex = 4;
             this.label9.Text = "k0 = ";
+            this.label9.Click += new System.EventHandler(this.label9_Click);
             // 
             // radioButton7
             // 
@@ -615,6 +651,7 @@
             this.label8.Size = new System.Drawing.Size(101, 13);
             this.label8.TabIndex = 2;
             this.label8.Text = "Кол-во CO в серии";
+            this.label8.Click += new System.EventHandler(this.label8_Click);
             // 
             // label7
             // 
@@ -624,6 +661,7 @@
             this.label7.Size = new System.Drawing.Size(92, 13);
             this.label7.TabIndex = 1;
             this.label7.Text = "Кол-во серий CO";
+            this.label7.Click += new System.EventHandler(this.label7_Click);
             // 
             // radioButton6
             // 
@@ -650,6 +688,7 @@
             this.groupBox1.TabIndex = 47;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Действие";
+            this.groupBox1.Enter += new System.EventHandler(this.groupBox1_Enter);
             // 
             // NewGraduirovka
             // 
