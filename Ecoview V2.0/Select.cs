@@ -16,6 +16,10 @@ namespace Ecoview_V2._0
         {
             InitializeComponent();
             this._Analis = parent;
+            
+           // _Analis = this.Owner as EcoviewProfessional1;
+            
+
         }
         bool click = false;
         private void button1_Click(object sender, EventArgs e)
@@ -100,8 +104,12 @@ namespace Ecoview_V2._0
                                 _Analis.tabControl2.TabPages.Remove(_Analis.tabPage7);
                                 _Analis.tabControl2.TabPages.Remove(_Analis.tabPage8);
                                 _Analis.Ecoview_Header = "Eciview Professional v1.0 Сканирование спектра";
+  
                                 _Analis.tabControl2.SelectedIndex = 5;
                                 _Analis.tabControl2.SelectTab(_Analis.tabPage6);
+                                _Analis.Podskazka.Text = "Подключите прибор";
+                                _Analis.label24.Visible = true;
+
                                 _Analis.selet_rezim = 5;
                             }
                             else
@@ -114,6 +122,8 @@ namespace Ecoview_V2._0
                                 _Analis.tabControl2.TabPages.Remove(_Analis.tabPage1);
                                 _Analis.Ecoview_Header = "Eciview Professional v1.0 Агро режим";
                                 _Analis.tabControl2.SelectedIndex = 6;
+                                _Analis.Add_Table2.Visible = false;
+                                _Analis.Remove_Table2.Visible = false;
                                 _Analis.tabControl2.SelectTab(_Analis.tabPage3);
                                 _Analis.selet_rezim = 6;
                                 _Analis.tabControl2.TabPages[0].Text = "Градуировка Агро";
@@ -128,15 +138,29 @@ namespace Ecoview_V2._0
 
         private void Select_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if(click != true)
+           
+            if (click != true)
             {
-                Application.Exit();
+                ///   Select.Dispose();
+                /// Dispose();
+               System.Windows.Forms.Application.ExitThread( );  
+               // Application.Exit();
+                //Application.Current.Shutdown();
+///
             }
         }
 
         private void Select_Load(object sender, EventArgs e)
         {
+            
+        }
 
+        private void Select_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            /*if (click != true)
+            {
+                this.Close();
+            }*/
         }
     }
 }

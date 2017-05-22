@@ -34,6 +34,9 @@ namespace Ecoview_V2._0
             else
             {
                 _Analis.ScanTable.Rows.Clear();
+                _Analis.dataGridView1.Rows.Clear();
+                _Analis.dataGridView2.Rows.Clear();
+                _Analis.listBox1.Items.Clear();
                 _Analis.start = Convert.ToDouble(textBox2.Text);
                 _Analis.cancel = Convert.ToDouble(textBox3.Text);
                 int rows = 0;
@@ -44,15 +47,54 @@ namespace Ecoview_V2._0
                 }
                 
             }
-            if(radioButton1.Checked == true)
+            _Analis.ScanChart.Series[0].Points.Clear();
+            _Analis.ScanChart.Series[1].Points.Clear();
+
+            _Analis.ScanChart.Series.Clear();
+            _Analis.ScanChart.Series.Add("Series1");
+            _Analis.ScanChart.Series.Add("Series2");
+            if (radioButton1.Checked == true)
             {
-                _Analis.ScanTable.Columns["Abs_scan"].HeaderText = "Abs";
+                _Analis.ScanTable.Columns[1].HeaderText = "Abs";
+                _Analis.ScanTable.Columns[2].HeaderText = "%T";
+                _Analis.dataGridView1.Columns[1].HeaderText = "Abs";
+                _Analis.dataGridView1.Columns[2].HeaderText = "%T";
+                _Analis.dataGridView2.Columns[1].HeaderText = "Abs";
+                _Analis.dataGridView2.Columns[2].HeaderText = "%T";
             }
             else
             {
-                _Analis.ScanTable.Columns["Abs_scan"].HeaderText = "%T";
+                _Analis.ScanTable.Columns[2].HeaderText = "Abs";
+                _Analis.ScanTable.Columns[1].HeaderText = "%T";
+                _Analis.dataGridView1.Columns[1].HeaderText = "%T";
+                _Analis.dataGridView1.Columns[2].HeaderText = "Abs";
+                _Analis.dataGridView2.Columns[1].HeaderText = "%T";
+                _Analis.dataGridView2.Columns[2].HeaderText = "Abs";
+            }
+            if (_Analis.ScanTable.Columns[1].HeaderText == "Abs")
+            {
+                //Array.Sort(massGE);
+                _Analis.ScanChart.ChartAreas[0].AxisY.Minimum = 0;
+                _Analis.ScanChart.ChartAreas[0].AxisY.Maximum = 3;
+                _Analis.ScanChart.ChartAreas[0].AxisX.Minimum = _Analis.cancel;
+                _Analis.ScanChart.ChartAreas[0].AxisX.Maximum = _Analis.start;
+            }
+            else
+            {
+                //Array.Sort(massGE);
+                _Analis.ScanChart.ChartAreas[0].AxisY.Minimum = 0;
+                _Analis.ScanChart.ChartAreas[0].AxisY.Maximum = 125;
+                _Analis.ScanChart.ChartAreas[0].AxisX.Minimum = _Analis.cancel;
+                _Analis.ScanChart.ChartAreas[0].AxisX.Maximum = _Analis.start;
             }
             _Analis.Description = textBox1.Text;
+            _Analis.button11.Enabled = true;
+            _Analis.StopSpectr = false;
+            _Analis.scan_mass = null;
+            int countStr = _Analis.ScanTable.Rows.Count;
+            _Analis.countScan = new string[1][,];
+            _Analis.button3.Enabled = true;
+           // _Analis.button10.Enabled = true;
             Close();
         }
 
@@ -202,6 +244,11 @@ namespace Ecoview_V2._0
                     }
                 }
             }
+        }
+
+        private void FotometrScan_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

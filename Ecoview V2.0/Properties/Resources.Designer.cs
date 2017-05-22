@@ -103,6 +103,16 @@ namespace Ecoview_V2._0.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap AT_btn {
+            get {
+                object obj = ResourceManager.GetObject("AT_btn", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Connect_btn {
             get {
                 object obj = ResourceManager.GetObject("Connect_btn", resourceCulture);
@@ -166,6 +176,16 @@ namespace Ecoview_V2._0.Properties {
         internal static System.Drawing.Bitmap Exit_btn {
             get {
                 object obj = ResourceManager.GetObject("Exit_btn", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap LOGO_ECOVIEW1 {
+            get {
+                object obj = ResourceManager.GetObject("LOGO_ECOVIEW1", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

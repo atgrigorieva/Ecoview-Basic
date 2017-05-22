@@ -25,12 +25,12 @@ namespace Ecoview_V2._0
         public EcoviewProfessional1()
         {
             InitializeComponent();
-           // this.StartPosition = FormStartPosition.WindowsDefaultBounds;
+            // this.StartPosition = FormStartPosition.WindowsDefaultBounds;
             if (ComPodkl == false)
             {
                 this.подключитьToolStripMenuItem.Enabled = true;
                 button2.Enabled = true;
-               
+
                 button12.Enabled = false;
                 button14.Enabled = false;
                 this.настройкаПортаToolStripMenuItem.Enabled = false;
@@ -38,7 +38,7 @@ namespace Ecoview_V2._0
                 this.калибровкаToolStripMenuItem.Enabled = false;
                 this.темновойТокToolStripMenuItem.Enabled = false;
                 this.измеритьToolStripMenuItem.Enabled = false;
-                
+
                 this.калибровкаДляОдноволновогоАнализаToolStripMenuItem.Enabled = false;
             }
             //   groupBox3.Enabled = false;
@@ -147,6 +147,8 @@ namespace Ecoview_V2._0
         bool USE_KO_1 = false;
         public int selet_rezim = 2;
         bool StopAgro = false;
+        public bool StopSpectr = false;
+        public string[][,] countScan;
         public void Ecoview_Load(object sender, EventArgs e)
         {
 
@@ -163,6 +165,59 @@ namespace Ecoview_V2._0
             chart1.ChartAreas[0].AxisY.MajorGrid.Enabled = false;
             chart1.Series[0].Points.Clear();
             chart1.Series[1].Points.Clear();
+
+            ScanChart.Series[0].ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            ScanChart.Series[0].Points.Add();
+            ScanChart.ChartAreas[0].AxisX.Minimum = 400;
+            ScanChart.ChartAreas[0].AxisX.Maximum = 600;
+            if (ScanTable.Columns[1].HeaderText == "Abs")
+            {
+                //Array.Sort(massGE);
+                ScanChart.ChartAreas[0].AxisY.Minimum = 0;
+                ScanChart.ChartAreas[0].AxisY.Maximum = 3;
+                ScanChart.ChartAreas[0].AxisX.Minimum = cancel;
+                ScanChart.ChartAreas[0].AxisX.Maximum = start;
+            }
+            else
+            {
+                //Array.Sort(massGE);
+                ScanChart.ChartAreas[0].AxisY.Minimum = 0;
+                ScanChart.ChartAreas[0].AxisY.Maximum = 125;
+                ScanChart.ChartAreas[0].AxisX.Minimum = cancel;
+                ScanChart.ChartAreas[0].AxisX.Maximum = start;
+            }
+            ScanChart.ChartAreas[0].AxisX.MajorGrid.Enabled = false;
+            ScanChart.ChartAreas[0].AxisY.MajorGrid.Enabled = false;
+            ScanChart.ChartAreas[0].AxisX.Title = ScanTable.Columns["WalveDl"].HeaderText;
+            ScanChart.ChartAreas[0].AxisY.Title = ScanTable.Columns["Abs_scan"].HeaderText;
+
+
+
+            chart3.Series[0].ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            chart3.Series[0].Points.Add();
+            chart3.ChartAreas[0].AxisX.Minimum = 400;
+            chart3.ChartAreas[0].AxisX.Maximum = 600;
+            if (ScanTable.Columns[1].HeaderText == "Abs")
+            {
+                //Array.Sort(massGE);
+                chart3.ChartAreas[0].AxisY.Minimum = 0;
+                chart3.ChartAreas[0].AxisY.Maximum = 3;
+                chart3.ChartAreas[0].AxisX.Minimum = cancel;
+                chart3.ChartAreas[0].AxisX.Maximum = start;
+            }
+            else
+            {
+                //Array.Sort(massGE);
+                chart3.ChartAreas[0].AxisY.Minimum = 0;
+                chart3.ChartAreas[0].AxisY.Maximum = 125;
+                chart3.ChartAreas[0].AxisX.Minimum = cancel;
+                chart3.ChartAreas[0].AxisX.Maximum = start;
+            }
+            chart3.ChartAreas[0].AxisX.MajorGrid.Enabled = false;
+            chart3.ChartAreas[0].AxisY.MajorGrid.Enabled = false;
+            chart3.ChartAreas[0].AxisX.Title = TableKinetica1.Columns[0].HeaderText;
+            chart3.ChartAreas[0].AxisY.Title = TableKinetica1.Columns[1].HeaderText;
+
             Zavisimoct = "A(C)";
             aproksim = "Линейная";
             Table1.AllowUserToResizeRows = false;
@@ -184,7 +239,9 @@ namespace Ecoview_V2._0
         public string Ecoview_Header = "";
         public void Select_modules()
         {
+            //this.Hide();
             Select _Select = new Select(this);
+            // _Select.Owner = this;
             _Select.ShowDialog();
             this.Text = Ecoview_Header;
         }
@@ -263,7 +320,7 @@ namespace Ecoview_V2._0
                 this.калибровкаДляОдноволновогоАнализаToolStripMenuItem.Enabled = true;
                 button1.Enabled = true;
                 button2.Enabled = false;
-                
+
                 button12.Enabled = true;
                 ComPort = true;
                 if ((OpenIzmer == true && ComPort == true) || (OpenIzmer1 == true && ComPort == true))
@@ -278,31 +335,43 @@ namespace Ecoview_V2._0
                 {
                     button14.Enabled = true;
                 }
-               else
+                else
                 {
                     button14.Enabled = false;
                 }
                 if (SposobZadan == "Ввод коэффициентов")
                 {
-                   button14.Enabled = false;
+                    button14.Enabled = false;
                 }
                 else
                 {
                     button14.Enabled = true;
                 }
-                Podskazka.Text = "Создайте или откройте Градуировку!";
-
+                if (selet_rezim == 2 || selet_rezim == 6)
+                {
+                    Podskazka.Text = "Создайте или откройте Градуировку!";
+                    label25.Visible = true;
+                    label26.Visible = true;
+                }
+                else
+                {
+                    if (selet_rezim == 5)
+                    {
+                        Podskazka.Text = "Создайте Измерение";
+                        label25.Visible = true;
+                        label26.Visible = false;
+                    }
+                }
                 label27.Visible = false;
                 label24.Visible = false;
-                label25.Visible = true;
-                label26.Visible = true;
+
                 label28.Visible = false;
                 label33.Visible = false;
 
             }
         }
 
-           public void ZapicInTable1()
+        public void ZapicInTable1()
         {
             bool doNotWrite = false;
             double sum = 0.0;
@@ -319,7 +388,7 @@ namespace Ecoview_V2._0
                 {
                     Table1.CurrentCell.Value = string.Format("{0:0.0000}", CellOpt);
                     CellOpt = 0;
-                                     
+
 
 
                 }
@@ -328,8 +397,8 @@ namespace Ecoview_V2._0
                     MessageBox.Show("Запись запрещена!");
                 }
             }
-            
-          
+
+
             int rownull = 0;
             for (int j = 0; j < Table1.Rows.Count - 1; j++)
             {
@@ -425,7 +494,7 @@ namespace Ecoview_V2._0
                         { doNotWrite = true; }
                     }
                 }
-                
+
                 functionAsred();
             }
 
@@ -444,7 +513,7 @@ namespace Ecoview_V2._0
             }
 
         }
-    
+
         public void LogoForm()
         {
             Form LogoForm = new Form();
@@ -469,6 +538,7 @@ namespace Ecoview_V2._0
             LogoForm.Controls.Add(PicBox);*/
             LogoForm.Show();
         }
+
         public void SAGE(ref int countSA, ref string GE5_1_0)
         {
             bool message1 = true;
@@ -504,109 +574,155 @@ namespace Ecoview_V2._0
             }
 
             newPort.Write("GE 1\r");
-
-            string GE5_1 = "";
-            int GEbyteRecieved4_1 = newPort.ReadBufferSize;
-            byte[] GEbuffer4_1 = new byte[GEbyteRecieved4_1];
-            newPort.Read(GEbuffer4_1, 0, GEbyteRecieved4_1);
-
-            indata = newPort.ReadExisting();
-            indata_zero = 0;
+            // Thread.Sleep(500);
+            // GEbyteRecieved4_1 = newPort.ReadBufferSize;
+            //  GEbuffer4_1 = new byte[GEbyteRecieved4_1];
+            // MessageBox.Show(newPort.Read(GEbuffer4_1, 0, GEbyteRecieved4_1).ToString());
+            // Thread.SpinWait(500);
             indata_0 = "";
-            indata_bool = true;
-            while (indata_bool == true)
+            for (int i = 0; i <= 5000000; i++)
             {
-
-                if (indata.Contains(">"))
+                indata = newPort.ReadExisting();
+                if (indata_0.Contains("\r>"))
                 {
-
-                    indata_bool = false;
-
+                    break;
                 }
-
-                else {
-
-                    indata = newPort.ReadExisting();
-                    indata_0 += indata;
-                }
+                indata_0 += indata;
             }
+            indata_zero = 0;
+            //  indata_0 = "";
+            indata_bool = true;
+            /* while (indata_bool == true)
+             {
+
+                 if (indata.Contains(">"))
+                 {
+                     indata_0 = indata;
+                     indata_bool = false;
+
+                 }
+                 else {                   
+
+                         indata = newPort.ReadExisting();
+                         indata_0 += indata;
+
+                 }
+             }*/
+            string GE5_1 = "";
             Regex regex = new Regex(@"\W");
+            Regex regex1 = new Regex(@"\D");
             GE5_1 = regex.Replace(indata_0, "");
+            GE5_1 = regex1.Replace(GE5_1, "");
+
             GE5_1_0 = regex.Replace(indata_0, "");
+            GE5_1_0 = regex1.Replace(GE5_1, "");
             GEText.Text = GE5_1_0;
-            double GAText1 = (Convert.ToDouble(GE5_1_0) / Convert.ToDouble(GE5_1_0)) * 100;
-
-            GAText.Text = string.Format("{0:0.00}", GAText1);
-
-            double OptPlot = Math.Log10(Convert.ToDouble(GE5_1_0) / Convert.ToDouble(GE5_1));
-
-            double OptPlot1 = OptPlot - Math.Truncate(OptPlot);
-            OptichPlot.Text = string.Format("{0:0.0000}", OptPlot1);
-            while (Convert.ToInt32(GE5_1) > 10000 && countSA > 1)
+            //if(GE5_1 == "")
             {
-                countSA--;
-                newPort.Write("SA " + countSA + "\r");
-                int SAAnalisByteRecieved1_1_1 = newPort.ReadBufferSize;
-                // Thread.Sleep(100);
-                indata = newPort.ReadExisting();
-                indata_zero = 0;
-                indata_0 = "";
-                indata_bool = true;
-                while (indata_bool == true)
-                {
-
-                    if (indata.Contains(">"))
-                    {
-
-                        indata_bool = false;
-
-                    }
-
-                    else {
-                        indata = newPort.ReadExisting();
-                    }
-                }
-
-                newPort.Write("GE 1\r");
-                GEbyteRecieved4_1 = newPort.ReadBufferSize;
-                GEbuffer4_1 = new byte[GEbyteRecieved4_1];
-                newPort.Read(GEbuffer4_1, 0, GEbyteRecieved4_1);
-
-                indata = newPort.ReadExisting();
-                indata_zero = 0;
-                indata_0 = "";
-                indata_bool = true;
-                while (indata_bool == true)
-                {
-
-                    if (indata.Contains(">"))
-                    {
-
-                        indata_bool = false;
-
-                    }
-
-                    else {
-
-                        indata = newPort.ReadExisting();
-                        indata_0 += indata;
-                    }
-                }
-                regex = new Regex(@"\W");
-                GE5_1 = regex.Replace(indata_0, "");
-
-                GE5_1_0 = regex.Replace(indata_0, "");
-                GEText.Text = GE5_1_0;
-
-                GAText1 = (Convert.ToDouble(GE5_1_0) / Convert.ToDouble(GE5_1_0)) * 100;
+                double GAText1 = (Convert.ToDouble(GE5_1_0) / Convert.ToDouble(GE5_1_0)) * 100;
 
                 GAText.Text = string.Format("{0:0.00}", GAText1);
 
-                OptPlot = Math.Log10(Convert.ToDouble(GE5_1_0) / Convert.ToDouble(GE5_1));
+                double OptPlot = Math.Log10(Convert.ToDouble(GE5_1_0) / Convert.ToDouble(GE5_1));
 
-                OptPlot1 = OptPlot - Math.Truncate(OptPlot);
+                double OptPlot1 = OptPlot - Math.Truncate(OptPlot);
                 OptichPlot.Text = string.Format("{0:0.0000}", OptPlot1);
+                while (Convert.ToInt32(GE5_1) > 10000 && countSA > 1)
+                {
+                    countSA--;
+                    newPort.Write("SA " + countSA + "\r");
+                    int SAAnalisByteRecieved1_1_1 = newPort.ReadBufferSize;
+                    // Thread.Sleep(100);
+                    indata = newPort.ReadExisting();
+                    indata_zero = 0;
+                    indata_0 = "";
+                    indata_bool = true;
+                    while (indata_bool == true)
+                    {
+
+                        if (indata.Contains(">"))
+                        {
+
+                            indata_bool = false;
+
+                        }
+
+                        else {
+                            indata = newPort.ReadExisting();
+                        }
+                    }
+
+                    newPort.Write("GE 1\r");
+                    // Thread.Sleep(500);
+                    // GEbyteRecieved4_1 = newPort.ReadBufferSize;
+                    //  GEbuffer4_1 = new byte[GEbyteRecieved4_1];
+                    // MessageBox.Show(newPort.Read(GEbuffer4_1, 0, GEbyteRecieved4_1).ToString());
+                    // Thread.SpinWait(500);
+                    indata_0 = "";
+                    for (int i = 0; i <= 5000000; i++)
+                    {
+                        indata = newPort.ReadExisting();
+                        if (indata_0.Contains("\r>"))
+                        {
+                            break;
+                        }
+                        indata_0 += indata;
+                    }
+                    indata_zero = 0;
+                    //  indata_0 = "";
+                    indata_bool = true;
+                    /* while (indata_bool == true)
+                     {
+
+                         if (indata.Contains(">"))
+                         {
+                             indata_0 = indata;
+                             indata_bool = false;
+
+                         }
+                         else {                   
+
+                                 indata = newPort.ReadExisting();
+                                 indata_0 += indata;
+
+                         }
+                     }*/
+                    regex = new Regex(@"\W");
+                    regex1 = new Regex(@"\D");
+                    GE5_1 = regex.Replace(indata_0, "");
+                    GE5_1 = regex1.Replace(GE5_1, "");
+
+                    GE5_1_0 = regex.Replace(indata_0, "");
+                    GE5_1_0 = regex1.Replace(GE5_1, "");
+                    GEText.Text = GE5_1_0;
+                    //   if (GE5_1 == "")
+                    {
+                        GAText1 = (Convert.ToDouble(GE5_1_0) / Convert.ToDouble(GE5_1_0)) * 100;
+
+
+                        GAText.Text = string.Format("{0:0.00}", GAText1);
+
+                        OptPlot = Math.Log10(Convert.ToDouble(GE5_1_0) / Convert.ToDouble(GE5_1));
+
+                        OptPlot1 = OptPlot - Math.Truncate(OptPlot);
+                        OptichPlot.Text = string.Format("{0:0.0000}", OptPlot1);
+                    }
+                    /* else
+                     {
+                         MessageBox.Show("Внимание! При обнулении возникла ошибка! Попробуйте еще раз!");
+                      //   SAGE(ref countSA, ref GE5_1_0);
+                         return;
+                     }*/
+                }
+
             }
+            /* else
+             {
+                 MessageBox.Show("Внимание! При обнулении возникла ошибка! Попробуйте еще раз!");
+                // SAGE(ref countSA, ref GE5_1_0);
+                 return;
+
+             }*/
             SWF.Application.OpenForms["LogoFrm"].Close();
 
             if (Izmerenie1 == false)
@@ -614,10 +730,10 @@ namespace Ecoview_V2._0
                 // InitializeTimer();
             }
         }
-        double[] scan_mass;
+        public double[] scan_mass;
         public void SAGEScan(ref int countSA, ref string GE5_1_0)
         {
-            SW_Scan();
+            Regex regex1;
             bool message1 = true;
             if (versionPribor.Contains("2"))
             { countSA = 8; }
@@ -627,35 +743,16 @@ namespace Ecoview_V2._0
             }
 
             LogoForm();
-
-            newPort.Write("SA " + countSA + "\r");
-
+            string GE5_1 = "";
             string indata = newPort.ReadExisting();
             int indata_zero = 0;
-            string indata_0;
+            string indata_0 = "";
             bool indata_bool = true;
-            while (indata_bool == true)
-            {
-
-                if (indata.Contains(">"))
-                {
-
-                    indata_bool = false;
-
-                }
-
-                else {
-                    indata = newPort.ReadExisting();
-
-                }
-            }
-
-            newPort.Write("GE 1\r");
-
-            string GE5_1 = "";
             int GEbyteRecieved4_1 = newPort.ReadBufferSize;
             byte[] GEbuffer4_1 = new byte[GEbyteRecieved4_1];
-            newPort.Read(GEbuffer4_1, 0, GEbyteRecieved4_1);
+            Regex regex = new Regex(@"\W");
+
+            newPort.Write("SA " + countSA + "\r");
 
             indata = newPort.ReadExisting();
             indata_zero = 0;
@@ -672,14 +769,54 @@ namespace Ecoview_V2._0
                 }
 
                 else {
-
                     indata = newPort.ReadExisting();
-                    indata_0 += indata;
+
                 }
             }
-            Regex regex = new Regex(@"\W");
+            //  Thread.Sleep(500);
+            newPort.Write("GE 1\r");
+            // Thread.Sleep(500);
+            // GEbyteRecieved4_1 = newPort.ReadBufferSize;
+            //  GEbuffer4_1 = new byte[GEbyteRecieved4_1];
+            // MessageBox.Show(newPort.Read(GEbuffer4_1, 0, GEbyteRecieved4_1).ToString());
+            // Thread.SpinWait(500);
+            indata_0 = "";
+            for (int i = 0; i <= 5000000; i++)
+            {
+                indata = newPort.ReadExisting();
+                if (indata_0.Contains("\r>"))
+                {
+                    break;
+                }
+                indata_0 += indata;
+            }
+            indata_zero = 0;
+            //  indata_0 = "";
+            indata_bool = true;
+            /* while (indata_bool == true)
+             {
+
+                 if (indata.Contains(">"))
+                 {
+                     indata_0 = indata;
+                     indata_bool = false;
+
+                 }
+                 else {                   
+
+                         indata = newPort.ReadExisting();
+                         indata_0 += indata;
+
+                 }
+             }*/
+            regex = new Regex(@"\W");
+            regex1 = new Regex(@"\D");
             GE5_1 = regex.Replace(indata_0, "");
+            GE5_1 = regex1.Replace(GE5_1, "");
+
             GE5_1_0 = regex.Replace(indata_0, "");
+            GE5_1_0 = regex1.Replace(GE5_1, "");
+
             GEText.Text = GE5_1_0;
             double GAText1 = (Convert.ToDouble(GE5_1_0) / Convert.ToDouble(GE5_1_0)) * 100;
 
@@ -713,36 +850,51 @@ namespace Ecoview_V2._0
                         indata = newPort.ReadExisting();
                     }
                 }
-
+                //     Thread.Sleep(500);
                 newPort.Write("GE 1\r");
-                GEbyteRecieved4_1 = newPort.ReadBufferSize;
-                GEbuffer4_1 = new byte[GEbyteRecieved4_1];
-                newPort.Read(GEbuffer4_1, 0, GEbyteRecieved4_1);
-
-                indata = newPort.ReadExisting();
-                indata_zero = 0;
+                // Thread.Sleep(500);
+                /*  GEbyteRecieved4_1 = newPort.ReadBufferSize;
+                  GEbuffer4_1 = new byte[GEbyteRecieved4_1];
+                  newPort.Read(GEbuffer4_1, 0, GEbyteRecieved4_1);*/
+                //    Thread.SpinWait(500);
                 indata_0 = "";
-                indata_bool = true;
-                while (indata_bool == true)
+                for (int i = 0; i <= 5000000; i++)
                 {
-
-                    if (indata.Contains(">"))
+                    indata = newPort.ReadExisting();
+                    if (indata_0.Contains("\r>"))
                     {
-
-                        indata_bool = false;
-
+                        break;
                     }
-
-                    else {
-
-                        indata = newPort.ReadExisting();
-                        indata_0 += indata;
-                    }
+                    indata_0 += indata;
                 }
+                indata_zero = 0;
+                //  indata_0 = "";
+                indata_bool = true;
+                /* while (indata_bool == true)
+                 {
+
+                     if (indata.Contains(">"))
+                     {
+                         indata_0 = indata;
+                         indata_bool = false;
+
+                     }
+                     else {
+
+                         indata = newPort.ReadExisting();
+                         indata_0 += indata;
+
+                     }
+                 }*/
+
                 regex = new Regex(@"\W");
+                regex1 = new Regex(@"\D");
                 GE5_1 = regex.Replace(indata_0, "");
+                GE5_1 = regex1.Replace(GE5_1, "");
 
                 GE5_1_0 = regex.Replace(indata_0, "");
+                GE5_1_0 = regex1.Replace(GE5_1, "");
+
                 GEText.Text = GE5_1_0;
 
                 GAText1 = (Convert.ToDouble(GE5_1_0) / Convert.ToDouble(GE5_1_0)) * 100;
@@ -755,7 +907,7 @@ namespace Ecoview_V2._0
                 OptichPlot.Text = string.Format("{0:0.0000}", OptPlot1);
             }
             SWF.Application.OpenForms["LogoFrm"].Close();
-
+            //  listBox1.Items.Add(GE5_1_0);
             scan_mass[countscan] = Convert.ToDouble(GE5_1_0);
             scan_massSA[countscan] = Convert.ToDouble(countSA);
         }
@@ -908,12 +1060,12 @@ namespace Ecoview_V2._0
                 }
 
                 else {
-                    
+
                     indata = newPort.ReadExisting();
-                    
+
                 }
             }
-            
+
             string substring = "\r";
             int count = (indata.Length - indata.Replace(substring, "").Length) / substring.Length;
             RDstring = new string[count];
@@ -965,6 +1117,15 @@ namespace Ecoview_V2._0
             else
             {
                 SWF.Application.Exit();
+                ///  this.Hide();
+
+                /* Select _Select = new Select(this);                
+                 _Select.Owner = this;
+                 _Select.ShowDialog();*/
+                //System.Environment.Exit(0);
+                //   Dispose();
+                //   Close();
+
             }
         }
 
@@ -1006,7 +1167,7 @@ namespace Ecoview_V2._0
 
                 this.подключитьToolStripMenuItem.Enabled = true;
                 button2.Enabled = true;
-                
+
                 button12.Enabled = false;
                 button14.Enabled = false;
                 this.настройкаПортаToolStripMenuItem.Enabled = false;
@@ -1047,6 +1208,7 @@ namespace Ecoview_V2._0
 
         private void button5_Click(object sender, EventArgs e)
         {
+            TopMost = false;
             if (selet_rezim == 2)
             {
                 Izmerenie1 = true;
@@ -1074,7 +1236,7 @@ namespace Ecoview_V2._0
                 }
                 else
                 {
-                    if(selet_rezim == 6)
+                    if (selet_rezim == 6)
                     {
                         Izmerenie1 = true;
                         if (tabControl2.SelectedIndex == 0)
@@ -1088,40 +1250,309 @@ namespace Ecoview_V2._0
                     }
                     else
                     {
-                        if(selet_rezim == 5)
+                        if (selet_rezim == 5)
                         {
                             if (ComPodkl == true)
                             {
+
                                 FotometrScan();
+                                Podskazka.Text = "Измерьте 0 Asb/100%T";
+                                label25.Visible = false;
+                                label59.Visible = true;
                             }
                             else
                             {
                                 MessageBox.Show("Для проведения сканирования необхдимо подключиться к прибору!");
                             }
                         }
+                        else
+                        {
+                            if (selet_rezim == 4)
+                            {
+                                if (ComPodkl == true)
+                                {
+                                    KineticaScan();
+                                }
+                                else
+                                {
+                                    MessageBox.Show("Для проведения сканирования необхдимо подключиться к прибору!");
+                                }
+                            }
+                            else
+                            {
+                                if (selet_rezim == 3)
+                                {
+                                    if (ComPodkl == true)
+                                    {
+                                        MultiWave();
+                                    }
+                                    else
+                                    {
+                                        MessageBox.Show("Для проведения сканирования необхдимо подключиться к прибору!");
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }
-            
+
         }
-       public double start = 0.0;
-       public double cancel = 0.0;
-        
+        public void MultiWave()
+        {
+            MultiWave _MultiWave = new MultiWave(this);
+            _MultiWave.ShowDialog();
+        }
+        public double interval;
+        public double delay;
+        public void KineticaScan()
+        {
+            Kinetica _KineticaScan = new Kinetica(this);
+            _KineticaScan.ShowDialog();
+        }
+        public double start = 0.0;
+        public double cancel = 0.0;
+
         public void FotometrScan()
         {
             FotometrScan _FotometrScan = new FotometrScan(this);
             _FotometrScan.ShowDialog();
         }
-       public void IzmerenieFR_new()
+        public double[] massWL;
+        public double[] massGE;
+        delegate void GetMessage(); // 1. Объявляем делегат
+        private void GoodMorning()
+        {
+            TableKinetica1.Rows.Add();
+        }
+        int timeLeft;
+        public void TableKinetica(object sender, EventArgs e)
+        {
+            //  int x = (int)obj;
+            // GetMessage del; // 2. Создаем переменную делегата
+            //  del = GoodMorning;
+
+            // timeLeft = timeLeft - Convert.ToInt32(interval * 1000);
+            // label56.Text = Convert.ToString(timeLeft);
+            timeLeft = timeLeft - Convert.ToInt32(interval);
+            label56.Text = Convert.ToString(timeLeft);
+            Application.DoEvents();
+            //  MessageBox.Show("Интервал: " + interval*1000);
+            TableKinetica1.Rows.Add();
+            Array.Resize<double>(ref massWL, massWL.Length + 1);
+            Array.Resize<double>(ref massGE, massGE.Length + 1);
+
+            string GE5Izmer = "";
+            string GE5_1_1 = "";
+            while (GE5Izmer == "")
+            {
+                // SW_Scan();
+                GE5Izmer = "";
+                GE5_1_1 = "";
+                newPort.Write("SA " + countSA + "\r");
+                string indata = newPort.ReadExisting();
+                string indata_0;
+                bool indata_bool = true;
+                while (indata_bool == true)
+                {
+                    if (indata.Contains(">"))
+                    {
+                        indata_bool = false;
+                    }
+
+                    else
+                    {
+                        indata = newPort.ReadExisting();
+                    }
+                }
+                newPort.Write("GE 1\r");
+                // Thread.Sleep(500);
+                // GEbyteRecieved4_1 = newPort.ReadBufferSize;
+                //  GEbuffer4_1 = new byte[GEbyteRecieved4_1];
+                // MessageBox.Show(newPort.Read(GEbuffer4_1, 0, GEbyteRecieved4_1).ToString());
+                // Thread.SpinWait(500);
+                indata_0 = "";
+                for (int i = 0; i <= 5000000; i++)
+                {
+                    indata = newPort.ReadExisting();
+                    if (indata_0.Contains("\r>"))
+                    {
+                        break;
+                    }
+                    indata_0 += indata;
+                }
+
+                //  indata_0 = "";
+                indata_bool = true;
+                /* while (indata_bool == true)
+                 {
+
+                     if (indata.Contains(">"))
+                     {
+                         indata_0 = indata;
+                         indata_bool = false;
+
+                     }
+                     else {                   
+
+                             indata = newPort.ReadExisting();
+                             indata_0 += indata;
+
+                     }
+                 }*/
+                Regex regex = new Regex(@"\W");
+                Regex regex1 = new Regex(@"\D");
+                GE5Izmer = regex.Replace(indata_0, "");
+                GE5Izmer = regex1.Replace(GE5Izmer, "");
+            }
+            //  MessageBox.Show("Измерение: " + GE5Izmer + "\rКалибровка: " + GE5_1_0 + "\rОтклонение: " + Convert.ToString(Convert.ToDouble(GE5_1_0) / (Convert.ToDouble(GE5Izmer))) +
+            //    "\rПоправочный коэффициент: " + RDstring[countSA]);
+            GEText.Text = GE5Izmer;
+            double Aser = Convert.ToDouble(GE5Izmer) / Convert.ToDouble(GE5_1_0) * 100;
+            double OptPlot1 = 0;
+            //MessageBox.Show(RDstring[countSA]);
+            OptPlot1 = Math.Log10((Convert.ToDouble(GE5_1_0) - Convert.ToDouble(RDstring[countSA])) / (Convert.ToDouble(GE5Izmer) - Convert.ToDouble(RDstring[countSA])));
+            double OptPlot1_1 = OptPlot1;
+            Application.DoEvents();
+            massWL[countscan] = Convert.ToDouble(TableKinetica1.Rows[countscan].Cells[0].Value);
+            TableKinetica1.Rows[countscan].Cells[0].Value = Convert.ToInt32(interval) * countscan;
+            if (TableKinetica1.Columns[1].HeaderText == "Abs")
+            {
+                TableKinetica1.Rows[countscan].Cells[1].Value = string.Format("{0:0.0000}", OptPlot1_1);
+                massGE[countscan] = Convert.ToDouble(TableKinetica1.Rows[countscan].Cells[1].Value);
+                TableKinetica1.Rows[countscan].Cells[2].Value =
+                    string.Format("{0:0.0}",
+                    ((Convert.ToDouble(GE5Izmer) - Convert.ToDouble(RDstring[countSA])) /
+                    (Convert.ToDouble(GE5_1_0) - Convert.ToDouble(RDstring[countSA])) * 100));
+            }
+            else
+            {
+                TableKinetica1.Rows[countscan].Cells[2].Value = string.Format("{0:0.0000}", OptPlot1_1);
+                TableKinetica1.Rows[countscan].Cells[1].Value =
+                    string.Format("{0:0.0}",
+                    ((Convert.ToDouble(GE5Izmer) - Convert.ToDouble(RDstring[countSA])) /
+                    (Convert.ToDouble(GE5_1_0) - Convert.ToDouble(RDstring[countSA])) * 100));
+                /** listBox1.Items.Add(GE5Izmer);*/
+                massGE[countscan] = Convert.ToDouble(TableKinetica1.Rows[countscan].Cells[1].Value);
+
+            }
+            massWL[countscan] = Convert.ToDouble(TableKinetica1.Rows[countscan].Cells[0].Value);
+            massGE[countscan] = Convert.ToDouble(TableKinetica1.Rows[countscan].Cells[1].Value);
+            Array.Sort(massWL);
+            Array.Sort(massGE);
+            double x1 = Convert.ToDouble(TableKinetica1.Rows[countscan].Cells[0].Value);
+            double y1 = Convert.ToDouble(TableKinetica1.Rows[countscan].Cells[1].Value);
+            /*ScanChart.Series[0].Points.AddXY(x1, y1);
+            ScanChart.Series[0].ChartType = SeriesChartType.Point;
+            ScanChart.ChartAreas[0].AxisY.Crossing = 0;
+            ScanChart.ChartAreas[0].AxisX.Crossing = 0;*/
+
+            chart3.Series[countButtonClick].Points.AddXY(x1, y1);
+            chart3.Series[countButtonClick].ChartType = SeriesChartType.Line;
+            if (TableKinetica1.Rows[countscan].Cells[1].Value != null && TableKinetica1.Rows[countscan].Cells[2].Value != null)
+            {
+                chart3.ChartAreas[0].AxisX.Minimum = cancel;
+                chart3.ChartAreas[0].AxisX.Maximum = start;
+
+            }
+            chart3.ChartAreas[0].AxisX.MajorGrid.Enabled = false;
+            chart3.ChartAreas[0].AxisY.MajorGrid.Enabled = false;
+            chart3.ChartAreas[0].AxisX.Title = TableKinetica1.Columns[0].HeaderText;
+            chart3.ChartAreas[0].AxisY.Title = TableKinetica1.Columns[1].HeaderText;
+            countscan++;
+            //del = GoodMorning;
+
+
+            if (timeLeft < 0)
+            {
+                timer2.Enabled = false;
+                timer2.Stop();
+                MinMax();
+                button14.Enabled = true;
+                button11.Enabled = false;
+            }
+
+        }
+        public void MinMax()
+        {
+            double max = 0.0;
+            double min = 0.0;
+            countscan = 0;
+            for (int i = 0; i < TableKinetica1.Rows.Count; i++)
+            {
+                double x1 = Convert.ToDouble(TableKinetica1.Rows[countscan].Cells[0].Value);
+                double y1 = Convert.ToDouble(TableKinetica1.Rows[countscan].Cells[1].Value);
+                if (i == 0)
+                {
+                    if (Convert.ToDouble(TableKinetica1.Rows[i].Cells[1].Value) > Convert.ToDouble(TableKinetica1.Rows[i + 1].Cells[1].Value))
+                    {
+                        max = Convert.ToDouble(TableKinetica1.Rows[i].Cells[1].Value);
+                        dataGridView3.Rows.Add(TableKinetica1.Rows[i].Cells[0].Value, TableKinetica1.Rows[i].Cells[1].Value, TableKinetica1.Rows[i].Cells[2].Value);
+                        min = max;
+                        x1 = Convert.ToDouble(TableKinetica1.Rows[i].Cells[0].Value);
+                        y1 = Convert.ToDouble(TableKinetica1.Rows[i].Cells[1].Value);
+                        chart3.Series[0].Points.AddXY(x1, y1);
+                        chart3.Series[0].ChartType = SeriesChartType.Point;
+                    }
+                    else
+                    {
+                        min = Convert.ToDouble(TableKinetica1.Rows[i].Cells[1].Value);
+                        dataGridView4.Rows.Add(TableKinetica1.Rows[i].Cells[0].Value, TableKinetica1.Rows[i].Cells[1].Value, TableKinetica1.Rows[i].Cells[2].Value);
+                        max = min;
+                        x1 = Convert.ToDouble(TableKinetica1.Rows[i].Cells[0].Value);
+                        y1 = Convert.ToDouble(TableKinetica1.Rows[i].Cells[1].Value);
+                        chart3.Series[0].Points.AddXY(x1, y1);
+                        chart3.Series[0].ChartType = SeriesChartType.Point;
+                    }
+
+                }
+                else {
+                    if (i + 1 != TableKinetica1.Rows.Count)
+                    {
+                        if (Convert.ToDouble(TableKinetica1.Rows[i].Cells[1].Value) > Convert.ToDouble(TableKinetica1.Rows[i - 1].Cells[1].Value)
+                            &&
+                            Convert.ToDouble(TableKinetica1.Rows[i].Cells[1].Value) >= Convert.ToDouble(TableKinetica1.Rows[i + 1].Cells[1].Value)
+
+                            )
+                        {
+                            max = Convert.ToDouble(TableKinetica1.Rows[i].Cells[1].Value);
+                            min = max;
+                            dataGridView3.Rows.Add(TableKinetica1.Rows[i].Cells[0].Value, TableKinetica1.Rows[i].Cells[1].Value, TableKinetica1.Rows[i].Cells[2].Value);
+                            x1 = Convert.ToDouble(TableKinetica1.Rows[i].Cells[0].Value);
+                            y1 = Convert.ToDouble(TableKinetica1.Rows[i].Cells[1].Value);
+                            chart3.Series[0].Points.AddXY(x1, y1);
+                            chart3.Series[0].ChartType = SeriesChartType.Point;
+                        }
+                        if ((Convert.ToDouble(TableKinetica1.Rows[i].Cells[1].Value) < Convert.ToDouble(TableKinetica1.Rows[i - 1].Cells[1].Value)
+                            &&
+                            Convert.ToDouble(TableKinetica1.Rows[i].Cells[1].Value) <= Convert.ToDouble(TableKinetica1.Rows[i + 1].Cells[1].Value))
+
+                            )
+                        {
+                            min = Convert.ToDouble(TableKinetica1.Rows[i].Cells[1].Value);
+                            dataGridView4.Rows.Add(TableKinetica1.Rows[i].Cells[0].Value, TableKinetica1.Rows[i].Cells[1].Value, TableKinetica1.Rows[i].Cells[2].Value);
+                            max = min;
+                            x1 = Convert.ToDouble(TableKinetica1.Rows[i].Cells[0].Value);
+                            y1 = Convert.ToDouble(TableKinetica1.Rows[i].Cells[1].Value);
+                            chart3.Series[0].Points.AddXY(x1, y1);
+                            chart3.Series[0].ChartType = SeriesChartType.Point;
+                        }
+                    }
+                }
+            }
+
+            // countscan++;
+        }
+        public void IzmerenieFR_new()
         {
             IzmerenieFR _IzmerenieFR = new IzmerenieFR(this);
             _IzmerenieFR.ShowDialog();
         }
-       public string CountSeriya1 = "";
-       public string CountInSeriya1 = "";
+        public string CountSeriya1 = "";
+        public string CountInSeriya1 = "";
         public void NewGraduirovca(ref string CountInSeriya, ref string CountSeriya)
         {
-           
+
             CountSeriya1 = CountSeriya;
             CountInSeriya1 = CountInSeriya;
             ParametrsGrad _ParametrsGrad = new ParametrsGrad(this);
@@ -1149,18 +1580,18 @@ namespace Ecoview_V2._0
                     Zavisimoct = "A(C)";
                     radioButton4.Checked = true;
                     label14.Text = "A(C)";
-/*                    textBox4.Text = "";
-                    textBox5.Text = "";
-                    textBox6.Text = "";*/
+                    /*                    textBox4.Text = "";
+                                        textBox5.Text = "";
+                                        textBox6.Text = "";*/
                 }
                 else
                 {
                     Zavisimoct = "C(A)";
                     radioButton5.Checked = true;
                     label14.Text = "C(A)";
- /*                   textBox4.Text = "";
-                    textBox5.Text = "";
-                    textBox6.Text = "";*/
+                    /*                   textBox4.Text = "";
+                                       textBox5.Text = "";
+                                       textBox6.Text = "";*/
 
                 }
                 if (_ParametrsGrad.radioButton1.Checked == true)
@@ -1213,7 +1644,7 @@ namespace Ecoview_V2._0
                 label28.Visible = true;
                 label33.Visible = true;
             };
-            
+
             CountSeriya = CountSeriya1;
             CountInSeriya = CountInSeriya1;
             dateTimePicker1.Text = DateTime;
@@ -1230,13 +1661,13 @@ namespace Ecoview_V2._0
                 Table1.Columns.RemoveAt(i);
             }
             Table1.Rows[Table1.Rows.Count - 1].Cells[0].Value = "";
-            if(Convert.ToInt32(CountInSeriya) < 3)
+            if (Convert.ToInt32(CountInSeriya) < 3)
             {
                 radioButton3.Enabled = false;
             }
             else
             {
-                if(Convert.ToInt32(CountInSeriya) < 2)
+                if (Convert.ToInt32(CountInSeriya) < 2)
                 {
                     radioButton2.Enabled = false;
                     radioButton3.Enabled = false;
@@ -1248,15 +1679,15 @@ namespace Ecoview_V2._0
                     radioButton3.Enabled = true;
                 }
             }
- /*           RR.Text = "";
-            SKO.Text = "";
-            label21.Text = "";
-            label22.Text = "";*/
+            /*           RR.Text = "";
+                       SKO.Text = "";
+                       label21.Text = "";
+                       label22.Text = "";*/
             if (SposobZadan == "По СО")
             {
- /*               textBox4.Text = "";
-                textBox5.Text = "";
-                textBox6.Text = "";*/
+                /*               textBox4.Text = "";
+                               textBox5.Text = "";
+                               textBox6.Text = "";*/
             }
             if (SposobZadan == "Ввод коэффициентов")
             {
@@ -1364,39 +1795,36 @@ namespace Ecoview_V2._0
 
         private void button6_Click(object sender, EventArgs e)
         {
-            if (selet_rezim == 2)
+            switch (selet_rezim)
             {
-                Izmerenie1 = true;
-                if (tabControl2.SelectedIndex == 0)
-                {
-                    Open();
-                }
-                else
-                {
-                    Open1();
-                }
-            }
-            else
-            {
-                if(selet_rezim == 1)
-                {
-                    IzmerenieFR_Open();
-                }
-                else
-                {
-                    if (selet_rezim == 6)
+                case 2:
+                    Izmerenie1 = true;
+                    if (tabControl2.SelectedIndex == 0)
                     {
-                        Izmerenie1 = true;
-                        if (tabControl2.SelectedIndex == 0)
-                        {
-                            Open();
-                        }
-                        else
-                        {
-                            Open1();
-                        }
+                        Open();
                     }
-                }
+                    else
+                    {
+                        Open1();
+                    }
+                    break;
+                case 1:
+                    IzmerenieFR_Open();
+                    break;
+                case 6:
+                    Izmerenie1 = true;
+                    if (tabControl2.SelectedIndex == 0)
+                    {
+                        Open();
+                    }
+                    else
+                    {
+                        Open1();
+                    }
+                    break;
+                case 5:
+                    TableScan_Open();
+                    break;
             }
         }
 
@@ -1405,6 +1833,32 @@ namespace Ecoview_V2._0
         bool USE_KO_Izmer = false;
         string filepath1;
         string filepath;
+        public void TableScan_Open()
+        {
+            openFileDialog1.InitialDirectory = "C";
+            openFileDialog1.Title = "Open File";
+            openFileDialog1.FileName = "";
+            openFileDialog1.Filter = "SCAN файл|*.SCAN2";
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+               ScanChart.Series[0].Points.Clear();
+               ScanChart.Series[1].Points.Clear();
+               ScanChart.Series.Clear();
+               ScanChart.Series.Add("Series1");
+               ScanChart.Series.Add("Series2");
+                listBox1.Items.Clear();
+                dataGridView1.Rows.Clear();
+                dataGridView2.Rows.Clear();
+                try
+                {
+                    // получаем выбранный файл
+                    openFileScan(ref filepath);
+                    button3.Enabled = true;
+                }
+                catch (Exception t) { MessageBox.Show("exeption" + t.Message); }
+            }
+        }
+
         public void Open()
         {
             if (selet_rezim == 2)
@@ -1496,7 +1950,7 @@ namespace Ecoview_V2._0
                 }
 
                 tabPage4.Parent = tabControl2;
-                if(selet_rezim == 6)
+                if (selet_rezim == 6)
                 {
                     tabControl2.TabPages[1].Text = "Измерение Агро";
                 }
@@ -1577,6 +2031,196 @@ namespace Ecoview_V2._0
             }
 
         }
+        public void openFileScan(ref string filepath)
+        {
+            filepath = openFileDialog1.FileName;
+            XmlDocument xDoc = new XmlDocument();
+            xDoc.Load(@filepath);
+            XmlNodeList nodes = xDoc.ChildNodes;
+
+            foreach(XmlNode n in nodes)
+            {
+                if ("Data_Izmerenie".Equals(n.Name))
+                {
+                    for(XmlNode d = n.FirstChild; d != null; d = d.NextSibling)
+                    {
+                        if ("Izmerenie".Equals(d.Name))
+                        {
+                            for (XmlNode k = d.FirstChild; k != null; k = k.NextSibling)
+                            {
+                                if ("CountIzmer".Equals(k.Name) && k.FirstChild != null)
+                                {
+                                    for (int i = 0; i < Convert.ToInt32(k.FirstChild.Value); i++)
+                                    {
+                                        listBox1.Items.Add("Измерение"+i);
+                                    }
+                                }
+                                if ("TypeIzmer".Equals(k.Name) && k.FirstChild != null)
+                                {
+                                    ScanTable.Columns[1].HeaderText = k.FirstChild.Value;
+                                    if (ScanTable.Columns[1].HeaderText == "Abs")
+                                    {
+                                        ScanTable.Columns[2].HeaderText = "%T";
+                                    }
+                                    else
+                                    {
+                                        ScanTable.Columns[2].HeaderText = "Abs";
+                                    }
+                                    ScanChart.ChartAreas[0].AxisX.Title = ScanTable.Columns["WalveDl"].HeaderText;
+                                    ScanChart.ChartAreas[0].AxisY.Title = ScanTable.Columns["Abs_scan"].HeaderText;
+                                }
+                            }
+                        }
+                        /*for(int i = 0; i < listBox1.Items.Count; i++)
+                        {
+                            
+                        }*/
+                    }
+                }
+            }
+            Array.Resize<string[,]>(ref countScan, listBox1.Items.Count);
+            XDocument xdoc = XDocument.Load(@filepath);
+            double[] RowsMax;
+            foreach (XElement IzmerScan in xdoc.Element("Data_Izmerenie").Elements("NumberIzmer"))
+            {
+                XElement CountStrElement = IzmerScan.Element("CountStr");
+                XAttribute NumberIzmer = IzmerScan.Attribute("Nomer");
+                //   MessageBox.Show(NumberIzmer.Value);
+                int StrCount = 0;
+                if (CountStrElement != null)
+                {
+                    StrCount = Convert.ToInt32(CountStrElement.Value);
+
+                }
+                countScan[Convert.ToInt32(NumberIzmer.Value)] = new string[StrCount, 3];
+
+                RowsMax = new double[StrCount];
+                foreach (XElement IzmerScan1 in xdoc.Element("Data_Izmerenie").Element("NumberIzmer").Elements("Str"))
+                {
+                    XAttribute nameAttribute = IzmerScan1.Attribute("Nomer");
+                    XElement RowsElement = IzmerScan1.Element("Cells0");
+                    RowsMax[Convert.ToInt32(nameAttribute.Value)] = Convert.ToDouble(RowsElement.Value);
+                }
+
+                ScanChart.ChartAreas[0].AxisX.Minimum = RowsMax[StrCount-1];
+                ScanChart.ChartAreas[0].AxisX.Maximum = RowsMax[0];
+            }
+
+
+            //MessageBox.Show(RowsMax);
+            foreach (XElement IzmerScan in xdoc.Element("Data_Izmerenie").Elements("NumberIzmer"))
+            {
+                XElement CountStrElement = IzmerScan.Element("CountStr");
+                XAttribute NumberIzmer = IzmerScan.Attribute("Nomer");
+             //   MessageBox.Show(NumberIzmer.Value);
+                int StrCount = 0;
+                if (CountStrElement != null)
+                {
+                    StrCount = Convert.ToInt32(CountStrElement.Value);
+
+                }
+                
+                Application.DoEvents();
+             //  if (chart1.Series.Count > 1) { chart1.Series.RemoveAt(Convert.ToInt32(NumberIzmer.Value)+1); }
+                ScanChart.Series.Add("area" + Convert.ToInt32(NumberIzmer.Value));
+                Random r = new Random();
+                int x = r.Next(100, 200), y = r.Next(100, 200);
+                ScanChart.Series["area" + Convert.ToInt32(NumberIzmer.Value)].Color =
+                    System.Drawing.Color.FromArgb(
+                        (byte)(x - 2 * y),
+                        (byte)(y + x),
+                        (byte)(y - 2 * x));
+                ScanChart.Series["area" + Convert.ToInt32(NumberIzmer.Value)].ChartType = SeriesChartType.Line;
+                //   TableScan();
+                // Application.DoEvents();
+                ///    RowsMax = new String[StrCount];
+                double[] massWL = new double[StrCount];
+                double[] massGE = new double[StrCount];
+                foreach (XElement IzmerScan1 in IzmerScan.Elements("Str"))
+                 {
+
+                    XAttribute nameAttribute = IzmerScan1.Attribute("Nomer");
+                    XElement CellsElement0 = IzmerScan1.Element("Cells0");
+                    XElement CellsElement1 = IzmerScan1.Element("Cells1");
+                    XElement CellsElement2 = IzmerScan1.Element("Cells2");
+                    if (nameAttribute != null && CellsElement0 != null && CellsElement1 != null && CellsElement2 != null)
+                    {
+                        countScan[Convert.ToInt32(NumberIzmer.Value)][Convert.ToInt32(nameAttribute.Value), 0] = CellsElement0.Value;
+                        countScan[Convert.ToInt32(NumberIzmer.Value)][Convert.ToInt32(nameAttribute.Value), 1] = CellsElement1.Value;
+                        countScan[Convert.ToInt32(NumberIzmer.Value)][Convert.ToInt32(nameAttribute.Value), 2] = CellsElement2.Value;
+                        double x1 = Convert.ToDouble(CellsElement0.Value);
+                        double y1 = Convert.ToDouble(CellsElement1.Value);
+                        ScanChart.Series["area" + Convert.ToInt32(NumberIzmer.Value)].Points.AddXY(x1, y1);
+                        massWL[Convert.ToInt32(nameAttribute.Value)] = Convert.ToDouble(CellsElement0.Value);
+                        massGE[Convert.ToInt32(nameAttribute.Value)] = Convert.ToDouble(CellsElement1.Value);
+
+                    }
+
+
+                }
+                double max = 0.0;
+                double min = 0.0;
+
+                for(int i = 0; i < StrCount; i++)
+                {
+                    if (i == 0)
+                    {
+                        if (massGE[i] > massGE[i+1])
+                        {
+                            max = massGE[i];
+                            //dataGridView1.Rows.Add(ScanTable.Rows[i].Cells[0].Value, ScanTable.Rows[i].Cells[1].Value, ScanTable.Rows[i].Cells[2].Value);
+                            min = max;
+                            double x1 = massWL[i];
+                            double y1 = massGE[i];
+                            ScanChart.Series[0].Points.AddXY(x1, y1);
+                            ScanChart.Series[0].ChartType = SeriesChartType.Point;
+                        }
+                        else
+                        {
+                            min = massGE[i];
+                          //  dataGridView2.Rows.Add(ScanTable.Rows[i].Cells[0].Value, ScanTable.Rows[i].Cells[1].Value, ScanTable.Rows[i].Cells[2].Value);
+                            max = min;
+                            double x1 = massWL[i];
+                            double y1 = massGE[i];
+                            ScanChart.Series[0].Points.AddXY(x1, y1);
+                            ScanChart.Series[0].ChartType = SeriesChartType.Point;
+                        }
+
+                    }
+                    else {
+                        if (i + 1 != StrCount)
+                        {
+                            if (massGE[i] > massGE[i-1] && massGE[i] >= massGE[i+1])
+                            {
+                                max = massGE[i];
+                                min = max;
+                                // dataGridView1.Rows.Add(ScanTable.Rows[i].Cells[0].Value, ScanTable.Rows[i].Cells[1].Value, ScanTable.Rows[i].Cells[2].Value);
+                                double x1 = massWL[i];
+                                double y1 = massGE[i];
+                                ScanChart.Series[0].Points.AddXY(x1, y1);
+                                ScanChart.Series[0].ChartType = SeriesChartType.Point;
+                            }
+                            if (massGE[i] < massGE[i-1] && massGE[i] <= massGE[i+1])
+                            {
+                                min = massGE[i];
+                              //  dataGridView2.Rows.Add(ScanTable.Rows[i].Cells[0].Value, ScanTable.Rows[i].Cells[1].Value, ScanTable.Rows[i].Cells[2].Value);
+                                max = min;
+                                double x1 = massWL[i];
+                                double y1 = massGE[i];
+                                ScanChart.Series[0].Points.AddXY(x1, y1);
+                                ScanChart.Series[0].ChartType = SeriesChartType.Point;
+                            }
+                        }
+                    }
+                }
+
+                listBox1.SetSelected(0, true);
+
+            }
+
+            
+
+        }
         public void openFile(ref string filepath)
         {
             WLREMOVE1();
@@ -1614,7 +2258,7 @@ namespace Ecoview_V2._0
                                     }
                                     else
                                     {
-                                       // MessageBox.Show("Версия совпадает!");
+                                        // MessageBox.Show("Версия совпадает!");
                                         break;
                                     }
 
@@ -1625,7 +2269,7 @@ namespace Ecoview_V2._0
 "Рекомендуем создать новую градуировку!");
                                     break;
                                 }
-                               
+
                             }
                         }
                     }
@@ -1701,7 +2345,7 @@ namespace Ecoview_V2._0
                                 {
                                     WidthCuvette = k.FirstChild.Value; //Ширина кюветы
                                     textBox2.Text = WidthCuvette;
-                                    
+
                                 }
                                 if ("BottomLine".Equals(k.Name) && k.FirstChild != null)
                                 {
@@ -1720,7 +2364,7 @@ namespace Ecoview_V2._0
                                 {
                                     Description = k.FirstChild.Value; //Примечание
                                     textBox1.Text = Description;
-                                    
+
                                 }
                                 if ("DateTime".Equals(k.Name) && k.FirstChild != null)
                                 {
@@ -1982,7 +2626,7 @@ namespace Ecoview_V2._0
                     // получаем выбранный файл
                     IzmerenieFR_openFile(ref filepathIzmarFR);
                     button11.Enabled = true;
-                  //  button10.Enabled = true;
+                    //  button10.Enabled = true;
                     button3.Enabled = true;
                     button9.Enabled = true;
                 }
@@ -2024,7 +2668,7 @@ namespace Ecoview_V2._0
                 XElement DescriptionElement = IzmerenieElement.Element("Description");
                 XElement DateTimeElement = IzmerenieElement.Element("DateTime");
                 XElement IspolnitelElement = IzmerenieElement.Element("Ispolnitel");
-                if (countIzmer1Element != null && DescriptionElement != null && DateTimeElement != null && IspolnitelElement != null) 
+                if (countIzmer1Element != null && DescriptionElement != null && DateTimeElement != null && IspolnitelElement != null)
                 {
                     DateTime = DateTimeElement.Value;
                     Description = DescriptionElement.Value;
@@ -2077,8 +2721,8 @@ namespace Ecoview_V2._0
                 }
             }
             IzmerenieFR_Table_Write();
-        
-            
+
+
         }
         public void openFile2(ref string filepath2, ref string filepath)
         {
@@ -2356,10 +3000,10 @@ namespace Ecoview_V2._0
 
 
         }
-       public void IzmerenieFR_Table_Write()
+        public void IzmerenieFR_Table_Write()
         {
             int StolbecCol_1 = 7;
-            for (int i = 0; i < (Stolbec_1.Length/StolbecCol_1); i++)
+            for (int i = 0; i < (Stolbec_1.Length / StolbecCol_1); i++)
             {
                 for (int j = 0; j < StolbecCol_1; j++)
                 {
@@ -2457,7 +3101,7 @@ namespace Ecoview_V2._0
             }
             GWNew.Text = wavelength1;
             SWF.Application.OpenForms["LogoFrm2"].Close();
-            // _Analis.GW();
+            // GW();
         }
         public void functionA()
         {
@@ -2611,7 +3255,7 @@ namespace Ecoview_V2._0
         public double Asred1;
         int currentCelledit = 0;
         int rowcelledit = 0;
-      
+
         public void functionAsred()
         {
             //Table1.Rows.Add();
@@ -2634,11 +3278,11 @@ namespace Ecoview_V2._0
                 if (radioButton2.Checked == true)
                 {
 
-                    lineinaya() ;
+                    lineinaya();
                 }
                 else
                 {
-                     kvadratichnaya();
+                    kvadratichnaya();
                 }
             }
             Podskazka.Text = "Сохраните градуировку!";
@@ -2721,7 +3365,7 @@ namespace Ecoview_V2._0
                 if (USE_KO == false)
                 {
                     USE_KO_lineinaya0_not();
-                    
+
                 }
                 else
                 {
@@ -3129,8 +3773,8 @@ namespace Ecoview_V2._0
             RR.Text = "R^2 = " + string.Format("{0:0.0000}", (1 - (yx / yx1)));
             for (int i = 1; i < Table1.Rows.Count - 1; i++)
             {
-               y1 = Convert.ToDouble(Table1.Rows[i].Cells["Asred"].Value);
-               x1 = Convert.ToDouble(Table1.Rows[i].Cells["Concetr"].Value);
+                y1 = Convert.ToDouble(Table1.Rows[i].Cells["Asred"].Value);
+                x1 = Convert.ToDouble(Table1.Rows[i].Cells["Concetr"].Value);
 
                 chart1.Series[0].Points.AddXY(x1, (y1 - y1_1));
                 chart1.Series[0].ChartType = SeriesChartType.Point;
@@ -3202,7 +3846,7 @@ namespace Ecoview_V2._0
                     // Запоминаем новое максимальное значение
                     max = Table1masStr1_1[i - 1];
                     // Запоминаем порядковый номер
-                   index = i;
+                    index = i;
                 }
             }
             // max = max / 100;
@@ -3339,7 +3983,7 @@ namespace Ecoview_V2._0
                 // circle++;
                 //double y2 = 0.5 * i;
                 //double x2 = y2 / k1;
-                
+
                 x2 = 0;
                 if (Table1_Asred == 0)
                 {
@@ -3689,7 +4333,7 @@ namespace Ecoview_V2._0
 
 
 
-            
+
         }
         public void USE_KO_lineinaya_not()
         {
@@ -3709,9 +4353,9 @@ namespace Ecoview_V2._0
             {
                 double x = Convert.ToDouble(Table1.Rows[i].Cells["Asred"].Value);
                 double y = Convert.ToDouble(Table1.Rows[i].Cells["Concetr"].Value);
-               // double y0 = Convert.ToDouble(Table1.Rows[0].Cells["Concetr"].Value);
+                // double y0 = Convert.ToDouble(Table1.Rows[0].Cells["Concetr"].Value);
                 double y1 = Convert.ToDouble(Table1.Rows[Table1.Rows.Count - 2].Cells["Concetr"].Value);
-               // double x0 = Convert.ToDouble(Table1.Rows[0].Cells["Asred"].Value);
+                // double x0 = Convert.ToDouble(Table1.Rows[0].Cells["Asred"].Value);
                 double x1 = Convert.ToDouble(Table1.Rows[Table1.Rows.Count - 2].Cells["Asred"].Value);
                 SUMMX += x; SUMMY += y;
                 XY += x * y;
@@ -4202,7 +4846,7 @@ namespace Ecoview_V2._0
             double xfin = x2 * 1.1;
             double yfin = xfin * k1 + k0;
             chart1.Series[1].Points.AddXY(xfin, yfin);
-           
+
         }
         public void USE_KO_lineinaya1_not()
         {
@@ -4228,7 +4872,7 @@ namespace Ecoview_V2._0
                 double x = Convert.ToDouble(Table1.Rows[i].Cells["Concetr"].Value);
                 //double x0 = Convert.ToDouble(Table1.Rows[0].Cells["Concetr"].Value);
                 double x1 = Convert.ToDouble(Table1.Rows[Table1.Rows.Count - 2].Cells["Concetr"].Value);
-               // double y0 = Convert.ToDouble(Table1.Rows[0].Cells["Asred"].Value);
+                // double y0 = Convert.ToDouble(Table1.Rows[0].Cells["Asred"].Value);
                 double y1 = Convert.ToDouble(Table1.Rows[Table1.Rows.Count - 2].Cells["Asred"].Value);
                 SUMMX += x; SUMMY += y;
                 XY += x * y;
@@ -4248,128 +4892,128 @@ namespace Ecoview_V2._0
             AgroText2.Text = string.Format("{0:0.0000}", 0);
             label14.Text = "C(A) = " + k1.ToString("0.0000 ;- 0.0000 ") + "*A " + k0.ToString("+ 0.0000 ;- 0.0000 ");
             max = -1;
-           for (int i = 0; i < Table1.Rows.Count - 1; i++)
-           {
-               double Ser1 = Convert.ToDouble(Table1.Rows[i].Cells["Asred"].Value) * k1 + k0;
-               SUMMSer = 0;
-               for (int j = 1; j <= NoCaIzm; j++)
-               {
-                   double Ser = Convert.ToDouble(Table1.Rows[i].Cells["A;Ser (" + j].Value) * k1 + k0;
+            for (int i = 0; i < Table1.Rows.Count - 1; i++)
+            {
+                double Ser1 = Convert.ToDouble(Table1.Rows[i].Cells["Asred"].Value) * k1 + k0;
+                SUMMSer = 0;
+                for (int j = 1; j <= NoCaIzm; j++)
+                {
+                    double Ser = Convert.ToDouble(Table1.Rows[i].Cells["A;Ser (" + j].Value) * k1 + k0;
 
-                   SUMMSer += (Ser - Ser1) * (Ser - Ser1);
-               }
-               double SredOtkl = Math.Sqrt(SUMMSer / (NoCaIzm - 1));
-               double SredOtklProc = (SredOtkl / Ser1) * 100;
-               SredOtklMatr[i] = SredOtklProc;
-           }
+                    SUMMSer += (Ser - Ser1) * (Ser - Ser1);
+                }
+                double SredOtkl = Math.Sqrt(SUMMSer / (NoCaIzm - 1));
+                double SredOtklProc = (SredOtkl / Ser1) * 100;
+                SredOtklMatr[i] = SredOtklProc;
+            }
 
-           // Цикл по всем элементам массива
-           // От 0 до размера массива
-           for (int i = 1; i <= SredOtklMatr.Length; i++)
-           {
-               // Если максимальная стоимость меньше, либо равно текущей проверяемой
-               if (max <= SredOtklMatr[i - 1])
-               {
-                   // Запоминаем новое максимальное значение
-                   max = SredOtklMatr[i - 1];
-                   // Запоминаем порядковый номер
-                   index = i;
-               }
-           }
-           // max = max / 100;
-           // index = index + 1;
-           if (NoCaIzm >= 3)
-           {
-               SKO.Text = "СКО(С) = " + string.Format("{0:0.00}", max) + "% (CO №" + index + ")";
-           }
-           else
-           {
-               SKO.Text = "СКО(C) - Не применимо для Nсер. < 3";
-           }
-           max = -1;
-           double[] Table1masStr1 = new double[Table1.Rows.Count - 1];
-           for (int i = 0; i < Table1.Rows.Count - 1; i++)
-           {
-               double x = Convert.ToDouble(Table1.Rows[i].Cells["Concetr"].Value);
-               //  double y = Convert.ToDouble(Table1.Rows[i].Cells["Asred"].Value);
-               //double xrasch = k1 * x;
-               double[] Table1masStr = new double[NoCaIzm];
-               for (int j = 1; j <= NoCaIzm; j++)
-               {
-                   Table1masStr[j - 1] = Convert.ToDouble(Table1.Rows[i].Cells["A;Ser (" + j].Value) * k1 + k0;
-               }
-               Array.Sort(Table1masStr);
-               double maxEl = Table1masStr[Table1masStr.Length - 1];
-               Table1masStr1[i] = Math.Abs(((maxEl - x) * 100) / x);
-               //label22.Text = "Макс.Ошибка А(С) = " + string.Format("{0:0.0000}", (((maxEl - xrasch) * 100) / xrasch));
-           }
-           for (int i = 1; i <= Table1masStr1.Length; i++)
-           {
-               // Если максимальная стоимость меньше, либо равно текущей проверяемой
-               if (max <= Table1masStr1[i - 1])
-               {
-                   // Запоминаем новое максимальное значение
-                   max = Table1masStr1[i - 1];
-                   // Запоминаем порядковый номер
-                   index = i;
-               }
-           }
-           // max = max / 100;
-           //index = index + 1;
-           label22.Text = "Макс.Ошибка А(С) = " + string.Format("{0:0.00}", max) + "% (CO №" + index + ")";
-           double yx = 0;
-           double yx1 = 0;
-           double SREDSUMM = 0;
-           SUMMX = 0;
-           for (int i = 0; i < Table1.Rows.Count - 1; i++)
-           {
-               double y1 = Convert.ToDouble(Table1.Rows[i].Cells["Concetr"].Value);
-               SUMMX += y1;
-           }
-           SREDSUMM = SUMMX / (Table1.Rows.Count - 1);
-           for (int i = 0; i < (Table1.Rows.Count - 1); i++)
-           {
-               double x1 = Convert.ToDouble(Table1.Rows[i].Cells["Concetr"].Value);
-               double y1 = Convert.ToDouble(Table1.Rows[i].Cells["Asred"].Value);
+            // Цикл по всем элементам массива
+            // От 0 до размера массива
+            for (int i = 1; i <= SredOtklMatr.Length; i++)
+            {
+                // Если максимальная стоимость меньше, либо равно текущей проверяемой
+                if (max <= SredOtklMatr[i - 1])
+                {
+                    // Запоминаем новое максимальное значение
+                    max = SredOtklMatr[i - 1];
+                    // Запоминаем порядковый номер
+                    index = i;
+                }
+            }
+            // max = max / 100;
+            // index = index + 1;
+            if (NoCaIzm >= 3)
+            {
+                SKO.Text = "СКО(С) = " + string.Format("{0:0.00}", max) + "% (CO №" + index + ")";
+            }
+            else
+            {
+                SKO.Text = "СКО(C) - Не применимо для Nсер. < 3";
+            }
+            max = -1;
+            double[] Table1masStr1 = new double[Table1.Rows.Count - 1];
+            for (int i = 0; i < Table1.Rows.Count - 1; i++)
+            {
+                double x = Convert.ToDouble(Table1.Rows[i].Cells["Concetr"].Value);
+                //  double y = Convert.ToDouble(Table1.Rows[i].Cells["Asred"].Value);
+                //double xrasch = k1 * x;
+                double[] Table1masStr = new double[NoCaIzm];
+                for (int j = 1; j <= NoCaIzm; j++)
+                {
+                    Table1masStr[j - 1] = Convert.ToDouble(Table1.Rows[i].Cells["A;Ser (" + j].Value) * k1 + k0;
+                }
+                Array.Sort(Table1masStr);
+                double maxEl = Table1masStr[Table1masStr.Length - 1];
+                Table1masStr1[i] = Math.Abs(((maxEl - x) * 100) / x);
+                //label22.Text = "Макс.Ошибка А(С) = " + string.Format("{0:0.0000}", (((maxEl - xrasch) * 100) / xrasch));
+            }
+            for (int i = 1; i <= Table1masStr1.Length; i++)
+            {
+                // Если максимальная стоимость меньше, либо равно текущей проверяемой
+                if (max <= Table1masStr1[i - 1])
+                {
+                    // Запоминаем новое максимальное значение
+                    max = Table1masStr1[i - 1];
+                    // Запоминаем порядковый номер
+                    index = i;
+                }
+            }
+            // max = max / 100;
+            //index = index + 1;
+            label22.Text = "Макс.Ошибка А(С) = " + string.Format("{0:0.00}", max) + "% (CO №" + index + ")";
+            double yx = 0;
+            double yx1 = 0;
+            double SREDSUMM = 0;
+            SUMMX = 0;
+            for (int i = 0; i < Table1.Rows.Count - 1; i++)
+            {
+                double y1 = Convert.ToDouble(Table1.Rows[i].Cells["Concetr"].Value);
+                SUMMX += y1;
+            }
+            SREDSUMM = SUMMX / (Table1.Rows.Count - 1);
+            for (int i = 0; i < (Table1.Rows.Count - 1); i++)
+            {
+                double x1 = Convert.ToDouble(Table1.Rows[i].Cells["Concetr"].Value);
+                double y1 = Convert.ToDouble(Table1.Rows[i].Cells["Asred"].Value);
 
-               yx += (x1 - (k1 * y1 + k0)) * (x1 - (k1 * y1 + k0));
-               yx1 += (x1 - SREDSUMM) * (x1 - SREDSUMM);
-           }
-           RR.Text = "R^2 = " + string.Format("{0:0.0000}", (1 - (yx / yx1)));
-           double x0 = 0;
-           double y0 = x0 * k1 + k0;
-           double x2 = 0;
-           chart1.Series[1].Points.AddXY(x0, y0);
-           for (int i = 0; i < Table1.Rows.Count - 1; i++)
-           {
-               circle = 1;
-               double x1_1 = Convert.ToDouble(Table1.Rows[i].Cells["Asred"].Value);
-               double y1_1 = Convert.ToDouble(Table1.Rows[i].Cells["Concetr"].Value);
+                yx += (x1 - (k1 * y1 + k0)) * (x1 - (k1 * y1 + k0));
+                yx1 += (x1 - SREDSUMM) * (x1 - SREDSUMM);
+            }
+            RR.Text = "R^2 = " + string.Format("{0:0.0000}", (1 - (yx / yx1)));
+            double x0 = 0;
+            double y0 = x0 * k1 + k0;
+            double x2 = 0;
+            chart1.Series[1].Points.AddXY(x0, y0);
+            for (int i = 0; i < Table1.Rows.Count - 1; i++)
+            {
+                circle = 1;
+                double x1_1 = Convert.ToDouble(Table1.Rows[i].Cells["Asred"].Value);
+                double y1_1 = Convert.ToDouble(Table1.Rows[i].Cells["Concetr"].Value);
 
-               // chart1.ChartAreas[0].AxisY.Crossing = k0;
-               chart1.Series[0].Points.AddXY(x1_1, y1_1);
-               chart1.Series[0].ChartType = SeriesChartType.Point;
-               chart1.ChartAreas[0].AxisY.Crossing = 0;
-               chart1.ChartAreas[0].AxisX.Crossing = 0;
-               // double y2 = 0.5 * i;
-               //     double x2 = (y2 - k0) / k1;
-               //  double y2 = k1 * x1_1 + k0;
-               x2 = x1_1;
-               double y2 = x1_1 * k1 + k0;
-               chart1.Series[1].Points.AddXY(x2, y2);
-               chart1.Series[1].ChartType = SeriesChartType.Line;
-               chart1.ChartAreas[0].AxisX.Title = "Оптическая плотность, А";
-               chart1.ChartAreas[0].AxisY.Title = "Концетрация, " + edconctr;
-               chart1.ChartAreas[0].AxisX.Minimum = 0;
-               //  chart1.ChartAreas[0].AxisX.Maximum = Math.Round((Convert.ToDouble(Table1.Rows[Table1.Rows.Count - 2].Cells["Asred"].Value) + x2), 2);
-               chart1.ChartAreas[0].AxisY.Minimum = 0;
-               //      chart1.ChartAreas[0].AxisY.Maximum = Convert.ToDouble(Table1.Rows[Table1.Rows.Count - 2].Cells["Concetr"].Value) + y2;
-               //   chart1.ChartAreas[0].AxisX.Interval = Math.Round((Convert.ToDouble(Table1.Rows[3].Cells["Asred"].Value) - Convert.ToDouble(Table1.Rows[2].Cells["Asred"].Value)), 2);
-               //     chart1.ChartAreas[0].AxisX.Interval = 5;
-           }
-           double xfin = x2 * 1.1;
-           double yfin = xfin * k1 + k0;
-           chart1.Series[1].Points.AddXY(xfin, yfin);
+                // chart1.ChartAreas[0].AxisY.Crossing = k0;
+                chart1.Series[0].Points.AddXY(x1_1, y1_1);
+                chart1.Series[0].ChartType = SeriesChartType.Point;
+                chart1.ChartAreas[0].AxisY.Crossing = 0;
+                chart1.ChartAreas[0].AxisX.Crossing = 0;
+                // double y2 = 0.5 * i;
+                //     double x2 = (y2 - k0) / k1;
+                //  double y2 = k1 * x1_1 + k0;
+                x2 = x1_1;
+                double y2 = x1_1 * k1 + k0;
+                chart1.Series[1].Points.AddXY(x2, y2);
+                chart1.Series[1].ChartType = SeriesChartType.Line;
+                chart1.ChartAreas[0].AxisX.Title = "Оптическая плотность, А";
+                chart1.ChartAreas[0].AxisY.Title = "Концетрация, " + edconctr;
+                chart1.ChartAreas[0].AxisX.Minimum = 0;
+                //  chart1.ChartAreas[0].AxisX.Maximum = Math.Round((Convert.ToDouble(Table1.Rows[Table1.Rows.Count - 2].Cells["Asred"].Value) + x2), 2);
+                chart1.ChartAreas[0].AxisY.Minimum = 0;
+                //      chart1.ChartAreas[0].AxisY.Maximum = Convert.ToDouble(Table1.Rows[Table1.Rows.Count - 2].Cells["Concetr"].Value) + y2;
+                //   chart1.ChartAreas[0].AxisX.Interval = Math.Round((Convert.ToDouble(Table1.Rows[3].Cells["Asred"].Value) - Convert.ToDouble(Table1.Rows[2].Cells["Asred"].Value)), 2);
+                //     chart1.ChartAreas[0].AxisX.Interval = 5;
+            }
+            double xfin = x2 * 1.1;
+            double yfin = xfin * k1 + k0;
+            chart1.Series[1].Points.AddXY(xfin, yfin);
         }
         private void radioButton4_CheckedChanged(object sender, EventArgs e)
         {
@@ -4692,37 +5336,37 @@ namespace Ecoview_V2._0
                 yx1 += (y1 - SREDSUMM) * (y1 - SREDSUMM);
             }
             RR.Text = "R^2 = " + string.Format("{0:0.0000}", (1 - (yx / yx1)));
-        
-        double x2_1 = 0;
-        double y0 = k0 + k1 * x2_1 + k2 * x2_1 * x2_1;
-        chart1.Series[1].Points.AddXY(x2_1, y0);
-                        for (int i = 0; i<Table1.Rows.Count - 1; i++)
-                        {
-                            double y = Convert.ToDouble(Table1.Rows[i].Cells["Asred"].Value);
-        double x = Convert.ToDouble(Table1.Rows[i].Cells["Concetr"].Value);
 
-        chart1.Series[0].Points.AddXY(x, y);
-                            chart1.Series[0].ChartType = SeriesChartType.Point;
-                            chart1.ChartAreas[0].AxisY.Crossing = 0;
-                            chart1.ChartAreas[0].AxisX.Crossing = 0;
+            double x2_1 = 0;
+            double y0 = k0 + k1 * x2_1 + k2 * x2_1 * x2_1;
+            chart1.Series[1].Points.AddXY(x2_1, y0);
+            for (int i = 0; i < Table1.Rows.Count - 1; i++)
+            {
+                double y = Convert.ToDouble(Table1.Rows[i].Cells["Asred"].Value);
+                double x = Convert.ToDouble(Table1.Rows[i].Cells["Concetr"].Value);
 
-                            // double x2_1 = 0.3 * i;
-                            x2_1 = x;
-                            double y2_1 = k0 + k1 * x2_1 + k2 * x2_1 * x2_1;
+                chart1.Series[0].Points.AddXY(x, y);
+                chart1.Series[0].ChartType = SeriesChartType.Point;
+                chart1.ChartAreas[0].AxisY.Crossing = 0;
+                chart1.ChartAreas[0].AxisX.Crossing = 0;
 
-        chart1.Series[1].Points.AddXY(x2_1, y2_1);
-                            chart1.Series[1].ChartType = SeriesChartType.Line;
-                            chart1.ChartAreas[0].AxisX.Title = "Концетрация, " + edconctr;
-                            chart1.ChartAreas[0].AxisY.Title = "Оптическая плотность, А";
-                            chart1.ChartAreas[0].AxisX.Minimum = 0;
-                            //  chart1.ChartAreas[0].AxisX.Maximum = Convert.ToDouble(Table1.Rows[Table1.Rows.Count - 2].Cells["Concetr"].Value) + x2_1;
-                            chart1.ChartAreas[0].AxisY.Minimum = 0;
-                            //   chart1.ChartAreas[0].AxisY.Maximum = Math.Round((Convert.ToDouble(Table1.Rows[Table1.Rows.Count - 2].Cells["Asred"].Value) + y2_1), 2);
-                            //chart1.ChartAreas[0].AxisX.Interval = Math.Round((Convert.ToDouble(Table1.Rows[3].Cells["Concetr"].Value) - Convert.ToDouble(Table1.Rows[2].Cells["Concetr"].Value)), 2);
-                        }
-    double xfin = x2_1 * 1.1;
-    double yfin = k0 + k1 * xfin + k2 * xfin * xfin;
-    chart1.Series[1].Points.AddXY(xfin, yfin);
+                // double x2_1 = 0.3 * i;
+                x2_1 = x;
+                double y2_1 = k0 + k1 * x2_1 + k2 * x2_1 * x2_1;
+
+                chart1.Series[1].Points.AddXY(x2_1, y2_1);
+                chart1.Series[1].ChartType = SeriesChartType.Line;
+                chart1.ChartAreas[0].AxisX.Title = "Концетрация, " + edconctr;
+                chart1.ChartAreas[0].AxisY.Title = "Оптическая плотность, А";
+                chart1.ChartAreas[0].AxisX.Minimum = 0;
+                //  chart1.ChartAreas[0].AxisX.Maximum = Convert.ToDouble(Table1.Rows[Table1.Rows.Count - 2].Cells["Concetr"].Value) + x2_1;
+                chart1.ChartAreas[0].AxisY.Minimum = 0;
+                //   chart1.ChartAreas[0].AxisY.Maximum = Math.Round((Convert.ToDouble(Table1.Rows[Table1.Rows.Count - 2].Cells["Asred"].Value) + y2_1), 2);
+                //chart1.ChartAreas[0].AxisX.Interval = Math.Round((Convert.ToDouble(Table1.Rows[3].Cells["Concetr"].Value) - Convert.ToDouble(Table1.Rows[2].Cells["Concetr"].Value)), 2);
+            }
+            double xfin = x2_1 * 1.1;
+            double yfin = k0 + k1 * xfin + k2 * xfin * xfin;
+            chart1.Series[1].Points.AddXY(xfin, yfin);
         }
 
         public void USE_KO_kvadratichnaya()
@@ -4742,7 +5386,7 @@ namespace Ecoview_V2._0
 
                 double y = Convert.ToDouble(Table1.Rows[i].Cells["Asred"].Value);
                 double x = Convert.ToDouble(Table1.Rows[i].Cells["Concetr"].Value);
-               
+
                 x2 += x * x;
                 x3 += x * x * x;
                 x4 += x * x * x * x;
@@ -5319,67 +5963,94 @@ namespace Ecoview_V2._0
 
         private void button7_Click(object sender, EventArgs e)
         {
-            if (selet_rezim == 2)
+            switch (selet_rezim)
             {
-                if (tabControl2.SelectedIndex == 0)
-                {
-                    if ((Table1.RowCount < 1) && SposobZadan == "По СО")
+                case 2:
+                    if (tabControl2.SelectedIndex == 0)
                     {
-                        MessageBox.Show("Создайте Градуировку");
-
-                    }
-                    else
-                    {
-                        Save();
-                    }
-                }
-                else
-                {
-                    if (Table2.RowCount > 0)
-                    {
-                        Save1();
-                    }
-                    else
-                    {
-                        MessageBox.Show("Создайте Измерение");
-                    }
-                }
-            }
-            else
-            {
-                if (selet_rezim == 1)
-                {
-                    SaveFR();
-                }
-                else
-                {
-                    if (selet_rezim == 6)
-                    {
-                        if (tabControl2.SelectedIndex == 0)
+                        if ((Table1.RowCount < 1) && SposobZadan == "По СО")
                         {
-                            if ((Table1.RowCount < 1) && SposobZadan == "По СО")
-                            {
-                                MessageBox.Show("Создайте Градуировку");
+                            MessageBox.Show("Создайте Градуировку");
 
-                            }
-                            else
-                            {
-                                Save();
-                            }
                         }
                         else
                         {
-                            if (Table2.RowCount > 0)
-                            {
-                                Save1();
-                            }
-                            else
-                            {
-                                MessageBox.Show("Создайте Измерение");
-                            }
+                            Save();
                         }
                     }
+                    else
+                    {
+                        if (Table2.RowCount > 0)
+                        {
+                            Save1();
+                        }
+                        else
+                        {
+                            MessageBox.Show("Создайте Измерение");
+                        }
+                    }
+                    break;
+                case 1:
+                    SaveFR();
+                    break;
+                case 6:
+                    if (tabControl2.SelectedIndex == 0)
+                    {
+                        if ((Table1.RowCount < 1) && SposobZadan == "По СО")
+                        {
+                            MessageBox.Show("Создайте Градуировку");
+
+                        }
+                        else
+                        {
+                            Save();
+                        }
+                    }
+                    else
+                    {
+                        if (Table2.RowCount > 0)
+                        {
+                            Save1();
+                        }
+                        else
+                        {
+                            MessageBox.Show("Создайте Измерение");
+                        }
+                    }
+                    break;
+                case 5:
+                    if (ScanTable.RowCount < 2)
+                    {
+                        MessageBox.Show("Создайте измерение");
+                    }
+                    else
+                    {
+                        SaveScan();
+                    }
+                    break;
+            }
+        }
+        public void SaveScan()
+        {
+            bool doNotWrite = false;
+            for (int j = 0; j < ScanTable.RowCount-1; j++)
+            {
+                for (int i = 0; i < ScanTable.Rows[j].Cells.Count; i++)
+                {
+                    if (ScanTable.Rows[j].Cells[i].Value == null)
+                    {
+                        doNotWrite = true;
+                        break;
+                    }
                 }
+            }
+            if (doNotWrite)
+            {
+                MessageBox.Show("Не вся поля таблицы были заполнены!");
+            }
+            else
+            {
+                SaveAsScanTable();
             }
         }
         public void SaveFR()
@@ -5440,9 +6111,9 @@ namespace Ecoview_V2._0
             else
             {
                 SaveAs1();
-                
+
             }
- 
+
         }
         public void Save1()
         {
@@ -5492,11 +6163,11 @@ namespace Ecoview_V2._0
                 button3.Enabled = true;
                 button9.Enabled = true;
                 печатьToolStripMenuItem1.Enabled = true;
+                tabPage4.Parent = tabControl2;
                 if (selet_rezim == 6)
                 {
                     tabControl2.TabPages[1].Text = "Измерение Агро";
                 }
-                tabPage4.Parent = tabControl2;
                 Podskazka.Text = "Перейдите в Измерения!";
                 label27.Visible = false;
                 label24.Visible = false;
@@ -5506,6 +6177,24 @@ namespace Ecoview_V2._0
                 label33.Visible = false;
             }
         }
+        public void SaveAsScanTable()
+        {
+            saveFileDialog1.InitialDirectory = "C";
+            saveFileDialog1.Title = "Save as XML File";
+            saveFileDialog1.FileName = "";
+            saveFileDialog1.Filter = "SCAN файл|*.SCAN2";
+
+            if (saveFileDialog1.ShowDialog() != DialogResult.Cancel)
+            {
+                CreateXMLDocumentIzmerenieScan(ref filepath);
+                WriteXmlIzmerenieScan(ref filepath);
+                button3.Enabled = true;
+                button9.Enabled = true;
+                печатьToolStripMenuItem1.Enabled = true;
+
+            }
+        }
+
         public void SaveAsIzmerenieFR()
         {
             saveFileDialog1.InitialDirectory = "C";
@@ -5524,6 +6213,16 @@ namespace Ecoview_V2._0
             }
         }
 
+        public void CreateXMLDocumentIzmerenieScan(ref string filepath)
+        {
+            filepath = saveFileDialog1.FileName;
+            XmlTextWriter xtw = new XmlTextWriter(filepath, Encoding.UTF8);
+
+            xtw.WriteStartDocument();
+            xtw.WriteStartElement("Data_Izmerenie");
+            xtw.WriteEndDocument();
+            xtw.Close();
+        }
         private void CreateXMLDocument(ref string filepath)
         {
 
@@ -5534,6 +6233,71 @@ namespace Ecoview_V2._0
             xtw.WriteStartElement("Data_Izmerenie");
             xtw.WriteEndDocument();
             xtw.Close();
+        }
+        public void WriteXmlIzmerenieScan(ref string filepath)
+        {
+            XmlDocument xd = new XmlDocument();
+            FileStream fs = new FileStream(filepath, FileMode.Open);
+            xd.Load(fs);
+            XmlNode Izmerenie = xd.CreateElement("Izmerenie");
+
+            XmlNode CountIzmer = xd.CreateElement("CountIzmer");
+            CountIzmer.InnerText = listBox1.Items.Count.ToString();
+            Izmerenie.AppendChild(CountIzmer);
+
+            HeaderCells = new string[1];
+            HeaderCells[0] = this.ScanTable.Columns[1].HeaderText;
+            XmlNode TypeIzmer = xd.CreateElement("TypeIzmer");
+            TypeIzmer.InnerText = HeaderCells[0];
+            Izmerenie.AppendChild(TypeIzmer);
+
+            // countScan[countButtonClick - 1][i, k]
+            xd.DocumentElement.AppendChild(Izmerenie);
+            int countIzmer = 0;
+
+            HeaderCells = new string[this.ScanTable.Columns.Count];
+            while (countIzmer < listBox1.Items.Count)
+            {
+                XmlNode NumberIzmer = xd.CreateElement("NumberIzmer");
+                XmlAttribute attribute1 = xd.CreateAttribute("Nomer");
+                attribute1.Value = Convert.ToString(countIzmer); // устанавливаем значение атрибута
+                NumberIzmer.Attributes.Append(attribute1); // добавляем атрибут
+
+                XmlNode CountStr = xd.CreateElement("CountStr");
+                CountStr.InnerText = countScan[countIzmer].GetLength(0).ToString();
+                NumberIzmer.AppendChild(CountStr);
+
+                int m = countScan[countIzmer].GetLength(0);
+                int n = countScan[countIzmer].GetLength(1);
+                for (int i = 0; i < m; i++)
+                {
+                    XmlNode Str = xd.CreateElement("Str");
+                    XmlAttribute attribute2 = xd.CreateAttribute("Nomer");
+                    attribute2.Value = Convert.ToString(i); // устанавливаем значение атрибута
+                    Str.Attributes.Append(attribute2); // добавляем атрибут
+                    NumberIzmer.AppendChild(Str);
+
+                    for (int j = 0; j < n; j++)
+                    {
+                        HeaderCells[j] = this.ScanTable.Columns[j].HeaderText;
+                        XmlNode Cells1 = xd.CreateElement("Cells"+j);
+                        XmlAttribute attribute3 = xd.CreateAttribute("TypeCell");
+                        attribute3.Value = HeaderCells[j]; // устанавливаем значение атрибута
+                        Cells1.Attributes.Append(attribute3); // добавляем атрибут
+                        Cells1.InnerText = countScan[countIzmer][i, j];
+                        Str.AppendChild(Cells1);
+                        //xd.DocumentElement.AppendChild(Cells1);
+                    }
+                 //   xd.DocumentElement.AppendChild(Str);
+                }
+                xd.DocumentElement.AppendChild(NumberIzmer);
+                countIzmer++;
+            }
+
+
+
+            fs.Close();         // Закрываем поток  
+            xd.Save(filepath); // Сохраняем файл  
         }
         public void WriteXml(ref string filepath)
         {
@@ -5659,14 +6423,6 @@ namespace Ecoview_V2._0
             HeaderCells = new string[this.Table1.Columns.Count];
             Cells1 = new string[this.Table1.Rows.Count - 1, this.Table1.Columns.Count];
 
-            /* for (int i = 0; i < this.Table1.Columns.Count; i++)
-             {
-                 HeaderCells[i] = this.Table1.Columns[i].HeaderText;
-                 XmlNode HeaderCells1 = xd.CreateElement(HeaderCells[i]); // Примечание
-                 HeaderCells1.InnerText = HeaderCells[i]; // и значение
-                 Izmerenie.AppendChild(HeaderCells1); // и указываем кому принадлежит
-             }
-             */
             XmlNode Zavisimoct1 = xd.CreateElement("SposobZadan"); // Примечание
             Zavisimoct1.InnerText = SposobZadan; // и значение
             Izmerenie.AppendChild(Zavisimoct1); // и указываем кому принадлежит
@@ -5681,9 +6437,7 @@ namespace Ecoview_V2._0
                     Cells2.Attributes.Append(attribute1); // добавляем атрибут
                     for (int j = 0; j < this.Table1.Columns.Count; j++)
                     {
-                        //  row[i + 2] = r.Cells[j].Value;
-                        // row[this.Table1.Columns[j].HeaderText] = r.Cells[j].Value.ToString();
-                        //string[][] Cells1;
+                       
                         Cells1[i, j] = Convert.ToString(this.Table1.Rows[i].Cells[j].Value);
 
                         HeaderCells[j] = this.Table1.Columns[j].HeaderText;
@@ -6203,6 +6957,13 @@ namespace Ecoview_V2._0
                                 }
                             }
                         }
+                        else
+                        {
+                            if(selet_rezim == 5)
+                            {
+                                SaveExcelScan();
+                            }
+                        }
                     }
                 }
             }
@@ -6211,6 +6972,32 @@ namespace Ecoview_V2._0
                 MessageBox.Show("Внимание!! Экспорт в Ecxel не возможен! Отсутствует Excel!");
             }
         }
+        public void SaveExcelScan()
+        {
+            bool doNotWrite = false;
+            for (int j = 0; j < ScanTable.Rows.Count - 1; j++)
+            {
+
+                for (int i = 3; i < ScanTable.Rows[j].Cells.Count; i++)
+                {
+                    if (ScanTable.Rows[j].Cells[i].Value == null)
+                    {
+                        doNotWrite = true;
+                        break;
+
+                    }
+                }
+            }
+            if (doNotWrite == true)
+            {
+                MessageBox.Show("Не вся поля таблицы были заполнены!");
+            }
+            else
+            {
+                ExportToExcelScan();
+            }
+        }
+
         public void IzmerenieFR_TableSaveExcel()
         {
             bool doNotWrite = false;
@@ -6261,7 +7048,41 @@ namespace Ecoview_V2._0
                 ExportToExcel();
             }
         }
-            public void ExportToExcel()
+        public void ExportToExcelScan()
+        {
+            saveFileDialog1.InitialDirectory = "C";
+            saveFileDialog1.Title = "Save as Excel File";
+            saveFileDialog1.FileName = "";
+            saveFileDialog1.Filter = "Excel Files(2003)|*.xls|Excel Files(2007)|*.xlsx";
+
+            if (saveFileDialog1.ShowDialog() != DialogResult.Cancel)
+            {
+                Microsoft.Office.Interop.Excel.Application exApp = new Microsoft.Office.Interop.Excel.Application();
+                //Excel.Application exApp = new Excel.Application();
+                exApp.Application.Workbooks.Add(Type.Missing);
+
+                exApp.Columns.ColumnWidth = 20;
+                for (int i = 1; i < this.ScanTable.Columns.Count + 1; i++)
+                {
+                    exApp.Cells[1, i] = this.ScanTable.Columns[i - 1].HeaderText;
+                }
+                //Thread.Sleep(500);
+                for (int i = 0; i < this.ScanTable.Rows.Count; i++)
+                {
+                   // Thread.Sleep(200);
+                    for (int j = 0; j < this.ScanTable.Columns.Count; j++)
+                    {
+                        exApp.Cells[i + 2, j + 1] = this.ScanTable.Rows[i].Cells[j].Value;
+                    }
+                }
+
+                exApp.ActiveWorkbook.SaveCopyAs(saveFileDialog1.FileName.ToString());
+                exApp.ActiveWorkbook.Saved = true;
+                exApp.Visible = true;
+            }
+        }
+            
+        public void ExportToExcel()
         {
             saveFileDialog1.InitialDirectory = "C";
             saveFileDialog1.Title = "Save as Excel File";
@@ -6396,7 +7217,9 @@ namespace Ecoview_V2._0
                 // exApp.Quit();
                 exApp.Visible = true;
             }
+
         }
+        int countButtonClick = 1;
         private void button10_Click(object sender, EventArgs e)
         {
             if (selet_rezim == 2)
@@ -6413,7 +7236,7 @@ namespace Ecoview_V2._0
             else
             {
                 if (selet_rezim == 6)
-                {                   
+                {
                     if (tabControl2.SelectedIndex == 0)
                     {
                         NewGrad(ref CountSeriya, ref CountInSeriya);
@@ -6421,6 +7244,13 @@ namespace Ecoview_V2._0
                     else
                     {
                         ///NewIzmerenie();
+                    }
+                }
+                else
+                {
+                    if (selet_rezim == 5)
+                    {
+                        
                     }
                 }
             }
@@ -7547,51 +8377,48 @@ namespace Ecoview_V2._0
             
             if (str != "")
             {
-                if (selet_rezim == 2)
+                switch (selet_rezim)
                 {
-                    if (tabControl2.SelectedIndex == 0 && SposobZadan == "По СО")
-                    {
-                        PrintDoc();
-                    }
-                    else
-                    {
-                        if (tabControl2.SelectedIndex == 0 && SposobZadan != "По СО")
+                    case 2:
+                        if (tabControl2.SelectedIndex == 0 && SposobZadan == "По СО")
                         {
-                            PrintDoc1();
+                            PrintDoc();
                         }
                         else
                         {
-                            PrintDoc2();
-                        }
-                    }
-                }
-                else
-                {
-                    if(selet_rezim == 1)
-                    {
-                        IzmerenieFR_TablePrintDoc();
-                    }
-                    else
-                    {
-                        if(selet_rezim == 6)
-                        {
-                            if (tabControl2.SelectedIndex == 0 && SposobZadan == "По СО")
+                            if (tabControl2.SelectedIndex == 0 && SposobZadan != "По СО")
                             {
-                                PrintDoc();
+                                PrintDoc1();
                             }
                             else
                             {
-                                if (tabControl2.SelectedIndex == 0 && SposobZadan != "По СО")
-                                {
-                                    PrintDoc1();
-                                }
-                                else
-                                {
-                                    PrintDoc2();
-                                }
+                                PrintDoc2();
                             }
                         }
-                    }
+                        break;
+                    case 1:
+                        IzmerenieFR_TablePrintDoc();
+                        break;
+                    case 6:
+                        if (tabControl2.SelectedIndex == 0 && SposobZadan == "По СО")
+                        {
+                            PrintDoc();
+                        }
+                        else
+                        {
+                            if (tabControl2.SelectedIndex == 0 && SposobZadan != "По СО")
+                            {
+                                PrintDoc1();
+                            }
+                            else
+                            {
+                                PrintDoc2();
+                            }
+                        }
+                        break;
+                    case 5:
+                        PrintScan();
+                        break;
                 }
 
             }
@@ -7626,6 +8453,33 @@ namespace Ecoview_V2._0
                 printPreviewTable1.ShowDialog();
             }
         }
+      //  PaperSize paperSize = new PaperSize("papersize", 2100, 5);
+      public void PrintScan()
+        {
+            bool doNotWrite = false;
+            for (int j = 0; j < ScanTable.Rows.Count - 1; j++)
+            {
+
+                for (int i = 0; i < ScanTable.Rows[j].Cells.Count; i++)
+                {
+                    if (ScanTable.Rows[j].Cells[i].Value == null)
+                    {
+                        doNotWrite = true;
+                        break;
+
+                    }
+                }
+            }
+            if (doNotWrite == true)
+            {
+                MessageBox.Show("Не вся поля таблицы были заполнены!");
+            }
+            else
+            {
+                PrintScanTable.Document = ScanTablePrint;
+                PrintScanTable.ShowDialog();
+            }
+        }
         public void IzmerenieFR_TablePrintDoc()
         {
             bool doNotWrite = false;
@@ -7649,6 +8503,7 @@ namespace Ecoview_V2._0
             else
             {
                 IzmerenieFRprintPreviewTable1.Document = IzmerenieFRprintTable1;
+               // IzmerenieFRprintTable1.DefaultPageSettings.PaperSize = paperSize;
                 IzmerenieFRprintPreviewTable1.ShowDialog();
             }
         }
@@ -7691,18 +8546,22 @@ namespace Ecoview_V2._0
             }
         }
         private string stringToPrint;
+        public void ScanTablePrint_PrintPage(object sender, PrintPageEventArgs e)
+        {
+            e.Graphics.DrawString("Измерение в режиме сканирования\n\n", new System.Drawing.Font("Times New Roman", 20, FontStyle.Bold), Brushes.Black, 100, 50);
+        }
         private void IzmerenieFRprintTable1_PrintPage(object sender, PrintPageEventArgs e)
         {
-           /* int charactersOnPage = 0;
-            int linesPerPage = 0;
+            /* int charactersOnPage = 0;
+             int linesPerPage = 0;
 
-            e.Graphics.MeasureString(stringToPrint, this.Font,
-       e.MarginBounds.Size, StringFormat.GenericTypographic,
-       out charactersOnPage, out linesPerPage);
-            e.Graphics.DrawString(stringToPrint, this.Font, Brushes.Black,
-        e.MarginBounds, StringFormat.GenericTypographic);*/
+             e.Graphics.MeasureString(stringToPrint, this.Font,
+        e.MarginBounds.Size, StringFormat.GenericTypographic,
+        out charactersOnPage, out linesPerPage);
+             e.Graphics.DrawString(stringToPrint, this.Font, Brushes.Black,
+         e.MarginBounds, StringFormat.GenericTypographic);*/
 
-
+            
             e.Graphics.DrawString("Измерение в фототметрическом режиме\n\n", new System.Drawing.Font("Times New Roman", 20, FontStyle.Bold), Brushes.Black, 100, 50);
             e.Graphics.DrawString("Примечание:", new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, 25, 110);
             e.Graphics.DrawString(Description, new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, 155, 110);
@@ -7754,11 +8613,11 @@ namespace Ecoview_V2._0
             e.Graphics.DrawString(DateTime, new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, 80, cordY);
             e.Graphics.DrawString("Исполнитель:", new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, 25, cordY + 30);
             e.Graphics.DrawString(Ispolnitel + "   _______________________", new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, 160, cordY + 30);
-           /* stringToPrint = stringToPrint.Substring(charactersOnPage);
+            /* stringToPrint = stringToPrint.Substring(charactersOnPage);
 
-            // Check to see if more pages are to be printed.
-            e.HasMorePages = (stringToPrint.Length > 0);*/
-
+             // Check to see if more pages are to be printed.
+             e.HasMorePages = (stringToPrint.Length > 0);*/
+            e.HasMorePages = false;
         }
         
         private void printDocument1_PrintPage_2(object sender, PrintPageEventArgs e)
@@ -7877,6 +8736,8 @@ namespace Ecoview_V2._0
         }
         public void IzmerenieFRPrintViewer1(object sender, PrintPageEventArgs e)
         {
+            int itemperpage = 0;
+            int totalnumber = 0;
             int height = 230;
             int width = 25;
 
@@ -7888,7 +8749,7 @@ namespace Ecoview_V2._0
             e.Graphics.FillRectangle(Brushes.White, new System.Drawing.Rectangle(width, height, IzmerenieFR_Table.Columns[1].Width + 5, IzmerenieFR_Table.Rows[0].Height * 2));
             e.Graphics.DrawRectangle(p, new System.Drawing.Rectangle(width, height, IzmerenieFR_Table.Columns[1].Width + 5, IzmerenieFR_Table.Rows[0].Height * 2));
             e.Graphics.DrawString(IzmerenieFR_Table.Columns[1].HeaderText, new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, new System.Drawing.Rectangle(width + 10, height, IzmerenieFR_Table.Columns[1].Width + 5, IzmerenieFR_Table.Rows[0].Height * 2));
-            width = width + IzmerenieFR_Table.Columns[1].Width+5;
+            width = width + IzmerenieFR_Table.Columns[1].Width + 5;
             e.Graphics.FillRectangle(Brushes.White, new System.Drawing.Rectangle(width, height, IzmerenieFR_Table.Columns[2].Width + 5, IzmerenieFR_Table.Rows[0].Height * 2));
             e.Graphics.DrawRectangle(p, new System.Drawing.Rectangle(width, height, IzmerenieFR_Table.Columns[2].Width + 5, IzmerenieFR_Table.Rows[0].Height * 2));
             e.Graphics.DrawString(IzmerenieFR_Table.Columns[2].HeaderText, new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, new System.Drawing.Rectangle(width + 10, height, IzmerenieFR_Table.Columns[2].Width + 5, IzmerenieFR_Table.Rows[0].Height * 2));
@@ -7913,75 +8774,88 @@ namespace Ecoview_V2._0
             width = 25;
             int height1 = height;
             int width1_1 = width;
-            for (int j = 0; j < IzmerenieFR_Table.Rows.Count - 1; j++)
+            while (totalnumber < IzmerenieFR_Table.Rows.Count - 1)
             {
-                e.Graphics.FillRectangle(Brushes.White, new System.Drawing.Rectangle(width, height, IzmerenieFR_Table.Columns[0].Width + 5, IzmerenieFR_Table.Rows[j].Height));
-                e.Graphics.DrawRectangle(p, new System.Drawing.Rectangle(width, height, IzmerenieFR_Table.Columns[0].Width + 5, IzmerenieFR_Table.Rows[j].Height));
-                e.Graphics.DrawString(IzmerenieFR_Table.Rows[j].Cells[0].Value.ToString(), new System.Drawing.Font("Times New Roman", 10, FontStyle.Regular), Brushes.Black, new System.Drawing.Rectangle(width + 10, height, IzmerenieFR_Table.Columns[0].Width + 5, IzmerenieFR_Table.Rows[j].Height));
+                e.Graphics.FillRectangle(Brushes.White, new System.Drawing.Rectangle(width, height, IzmerenieFR_Table.Columns[0].Width + 5, IzmerenieFR_Table.Rows[totalnumber].Height));
+                e.Graphics.DrawRectangle(p, new System.Drawing.Rectangle(width, height, IzmerenieFR_Table.Columns[0].Width + 5, IzmerenieFR_Table.Rows[totalnumber].Height));
+                e.Graphics.DrawString(IzmerenieFR_Table.Rows[totalnumber].Cells[0].Value.ToString(), new System.Drawing.Font("Times New Roman", 10, FontStyle.Regular), Brushes.Black, new System.Drawing.Rectangle(width + 10, height, IzmerenieFR_Table.Columns[0].Width + 5, IzmerenieFR_Table.Rows[totalnumber].Height));
                 // width = width + IzmerenieFR_Table.Columns[0].Width;
-                height += IzmerenieFR_Table.Rows[j].Height;
+                height += IzmerenieFR_Table.Rows[totalnumber].Height;
+
+                e.Graphics.FillRectangle(Brushes.White, new System.Drawing.Rectangle(width, height, IzmerenieFR_Table.Columns[1].Width + 5, IzmerenieFR_Table.Rows[totalnumber].Height));
+                e.Graphics.DrawRectangle(p, new System.Drawing.Rectangle(width, height, IzmerenieFR_Table.Columns[1].Width + 5, IzmerenieFR_Table.Rows[totalnumber].Height));
+                e.Graphics.DrawString(IzmerenieFR_Table.Rows[totalnumber].Cells[1].Value.ToString(), new System.Drawing.Font("Times New Roman", 10, FontStyle.Regular), Brushes.Black, new System.Drawing.Rectangle(width + 10, height, IzmerenieFR_Table.Columns[1].Width + 5, IzmerenieFR_Table.Rows[totalnumber].Height));
+                // width = width + IzmerenieFR_Table.Columns[1].Width;
+                height += IzmerenieFR_Table.Rows[totalnumber].Height;
+
+                e.Graphics.FillRectangle(Brushes.White, new System.Drawing.Rectangle(width, height, IzmerenieFR_Table.Columns[2].Width + 5, IzmerenieFR_Table.Rows[totalnumber].Height));
+                e.Graphics.DrawRectangle(p, new System.Drawing.Rectangle(width, height, IzmerenieFR_Table.Columns[2].Width + 5, IzmerenieFR_Table.Rows[totalnumber].Height));
+                e.Graphics.DrawString(IzmerenieFR_Table.Rows[totalnumber].Cells[2].Value.ToString(), new System.Drawing.Font("Times New Roman", 10, FontStyle.Regular), Brushes.Black, new System.Drawing.Rectangle(width + 10, height, IzmerenieFR_Table.Columns[2].Width + 5, IzmerenieFR_Table.Rows[totalnumber].Height));
+                // width = width + IzmerenieFR_Table.Columns[2].Width;
+                height += IzmerenieFR_Table.Rows[totalnumber].Height;
+
+
+                e.Graphics.FillRectangle(Brushes.White, new System.Drawing.Rectangle(width, height, IzmerenieFR_Table.Columns[3].Width + 5, IzmerenieFR_Table.Rows[totalnumber].Height));
+                e.Graphics.DrawRectangle(p, new System.Drawing.Rectangle(width, height, IzmerenieFR_Table.Columns[3].Width + 5, IzmerenieFR_Table.Rows[totalnumber].Height));
+                e.Graphics.DrawString(IzmerenieFR_Table.Rows[totalnumber].Cells[3].Value.ToString(), new System.Drawing.Font("Times New Roman", 10, FontStyle.Regular), Brushes.Black, new System.Drawing.Rectangle(width + 10, height, IzmerenieFR_Table.Columns[3].Width + 5, IzmerenieFR_Table.Rows[totalnumber].Height));
+                // width = width + IzmerenieFR_Table.Columns[1].Width;
+                height += IzmerenieFR_Table.Rows[totalnumber].Height;
+
+
+                e.Graphics.FillRectangle(Brushes.White, new System.Drawing.Rectangle(width, height, IzmerenieFR_Table.Columns[4].Width + 5, IzmerenieFR_Table.Rows[totalnumber].Height));
+                e.Graphics.DrawRectangle(p, new System.Drawing.Rectangle(width, height, IzmerenieFR_Table.Columns[4].Width + 5, IzmerenieFR_Table.Rows[totalnumber].Height));
+                e.Graphics.DrawString(IzmerenieFR_Table.Rows[totalnumber].Cells[4].Value.ToString(), new System.Drawing.Font("Times New Roman", 10, FontStyle.Regular), Brushes.Black, new System.Drawing.Rectangle(width + 10, height, IzmerenieFR_Table.Columns[4].Width + 5, IzmerenieFR_Table.Rows[totalnumber].Height));
+                // width = width + IzmerenieFR_Table.Columns[4].Width;
+                height += IzmerenieFR_Table.Rows[totalnumber].Height;
+
+
+                e.Graphics.FillRectangle(Brushes.White, new System.Drawing.Rectangle(width, height, IzmerenieFR_Table.Columns[5].Width + 5, IzmerenieFR_Table.Rows[totalnumber].Height));
+                e.Graphics.DrawRectangle(p, new System.Drawing.Rectangle(width, height, IzmerenieFR_Table.Columns[5].Width + 5, IzmerenieFR_Table.Rows[totalnumber].Height));
+                e.Graphics.DrawString(IzmerenieFR_Table.Rows[totalnumber].Cells[5].Value.ToString(), new System.Drawing.Font("Times New Roman", 10, FontStyle.Regular), Brushes.Black, new System.Drawing.Rectangle(width + 10, height, IzmerenieFR_Table.Columns[5].Width + 5, IzmerenieFR_Table.Rows[totalnumber].Height));
+                // width = width + IzmerenieFR_Table.Columns[5].Width;
+                height += IzmerenieFR_Table.Rows[totalnumber].Height;
+
+
+
+                e.Graphics.FillRectangle(Brushes.White, new System.Drawing.Rectangle(width, height, IzmerenieFR_Table.Columns[6].Width + 5, IzmerenieFR_Table.Rows[totalnumber].Height));
+                e.Graphics.DrawRectangle(p, new System.Drawing.Rectangle(width, height, IzmerenieFR_Table.Columns[6].Width + 5, IzmerenieFR_Table.Rows[totalnumber].Height));
+                e.Graphics.DrawString(IzmerenieFR_Table.Rows[totalnumber].Cells[6].Value.ToString(), new System.Drawing.Font("Times New Roman", 10, FontStyle.Regular), Brushes.Black, new System.Drawing.Rectangle(width + 10, height, IzmerenieFR_Table.Columns[6].Width + 5, IzmerenieFR_Table.Rows[totalnumber].Height));
+                // width = width + IzmerenieFR_Table.Columns[6].Width;
+                height += IzmerenieFR_Table.Rows[totalnumber].Height;
+                totalnumber++;
+                if (itemperpage < 20)
+                {
+                    itemperpage += 1;
+                    e.HasMorePages = false;
+                }
+                else
+                {
+                    itemperpage = 0;
+                    e.HasMorePages = true;
+                    return;
+                }
+                
             }
             height = height1;
             width = width + IzmerenieFR_Table.Columns[0].Width + 5;
-            for (int j = 0; j < IzmerenieFR_Table.Rows.Count - 1; j++)
-            {
-                e.Graphics.FillRectangle(Brushes.White, new System.Drawing.Rectangle(width, height, IzmerenieFR_Table.Columns[1].Width+5, IzmerenieFR_Table.Rows[j].Height));
-                e.Graphics.DrawRectangle(p, new System.Drawing.Rectangle(width, height, IzmerenieFR_Table.Columns[1].Width+5, IzmerenieFR_Table.Rows[j].Height));
-                e.Graphics.DrawString(IzmerenieFR_Table.Rows[j].Cells[1].Value.ToString(), new System.Drawing.Font("Times New Roman", 10, FontStyle.Regular), Brushes.Black, new System.Drawing.Rectangle(width + 10, height, IzmerenieFR_Table.Columns[1].Width + 5, IzmerenieFR_Table.Rows[j].Height));
-                // width = width + IzmerenieFR_Table.Columns[1].Width;
-                height += IzmerenieFR_Table.Rows[j].Height;
-            }
+            
             height = height1;
-            width = width + IzmerenieFR_Table.Columns[0].Width+5;
-            for (int j = 0; j < IzmerenieFR_Table.Rows.Count - 1; j++)
-            {
-                e.Graphics.FillRectangle(Brushes.White, new System.Drawing.Rectangle(width, height, IzmerenieFR_Table.Columns[2].Width + 5, IzmerenieFR_Table.Rows[j].Height));
-                e.Graphics.DrawRectangle(p, new System.Drawing.Rectangle(width, height, IzmerenieFR_Table.Columns[2].Width + 5, IzmerenieFR_Table.Rows[j].Height));
-                e.Graphics.DrawString(IzmerenieFR_Table.Rows[j].Cells[2].Value.ToString(), new System.Drawing.Font("Times New Roman", 10, FontStyle.Regular), Brushes.Black, new System.Drawing.Rectangle(width + 10, height, IzmerenieFR_Table.Columns[2].Width + 5, IzmerenieFR_Table.Rows[j].Height));
-                // width = width + IzmerenieFR_Table.Columns[2].Width;
-                height += IzmerenieFR_Table.Rows[j].Height;
-            }
+            width = width + IzmerenieFR_Table.Columns[0].Width + 5;
+
             height = height1;
-            width = width + IzmerenieFR_Table.Columns[0].Width+5;
-            for (int j = 0; j < IzmerenieFR_Table.Rows.Count - 1; j++)
-            {
-                e.Graphics.FillRectangle(Brushes.White, new System.Drawing.Rectangle(width, height, IzmerenieFR_Table.Columns[3].Width + 5, IzmerenieFR_Table.Rows[j].Height));
-                e.Graphics.DrawRectangle(p, new System.Drawing.Rectangle(width, height, IzmerenieFR_Table.Columns[3].Width + 5, IzmerenieFR_Table.Rows[j].Height));
-                e.Graphics.DrawString(IzmerenieFR_Table.Rows[j].Cells[3].Value.ToString(), new System.Drawing.Font("Times New Roman", 10, FontStyle.Regular), Brushes.Black, new System.Drawing.Rectangle(width + 10, height, IzmerenieFR_Table.Columns[3].Width+5, IzmerenieFR_Table.Rows[j].Height));
-                // width = width + IzmerenieFR_Table.Columns[1].Width;
-                height += IzmerenieFR_Table.Rows[j].Height;
-            }
+            width = width + IzmerenieFR_Table.Columns[0].Width + 5;
+
             height = height1;
-            width = width + IzmerenieFR_Table.Columns[0].Width+5;
-            for (int j = 0; j < IzmerenieFR_Table.Rows.Count - 1; j++)
-            {
-                e.Graphics.FillRectangle(Brushes.White, new System.Drawing.Rectangle(width, height, IzmerenieFR_Table.Columns[4].Width + 5, IzmerenieFR_Table.Rows[j].Height));
-                e.Graphics.DrawRectangle(p, new System.Drawing.Rectangle(width, height, IzmerenieFR_Table.Columns[4].Width + 5, IzmerenieFR_Table.Rows[j].Height));
-                e.Graphics.DrawString(IzmerenieFR_Table.Rows[j].Cells[4].Value.ToString(), new System.Drawing.Font("Times New Roman", 10, FontStyle.Regular), Brushes.Black, new System.Drawing.Rectangle(width + 10, height, IzmerenieFR_Table.Columns[4].Width+5, IzmerenieFR_Table.Rows[j].Height));
-                // width = width + IzmerenieFR_Table.Columns[4].Width;
-                height += IzmerenieFR_Table.Rows[j].Height;
-            }
+            width = width + IzmerenieFR_Table.Columns[0].Width + 5;
+
             height = height1;
-            width = width + IzmerenieFR_Table.Columns[0].Width+5;
-            for (int j = 0; j < IzmerenieFR_Table.Rows.Count - 1; j++)
-            {
-                e.Graphics.FillRectangle(Brushes.White, new System.Drawing.Rectangle(width, height, IzmerenieFR_Table.Columns[5].Width + 5, IzmerenieFR_Table.Rows[j].Height));
-                e.Graphics.DrawRectangle(p, new System.Drawing.Rectangle(width, height, IzmerenieFR_Table.Columns[5].Width + 5, IzmerenieFR_Table.Rows[j].Height));
-                e.Graphics.DrawString(IzmerenieFR_Table.Rows[j].Cells[5].Value.ToString(), new System.Drawing.Font("Times New Roman", 10, FontStyle.Regular), Brushes.Black, new System.Drawing.Rectangle(width + 10, height, IzmerenieFR_Table.Columns[5].Width+5, IzmerenieFR_Table.Rows[j].Height));
-                // width = width + IzmerenieFR_Table.Columns[5].Width;
-                height += IzmerenieFR_Table.Rows[j].Height;
-            }
+            width = width + IzmerenieFR_Table.Columns[0].Width + 5;
+           
             height = height1;
-            width = width + IzmerenieFR_Table.Columns[0].Width+5;
-            for (int j = 0; j < IzmerenieFR_Table.Rows.Count - 1; j++)
-            {
-                e.Graphics.FillRectangle(Brushes.White, new System.Drawing.Rectangle(width, height, IzmerenieFR_Table.Columns[6].Width + 5, IzmerenieFR_Table.Rows[j].Height));
-                e.Graphics.DrawRectangle(p, new System.Drawing.Rectangle(width, height, IzmerenieFR_Table.Columns[6].Width + 5, IzmerenieFR_Table.Rows[j].Height));
-                e.Graphics.DrawString(IzmerenieFR_Table.Rows[j].Cells[6].Value.ToString(), new System.Drawing.Font("Times New Roman", 10, FontStyle.Regular), Brushes.Black, new System.Drawing.Rectangle(width + 10, height, IzmerenieFR_Table.Columns[6].Width+5, IzmerenieFR_Table.Rows[j].Height));
-                // width = width + IzmerenieFR_Table.Columns[6].Width;
-                height += IzmerenieFR_Table.Rows[j].Height;
-            }
-            cordY = height+10;
+            width = width + IzmerenieFR_Table.Columns[0].Width + 5;
+            
+            cordY = height + 10;
+        
 
         }
         ///Если меньше или равно 3
@@ -9005,45 +9879,41 @@ namespace Ecoview_V2._0
 
         private void button14_Click(object sender, EventArgs e)
         {
-            if (selet_rezim == 2)
+            switch (selet_rezim)
             {
-                if (tabControl2.SelectedIndex == 0)
-                {
-                    if (Table1.RowCount > 1)
+                case 2:
+                    if (tabControl2.SelectedIndex == 0)
                     {
-                        if (textBox10.Text != GWNew.Text)
+                        if (Table1.RowCount > 1)
                         {
-                            MessageBox.Show("Длина волны градуировки отличается от длины волны, установленной на приборе!\rИзмените настройки градуировки!");
+                            if (textBox10.Text != GWNew.Text)
+                            {
+                                MessageBox.Show("Длина волны градуировки отличается от длины волны, установленной на приборе!\rИзмените настройки градуировки!");
+                            }
+                            Graduirovka(sender, e);
                         }
-                        Graduirovka(sender, e);
+                        else
+                        {
+                            MessageBox.Show("Создайте градуировку по СО");
+                        }
                     }
                     else
                     {
-                        MessageBox.Show("Создайте градуировку по СО");
-                    }
-                }
-
-
-                else
-                {
-                    if (Table2.RowCount > 1)
-                    {
-                        if (textBox10.Text != GWNew.Text)
+                        if (Table2.RowCount > 1)
                         {
-                            MessageBox.Show("Длина волны градуировки отличается от длины волны, установленной на приборе!\rИзмените настройки градуировки!");
+                            if (textBox10.Text != GWNew.Text)
+                            {
+                                MessageBox.Show("Длина волны градуировки отличается от длины волны, установленной на приборе!\rИзмените настройки градуировки!");
+                            }
+                            Izmerenie(sender, e);
                         }
-                        Izmerenie(sender, e);
+                        else
+                        {
+                            MessageBox.Show("Создайте измерение");
+                        }
                     }
-                    else
-                    {
-                        MessageBox.Show("Создайте измерение");
-                    }
-                }
-            }
-            else
-            {
-                if (selet_rezim == 1)
-                {
+                    break;
+                case 1:
                     if (IzmerenieFR_Table.RowCount > 1)
                     {
                         IzmerenieFr_izmer();
@@ -9052,147 +9922,689 @@ namespace Ecoview_V2._0
                     {
                         MessageBox.Show("Данная опреция невозможна! Создайте новое измерение!");
                     }
-                }
-                else
-                {
-                    if(selet_rezim == 6)
+                    break;
+                case 6:
+                    if (tabControl2.SelectedIndex == 0)
                     {
-                        if (tabControl2.SelectedIndex == 0)
+                        if (Table1.RowCount > 1)
                         {
-                            if (Table1.RowCount > 1)
+                            if (textBox10.Text != GWNew.Text)
                             {
-                                if (textBox10.Text != GWNew.Text)
-                                {
-                                    MessageBox.Show("Длина волны градуировки отличается от длины волны, установленной на приборе!\rИзмените настройки градуировки!");
-                                }
-                                Graduirovka(sender, e);
+                                MessageBox.Show("Длина волны градуировки отличается от длины волны, установленной на приборе!\rИзмените настройки градуировки!");
                             }
-                            else
+                            Graduirovka(sender, e);
+                        }
+                        else
+                        {
+                            MessageBox.Show("Создайте градуировку по СО");
+                        }
+                    }
+
+
+                    else
+                    {
+                        if (Table2.RowCount > 1)
+                        {
+                            if (textBox10.Text != GWNew.Text)
                             {
-                                MessageBox.Show("Создайте градуировку по СО");
+                                MessageBox.Show("Длина волны градуировки отличается от длины волны, установленной на приборе!\rИзмените настройки градуировки!");
+                            }
+                            Table2.Rows[0].ReadOnly = true;
+                            if (Table2.Rows[Table2.CurrentCell.RowIndex].ReadOnly == true)
+                            {
+                                Table2.CurrentCell = this.Table2[2, Table2.CurrentCell.RowIndex + 1];
+                            }
+
+                            {
+                                Application.DoEvents();
+                                TableAgro2();
+                                Application.DoEvents();
                             }
                         }
+                        else
+                        {
+                            MessageBox.Show("Создайте измерение");
+                        }
+                    }
+                    break;
+                case 5:
+                    if (ScanTable.Rows.Count > 1)
+                    {
+                        if (scan_mass != null)
+                        {
+                            int notNull = 0;
+                            for (int i = 0; i < ScanTable.Rows.Count; i++)
+                            {
+                                for (int k = 0; k < ScanTable.ColumnCount; k++)
+                                {
+                                    if (ScanTable.Rows[i].Cells[k].Value != null)
+                                    {
+                                        notNull++;
+                                    }
+                                }
+                            }
+                            if (notNull == (ScanTable.Rows.Count - 1) * ScanTable.ColumnCount)
+                            {
+                                DialogResult result = MessageBox.Show("Внимание! Ваша таблица перезапишется," +
+                                    "при этом данные будут сохранены.",
+                                    "Предупреждение",
+                                    MessageBoxButtons.YesNo,
+                                    MessageBoxIcon.Information,
+                                    MessageBoxDefaultButton.Button1,
+                                    MessageBoxOptions.DefaultDesktopOnly);
+                                if (result == DialogResult.Yes)
+                                {
+                                    TableScan();
+                                    TableScan_Save();
+                                }
+                                this.TopMost = true;
 
+                            }
+                            else {
+                                this.TopMost = true;
+                                Application.DoEvents();
+                                TableScan();
+                                Application.DoEvents();
+                                TableScan_Save();
+                            }
+                        }
+                        else
+                        {
+                            MessageBox.Show("Вы забыли откалиброваться! Откалибруйтесь!");
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("Создайте новое измерение!");
+                    }
+                    break;
+                case 4:
+                    ChartGraf();
+                    if (timer2.Enabled == false)
+                    { 
+                        if (delay > 0)
+                        {
+                            timer1.Interval = Convert.ToInt32(1000); // 500 миллисекунд
+                            timer1.Enabled = true;
+                            timer1.Tick += TimerTick1;
+                        }
+                        else {
+
+                            timeLeft = Convert.ToInt32(start);
+                            TableKinetica1.Rows.Clear();
+                            TableKinetica(sender, e);
+                            button14.Enabled = false;
+                            dataGridView3.Rows.Clear();
+                            dataGridView4.Rows.Clear();
+                            timer2.Start();
+                            timer2.Enabled = true;
+                            button11.Enabled = true;
+                        }
+                    }
+                    break;
+                case 3:
+                    if (scan_mass != null)
+                    {
+                        Application.DoEvents();
+                        dataGridView5.Rows.Add(dataGridView5.Rows.Count, "Образец " + dataGridView5.Rows.Count);
+                        Array.Resize<double[]>(ref massGEMultiAbs, dataGridView5.Rows.Count - 1);
+                        massGEMultiAbs[massGEMultiAbs.Length - 1] = new double[dataGridView5.ColumnCount - 2];
+                        Array.Resize<double[]>(ref massGEMultiT, dataGridView5.Rows.Count - 1);
+                        massGEMultiT[massGEMultiAbs.Length - 1] = new double[dataGridView5.ColumnCount - 2];
+                        StopSpectr = false;
+                        button14.Enabled = false;
+                        button11.Enabled = true;
+                        TableMultiScan();
+                        Application.DoEvents();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Вы забыли откалиброваться! Откалибруйтесь!");
+                    }
+                    break;
+            }
+        }
+        public double[][] massGEMultiAbs;
+        public double[][] massGEMultiT;
+        public void ChartGraf()
+        {
+          ///  chart3.Series[0].Points.Clear();
+         //   chart3.Series[1].Points.Clear();
+         //   chart3.ChartAreas[0].AxisX.Interval = interval;
+            if (radioButton1.Checked == true)
+            {
+                TableKinetica1.Columns[1].HeaderText = "Abs";
+                TableKinetica1.Columns[2].HeaderText = "%T";
+                dataGridView1.Columns[1].HeaderText = "Abs";
+                dataGridView1.Columns[2].HeaderText = "%T";
+                dataGridView2.Columns[1].HeaderText = "Abs";
+                dataGridView2.Columns[2].HeaderText = "%T";
+            }
+            else
+            {
+                TableKinetica1.Columns[2].HeaderText = "Abs";
+                TableKinetica1.Columns[1].HeaderText = "%T";
+                dataGridView1.Columns[1].HeaderText = "%T";
+                dataGridView1.Columns[2].HeaderText = "Abs";
+                dataGridView2.Columns[1].HeaderText = "%T";
+                dataGridView2.Columns[2].HeaderText = "Abs";
+            }
+            if (TableKinetica1.Columns[1].HeaderText == "Abs")
+            {
+                //Array.Sort(massGE);
+                chart3.ChartAreas[0].AxisY.Minimum = 0;
+                chart3.ChartAreas[0].AxisY.Maximum = 3;
+                chart3.ChartAreas[0].AxisX.Minimum = 0;
+                chart3.ChartAreas[0].AxisX.Maximum = start;
+            }
+            else
+            {
+                //Array.Sort(massGE);
+                chart3.ChartAreas[0].AxisY.Minimum = 0;
+                chart3.ChartAreas[0].AxisY.Maximum = 125;
+                chart3.ChartAreas[0].AxisX.Minimum = 0;
+                chart3.ChartAreas[0].AxisX.Maximum = start;
+            }
+          /*  chart3.Series.Add("area" + countButtonClick);
+            Random r = new Random();
+            int x = r.Next(100, 200), y = r.Next(100, 200);
+            chart3.Series["area" + countButtonClick].Color =
+                System.Drawing.Color.FromArgb(
+                    (byte)(x - 2 * y),
+                    (byte)(y + x),
+                    (byte)(y - 2 * x));*/
+        }
+        public void TimerTick1(object sender, EventArgs e)
+        {
+            label53.Text = Convert.ToString(delay);
+            delay--;
+            if(delay < 0.0)
+            {
+                timer1.Stop();
+                timer1.Enabled = false;
+                timeLeft = Convert.ToInt32(start);
+                TableKinetica(sender, e);
+                timer2.Start();
+                timer2.Enabled = true;
+                button11.Enabled = true;
+            }
+        }
+        public void TableScan_Save()
+        {
+            if (countButtonClick == 1)
+            {
+                listBox1.Items.Add("Измерение" + countButtonClick);
+                countScan[countButtonClick - 1] = new string[ScanTable.Rows.Count - 1, 3];
+                ScanTable_Save();
+                Application.DoEvents();
+                ScanChart.Series.Add("area" + countButtonClick);
+                Random r = new Random();
+                int x = r.Next(100, 200), y = r.Next(100, 200);
+                ScanChart.Series["area" + countButtonClick].Color =
+                    System.Drawing.Color.FromArgb(
+                        (byte)(x - 2 * y),
+                        (byte)(y + x),
+                        (byte)(y - 2 * x));
+                //   TableScan();
+                Application.DoEvents();
+
+            }
+            else
+            {
+                listBox1.Items.Add("Измерение" + countButtonClick);
+                Array.Resize<string[,]>(ref countScan, countButtonClick);
+                countScan[countButtonClick - 1] = new string[ScanTable.Rows.Count - 1, 3];
+                ScanTable_Save();
+                Application.DoEvents();
+                ScanChart.Series.Add("area" + countButtonClick);
+                Random r = new Random();
+                int x = r.Next(0, 200), y = r.Next(0, 200);
+                ScanChart.Series["area" + countButtonClick].Color =
+                    System.Drawing.Color.FromArgb(
+                        (byte)(x - 2 * y),
+                        (byte)(y + x),
+                        (byte)(y - 2 * x));
+                //   TableScan();
+                Application.DoEvents();
+
+            }
+        }
+        public void ScanTable_Save()
+        {
+
+            for (int i = 0; i < ScanTable.Rows.Count - 1; i++)
+            {
+                for (int k = 0; k < ScanTable.ColumnCount; k++)
+                {
+                    countScan[countButtonClick - 1][i, k] = ScanTable.Rows[i].Cells[k].Value.ToString();
+                    
+                }
+            }
+            countButtonClick++;
+            
+
+        }
+        public void TableAgro2()
+        {
+            double sredPlot = 0;
+            int length = 1;
+            double[] numbers = new double[length];
+         
+            while (StopAgro != true)
+            {
+                Thread.Sleep(1000);
+                Application.DoEvents();
+                string GE5Izmer = "";
+                string GE5_1_1 = "";
+                double serValue = 0;
+                double SredValue = 0;
+                while (GE5Izmer == "")
+                {
+
+                    GE5Izmer = "";
+                    GE5_1_1 = "";
+                    newPort.Write("SA " + countSA + "\r");
+                    string indata = newPort.ReadExisting();
+                    string indata_0;
+                    bool indata_bool = true;
+                    while (indata_bool == true)
+                    {
+                        if (indata.Contains(">"))
+                        {
+                            indata_bool = false;
+                        }
 
                         else
                         {
-                           if (Table2.RowCount > 1)
-                            {
-                                if (textBox10.Text != GWNew.Text)
-                                {
-                                    MessageBox.Show("Длина волны градуировки отличается от длины волны, установленной на приборе!\rИзмените настройки градуировки!");
-                                }
-                                Table2.Rows[0].ReadOnly = true;
-                                if (Table2.Rows[Table2.CurrentCell.RowIndex].ReadOnly == true)
-                                {
-                                    Table2.CurrentCell = this.Table2[2, Table2.CurrentCell.RowIndex + 1];
-                                }
-                                //Izmerenie(sender, e);
-                                while (StopAgro == false)
-                                {
-                                    Application.DoEvents();
-                                    Izmerenie(sender, e);
-                                    if (selet_rezim == 6)
-                                    {
-
-                                        Table2.Rows[Table2.CurrentCell.RowIndex].Cells["Obrazec"].Value = "Образец " + Table2.CurrentCell.RowIndex;
-                                        Table2.Rows.Add();
-                                        Table2.Rows[Table2.CurrentCell.RowIndex + 1].ReadOnly = false;
-                                        Table2.Rows[Table2.CurrentCell.RowIndex + 1].Cells["Column1"].Value =
-                                            Table2.CurrentCell.RowIndex + 1;
-                                        Table2.Rows[Table2.CurrentCell.RowIndex + 1].Cells["Column1"].ReadOnly = true;
-                                    }
-                                    Application.DoEvents();
-                                }
-                            }
-                            else
-                            {
-                                MessageBox.Show("Создайте измерение");
-                            }
+                            indata = newPort.ReadExisting();
                         }
                     }
-                    else
+
+                    newPort.Write("GE 1\r");
+                    // Thread.Sleep(500);
+                    // GEbyteRecieved4_1 = newPort.ReadBufferSize;
+                    //  GEbuffer4_1 = new byte[GEbyteRecieved4_1];
+                    // MessageBox.Show(newPort.Read(GEbuffer4_1, 0, GEbyteRecieved4_1).ToString());
+                    // Thread.SpinWait(500);
+                    indata_0 = "";
+                    for (int i = 0; i <= 5000000; i++)
                     {
-                        if(selet_rezim == 5)
+                        indata = newPort.ReadExisting();
+                        if (indata_0.Contains("\r>"))
                         {
-                            if (scan_mass != null)
+                            break;
+                        }
+                        indata_0 += indata;
+                    }
+
+                    //  indata_0 = "";
+                    indata_bool = true;
+                    /* while (indata_bool == true)
+                     {
+
+                         if (indata.Contains(">"))
+                         {
+                             indata_0 = indata;
+                             indata_bool = false;
+
+                         }
+                         else {                   
+
+                                 indata = newPort.ReadExisting();
+                                 indata_0 += indata;
+
+                         }
+                     }*/
+                    Regex regex = new Regex(@"\W");
+                    Regex regex1 = new Regex(@"\D");
+                    GE5Izmer = regex.Replace(indata_0, "");
+                    GE5Izmer = regex1.Replace(GE5Izmer, "");
+                }
+                //MessageBox.Show("Измерение");
+                GEText.Text = GE5Izmer;
+                double Aser = Convert.ToDouble(GE5Izmer) / Convert.ToDouble(GE5_1_0) * 100;
+                double OptPlot1 = 0;
+
+                OptPlot1 = Math.Log10((Convert.ToDouble(GE5_1_0) - Convert.ToDouble(RDstring[countSA])) /
+                    (Convert.ToDouble(GE5Izmer) - Convert.ToDouble(RDstring[countSA])));
+                double OptPlot1_1 = OptPlot1;
+                Application.DoEvents();
+                //if (OptPlot1_1 > 0.002)
+                //{
+                numbers[length - 1] = OptPlot1_1;
+                length++;
+                Array.Resize<double>(ref numbers, length);
+                    
+                    
+                    
+                if (numbers.Length > 6)
+                {
+                    if (numbers[numbers.Length - 2] / numbers[numbers.Length - 3] > 1.4
+                        && numbers[numbers.Length - 2] / numbers[numbers.Length - 4] > 1.4
+                        && numbers[numbers.Length - 2] / numbers[numbers.Length - 5] > 1.4
+                        && numbers[numbers.Length - 2] / numbers[numbers.Length - 6] > 1.4
+                        )
+                    //  sredPlot = 0;
+                    // double[] numbers2 = numbers.ToArray<double>();
+                    /* for (int i = 0; i < numbers.Length; i++)
+                     {
+                         sredPlot += numbers[i];
+                     }*/
+                    // sredPlot = sredPlot / numbers.Length;
+                    //if (sredPlot > 0)
+                    // {
+                    {
+                        Table2.Rows[Table2.CurrentCell.RowIndex].Cells[2].Value = string.Format("{0:0.0000}", numbers[numbers.Length-3]);
+                        if (aproksim == "Линейная через 0")
+                        {
+
+                            if (Table2.Rows[0].Cells[2].Value.ToString() != "" &&
+                                Table2.Rows[Table2.CurrentCell.RowIndex].Cells[2].Value != null)
                             {
-                                TableScan();
+                                if ((Convert.ToDouble(Table2.Rows[0].Cells[2].Value.ToString()) >
+                                    Convert.ToDouble(Table2.Rows[Table2.CurrentCell.RowIndex].Cells[2].Value.ToString())) && count == 0)
+                                {
+                                    if (count == 0)
+                                    {
+                                        count++;
+                                        MessageBox.Show("Оптическая плотность контрольногго образца не может быть больше иззмеряемого!");
+                                    }
+
+                                }
+
+                                serValue = (Convert.ToDouble(Table2.Rows[Table2.CurrentCell.RowIndex].Cells[2].Value.ToString()) -
+                                    Convert.ToDouble(Table2.Rows[0].Cells[2].Value.ToString())) / Convert.ToDouble(AgroText1.Text);
                             }
                             else
                             {
-                                MessageBox.Show("Вы забыли откалиброваться! Откалибруйтесь!");
+
+                                serValue = 0;
+                                if (Table2.Rows[0].Cells[2].Value.ToString() == null)
+                                {
+                                    MessageBox.Show("Измерьте Контрольный образец!");
+                                    return;
+
+
+                                }
                             }
                         }
+                        if (aproksim == "Линейная")
+                        {
+                            if (Table2.Rows[0].Cells[2].Value.ToString() != "" &&
+                                Table2.Rows[Table2.CurrentCell.RowIndex].Cells[2].Value.ToString() != "")
+                            {
+                                if ((Convert.ToDouble(Table2.Rows[0].Cells[2].Value.ToString()) >
+                                    Convert.ToDouble(Table2.Rows[Table2.CurrentCell.RowIndex].Cells[2].Value.ToString()))
+                                    && count == 0)
+                                {
+                                    if (count == 0)
+                                    {
+                                        count++;
+                                        MessageBox.Show("Оптическая плотность контрольногго образца не может быть больше иззмеряемого!");
+                                    }
+                                }
+                                serValue =
+                                    ((Convert.ToDouble(Table2.Rows[Table2.CurrentCell.RowIndex].Cells[2].Value.ToString()) -
+                                    Convert.ToDouble(Table2.Rows[0].Cells[2].Value.ToString()) -
+                                    Convert.ToDouble(AgroText0.Text))) /
+                                    Convert.ToDouble(AgroText1.Text);
+                            }
+                            else
+                            {
+
+                                serValue = 0;
+                                if (Table2.Rows[0].Cells[2].Value.ToString() == null)
+                                {
+                                    MessageBox.Show("Измерьте Контрольный образец!");
+                                    return;
+
+
+                                }
+                            }
+
+                        }
+                        if (aproksim == "Квадратичная")
+                        {
+                            if (Table2.Rows[0].Cells[2].Value.ToString() != "" &&
+                                Table2.Rows[Table2.CurrentCell.RowIndex].Cells[2].Value.ToString() != "")
+                            {
+                                if ((Convert.ToDouble(Table2.Rows[0].Cells[2].Value.ToString()) >
+                                    Convert.ToDouble(Table2.Rows[Table2.CurrentCell.RowIndex].Cells[2].Value.ToString()))
+                                    && count == 0)
+                                {
+                                    if (count == 0)
+                                    {
+                                        count++;
+                                        MessageBox.Show("Оптическая плотность контрольногго образца не может быть больше иззмеряемого!");
+                                    }
+                                }
+                                serValue =
+                                    ((Convert.ToDouble(Table2.Rows[Table2.CurrentCell.RowIndex].Cells[2].Value.ToString())
+                                    -
+                                    Convert.ToDouble(Table2.Rows[0].Cells[2].Value.ToString()) -
+                                    Convert.ToDouble(AgroText0.Text))) /
+                                    (Convert.ToDouble(AgroText1.Text) + Convert.ToDouble(AgroText2.Text));
+                            }
+                            else
+                            {
+                                serValue = 0;
+                                if (Table2.Rows[0].Cells[2].Value.ToString() == null)
+                                {
+                                    MessageBox.Show("Измерьте Контрольый образец!");
+                                    return;
+
+
+                                }
+                            }
+
+
+                        }
+                        double CValue1 = Convert.ToDouble(F1Text.Text);
+                        double CValue2 = Convert.ToDouble(F2Text.Text);
+
+                        if (serValue >= 0)
+                        {
+                            Table2.Rows[Table2.CurrentCell.RowIndex].Cells[3].Value =
+                                string.Format("{0:0.0000}", serValue * CValue1 * CValue2);
+                            SredValue +=
+                                Convert.ToDouble(Table2.Rows[Table2.CurrentCell.RowIndex].Cells[3].Value.ToString());
+                        }
+                        else
+                        {
+                            Table2.Rows[Table2.CurrentCell.RowIndex].Cells[3].Value = "";
+                        }
+
+                        Application.DoEvents();
+                        Table2.Rows[Table2.CurrentCell.RowIndex].Cells["Obrazec"].Value =
+                                                      "Образец " + Table2.CurrentCell.RowIndex;
+                        Table2.Rows.Add();
+
+                        Table2.Rows[Table2.CurrentCell.RowIndex + 1].ReadOnly = false;
+                        Table2.Rows[Table2.CurrentCell.RowIndex + 1].Cells["Column1"].Value =
+                        Table2.CurrentCell.RowIndex + 1;
+                        Table2.Rows[Table2.CurrentCell.RowIndex + 1].Cells["Column1"].ReadOnly = true;
+                        Table2.CurrentCell = this.Table2[2, Table2.CurrentCell.RowIndex + 1];
+                        button14.Enabled = true;
+                        button11.Enabled = true;
+                        Application.DoEvents();
+                    }
+                    //  length = 1;
+                    // numbers = new double[length];
+
+                }
+              
+            }
+        }
+        public int countscan = 0;
+
+        public void TableMultiScan()
+        {
+            countscan = 0;
+            while ((countscan != dataGridView5.ColumnCount - 2) && (StopSpectr != true))
+            {
+                Application.DoEvents();
+                string GE5Izmer = "";
+                string GE5_1_1 = "";
+                while (GE5Izmer == "")
+                {
+                    SW_MultiScan();
+                    GE5Izmer = "";
+                    GE5_1_1 = "";
+                    newPort.Write("SA " + scan_massSA[countscan] + "\r");
+                    string indata = newPort.ReadExisting();
+                    string indata_0;
+                    bool indata_bool = true;
+                    while (indata_bool == true)
+                    {
+                        if (indata.Contains(">"))
+                        {
+                            indata_bool = false;
+                        }
+
+                        else
+                        {
+                            indata = newPort.ReadExisting();
+                        }
+                    }
+
+                    newPort.Write("GE 1\r");
+                    // Thread.Sleep(500);
+                    // GEbyteRecieved4_1 = newPort.ReadBufferSize;
+                    //  GEbuffer4_1 = new byte[GEbyteRecieved4_1];
+                    // MessageBox.Show(newPort.Read(GEbuffer4_1, 0, GEbyteRecieved4_1).ToString());
+                    // Thread.SpinWait(500);
+                    indata_0 = "";
+                    for (int i = 0; i <= 5000000; i++)
+                    {
+                        indata = newPort.ReadExisting();
+                        if (indata_0.Contains("\r>"))
+                        {
+                            break;
+                        }
+                        indata_0 += indata;
+                    }
+
+                    //  indata_0 = "";
+                    indata_bool = true;
+                    /* while (indata_bool == true)
+                     {
+
+                         if (indata.Contains(">"))
+                         {
+                             indata_0 = indata;
+                             indata_bool = false;
+
+                         }
+                         else {                   
+
+                                 indata = newPort.ReadExisting();
+                                 indata_0 += indata;
+
+                         }
+                     }*/
+                    Regex regex = new Regex(@"\W");
+                    Regex regex1 = new Regex(@"\D");
+                    GE5Izmer = regex.Replace(indata_0, "");
+                    GE5Izmer = regex1.Replace(GE5Izmer, "");
+                }
+                //MessageBox.Show("Измерение");
+                GEText.Text = GE5Izmer;
+                double Aser = Convert.ToDouble(GE5Izmer) / Convert.ToDouble(scan_mass[countscan]) * 100;
+                double OptPlot1 = 0;
+               
+                OptPlot1 = Math.Log10((Convert.ToDouble(scan_mass[countscan]) - Convert.ToDouble(RDstring[countSA])) / 
+                    (Convert.ToDouble(GE5Izmer) - Convert.ToDouble(RDstring[countSA])));
+                double OptPlot1_1 = OptPlot1;
+                Application.DoEvents();
+                dataGridView5.Rows[dataGridView5.Rows.Count - 2].Cells["Abs " + countscan].Value = string.Format("{0:0.0000}", OptPlot1_1);
+                massGEMultiAbs[dataGridView5.Rows.Count - 2][countscan] = 
+                    Convert.ToDouble(dataGridView5.Rows[dataGridView5.Rows.Count - 2].Cells["Abs " + countscan].Value);
+
+                massGEMultiT[dataGridView5.Rows.Count - 2][countscan] = (Convert.ToDouble(GE5Izmer) - Convert.ToDouble(RDstring[countSA])) /
+                    (Convert.ToDouble(scan_mass[countscan]) - Convert.ToDouble(RDstring[countSA])) * 100;
+                countscan++;
+                Application.DoEvents();
+            }
+            button14.Enabled = true;
+            button11.Enabled = false;
+            Application.DoEvents();
+            if(StopSpectr == true)
+            {
+                MessageBox.Show("Измерение было прервано!");
+            }
+        }
+        public void TableScan()
+        {
+            for (int i = 0; i < ScanTable.Rows.Count - 1; i++)
+            {
+                for (int k = 0; k < ScanTable.ColumnCount; k++)
+                {
+                   if (k > 0)
+                    {
+                        ScanTable.Rows[i].Cells[k].Value = null;
                     }
                 }
             }
-        }
-        int countscan = 0;
-        public void TableScan()
-        {
-            ///MessageBox.Show(Convert.ToString(scan_mass));
-            /*for (int i = 0; i < scan_mass.Length; i++)
-            {
-                listBox1.Items.Add(scan_mass[i].ToString());
-            }*/
+            dataGridView1.Rows.Clear();
+            dataGridView2.Rows.Clear();
             double[] massWL = new double[ScanTable.Rows.Count - 1];
             double[] massGE = new double[ScanTable.Rows.Count - 1];
             countscan = 0;
-            ScanChart.Series[0].Points.Clear();
-            ScanChart.Series[1].Points.Clear();
-          //  ScanChart.ChartAreas[0].AxisX.MajorGrid.Interval = Convert.ToDouble(string.Format("{0:0.0}", ScanTable.Rows[0].Cells[0].Value)) - Convert.ToDouble(string.Format("{0:0.0}", ScanTable.Rows[1].Cells[0].Value));
-            
-            while (countscan != ScanTable.Rows.Count-1)
+          //  ScanChart.Series[0].Points.Clear();
+           // ScanChart.Series[1].Points.Clear();
+            //  ScanChart.ChartAreas[0].AxisX.MajorGrid.Interval = Convert.ToDouble(string.Format("{0:0.0}", ScanTable.Rows[0].Cells[0].Value)) - Convert.ToDouble(string.Format("{0:0.0}", ScanTable.Rows[1].Cells[0].Value));
+
+            while ((countscan != ScanTable.Rows.Count - 1) && (StopSpectr != true) && label56.Text != "0")
             {
-                SW_Scan();
                 string GE5Izmer = "";
                 string GE5_1_1 = "";
-                newPort.Write("SA " + scan_massSA[countscan] + "\r");
-                string indata = newPort.ReadExisting();
-                string indata_0;
-                bool indata_bool = true;
-                while (indata_bool == true)
+                while (GE5Izmer == "")
                 {
-                    if (indata.Contains(">"))
+                    SW_Scan();
+                    GE5Izmer = "";
+                    GE5_1_1 = "";
+                    newPort.Write("SA " + scan_massSA[countscan] + "\r");
+                    string indata = newPort.ReadExisting();
+                    string indata_0;
+                    bool indata_bool = true;
+                    while (indata_bool == true)
                     {
-                        indata_bool = false;
+                        if (indata.Contains(">"))
+                        {
+                            indata_bool = false;
+                        }
+
+                        else
+                        {
+                            indata = newPort.ReadExisting();
+                        }
                     }
 
-                    else
+                    newPort.Write("GE 1\r");
+                    // Thread.Sleep(500);
+                    // GEbyteRecieved4_1 = newPort.ReadBufferSize;
+                    //  GEbuffer4_1 = new byte[GEbyteRecieved4_1];
+                    // MessageBox.Show(newPort.Read(GEbuffer4_1, 0, GEbyteRecieved4_1).ToString());
+                    // Thread.SpinWait(500);
+                    indata_0 = "";
+                    for (int i = 0; i <= 5000000; i++)
                     {
                         indata = newPort.ReadExisting();
-                    }
-                }
-
-                newPort.Write("GE 1\r");
-
-                GE5Izmer = "";
-                int GEbyteRecieved4_1 = newPort.ReadBufferSize;
-                byte[] GEbuffer4_1 = new byte[GEbyteRecieved4_1];
-                newPort.Read(GEbuffer4_1, 0, GEbyteRecieved4_1);
-
-                indata = newPort.ReadExisting();
-
-                indata_0 = "";
-                indata_bool = true;
-                while (indata_bool == true)
-                {
-                    if (indata.Contains(">"))
-                    {
-                        indata_bool = false;
-                    }
-
-                    else
-                    {
-                        indata = newPort.ReadExisting();
+                        if (indata_0.Contains("\r>"))
+                        {
+                            break;
+                        }
                         indata_0 += indata;
                     }
+
+                    indata_bool = true;
+                    
+                    Regex regex = new Regex(@"\W");
+                    Regex regex1 = new Regex(@"\D");
+                    GE5Izmer = regex.Replace(indata_0, "");
+                    GE5Izmer = regex1.Replace(GE5Izmer, "");
                 }
-                Regex regex = new Regex(@"\W");
-                GE5Izmer = regex.Replace(indata_0, "");
-                //  MessageBox.Show("Измерение: " + GE5Izmer + "\rКалибровка: " + GE5_1_0 + "\rОтклонение: " + Convert.ToString(Convert.ToDouble(GE5_1_0) / (Convert.ToDouble(GE5Izmer))) +
-                //    "\rПоправочный коэффициент: " + RDstring[countSA]);
+             
                 GEText.Text = GE5Izmer;
                 double Aser = Convert.ToDouble(GE5Izmer) / Convert.ToDouble(scan_mass[countscan]) * 100;
                 double OptPlot1 = 0;
@@ -9200,51 +10612,133 @@ namespace Ecoview_V2._0
                 OptPlot1 = Math.Log10((Convert.ToDouble(scan_mass[countscan]) - Convert.ToDouble(RDstring[countSA])) / (Convert.ToDouble(GE5Izmer) - Convert.ToDouble(RDstring[countSA])));
                 double OptPlot1_1 = OptPlot1;
                 Application.DoEvents();
-                if (ScanTable.Columns["Abs_scan"].HeaderText == "Abs")
+                massWL[countscan] = Convert.ToDouble(ScanTable.Rows[countscan].Cells[0].Value);
+                if (ScanTable.Columns[1].HeaderText == "Abs")
                 {
                     ScanTable.Rows[countscan].Cells[1].Value = string.Format("{0:0.0000}", OptPlot1_1);
+                    massGE[countscan] = Convert.ToDouble(ScanTable.Rows[countscan].Cells[1].Value);
+                    ScanTable.Rows[countscan].Cells[2].Value =
+                        string.Format("{0:0.0}",
+                        ((Convert.ToDouble(GE5Izmer) - Convert.ToDouble(RDstring[countSA])) /
+                        (Convert.ToDouble(scan_mass[countscan]) - Convert.ToDouble(RDstring[countSA])) * 100));
                 }
                 else
                 {
-                    ScanTable.Rows[countscan].Cells[1].Value = string.Format("{0:0.0}", ((Convert.ToDouble(scan_mass[countscan]) - Convert.ToDouble(RDstring[countSA])) / (Convert.ToDouble(GE5Izmer) - Convert.ToDouble(RDstring[countSA]))) * 100); ;
+                    ScanTable.Rows[countscan].Cells[2].Value = string.Format("{0:0.0000}", OptPlot1_1);
+                    ScanTable.Rows[countscan].Cells[1].Value =
+                        string.Format("{0:0.0}",
+                        ((Convert.ToDouble(GE5Izmer) - Convert.ToDouble(RDstring[countSA])) /
+                        (Convert.ToDouble(scan_mass[countscan]) - Convert.ToDouble(RDstring[countSA])) * 100));
+                    /** listBox1.Items.Add(GE5Izmer);*/
+                    massGE[countscan] = Convert.ToDouble(ScanTable.Rows[countscan].Cells[1].Value);
+
                 }
                 massWL[countscan] = Convert.ToDouble(ScanTable.Rows[countscan].Cells[0].Value);
                 massGE[countscan] = Convert.ToDouble(ScanTable.Rows[countscan].Cells[1].Value);
-                countscan++;
-            }
-            Array.Sort(massWL);
-            Array.Sort(massGE);
-            while (countscan != 0)
-            {
-               /* */
-
+                Array.Sort(massWL);
+                Array.Sort(massGE);
                 double x1 = Convert.ToDouble(ScanTable.Rows[countscan].Cells[0].Value);
                 double y1 = Convert.ToDouble(ScanTable.Rows[countscan].Cells[1].Value);
-                ScanChart.Series[0].Points.AddXY(x1, y1);
+                /*ScanChart.Series[0].Points.AddXY(x1, y1);
                 ScanChart.Series[0].ChartType = SeriesChartType.Point;
                 ScanChart.ChartAreas[0].AxisY.Crossing = 0;
-                ScanChart.ChartAreas[0].AxisX.Crossing = 0;
-                ScanChart.Series[1].Points.AddXY(x1, y1);
-                ScanChart.Series[1].ChartType = SeriesChartType.Line;
-                if (ScanTable.Rows[countscan].Cells["Abs_scan"].Value != null)
+                ScanChart.ChartAreas[0].AxisX.Crossing = 0;*/
+                
+                ScanChart.Series[countButtonClick].Points.AddXY(x1, y1);
+                ScanChart.Series[countButtonClick].ChartType = SeriesChartType.Line;
+                if (ScanTable.Rows[countscan].Cells[1].Value != null && ScanTable.Rows[countscan].Cells[2].Value != null)
                 {
-                    ScanChart.ChartAreas[0].AxisX.Minimum = massWL[0];
-                    ScanChart.ChartAreas[0].AxisY.Minimum = massGE[0];
+                    ScanChart.ChartAreas[0].AxisX.Minimum = cancel;
+                    ScanChart.ChartAreas[0].AxisX.Maximum = start;
+
                 }
                 ScanChart.ChartAreas[0].AxisX.MajorGrid.Enabled = false;
                 ScanChart.ChartAreas[0].AxisY.MajorGrid.Enabled = false;
                 ScanChart.ChartAreas[0].AxisX.Title = ScanTable.Columns["WalveDl"].HeaderText;
                 ScanChart.ChartAreas[0].AxisY.Title = ScanTable.Columns["Abs_scan"].HeaderText;
-                countscan--;
+                countscan++;
             }
+
+            double max = 0.0;
+            double min = 0.0;
+            for (int i = 0; i < ScanTable.Rows.Count; i++)
+            {
+                if (i == 0)
+                {
+                    if (Convert.ToDouble(ScanTable.Rows[i].Cells[1].Value) > Convert.ToDouble(ScanTable.Rows[i + 1].Cells[1].Value))
+                    {
+                        max = Convert.ToDouble(ScanTable.Rows[i].Cells[1].Value);
+                        dataGridView1.Rows.Add(ScanTable.Rows[i].Cells[0].Value, ScanTable.Rows[i].Cells[1].Value, ScanTable.Rows[i].Cells[2].Value);
+                        min = max;
+                        double x1 = Convert.ToDouble(ScanTable.Rows[i].Cells[0].Value);
+                        double y1 = Convert.ToDouble(ScanTable.Rows[i].Cells[1].Value);
+                        ScanChart.Series[0].Points.AddXY(x1, y1);
+                        ScanChart.Series[0].ChartType = SeriesChartType.Point;
+                    }
+                    else
+                    {
+                        min = Convert.ToDouble(ScanTable.Rows[i].Cells[1].Value);
+                        dataGridView2.Rows.Add(ScanTable.Rows[i].Cells[0].Value, ScanTable.Rows[i].Cells[1].Value, ScanTable.Rows[i].Cells[2].Value);
+                        max = min;
+                        double x1 = Convert.ToDouble(ScanTable.Rows[i].Cells[0].Value);
+                        double y1 = Convert.ToDouble(ScanTable.Rows[i].Cells[1].Value);
+                        ScanChart.Series[0].Points.AddXY(x1, y1);
+                        ScanChart.Series[0].ChartType = SeriesChartType.Point;
+                    }
+
+                }
+                else {
+                    if (i + 1 != ScanTable.Rows.Count)
+                    {
+                        if (Convert.ToDouble(ScanTable.Rows[i].Cells[1].Value) > Convert.ToDouble(ScanTable.Rows[i - 1].Cells[1].Value)
+                            &&
+                            Convert.ToDouble(ScanTable.Rows[i].Cells[1].Value) >= Convert.ToDouble(ScanTable.Rows[i + 1].Cells[1].Value)
+
+                            )
+                        {
+                            max = Convert.ToDouble(ScanTable.Rows[i].Cells[1].Value);
+                            min = max;
+                            dataGridView1.Rows.Add(ScanTable.Rows[i].Cells[0].Value, ScanTable.Rows[i].Cells[1].Value, ScanTable.Rows[i].Cells[2].Value);
+                            double x1 = Convert.ToDouble(ScanTable.Rows[i].Cells[0].Value);
+                            double y1 = Convert.ToDouble(ScanTable.Rows[i].Cells[1].Value);
+                            ScanChart.Series[0].Points.AddXY(x1, y1);
+                            ScanChart.Series[0].ChartType = SeriesChartType.Point;
+                        }
+                        if ((Convert.ToDouble(ScanTable.Rows[i].Cells[1].Value) < Convert.ToDouble(ScanTable.Rows[i - 1].Cells[1].Value)
+                            &&
+                            Convert.ToDouble(ScanTable.Rows[i].Cells[1].Value) <= Convert.ToDouble(ScanTable.Rows[i + 1].Cells[1].Value))
+
+                            )
+                        {
+                            min = Convert.ToDouble(ScanTable.Rows[i].Cells[1].Value);
+                            dataGridView2.Rows.Add(ScanTable.Rows[i].Cells[0].Value, ScanTable.Rows[i].Cells[1].Value, ScanTable.Rows[i].Cells[2].Value);
+                            max = min;
+                            double x1 = Convert.ToDouble(ScanTable.Rows[i].Cells[0].Value);
+                            double y1 = Convert.ToDouble(ScanTable.Rows[i].Cells[1].Value);
+                            ScanChart.Series[0].Points.AddXY(x1, y1);
+                            ScanChart.Series[0].ChartType = SeriesChartType.Point;
+                        }
+                    }
+                }
+            }
+
+
+            /* while (countscan != 0)
+             {
+
+
+
+                 countscan--;
+             }*/
         }
         public void SW_Scan()
         {
-            LogoForm();
+            //LogoForm();
+            Application.DoEvents();
             string SWText1 = ScanTable.Rows[countscan].Cells[0].Value.ToString();
             double Walve_double = Convert.ToDouble(ScanTable.Rows[countscan].Cells[0].Value.ToString().Replace(".", ","));
             newPort.Write("SW " + Walve_double.ToString(System.Globalization.CultureInfo.GetCultureInfo("en-US")) + "\r");
-          //  Thread.Sleep(2000);
+           // Thread.Sleep(100);
             string indata = newPort.ReadExisting();
 
             bool indata_bool = true;
@@ -9263,10 +10757,44 @@ namespace Ecoview_V2._0
                 }
             }
             GWNew.Text = string.Format("{0:0.0}", ScanTable.Rows[countscan].Cells[0].Value.ToString());
-            SWF.Application.OpenForms["LogoFrm"].Close();
-            //Thread.Sleep(2000);
-            // _Analis.GW();
+            Application.DoEvents();
+            // SWF.Application.OpenForms["LogoFrm"].Close();
+         //  Thread.Sleep(100);
+            // GW();
         }
+
+        public void SW_MultiScan()
+        {
+            //LogoForm();
+            Application.DoEvents();
+            string SWText1 = textBoxCO[countscan].Text;
+            double Walve_double = Convert.ToDouble(textBoxCO[countscan].Text.Replace(".", ","));
+            newPort.Write("SW " + Walve_double.ToString(System.Globalization.CultureInfo.GetCultureInfo("en-US")) + "\r");
+            // Thread.Sleep(100);
+            string indata = newPort.ReadExisting();
+
+            bool indata_bool = true;
+            while (indata_bool == true)
+            {
+                if (indata.Contains(">"))
+                {
+
+                    indata_bool = false;
+
+                }
+
+                else
+                {
+                    indata = newPort.ReadExisting();
+                }
+            }
+            GWNew.Text = string.Format("{0:0.0}", textBoxCO[countscan].Text);
+            Application.DoEvents();
+            // SWF.Application.OpenForms["LogoFrm"].Close();
+            //  Thread.Sleep(100);
+            // GW();
+        }
+
         public void IzmerenieFr_izmer()
         {
             int startIndexCell = 3;
@@ -9299,35 +10827,44 @@ namespace Ecoview_V2._0
             }
 
             newPort.Write("GE 1\r");
-
-            GE5Izmer = "";
-            int GEbyteRecieved4_1 = newPort.ReadBufferSize;
-            byte[] GEbuffer4_1 = new byte[GEbyteRecieved4_1];
-            newPort.Read(GEbuffer4_1, 0, GEbyteRecieved4_1);
-
-            indata = newPort.ReadExisting();
-
+            // Thread.Sleep(500);
+            // GEbyteRecieved4_1 = newPort.ReadBufferSize;
+            //  GEbuffer4_1 = new byte[GEbyteRecieved4_1];
+            // MessageBox.Show(newPort.Read(GEbuffer4_1, 0, GEbyteRecieved4_1).ToString());
+            // Thread.SpinWait(500);
             indata_0 = "";
-            indata_bool = true;
-            while (indata_bool == true)
+            for (int i = 0; i <= 5000000; i++)
             {
-
-                if (indata.Contains(">"))
+                indata = newPort.ReadExisting();
+                if (indata_0.Contains("\r>"))
                 {
-
-                    indata_bool = false;
-
+                    break;
                 }
-
-                else
-                {
-
-                    indata = newPort.ReadExisting();
-                    indata_0 += indata;
-                }
+                indata_0 += indata;
             }
+
+            //  indata_0 = "";
+            indata_bool = true;
+            /* while (indata_bool == true)
+             {
+
+                 if (indata.Contains(">"))
+                 {
+                     indata_0 = indata;
+                     indata_bool = false;
+
+                 }
+                 else {                   
+
+                         indata = newPort.ReadExisting();
+                         indata_0 += indata;
+
+                 }
+             }*/
             Regex regex = new Regex(@"\W");
+            Regex regex1 = new Regex(@"\D");
             GE5Izmer = regex.Replace(indata_0, "");
+            GE5Izmer = regex1.Replace(GE5Izmer, "");
             //  MessageBox.Show("Измерение: " + GE5Izmer + "\rКалибровка: " + GE5_1_0 + "\rОтклонение: " + Convert.ToString(Convert.ToDouble(GE5_1_0) / (Convert.ToDouble(GE5Izmer))) +
             //    "\rПоправочный коэффициент: " + RDstring[countSA]);
 
@@ -9411,36 +10948,45 @@ namespace Ecoview_V2._0
             }
 
             newPort.Write("GE 1\r");
-
-            GE5Izmer = "";
-            int GEbyteRecieved4_1 = newPort.ReadBufferSize;
-            byte[] GEbuffer4_1 = new byte[GEbyteRecieved4_1];
-            newPort.Read(GEbuffer4_1, 0, GEbyteRecieved4_1);
-
-            indata = newPort.ReadExisting();
-
+            // Thread.Sleep(500);
+            // GEbyteRecieved4_1 = newPort.ReadBufferSize;
+            //  GEbuffer4_1 = new byte[GEbyteRecieved4_1];
+            // MessageBox.Show(newPort.Read(GEbuffer4_1, 0, GEbyteRecieved4_1).ToString());
+            // Thread.SpinWait(500);
             indata_0 = "";
-            indata_bool = true;
-            while (indata_bool == true)
+            for (int i = 0; i <= 5000000; i++)
             {
-
-                if (indata.Contains(">"))
+                indata = newPort.ReadExisting();
+                if (indata_0.Contains("\r>"))
                 {
-
-                    indata_bool = false;
-
+                    break;
                 }
-
-                else
-                {
-
-                    indata = newPort.ReadExisting();
-                    indata_0 += indata;
-                }
+                indata_0 += indata;
             }
+
+            //  indata_0 = "";
+            indata_bool = true;
+            /* while (indata_bool == true)
+             {
+
+                 if (indata.Contains(">"))
+                 {
+                     indata_0 = indata;
+                     indata_bool = false;
+
+                 }
+                 else {                   
+
+                         indata = newPort.ReadExisting();
+                         indata_0 += indata;
+
+                 }
+             }*/
             Regex regex = new Regex(@"\W");
+            Regex regex1 = new Regex(@"\D");
             GE5Izmer = regex.Replace(indata_0, "");
-          //  MessageBox.Show("Измерение: " + GE5Izmer + "\rКалибровка: " + GE5_1_0 + "\rОтклонение: " + Convert.ToString(Convert.ToDouble(GE5_1_0) / (Convert.ToDouble(GE5Izmer))) +
+            GE5Izmer = regex1.Replace(GE5Izmer, "");
+            //  MessageBox.Show("Измерение: " + GE5Izmer + "\rКалибровка: " + GE5_1_0 + "\rОтклонение: " + Convert.ToString(Convert.ToDouble(GE5_1_0) / (Convert.ToDouble(GE5Izmer))) +
             //    "\rПоправочный коэффициент: " + RDstring[countSA]);
 
 
@@ -9591,129 +11137,78 @@ namespace Ecoview_V2._0
         public void Izmerenie(object sender, EventArgs e)
         {
             double CCR = 0.0;
-
             int rowIndex2 = Table2.CurrentRow.Index;
-
             bool doNotWrite1 = false;
-
             double maxEl;
-
             double minEl;
-
             double serValue = 0;
-
             int cellnull = 0;
-
             El = new double[NoCaIzm1];
-
             string GE5Izmer = "";
-
             string GE5_1_1 = "";
-
             newPort.Write("SA " + countSA + "\r");
-
             string indata = newPort.ReadExisting();
-
             string indata_0;
-
             bool indata_bool = true;
-
-
-
             while (indata_bool == true)
-
             {
-
-
-
                 if (indata.Contains(">"))
-
                 {
-
-
-
                     indata_bool = false;
-
-
-
                 }
-
-
-
                 else {
-
                     indata = newPort.ReadExisting();
-
-
-
                 }
-
             }
-
-
-
             newPort.Write("GE 1\r");
-
-
-
-            GE5Izmer = "";
-
-            int GEbyteRecieved4_1 = newPort.ReadBufferSize;
-
-            byte[] GEbuffer4_1 = new byte[GEbyteRecieved4_1];
-
-            newPort.Read(GEbuffer4_1, 0, GEbyteRecieved4_1);
-
-
-
-            indata = newPort.ReadExisting();
-
-
-
+            // Thread.Sleep(500);
+            // GEbyteRecieved4_1 = newPort.ReadBufferSize;
+            //  GEbuffer4_1 = new byte[GEbyteRecieved4_1];
+            // MessageBox.Show(newPort.Read(GEbuffer4_1, 0, GEbyteRecieved4_1).ToString());
+            // Thread.SpinWait(500);
             indata_0 = "";
-
-            indata_bool = true;
-
-            while (indata_bool == true)
-
+            for (int i = 0; i <= 5000000; i++)
             {
-                if (indata.Contains(">"))
-
+                indata = newPort.ReadExisting();
+                if (indata_0.Contains("\r>"))
                 {
-                    
-                    indata_bool = false;
+                    break;
+                }
+                indata_0 += indata;
+            }
+            int indata_zero = 0;
+            //  indata_0 = "";
+            indata_bool = true;
+            /* while (indata_bool == true)
+             {
+
+                 if (indata.Contains(">"))
+                 {
+                     indata_0 = indata;
+                     indata_bool = false;
 
                  }
+                 else {                   
 
-                
-                else {
+                         indata = newPort.ReadExisting();
+                         indata_0 += indata;
 
-                    indata = newPort.ReadExisting();
-
-                    indata_0 += indata;
-
-                }
-
-            }
-
-            Regex regex = new Regex(@"\W");
-
+                 }
+             }*/
+            GE5Izmer = "";
+          Regex  regex = new Regex(@"\W");
+           Regex regex1 = new Regex(@"\D");
             GE5Izmer = regex.Replace(indata_0, "");
+            GE5Izmer = regex1.Replace(GE5Izmer, "");
 
             GEText.Text = GE5Izmer;
-
             // MessageBox.Show(GE5Izmer);
-
             int curentIndex = Table2.CurrentCell.ColumnIndex;
-
             double Aser = Convert.ToDouble(GE5Izmer) / Convert.ToDouble(GE5_1_0) * 100;
-
-            double OptPlot1 = Math.Log10((Convert.ToDouble(GE5_1_0) - Convert.ToDouble(RDstring[countSA])) / (Convert.ToDouble(GE5Izmer) - Convert.ToDouble(RDstring[countSA])));
-
-            double OptPlot1_1 = OptPlot1 - Math.Truncate(OptPlot1);
-            
-            if (selet_rezim == 6)
-            {
+            double OptPlot1 = Math.Log10((Convert.ToDouble(GE5_1_0) - Convert.ToDouble(RDstring[countSA])) / 
+                (Convert.ToDouble(GE5Izmer) - Convert.ToDouble(RDstring[countSA])));
+            double OptPlot1_1 = OptPlot1 - Math.Truncate(OptPlot1);            
+            if (selet_rezim == 6)            {
                 Table2.Rows[0].ReadOnly = true;
                 if (Table2.Rows[Table2.CurrentCell.RowIndex].ReadOnly == true)
                 {
@@ -10513,23 +12008,70 @@ namespace Ecoview_V2._0
         }
         public void Calibrovka()
         {
-            if(selet_rezim == 5)
+            if (selet_rezim == 5)
             {
+
+                StopSpectr = false;
                 countscan = 0;
                 scan_massSA = new double[ScanTable.Rows.Count - 1];
-                scan_mass = new double[ScanTable.Rows.Count-1];
-                while (countscan != ScanTable.Rows.Count - 1)
-                {
+                scan_mass = new double[ScanTable.Rows.Count - 1];
+                Application.DoEvents();
+                LogoForm();
+                while ((countscan != ScanTable.Rows.Count - 1) && (StopSpectr != true))                {
+
+                    Application.DoEvents();
+
+                    Application.DoEvents();
+                    GWNew.Text = string.Format("{0:0.0}", ScanTable.Rows[countscan].Cells[0].Value.ToString());
+                    SW_Scan();
+                    Thread.Sleep(50);
                     SAGEScan(ref countSA, ref GE5_1_0);
+                    Application.DoEvents();
+
+
                     countscan++;
                 }
+                SWF.Application.OpenForms["LogoFrm"].Close();
                 MessageBox.Show("Калибровка закончена!");
+                Podskazka.Text = "Можно сканировать";
+                label59.Visible = false;
+                label28.Visible = true;
             }
             else
             {
-                SAGE(ref countSA, ref GE5_1_0);
+                if (selet_rezim == 3)
+                {
+                    StopSpectr = false;
+                    countscan = 0;
+                    scan_massSA = new double[dataGridView5.Columns.Count - 2];
+                    scan_mass = new double[dataGridView5.Columns.Count - 2];
+                    Application.DoEvents();
+                    LogoForm();
+                    while ((countscan != dataGridView5.Columns.Count - 2) && (StopSpectr != true))
+                    {
+
+                        Application.DoEvents();
+                        SW_MultiScan();
+                        Application.DoEvents();
+                        GWNew.Text = string.Format("{0:0.0}", textBoxCO[countscan].Text);
+                        button12.Enabled = false;
+                        button14.Enabled = false;
+                        button11.Enabled = true;
+                        SAGEScan(ref countSA, ref GE5_1_0);
+                        Application.DoEvents();
+                        countscan++;
+                    }
+                    SWF.Application.OpenForms["LogoFrm"].Close();
+                    button12.Enabled = true;
+                    button14.Enabled = true;
+                    button11.Enabled = false;
+                    MessageBox.Show("Калибровка закончена!");
+                }
+                else
+                {
+                    SAGE(ref countSA, ref GE5_1_0);
+                }
             }
-            
 
         }
 
@@ -10908,6 +12450,37 @@ namespace Ecoview_V2._0
                             StopAgro = true;
                         }
                     }
+                    else
+                    {
+                        if (selet_rezim == 5)
+                        {
+                            StopSpectr = true;
+                        }
+                        else
+                        {
+                            if(selet_rezim == 4)
+                            {
+                                if (timer2.Enabled == true)
+                                {
+                                    timer2.Enabled = true;
+                                    timer2.Stop();
+                                    MinMax();
+                                    button14.Enabled = true;
+                                    button11.Enabled = false;
+                                    
+                                }
+
+                            }
+                            else
+                            {
+                                if(selet_rezim == 3)
+                                {
+                                   StopSpectr = true;
+                                   
+                                }
+                            }
+                        }
+                    }
                 }
                     
             }
@@ -11001,6 +12574,841 @@ namespace Ecoview_V2._0
 
         }
 
+        private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ScanTable.Rows.Clear();
+            int number = listBox1.SelectedIndex;
+            int m = countScan[number].GetLength(0);
+            int n = countScan[number].GetLength(1);
+            ScanTable.ColumnCount = n;
+            ScanTable.RowCount = m + 1;
+            for (int i = 0; i < m; i++)
+            {
+                for (int j = 0; j < n; j++)
+                {
+                    ScanTable.Rows[i].Cells[j].Value = countScan[number][i, j];
+                }
+            }
+            dataGridView1.Rows.Clear();
+            dataGridView2.Rows.Clear();
+            double max = 0.0;
+            double min = 0.0;
+            for (int i = 0; i < ScanTable.Rows.Count; i++)
+            {
+                if (i == 0)
+                {
+                    if (Convert.ToDouble(ScanTable.Rows[i].Cells[1].Value) > Convert.ToDouble(ScanTable.Rows[i + 1].Cells[1].Value))
+                    {
+                        max = Convert.ToDouble(ScanTable.Rows[i].Cells[1].Value);
+                        dataGridView1.Rows.Add(ScanTable.Rows[i].Cells[0].Value, ScanTable.Rows[i].Cells[1].Value, ScanTable.Rows[i].Cells[2].Value);
+                        min = max;
+                        double x1 = Convert.ToDouble(ScanTable.Rows[i].Cells[0].Value);
+                        double y1 = Convert.ToDouble(ScanTable.Rows[i].Cells[1].Value);
+                        ScanChart.Series[0].Points.AddXY(x1, y1);
+                        ScanChart.Series[0].ChartType = SeriesChartType.Point;
+                    }
+                    else
+                    {
+                        min = Convert.ToDouble(ScanTable.Rows[i].Cells[1].Value);
+                        dataGridView2.Rows.Add(ScanTable.Rows[i].Cells[0].Value, ScanTable.Rows[i].Cells[1].Value, ScanTable.Rows[i].Cells[2].Value);
+                        max = min;
+                        double x1 = Convert.ToDouble(ScanTable.Rows[i].Cells[0].Value);
+                        double y1 = Convert.ToDouble(ScanTable.Rows[i].Cells[1].Value);
+                        ScanChart.Series[0].Points.AddXY(x1, y1);
+                        ScanChart.Series[0].ChartType = SeriesChartType.Point;
+                    }
+
+                }
+                else {
+                    if (i + 1 != ScanTable.Rows.Count)
+                    {
+                        if (Convert.ToDouble(ScanTable.Rows[i].Cells[1].Value) > Convert.ToDouble(ScanTable.Rows[i - 1].Cells[1].Value)
+                            &&
+                            Convert.ToDouble(ScanTable.Rows[i].Cells[1].Value) >= Convert.ToDouble(ScanTable.Rows[i + 1].Cells[1].Value)
+
+                            )
+                        {
+                            max = Convert.ToDouble(ScanTable.Rows[i].Cells[1].Value);
+                            min = max;
+                            dataGridView1.Rows.Add(ScanTable.Rows[i].Cells[0].Value, ScanTable.Rows[i].Cells[1].Value, ScanTable.Rows[i].Cells[2].Value);
+                            double x1 = Convert.ToDouble(ScanTable.Rows[i].Cells[0].Value);
+                            double y1 = Convert.ToDouble(ScanTable.Rows[i].Cells[1].Value);
+                            ScanChart.Series[0].Points.AddXY(x1, y1);
+                            ScanChart.Series[0].ChartType = SeriesChartType.Point;
+                        }
+                        if ((Convert.ToDouble(ScanTable.Rows[i].Cells[1].Value) < Convert.ToDouble(ScanTable.Rows[i - 1].Cells[1].Value)
+                            &&
+                            Convert.ToDouble(ScanTable.Rows[i].Cells[1].Value) <= Convert.ToDouble(ScanTable.Rows[i + 1].Cells[1].Value))
+
+                            )
+                        {
+                            min = Convert.ToDouble(ScanTable.Rows[i].Cells[1].Value);
+                            dataGridView2.Rows.Add(ScanTable.Rows[i].Cells[0].Value, ScanTable.Rows[i].Cells[1].Value, ScanTable.Rows[i].Cells[2].Value);
+                            max = min;
+                            double x1 = Convert.ToDouble(ScanTable.Rows[i].Cells[0].Value);
+                            double y1 = Convert.ToDouble(ScanTable.Rows[i].Cells[1].Value);
+                            ScanChart.Series[0].Points.AddXY(x1, y1);
+                            ScanChart.Series[0].ChartType = SeriesChartType.Point;
+                        }
+                    }
+                }
+            }
+
+        }
+
+        private void groupBox3_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label18_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void groupBox6_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Table1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void textBox8_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label19_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void dateTimePicker2_ValueChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label17_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void groupBox5_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label22_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label21_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void RR_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void SKO_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Opt_dlin_cuvet_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Table2_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void groupBox4_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label14_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void F1Text_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void groupBox2_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label15_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void F2Text_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void groupBox1_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void AgroText2_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void AgroText1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void AgroText0_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label13_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label12_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label7_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox7_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label20_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label16_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void tabPage4_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox12_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label32_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox9_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label29_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void printPreviewTable1_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label28_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label27_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label26_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label25_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label24_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label23_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Podskazki_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Podskazka_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void OptichPlot_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label11_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void GAText_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label10_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label8_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void GEText_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void printPreviewTable2_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void GWNew_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label9_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void chart1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void contextMenuStrip1_Opening(object sender, CancelEventArgs e)
+        {
+
+        }
+
+        private void saveFileDialog1_FileOk(object sender, CancelEventArgs e)
+        {
+
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+
+        }
+
+        private void оПрограммеToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void справкаToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void справкаToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void калибровкаДляОдноволновогоАнализаToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void темновойТокToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void настройкаПортаToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void приборToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void графикРезультатаОдноволновогоИзмеренияToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void волновойАнализToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void анализToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void файлToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void menuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+
+        }
+
+        private void openFileDialog1_FileOk(object sender, CancelEventArgs e)
+        {
+
+        }
+
+        private void label6_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void numericUpDown1_ValueChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void dateTimePicker1_ValueChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label5_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label4_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox3_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label3_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox2_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void tabPage3_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox11_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label31_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox10_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label30_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void tabPage1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void IzmerenieFR_Table_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void tabPage2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void tabPage5_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void tabPage6_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label50_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label52_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label51_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void dataGridView2_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void ScanChart_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void ScanTable_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void textBox16_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label42_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox17_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label43_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void groupBox7_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void AgroTable1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void groupBox8_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label41_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label34_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label39_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label40_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void groupBox9_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label38_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void groupBox10_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void radioButton9_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void radioButton10_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void groupBox11_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox13_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox14_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox15_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label35_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label36_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label37_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void groupBox12_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void radioButton6_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void radioButton7_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void radioButton8_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void chart2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label44_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void numericUpDown2_ValueChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void dateTimePicker3_ValueChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label45_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label46_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox18_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label47_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox19_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label48_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox20_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label49_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void tabPage8_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
+        {
+
+        }
+
+        private void label33_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void IzmerenieFRprintPreviewTable1_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button17_Click(object sender, EventArgs e)
+        {
+
+            for (int i = 0; i < dataGridView5.ColumnCount - 2; i++)
+            {
+                if (dataGridView5.Columns["Abs " + i].HeaderText == "Abs " + textBoxCO[i].Text + " нм")
+                {
+                    dataGridView5.Columns["Abs " + i].HeaderText = "%T " + textBoxCO[i].Text + " нм";
+                }
+                else
+                {
+                    dataGridView5.Columns["Abs " + i].HeaderText = "Abs " + textBoxCO[i].Text + " нм";
+                }
+            }
+            for (int j = 0; j < dataGridView5.Rows.Count-1; j++)
+            {
+                for (int i = 0; i < dataGridView5.ColumnCount - 2; i++)
+                {
+                    if (dataGridView5.Columns["Abs " + i].HeaderText == "Abs " + textBoxCO[i].Text + " нм")
+                    {
+                        if (massGEMultiAbs[j][i].ToString() != null)
+                        {
+                            dataGridView5.Rows[j].Cells["Abs " + i].Value = string.Format("{0:0.0000}", massGEMultiAbs[j][i]);
+                        }
+                        else
+                        {
+                            dataGridView5.Rows[j].Cells["Abs " + i].Value = null;
+                        }
+                    }
+                    else
+                    {
+                        if (massGEMultiT[j][i].ToString() != null)
+                        {
+                            dataGridView5.Rows[j].Cells["Abs " + i].Value = string.Format("{0:0.00}", massGEMultiT[j][i]);
+                        }
+                        else
+                        {
+                            dataGridView5.Rows[j].Cells["Abs " + i].Value = null;
+                        }
+                    }
+                }
+            }
+        }
         public void SaveTpPdf2()
         {
             bool doNotWrite = false;
