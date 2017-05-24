@@ -17,6 +17,7 @@ using System.Linq;
 using System.Globalization;
 using Microsoft.Win32;
 using System.Xml.Linq;
+using System.Data;
 
 namespace Ecoview_V2._0
 {
@@ -1841,11 +1842,11 @@ namespace Ecoview_V2._0
             openFileDialog1.Filter = "SCAN файл|*.SCAN2";
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
-               ScanChart.Series[0].Points.Clear();
-               ScanChart.Series[1].Points.Clear();
-               ScanChart.Series.Clear();
-               ScanChart.Series.Add("Series1");
-               ScanChart.Series.Add("Series2");
+                ScanChart.Series[0].Points.Clear();
+                ScanChart.Series[1].Points.Clear();
+                ScanChart.Series.Clear();
+                ScanChart.Series.Add("Series1");
+                ScanChart.Series.Add("Series2");
                 listBox1.Items.Clear();
                 dataGridView1.Rows.Clear();
                 dataGridView2.Rows.Clear();
@@ -2038,11 +2039,11 @@ namespace Ecoview_V2._0
             xDoc.Load(@filepath);
             XmlNodeList nodes = xDoc.ChildNodes;
 
-            foreach(XmlNode n in nodes)
+            foreach (XmlNode n in nodes)
             {
                 if ("Data_Izmerenie".Equals(n.Name))
                 {
-                    for(XmlNode d = n.FirstChild; d != null; d = d.NextSibling)
+                    for (XmlNode d = n.FirstChild; d != null; d = d.NextSibling)
                     {
                         if ("Izmerenie".Equals(d.Name))
                         {
@@ -2052,7 +2053,7 @@ namespace Ecoview_V2._0
                                 {
                                     for (int i = 0; i < Convert.ToInt32(k.FirstChild.Value); i++)
                                     {
-                                        listBox1.Items.Add("Измерение"+i);
+                                        listBox1.Items.Add("Измерение" + i);
                                     }
                                 }
                                 if ("TypeIzmer".Equals(k.Name) && k.FirstChild != null)
@@ -2102,7 +2103,7 @@ namespace Ecoview_V2._0
                     RowsMax[Convert.ToInt32(nameAttribute.Value)] = Convert.ToDouble(RowsElement.Value);
                 }
 
-                ScanChart.ChartAreas[0].AxisX.Minimum = RowsMax[StrCount-1];
+                ScanChart.ChartAreas[0].AxisX.Minimum = RowsMax[StrCount - 1];
                 ScanChart.ChartAreas[0].AxisX.Maximum = RowsMax[0];
             }
 
@@ -2112,16 +2113,16 @@ namespace Ecoview_V2._0
             {
                 XElement CountStrElement = IzmerScan.Element("CountStr");
                 XAttribute NumberIzmer = IzmerScan.Attribute("Nomer");
-             //   MessageBox.Show(NumberIzmer.Value);
+                //   MessageBox.Show(NumberIzmer.Value);
                 int StrCount = 0;
                 if (CountStrElement != null)
                 {
                     StrCount = Convert.ToInt32(CountStrElement.Value);
 
                 }
-                
+
                 Application.DoEvents();
-             //  if (chart1.Series.Count > 1) { chart1.Series.RemoveAt(Convert.ToInt32(NumberIzmer.Value)+1); }
+                //  if (chart1.Series.Count > 1) { chart1.Series.RemoveAt(Convert.ToInt32(NumberIzmer.Value)+1); }
                 ScanChart.Series.Add("area" + Convert.ToInt32(NumberIzmer.Value));
                 Random r = new Random();
                 int x = r.Next(100, 200), y = r.Next(100, 200);
@@ -2137,7 +2138,7 @@ namespace Ecoview_V2._0
                 double[] massWL = new double[StrCount];
                 double[] massGE = new double[StrCount];
                 foreach (XElement IzmerScan1 in IzmerScan.Elements("Str"))
-                 {
+                {
 
                     XAttribute nameAttribute = IzmerScan1.Attribute("Nomer");
                     XElement CellsElement0 = IzmerScan1.Element("Cells0");
@@ -2161,11 +2162,11 @@ namespace Ecoview_V2._0
                 double max = 0.0;
                 double min = 0.0;
 
-                for(int i = 0; i < StrCount; i++)
+                for (int i = 0; i < StrCount; i++)
                 {
                     if (i == 0)
                     {
-                        if (massGE[i] > massGE[i+1])
+                        if (massGE[i] > massGE[i + 1])
                         {
                             max = massGE[i];
                             //dataGridView1.Rows.Add(ScanTable.Rows[i].Cells[0].Value, ScanTable.Rows[i].Cells[1].Value, ScanTable.Rows[i].Cells[2].Value);
@@ -2178,7 +2179,7 @@ namespace Ecoview_V2._0
                         else
                         {
                             min = massGE[i];
-                          //  dataGridView2.Rows.Add(ScanTable.Rows[i].Cells[0].Value, ScanTable.Rows[i].Cells[1].Value, ScanTable.Rows[i].Cells[2].Value);
+                            //  dataGridView2.Rows.Add(ScanTable.Rows[i].Cells[0].Value, ScanTable.Rows[i].Cells[1].Value, ScanTable.Rows[i].Cells[2].Value);
                             max = min;
                             double x1 = massWL[i];
                             double y1 = massGE[i];
@@ -2190,7 +2191,7 @@ namespace Ecoview_V2._0
                     else {
                         if (i + 1 != StrCount)
                         {
-                            if (massGE[i] > massGE[i-1] && massGE[i] >= massGE[i+1])
+                            if (massGE[i] > massGE[i - 1] && massGE[i] >= massGE[i + 1])
                             {
                                 max = massGE[i];
                                 min = max;
@@ -2200,10 +2201,10 @@ namespace Ecoview_V2._0
                                 ScanChart.Series[0].Points.AddXY(x1, y1);
                                 ScanChart.Series[0].ChartType = SeriesChartType.Point;
                             }
-                            if (massGE[i] < massGE[i-1] && massGE[i] <= massGE[i+1])
+                            if (massGE[i] < massGE[i - 1] && massGE[i] <= massGE[i + 1])
                             {
                                 min = massGE[i];
-                              //  dataGridView2.Rows.Add(ScanTable.Rows[i].Cells[0].Value, ScanTable.Rows[i].Cells[1].Value, ScanTable.Rows[i].Cells[2].Value);
+                                //  dataGridView2.Rows.Add(ScanTable.Rows[i].Cells[0].Value, ScanTable.Rows[i].Cells[1].Value, ScanTable.Rows[i].Cells[2].Value);
                                 max = min;
                                 double x1 = massWL[i];
                                 double y1 = massGE[i];
@@ -2218,7 +2219,7 @@ namespace Ecoview_V2._0
 
             }
 
-            
+
 
         }
         public void openFile(ref string filepath)
@@ -6033,7 +6034,7 @@ namespace Ecoview_V2._0
         public void SaveScan()
         {
             bool doNotWrite = false;
-            for (int j = 0; j < ScanTable.RowCount-1; j++)
+            for (int j = 0; j < ScanTable.RowCount - 1; j++)
             {
                 for (int i = 0; i < ScanTable.Rows[j].Cells.Count; i++)
                 {
@@ -6280,7 +6281,7 @@ namespace Ecoview_V2._0
                     for (int j = 0; j < n; j++)
                     {
                         HeaderCells[j] = this.ScanTable.Columns[j].HeaderText;
-                        XmlNode Cells1 = xd.CreateElement("Cells"+j);
+                        XmlNode Cells1 = xd.CreateElement("Cells" + j);
                         XmlAttribute attribute3 = xd.CreateAttribute("TypeCell");
                         attribute3.Value = HeaderCells[j]; // устанавливаем значение атрибута
                         Cells1.Attributes.Append(attribute3); // добавляем атрибут
@@ -6288,7 +6289,7 @@ namespace Ecoview_V2._0
                         Str.AppendChild(Cells1);
                         //xd.DocumentElement.AppendChild(Cells1);
                     }
-                 //   xd.DocumentElement.AppendChild(Str);
+                    //   xd.DocumentElement.AppendChild(Str);
                 }
                 xd.DocumentElement.AppendChild(NumberIzmer);
                 countIzmer++;
@@ -6437,7 +6438,7 @@ namespace Ecoview_V2._0
                     Cells2.Attributes.Append(attribute1); // добавляем атрибут
                     for (int j = 0; j < this.Table1.Columns.Count; j++)
                     {
-                       
+
                         Cells1[i, j] = Convert.ToString(this.Table1.Rows[i].Cells[j].Value);
 
                         HeaderCells[j] = this.Table1.Columns[j].HeaderText;
@@ -6472,7 +6473,7 @@ namespace Ecoview_V2._0
             xd.Save(filepath); // Сохраняем файл  
 
         }
-            public void SaveAs2()
+        public void SaveAs2()
         {
             saveFileDialog1.InitialDirectory = "C";
             saveFileDialog1.Title = "Save as XML File";
@@ -6741,7 +6742,7 @@ namespace Ecoview_V2._0
 
                 }
 
-             Table1.CurrentCell = this.Table1[3, 0];
+                Table1.CurrentCell = this.Table1[3, 0];
             }
             for (int i = 1; i <= NoCaIzm; i++)
             {
@@ -6943,7 +6944,7 @@ namespace Ecoview_V2._0
                     }
                     else
                     {
-                        if(selet_rezim == 6)
+                        if (selet_rezim == 6)
                         {
                             if (tabControl2.SelectedIndex == 0 && SposobZadan == "По СО")
                             {
@@ -6959,7 +6960,7 @@ namespace Ecoview_V2._0
                         }
                         else
                         {
-                            if(selet_rezim == 5)
+                            if (selet_rezim == 5)
                             {
                                 SaveExcelScan();
                             }
@@ -7069,7 +7070,7 @@ namespace Ecoview_V2._0
                 //Thread.Sleep(500);
                 for (int i = 0; i < this.ScanTable.Rows.Count; i++)
                 {
-                   // Thread.Sleep(200);
+                    // Thread.Sleep(200);
                     for (int j = 0; j < this.ScanTable.Columns.Count; j++)
                     {
                         exApp.Cells[i + 2, j + 1] = this.ScanTable.Rows[i].Cells[j].Value;
@@ -7081,7 +7082,7 @@ namespace Ecoview_V2._0
                 exApp.Visible = true;
             }
         }
-            
+
         public void ExportToExcel()
         {
             saveFileDialog1.InitialDirectory = "C";
@@ -7144,7 +7145,7 @@ namespace Ecoview_V2._0
                         string value = Convert.ToString(this.IzmerenieFR_Table.Rows[i].Cells[j].Value);
                         value = value.Replace(",", ".");
                         exApp.Cells[i + 2, j + 1] = value;
-                       
+
                     }
                 }
 
@@ -7250,7 +7251,7 @@ namespace Ecoview_V2._0
                 {
                     if (selet_rezim == 5)
                     {
-                        
+
                     }
                 }
             }
@@ -7302,18 +7303,18 @@ namespace Ecoview_V2._0
                     Zavisimoct = "A(C)";
                     radioButton4.Checked = true;
                     label14.Text = "A(C)";
-       /*             textBox4.Text = "";
-                    textBox5.Text = "";
-                    textBox6.Text = "";*/
+                    /*             textBox4.Text = "";
+                                 textBox5.Text = "";
+                                 textBox6.Text = "";*/
                 }
                 else
                 {
                     Zavisimoct = "C(A)";
                     radioButton5.Checked = true;
                     label14.Text = "C(A)";
-                  /*  textBox4.Text = "";
-                    textBox5.Text = "";
-                    textBox6.Text = "";*/
+                    /*  textBox4.Text = "";
+                      textBox5.Text = "";
+                      textBox6.Text = "";*/
                 }
                 if (_NewGraduirovka.radioButton1.Checked == true)
                 {
@@ -7361,10 +7362,10 @@ namespace Ecoview_V2._0
             CountInSeriya = CountInSeriya1;
             dateTimePicker1.Text = DateTime;
             tabControl2.SelectTab(tabPage3);
-        /*    chart1.ChartAreas[0].AxisX.MajorGrid.Enabled = false;
-            chart1.ChartAreas[0].AxisY.MajorGrid.Enabled = false;
-            chart1.Series[0].Points.Clear();
-            chart1.Series[1].Points.Clear();*/
+            /*    chart1.ChartAreas[0].AxisX.MajorGrid.Enabled = false;
+                chart1.ChartAreas[0].AxisY.MajorGrid.Enabled = false;
+                chart1.Series[0].Points.Clear();
+                chart1.Series[1].Points.Clear();*/
             //       Table1.Columns.Add("X*X", "Concetr*Concetr");
             //Table1.Columns.Add("X*Y", "Asred*Concetr");
             //CalibrovkaGrad();
@@ -7394,15 +7395,15 @@ namespace Ecoview_V2._0
                     radioButton3.Enabled = true;
                 }
             }
-     /*       RR.Text = "";
-            SKO.Text = "";
-            label21.Text = "";
-            label22.Text = "";*/
+            /*       RR.Text = "";
+                   SKO.Text = "";
+                   label21.Text = "";
+                   label22.Text = "";*/
             if (SposobZadan == "По СО")
             {
-       /*         textBox4.Text = "";
-                textBox5.Text = "";
-                textBox6.Text = "";*/
+                /*         textBox4.Text = "";
+                         textBox5.Text = "";
+                         textBox6.Text = "";*/
             }
             Table1.Rows[Table1.Rows.Count - 1].Cells[0].Value = "";
             if (SposobZadan == "Ввод коэффициентов")
@@ -7426,11 +7427,11 @@ namespace Ecoview_V2._0
 
         }
 
-  
+
         public void Table2_UseCo()
         {
             double CCR = 0.0;
-            
+
             double maxEl;
             double minEl;
             double serValue = 0;
@@ -7609,15 +7610,15 @@ namespace Ecoview_V2._0
                     }
                 }
             }
-                for (int i1 = 1; i1 <= NoCaIzm1; i1++)
+            for (int i1 = 1; i1 <= NoCaIzm1; i1++)
+            {
+                Table2.Rows[0].Cells["C,edconctr;Ser." + i1].Value = "";
+                if (selet_rezim == 2)
                 {
-                    Table2.Rows[0].Cells["C,edconctr;Ser." + i1].Value = "";
-                    if (selet_rezim == 2)
-                    {
-                        Table2.Rows[0].Cells["Ccr"].Value = "";
-                        Table2.Rows[0].Cells["d%"].Value = "";
-                    }
+                    Table2.Rows[0].Cells["Ccr"].Value = "";
+                    Table2.Rows[0].Cells["d%"].Value = "";
                 }
+            }
 
 
         }
@@ -7655,13 +7656,13 @@ namespace Ecoview_V2._0
             }
             else
             {
-                if(selet_rezim == 1)
+                if (selet_rezim == 1)
                 {
                     IzmerenieFRSavePDF();
                 }
                 else
                 {
-                    if(selet_rezim == 6)
+                    if (selet_rezim == 6)
                     {
                         if (tabControl2.SelectedIndex == 0 && SposobZadan == "По СО")
                         {
@@ -7736,7 +7737,7 @@ namespace Ecoview_V2._0
         {
             ExportToPDF1();
         }
-        
+
         public void ExportToPDF1()
         {
             BaseFont baseFont = BaseFont.CreateFont("C:\\Windows\\Fonts\\georgia.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
@@ -8352,7 +8353,7 @@ namespace Ecoview_V2._0
                     Table2.Rows[0].Cells["d%"].ReadOnly = true;
                 }
             }
-            Table2.Rows[Table2.RowCount-1].ReadOnly = true;
+            Table2.Rows[Table2.RowCount - 1].ReadOnly = true;
             button11.Enabled = true;
 
         }
@@ -8374,7 +8375,7 @@ namespace Ecoview_V2._0
             {
                 str += PrinterSettings.InstalledPrinters[i] + "\n";
             }
-            
+
             if (str != "")
             {
                 switch (selet_rezim)
@@ -8453,8 +8454,15 @@ namespace Ecoview_V2._0
                 printPreviewTable1.ShowDialog();
             }
         }
-      //  PaperSize paperSize = new PaperSize("papersize", 2100, 5);
-      public void PrintScan()
+        private int pagesCount;
+        //  PaperSize paperSize = new PaperSize("papersize", 2100, 5);
+        int prinPage = 0;
+        int strcountScan = 0;
+        int realwidth = 0;
+        int realheight = 0;
+        int width = 0;
+        int height1 = 0;
+        public void PrintScan()
         {
             bool doNotWrite = false;
             for (int j = 0; j < ScanTable.Rows.Count - 1; j++)
@@ -8476,10 +8484,19 @@ namespace Ecoview_V2._0
             }
             else
             {
+                prinPage = 0;
+                strcountScan = 0;
+                realwidth = 0;
+                realheight = 0;
+                width = 0;
+                height1 = 0;
                 PrintScanTable.Document = ScanTablePrint;
+
                 PrintScanTable.ShowDialog();
+
             }
         }
+
         public void IzmerenieFR_TablePrintDoc()
         {
             bool doNotWrite = false;
@@ -8503,7 +8520,7 @@ namespace Ecoview_V2._0
             else
             {
                 IzmerenieFRprintPreviewTable1.Document = IzmerenieFRprintTable1;
-               // IzmerenieFRprintTable1.DefaultPageSettings.PaperSize = paperSize;
+                // IzmerenieFRprintTable1.DefaultPageSettings.PaperSize = paperSize;
                 IzmerenieFRprintPreviewTable1.ShowDialog();
             }
         }
@@ -8545,10 +8562,122 @@ namespace Ecoview_V2._0
                 }
             }
         }
-        private string stringToPrint;
+        int height;
+
         public void ScanTablePrint_PrintPage(object sender, PrintPageEventArgs e)
         {
-            e.Graphics.DrawString("Измерение в режиме сканирования\n\n", new System.Drawing.Font("Times New Roman", 20, FontStyle.Bold), Brushes.Black, 100, 50);
+            if (prinPage <= 0)
+            {
+                e.Graphics.DrawString("Измерение в режиме сканирования\n\n",
+                new System.Drawing.Font("Times New Roman", 20, FontStyle.Bold), Brushes.Black, 100, 50);
+                e.Graphics.DrawString("График сканирования\n\n",
+                  new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, 100, 100);
+                height = ScanChart.Height;
+                Bitmap bmp = new Bitmap(ScanChart.Width, ScanChart.Height);
+                ScanChart.DrawToBitmap(bmp, new System.Drawing.Rectangle(0, 0, ScanChart.Width, ScanChart.Height));
+                e.Graphics.DrawImage(bmp, 25, 130);
+                height = height + 160;
+                e.Graphics.DrawString("Таблица сканирования\n\n",
+                new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, 100, height);
+
+
+                realwidth = ScanTable.Columns[0].Width + 5;
+                realheight = height + 35;
+                width = 100;
+                height1 = ScanTable.Rows[0].Height + 5;
+                for (int z = 0; z < ScanTable.Columns.Count; z++)
+                {
+                    e.Graphics.FillRectangle(Brushes.AliceBlue, realwidth, realheight, width, height1);
+                    e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
+                    e.Graphics.DrawString(ScanTable.Columns[z].HeaderText, new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, realwidth, realheight);
+                    realwidth = realwidth + width;
+                }
+                realwidth = ScanTable.Columns[0].Width + 5;
+                realheight = realheight + 20;
+
+                while (strcountScan < ScanTable.Rows.Count - 1)
+                {
+                    for (int j = 0; j < ScanTable.Columns.Count; j++)
+                    {
+                        e.Graphics.FillRectangle(Brushes.AliceBlue, realwidth, realheight, width, height1);
+                        e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
+                        e.Graphics.DrawString(ScanTable.Rows[strcountScan].Cells[j].Value.ToString(), new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, realwidth, realheight);
+                        realwidth = realwidth + width;
+
+                    }
+                    realwidth = ScanTable.Columns[0].Width + 5;
+                    realheight = realheight + 20;
+
+                    if (realheight > e.MarginBounds.Height)
+                    {
+                        height = 100;
+                        e.HasMorePages = true;
+                        //   strcountScan++;
+                        prinPage++;
+                        return;
+                    }
+                    else
+                    {
+                        e.HasMorePages = false;
+
+                    }
+                    // strcountScan++;
+
+                    strcountScan++;
+                }
+            }
+            else {
+                realwidth = ScanTable.Columns[0].Width + 5;
+                realheight = 20;
+                width = 100;
+                height1 = ScanTable.Rows[0].Height + 5;
+                for (int z = 0; z < ScanTable.Columns.Count; z++)
+                {
+                    e.Graphics.FillRectangle(Brushes.AliceBlue, realwidth, realheight, width, height1);
+                    e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
+                    e.Graphics.DrawString(ScanTable.Columns[z].HeaderText, new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, realwidth, realheight);
+                    realwidth = realwidth + width;
+                }
+                realwidth = ScanTable.Columns[0].Width + 5;
+                realheight = realheight + 20;
+
+                while (strcountScan < ScanTable.Rows.Count - 1)
+                {
+                    for (int j = 0; j < ScanTable.Columns.Count; j++)
+                    {
+                        e.Graphics.FillRectangle(Brushes.AliceBlue, realwidth, realheight, width, height1);
+                        e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
+                        e.Graphics.DrawString(ScanTable.Rows[strcountScan].Cells[j].Value.ToString(), new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, realwidth, realheight);
+                        realwidth = realwidth + width;
+
+                    }
+                    realwidth = ScanTable.Columns[0].Width + 5;
+                    realheight = realheight + 20;
+
+                    if (realheight > e.MarginBounds.Height)
+                    {
+                        height = 100;
+                        e.HasMorePages = true;
+                        //   strcountScan++;
+                        prinPage++;
+                        return;
+                    }
+                    else
+                    {
+                        e.HasMorePages = false;
+
+                    }
+                    strcountScan++;
+                }
+            }
+            
+        }
+
+    
+        public void printTableScan(PrintPageEventArgs e)
+        {
+            int height = ScanChart.Height + 160;
+            
         }
         private void IzmerenieFRprintTable1_PrintPage(object sender, PrintPageEventArgs e)
         {
