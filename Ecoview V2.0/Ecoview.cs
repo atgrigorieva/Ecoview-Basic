@@ -1826,7 +1826,11 @@ namespace Ecoview_V2._0
                 case 5:
                     TableScan_Open();
                     break;
+                case 4:
+                    TableKin_Open();
+                    break;
             }
+            
         }
 
         public string F1;
@@ -1834,6 +1838,31 @@ namespace Ecoview_V2._0
         bool USE_KO_Izmer = false;
         string filepath1;
         string filepath;
+        public void TableKin_Open()
+        {
+            openFileDialog1.InitialDirectory = "C";
+            openFileDialog1.Title = "Open File";
+            openFileDialog1.FileName = "";
+            openFileDialog1.Filter = "KIN файл|*.KIN2";
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                chart3.Series[0].Points.Clear();
+                chart3.Series[1].Points.Clear();
+                chart3.Series.Clear();
+                chart3.Series.Add("Series1");
+                chart3.Series.Add("Series2");
+                //listBox1.Items.Clear();
+                dataGridView4.Rows.Clear();
+                dataGridView3.Rows.Clear();
+                try
+                {
+                    // получаем выбранный файл
+                    openFileKin(ref filepath);
+                    button3.Enabled = true;
+                }
+                catch (Exception t) { MessageBox.Show("exeption" + t.Message); }
+            }
+        }
         public void TableScan_Open()
         {
             openFileDialog1.InitialDirectory = "C";
@@ -2030,6 +2059,10 @@ namespace Ecoview_V2._0
             {
                 button14.Enabled = false;
             }
+
+        }
+        public void openFileKin(ref string filepath)
+        {
 
         }
         public void openFileScan(ref string filepath)
@@ -6029,6 +6062,39 @@ namespace Ecoview_V2._0
                         SaveScan();
                     }
                     break;
+                case 4:
+                    if(TableKinetica1.RowCount < 2)
+                    {
+                        MessageBox.Show("Создайте измерение");
+                    }
+                    else
+                    {
+                        SaveKin();
+                    }
+                    break;
+            }
+        }
+        public void SaveKin()
+        {
+            bool doNotWrite = false;
+            for (int j = 0; j < TableKinetica1.RowCount - 1; j++)
+            {
+                for (int i = 0; i < TableKinetica1.Rows[j].Cells.Count; i++)
+                {
+                    if (TableKinetica1.Rows[j].Cells[i].Value == null)
+                    {
+                        doNotWrite = true;
+                        break;
+                    }
+                }
+            }
+            if (doNotWrite)
+            {
+                MessageBox.Show("Не вся поля таблицы были заполнены!");
+            }
+            else
+            {
+                SaveAsKinTable();
             }
         }
         public void SaveScan()
@@ -6178,6 +6244,23 @@ namespace Ecoview_V2._0
                 label33.Visible = false;
             }
         }
+        public void SaveAsKinTable()
+        {
+            saveFileDialog1.InitialDirectory = "C";
+            saveFileDialog1.Title = "Save as XML File";
+            saveFileDialog1.FileName = "";
+            saveFileDialog1.Filter = "KIN файл|*.KIN2";
+
+            if (saveFileDialog1.ShowDialog() != DialogResult.Cancel)
+            {
+                CreateXMLDocumentIzmerenieKin(ref filepath);
+                WriteXmlKin(ref filepath);
+                button3.Enabled = true;
+                button9.Enabled = true;
+                печатьToolStripMenuItem1.Enabled = true;
+
+            }
+        }
         public void SaveAsScanTable()
         {
             saveFileDialog1.InitialDirectory = "C";
@@ -6224,6 +6307,16 @@ namespace Ecoview_V2._0
             xtw.WriteEndDocument();
             xtw.Close();
         }
+        public void CreateXMLDocumentIzmerenieKin(ref string filepath)
+        {
+            filepath = saveFileDialog1.FileName;
+            XmlTextWriter xtw = new XmlTextWriter(filepath, Encoding.UTF8);
+
+            xtw.WriteStartDocument();
+            xtw.WriteStartElement("Data_Izmerenie");
+            xtw.WriteEndDocument();
+            xtw.Close();
+        }
         private void CreateXMLDocument(ref string filepath)
         {
 
@@ -6234,6 +6327,50 @@ namespace Ecoview_V2._0
             xtw.WriteStartElement("Data_Izmerenie");
             xtw.WriteEndDocument();
             xtw.Close();
+        }
+        public void WriteXmlKin(ref string filepath)
+        {
+            XmlDocument xd = new XmlDocument();
+            FileStream fs = new FileStream(filepath, FileMode.Open);
+            xd.Load(fs);
+            XmlNode Izmerenie = xd.CreateElement("Izmerenie");
+
+           //string HeaderCells1 =;
+            XmlNode TypeIzmer = xd.CreateElement("TypeIzmer");
+            TypeIzmer.InnerText = TableKinetica1.Columns[1].HeaderText;
+            Izmerenie.AppendChild(TypeIzmer);
+
+            xd.DocumentElement.AppendChild(Izmerenie);
+
+            XmlNode NumberIzmer = xd.CreateElement("NumberIzmer");
+
+          
+            for (int i = 0; i < TableKinetica1.RowCount-1; i++)
+            {
+                XmlNode Str = xd.CreateElement("Str");
+                XmlAttribute attribute2 = xd.CreateAttribute("Nomer");
+                attribute2.Value = Convert.ToString(i); // устанавливаем значение атрибута
+                Str.Attributes.Append(attribute2); // добавляем атрибут
+                NumberIzmer.AppendChild(Str);
+
+                for (int j = 0; j < TableKinetica1.ColumnCount; j++)
+                {
+               //     HeaderCells1 = this.TableKinetica1.Columns[j].HeaderText;
+                    XmlNode Cells1 = xd.CreateElement("Cells" + j);
+                    XmlAttribute attribute3 = xd.CreateAttribute("TypeCell");
+                    attribute3.Value = TableKinetica1.Columns[j].HeaderText; // устанавливаем значение атрибута
+                    Cells1.Attributes.Append(attribute3); // добавляем атрибут
+                    Cells1.InnerText = TableKinetica1.Rows[i].Cells[j].Value.ToString();
+                    Str.AppendChild(Cells1);
+                    //xd.DocumentElement.AppendChild(Cells1);
+                }
+                //   xd.DocumentElement.AppendChild(Str);
+            }
+            xd.DocumentElement.AppendChild(NumberIzmer);
+
+            fs.Close();         // Закрываем поток  
+            xd.Save(filepath); // Сохраняем файл  
+
         }
         public void WriteXmlIzmerenieScan(ref string filepath)
         {
@@ -8418,6 +8555,7 @@ namespace Ecoview_V2._0
                         }
                         break;
                     case 5:
+                        this.TopMost = false;
                         PrintScan();
                         break;
                 }
