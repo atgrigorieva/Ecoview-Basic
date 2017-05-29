@@ -1854,6 +1854,7 @@ namespace Ecoview_V2._0
                 //listBox1.Items.Clear();
                 dataGridView4.Rows.Clear();
                 dataGridView3.Rows.Clear();
+                TableKinetica1.Rows.Clear();
                 try
                 {
                     // получаем выбранный файл
@@ -1877,6 +1878,7 @@ namespace Ecoview_V2._0
                 ScanChart.Series.Add("Series1");
                 ScanChart.Series.Add("Series2");
                 listBox1.Items.Clear();
+                ScanTable.Rows.Clear();
                 dataGridView1.Rows.Clear();
                 dataGridView2.Rows.Clear();
                 try
@@ -2063,7 +2065,105 @@ namespace Ecoview_V2._0
         }
         public void openFileKin(ref string filepath)
         {
+            filepath = openFileDialog1.FileName;
+            XmlDocument xDoc = new XmlDocument();
+            xDoc.Load(@filepath);
+            XmlNodeList nodes = xDoc.ChildNodes;
 
+           
+
+            foreach (XmlNode n in nodes)
+            {
+                if ("Data_Izmerenie".Equals(n.Name))
+                {
+                    for (XmlNode d = n.FirstChild; d != null; d = d.NextSibling)
+                    {
+                        if ("Izmerenie".Equals(d.Name))
+                        {
+                            for (XmlNode k = d.FirstChild; k != null; k = k.NextSibling)
+                            {
+
+                                if ("TypeIzmer".Equals(k.Name) && k.FirstChild != null)
+                                {
+                                    TableKinetica1.Columns[1].HeaderText = k.FirstChild.Value;
+                                    if (TableKinetica1.Columns[1].HeaderText == "Abs")
+                                    {
+                                        TableKinetica1.Columns[2].HeaderText = "%T";
+                                    }
+                                    else
+                                    {
+                                        TableKinetica1.Columns[2].HeaderText = "Abs";
+                                    }
+                                    chart3.ChartAreas[0].AxisX.Title = TableKinetica1.Columns[0].HeaderText;
+                                    chart3.ChartAreas[0].AxisY.Title = TableKinetica1.Columns[1].HeaderText;
+                                }
+                            }
+                        }
+
+                    }
+                }
+            }
+
+            XDocument xdoc = XDocument.Load(@filepath);
+            foreach (XElement IzmerScan in xdoc.Element("Data_Izmerenie").Elements("NumberIzmer"))
+            {
+                foreach (XElement IzmerScan1 in xdoc.Element("Data_Izmerenie").Element("NumberIzmer").Elements("Str"))
+                {
+                    XElement CellsElement0 = IzmerScan1.Element("Cells0");
+                    XElement CellsElement1 = IzmerScan1.Element("Cells1");
+                    XElement CellsElement2 = IzmerScan1.Element("Cells2");
+
+                    TableKinetica1.Rows.Add(CellsElement0.Value, CellsElement1.Value, CellsElement2.Value);
+                }
+            }
+
+            chart3.ChartAreas[0].AxisX.MajorGrid.Enabled = false;
+            chart3.ChartAreas[0].AxisY.MajorGrid.Enabled = false;
+          //  chart3.ChartAreas[0].AxisX.Title = TableKinetica1.Columns[0].HeaderText;
+           // chart3.ChartAreas[0].AxisY.Title = TableKinetica1.Columns[1].HeaderText;
+            switch (TableKinetica1.Columns[1].HeaderText)
+            {
+                case "Abs":
+                    chart3.ChartAreas[0].AxisY.Minimum = 0;
+                    chart3.ChartAreas[0].AxisY.Maximum = 3;
+                    chart3.ChartAreas[0].AxisX.Minimum = 0;
+                    chart3.ChartAreas[0].AxisX.Maximum = Convert.ToDouble(TableKinetica1.Rows[TableKinetica1.Rows.Count - 2].Cells[0].Value);
+                    dataGridView4.Columns[1].HeaderText = "Abs";
+                    dataGridView4.Columns[2].HeaderText = "%T";
+                    dataGridView3.Columns[1].HeaderText = "Abs";
+                    dataGridView3.Columns[2].HeaderText = "%T";
+                    break;
+                case "%T":
+                    chart3.ChartAreas[0].AxisY.Minimum = 0;
+                    chart3.ChartAreas[0].AxisY.Maximum = 125;
+                    chart3.ChartAreas[0].AxisX.Minimum = 0;
+                    chart3.ChartAreas[0].AxisX.Maximum = Convert.ToDouble(TableKinetica1.Rows[TableKinetica1.Rows.Count - 2].Cells[0].Value);
+                    dataGridView4.Columns[1].HeaderText = "%T";
+                    dataGridView4.Columns[2].HeaderText = "Abs";
+                    dataGridView3.Columns[1].HeaderText = "%T";
+                    dataGridView3.Columns[2].HeaderText = "Abs";
+                    break;
+            }
+
+            massGE = new double[TableKinetica1.Rows.Count-2];
+            massWL = new double[TableKinetica1.Rows.Count-2];
+            chart3.Series[1].ChartType = SeriesChartType.Line;
+            for (int i = 0; i < massGE.Length; i++)
+            {
+                massWL[i] = Convert.ToDouble(TableKinetica1.Rows[i].Cells[0].Value);
+                massGE[i] = Convert.ToDouble(TableKinetica1.Rows[i].Cells[1].Value);
+                double x1 = Convert.ToDouble(TableKinetica1.Rows[i].Cells[0].Value);
+                double y1 = Convert.ToDouble(TableKinetica1.Rows[i].Cells[1].Value);
+                chart3.Series[1].Points.AddXY(x1, y1);
+                
+
+            }
+
+
+            Array.Sort(massWL);
+            Array.Sort(massGE);
+
+            MinMax();
         }
         public void openFileScan(ref string filepath)
         {
@@ -2105,10 +2205,7 @@ namespace Ecoview_V2._0
                                 }
                             }
                         }
-                        /*for(int i = 0; i < listBox1.Items.Count; i++)
-                        {
-                            
-                        }*/
+                       
                     }
                 }
             }
@@ -8558,6 +8655,10 @@ namespace Ecoview_V2._0
                         this.TopMost = false;
                         PrintScan();
                         break;
+                    case 4:
+                        this.TopMost = false;
+                        PrintKinetica();
+                        break;
                 }
 
             }
@@ -8600,6 +8701,41 @@ namespace Ecoview_V2._0
         int realheight = 0;
         int width = 0;
         int height1 = 0;
+
+       public void PrintKinetica()
+        {
+            bool doNotWrite = false;
+            for (int j = 0; j < TableKinetica1.Rows.Count - 2; j++)
+            {
+
+                for (int i = 0; i < TableKinetica1.Rows[j].Cells.Count; i++)
+                {
+                    if (TableKinetica1.Rows[j].Cells[i].Value == null)
+                    {
+                        doNotWrite = true;
+                        break;
+
+                    }
+                }
+            }
+            if (doNotWrite == true)
+            {
+                MessageBox.Show("Не вся поля таблицы были заполнены!");
+            }
+            else
+            {
+                prinPage = 0;
+                strcountScan = 0;
+                realwidth = 0;
+                realheight = 0;
+                width = 0;
+                height1 = 0;
+                PrintKinTable.Document = KinTablePrint;
+                PrintKinTable.ShowDialog();
+
+            }
+        }
+
         public void PrintScan()
         {
             bool doNotWrite = false;
@@ -8629,7 +8765,6 @@ namespace Ecoview_V2._0
                 width = 0;
                 height1 = 0;
                 PrintScanTable.Document = ScanTablePrint;
-
                 PrintScanTable.ShowDialog();
 
             }
@@ -8701,7 +8836,113 @@ namespace Ecoview_V2._0
             }
         }
         int height;
+        public void KinTablePrint_PrintPage(object sender, PrintPageEventArgs e)
+        {
+            if (prinPage <= 0)
+            {
+                e.Graphics.DrawString("Измерение в режиме кинетики\n\n",
+                new System.Drawing.Font("Times New Roman", 20, FontStyle.Bold), Brushes.Black, 100, 50);
+                e.Graphics.DrawString("График сканирования\n\n",
+                  new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, 100, 100);
+                height = chart3.Height;
+                Bitmap bmp = new Bitmap(chart3.Width, chart3.Height);
+                chart3.DrawToBitmap(bmp, new System.Drawing.Rectangle(0, 0, chart3.Width, chart3.Height));
+                e.Graphics.DrawImage(bmp, 25, 130);
+                height = height + 160;
+                e.Graphics.DrawString("Таблица сканирования\n\n",
+                new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, 100, height);
 
+
+                realwidth = TableKinetica1.Columns[0].Width + 5;
+                realheight = height + 35;
+                width = 100;
+                height1 = TableKinetica1.Rows[0].Height + 5;
+                for (int z = 0; z < ScanTable.Columns.Count; z++)
+                {
+                    e.Graphics.FillRectangle(Brushes.AliceBlue, realwidth, realheight, width, height1);
+                    e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
+                    e.Graphics.DrawString(TableKinetica1.Columns[z].HeaderText, new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, realwidth, realheight);
+                    realwidth = realwidth + width;
+                }
+                realwidth = TableKinetica1.Columns[0].Width + 5;
+                realheight = realheight + 20;
+
+                while (strcountScan < TableKinetica1.Rows.Count - 1)
+                {
+                    for (int j = 0; j < TableKinetica1.Columns.Count; j++)
+                    {
+                        e.Graphics.FillRectangle(Brushes.AliceBlue, realwidth, realheight, width, height1);
+                        e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
+                        e.Graphics.DrawString(TableKinetica1.Rows[strcountScan].Cells[j].Value.ToString(), new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, realwidth, realheight);
+                        realwidth = realwidth + width;
+
+                    }
+                    realwidth = TableKinetica1.Columns[0].Width + 5;
+                    realheight = realheight + 20;
+
+                    if (realheight > e.MarginBounds.Height)
+                    {
+                        height = 100;
+                        e.HasMorePages = true;
+                        //   strcountScan++;
+                        prinPage++;
+                        return;
+                    }
+                    else
+                    {
+                        e.HasMorePages = false;
+
+                    }
+                    // strcountScan++;
+
+                    strcountScan++;
+                }
+            }
+            else {
+                realwidth = TableKinetica1.Columns[0].Width + 5;
+                realheight = 20;
+                width = 100;
+                height1 = TableKinetica1.Rows[0].Height + 5;
+                for (int z = 0; z < TableKinetica1.Columns.Count; z++)
+                {
+                    e.Graphics.FillRectangle(Brushes.AliceBlue, realwidth, realheight, width, height1);
+                    e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
+                    e.Graphics.DrawString(TableKinetica1.Columns[z].HeaderText, new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, realwidth, realheight);
+                    realwidth = realwidth + width;
+                }
+                realwidth = TableKinetica1.Columns[0].Width + 5;
+                realheight = realheight + 20;
+
+                while (strcountScan < TableKinetica1.Rows.Count - 1)
+                {
+                    for (int j = 0; j < TableKinetica1.Columns.Count; j++)
+                    {
+                        e.Graphics.FillRectangle(Brushes.AliceBlue, realwidth, realheight, width, height1);
+                        e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
+                        e.Graphics.DrawString(TableKinetica1.Rows[strcountScan].Cells[j].Value.ToString(), new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, realwidth, realheight);
+                        realwidth = realwidth + width;
+
+                    }
+                    realwidth = TableKinetica1.Columns[0].Width + 5;
+                    realheight = realheight + 20;
+
+                    if (realheight > e.MarginBounds.Height)
+                    {
+                        height = 100;
+                        e.HasMorePages = true;
+                        //   strcountScan++;
+                        prinPage++;
+                        return;
+                    }
+                    else
+                    {
+                        e.HasMorePages = false;
+
+                    }
+                    strcountScan++;
+                }
+            }
+        }
         public void ScanTablePrint_PrintPage(object sender, PrintPageEventArgs e)
         {
             if (prinPage <= 0)
@@ -8812,11 +9053,7 @@ namespace Ecoview_V2._0
         }
 
     
-        public void printTableScan(PrintPageEventArgs e)
-        {
-            int height = ScanChart.Height + 160;
-            
-        }
+        
         private void IzmerenieFRprintTable1_PrintPage(object sender, PrintPageEventArgs e)
         {
             /* int charactersOnPage = 0;
@@ -10338,24 +10575,7 @@ namespace Ecoview_V2._0
           ///  chart3.Series[0].Points.Clear();
          //   chart3.Series[1].Points.Clear();
          //   chart3.ChartAreas[0].AxisX.Interval = interval;
-            if (radioButton1.Checked == true)
-            {
-                TableKinetica1.Columns[1].HeaderText = "Abs";
-                TableKinetica1.Columns[2].HeaderText = "%T";
-                dataGridView1.Columns[1].HeaderText = "Abs";
-                dataGridView1.Columns[2].HeaderText = "%T";
-                dataGridView2.Columns[1].HeaderText = "Abs";
-                dataGridView2.Columns[2].HeaderText = "%T";
-            }
-            else
-            {
-                TableKinetica1.Columns[2].HeaderText = "Abs";
-                TableKinetica1.Columns[1].HeaderText = "%T";
-                dataGridView1.Columns[1].HeaderText = "%T";
-                dataGridView1.Columns[2].HeaderText = "Abs";
-                dataGridView2.Columns[1].HeaderText = "%T";
-                dataGridView2.Columns[2].HeaderText = "Abs";
-            }
+           
             if (TableKinetica1.Columns[1].HeaderText == "Abs")
             {
                 //Array.Sort(massGE);
@@ -10363,6 +10583,11 @@ namespace Ecoview_V2._0
                 chart3.ChartAreas[0].AxisY.Maximum = 3;
                 chart3.ChartAreas[0].AxisX.Minimum = 0;
                 chart3.ChartAreas[0].AxisX.Maximum = start;
+                dataGridView1.Columns[1].HeaderText = "Abs";
+                dataGridView1.Columns[2].HeaderText = "%T";
+                dataGridView2.Columns[1].HeaderText = "Abs";
+                dataGridView2.Columns[2].HeaderText = "%T";
+                TableKinetica1.Columns[2].HeaderText = "%T";
             }
             else
             {
@@ -10371,6 +10596,11 @@ namespace Ecoview_V2._0
                 chart3.ChartAreas[0].AxisY.Maximum = 125;
                 chart3.ChartAreas[0].AxisX.Minimum = 0;
                 chart3.ChartAreas[0].AxisX.Maximum = start;
+                TableKinetica1.Columns[2].HeaderText = "Abs";
+                dataGridView1.Columns[1].HeaderText = "%T";
+                dataGridView1.Columns[2].HeaderText = "Abs";
+                dataGridView2.Columns[1].HeaderText = "%T";
+                dataGridView2.Columns[2].HeaderText = "Abs";
             }
           /*  chart3.Series.Add("area" + countButtonClick);
             Random r = new Random();
