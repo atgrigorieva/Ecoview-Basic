@@ -1829,6 +1829,9 @@ namespace Ecoview_V2._0
                 case 4:
                     TableKin_Open();
                     break;
+                case 3:
+                    TableMulti_Open();
+                    break;
             }
             
         }
@@ -1838,6 +1841,29 @@ namespace Ecoview_V2._0
         bool USE_KO_Izmer = false;
         string filepath1;
         string filepath;
+        public void TableMulti_Open()
+        {
+            openFileDialog1.InitialDirectory = "C";
+            openFileDialog1.Title = "Open File";
+            openFileDialog1.FileName = "";
+            openFileDialog1.Filter = "MULTI файл|*.MULTI2";
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                dataGridView5.Rows.Clear();
+                for(int i = dataGridView5.ColumnCount - 1; i >= 2; i--)
+                {
+                    dataGridView5.Columns.Remove(dataGridView5.Columns[i]);
+                }
+                try
+                {
+                    // получаем выбранный файл
+                    openFileMulti(ref filepath);
+                    button3.Enabled = true;
+                   // button9.Enabled = true;
+                }
+                catch (Exception t) { MessageBox.Show("exeption" + t.Message); }
+            }
+        }
         public void TableKin_Open()
         {
             openFileDialog1.InitialDirectory = "C";
@@ -2063,14 +2089,88 @@ namespace Ecoview_V2._0
             }
 
         }
-        public void openFileKin(ref string filepath)
+        public void openFileMulti(ref string filepath)
         {
             filepath = openFileDialog1.FileName;
             XmlDocument xDoc = new XmlDocument();
             xDoc.Load(@filepath);
             XmlNodeList nodes = xDoc.ChildNodes;
 
+            XDocument xdoc = XDocument.Load(@filepath);
+
+            foreach (XElement IzmerScan1 in xdoc.Element("Data_Izmerenie").Element("NumberIzmer").Elements("Str")){
+                int celssData = 0;
+                
+                foreach (XElement IzmerScan1_1 in IzmerScan1.Elements("Cells"))
+                {
+                    XAttribute CellsAttribute0 = IzmerScan1_1.Attribute("TypeCell1");
+                    if(CellsAttribute0 != null)
+                    {
+                        if (CellsAttribute0.Value.Contains("Abs")){
+                            CellsAttribute0.Value = CellsAttribute0.Value.Substring(4);
+                            CellsAttribute0.Value = CellsAttribute0.Value.Substring(0, CellsAttribute0.Value.Length - 3);
+                            dataGridView5.Columns.Add("Abs " + celssData, "Abs " + CellsAttribute0.Value + " нм");
+                        }
+                        else
+                        {
+                            CellsAttribute0.Value = CellsAttribute0.Value.Substring(3);
+                            CellsAttribute0.Value = CellsAttribute0.Value.Substring(0, CellsAttribute0.Value.Length - 3);
+                            dataGridView5.Columns.Add("Abs " + celssData, "%T " + CellsAttribute0.Value + " нм");
+                        }
+                        
+                        textBoxCO[celssData] = new TextBox();
+                        textBoxCO[celssData].Text = CellsAttribute0.Value;
+                    }
+                    celssData++;
+                }
+                break;
+                
+            }
            
+            foreach (XElement IzmerScan in xdoc.Element("Data_Izmerenie").Elements("NumberIzmer"))
+            {
+                int rowsData = 1;
+                foreach (XElement IzmerScan1 in IzmerScan.Elements("Str"))
+                {
+                    XElement CellsElement0 = IzmerScan1.Element("Cells0");
+                    XElement CellsElement1 = IzmerScan1.Element("Cells1");
+                    dataGridView5.Rows.Add(CellsElement0.Value, CellsElement1.Value);
+                    Array.Resize<double[]>(ref massGEMultiAbs, rowsData);
+                    massGEMultiAbs[massGEMultiAbs.Length - 1] = new double[dataGridView5.ColumnCount - 2];
+                    Array.Resize<double[]>(ref massGEMultiT, rowsData);
+                    massGEMultiT[massGEMultiAbs.Length - 1] = new double[dataGridView5.ColumnCount - 2];
+                    int celssData = 2;
+
+                    foreach (XElement IzmerScan2 in IzmerScan1.Elements("Cells"))
+                    {
+                        XElement CellsElement3 = IzmerScan2;
+                        if (CellsElement3 != null)
+                        {
+                            dataGridView5.Rows[dataGridView5.Rows.Count - 2].Cells[celssData].Value = CellsElement3.Value;
+                            if(dataGridView5.Columns["Abs " + 1].HeaderText.Contains("Abs "))
+                            {
+                                massGEMultiAbs[rowsData - 1][celssData - 2] = Convert.ToDouble(CellsElement3.Value);
+                                massGEMultiT[rowsData - 1][celssData - 2] = System.Math.Pow(System.Math.Pow(10, Convert.ToDouble(CellsElement3.Value)), -1) *100;
+                            }
+                            else
+                            {
+                                massGEMultiT[rowsData - 1][celssData - 2] = Convert.ToDouble(CellsElement3.Value);
+                                massGEMultiAbs[rowsData - 1][celssData - 2] = Math.Log10(System.Math.Pow((Convert.ToDouble(CellsElement3.Value) / 100), -1));
+                            }
+                                
+                        }
+                        celssData++;
+                    }
+                    rowsData++;
+                }
+            }
+        }
+        public void openFileKin(ref string filepath)
+        {
+            filepath = openFileDialog1.FileName;
+            XmlDocument xDoc = new XmlDocument();
+            xDoc.Load(@filepath);
+            XmlNodeList nodes = xDoc.ChildNodes;           
 
             foreach (XmlNode n in nodes)
             {
@@ -6169,6 +6269,39 @@ namespace Ecoview_V2._0
                         SaveKin();
                     }
                     break;
+                case 3:
+                    if(dataGridView5.Rows.Count < 2)
+                    {
+                        MessageBox.Show("Создайте измерение");
+                    }
+                    else
+                    {
+                        SaveMulti();
+                    }
+                    break;
+            }
+        }
+        public void SaveMulti()
+        {
+            bool doNotWrite = false;
+            for (int j = 0; j < dataGridView5.RowCount - 1; j++)
+            {
+                for (int i = 0; i < dataGridView5.Rows[j].Cells.Count; i++)
+                {
+                    if (dataGridView5.Rows[j].Cells[i].Value == null)
+                    {
+                        doNotWrite = true;
+                        break;
+                    }
+                }
+            }
+            if (doNotWrite)
+            {
+                MessageBox.Show("Не вся поля таблицы были заполнены!");
+            }
+            else
+            {
+                SaveAsMultiTable();
             }
         }
         public void SaveKin()
@@ -6341,6 +6474,23 @@ namespace Ecoview_V2._0
                 label33.Visible = false;
             }
         }
+        public void SaveAsMultiTable()
+        {
+            saveFileDialog1.InitialDirectory = "C";
+            saveFileDialog1.Title = "Save as XML File";
+            saveFileDialog1.FileName = "";
+            saveFileDialog1.Filter = "MULTI файл|*.MULTI2";
+
+            if (saveFileDialog1.ShowDialog() != DialogResult.Cancel)
+            {
+                CreateXMLDocumentMULTI(ref filepath);
+                WriteXmlMULTI(ref filepath);
+                button3.Enabled = true;
+                button9.Enabled = true;
+                печатьToolStripMenuItem1.Enabled = true;
+
+            }
+        }
         public void SaveAsKinTable()
         {
             saveFileDialog1.InitialDirectory = "C";
@@ -6404,6 +6554,16 @@ namespace Ecoview_V2._0
             xtw.WriteEndDocument();
             xtw.Close();
         }
+        public void CreateXMLDocumentMULTI(ref string filepath)
+        {
+            filepath = saveFileDialog1.FileName;
+            XmlTextWriter xtw = new XmlTextWriter(filepath, Encoding.UTF8);
+
+            xtw.WriteStartDocument();
+            xtw.WriteStartElement("Data_Izmerenie");
+            xtw.WriteEndDocument();
+            xtw.Close();
+        }
         public void CreateXMLDocumentIzmerenieKin(ref string filepath)
         {
             filepath = saveFileDialog1.FileName;
@@ -6424,6 +6584,61 @@ namespace Ecoview_V2._0
             xtw.WriteStartElement("Data_Izmerenie");
             xtw.WriteEndDocument();
             xtw.Close();
+        }
+        public void WriteXmlMULTI(ref string filepath)
+        {
+            XmlDocument xd = new XmlDocument();
+            FileStream fs = new FileStream(filepath, FileMode.Open);
+            xd.Load(fs);
+            XmlNode Izmerenie = xd.CreateElement("Izmerenie");
+
+            //string HeaderCells1 =;
+          /*  XmlNode TypeIzmer = xd.CreateElement("TypeIzmer");
+            TypeIzmer.InnerText = TableKinetica1.Columns[1].HeaderText;
+            Izmerenie.AppendChild(TypeIzmer);*/
+
+            xd.DocumentElement.AppendChild(Izmerenie);
+
+            XmlNode NumberIzmer = xd.CreateElement("NumberIzmer");
+
+
+            for (int i = 0; i < dataGridView5.RowCount - 1; i++)
+            {
+                XmlNode Str = xd.CreateElement("Str");
+                XmlAttribute attribute2 = xd.CreateAttribute("Nomer");
+                attribute2.Value = Convert.ToString(i); // устанавливаем значение атрибута
+                Str.Attributes.Append(attribute2); // добавляем атрибут
+                NumberIzmer.AppendChild(Str);
+                for (int j = 0; j < dataGridView5.ColumnCount; j++)
+                {
+                    //     HeaderCells1 = this.TableKinetica1.Columns[j].HeaderText;
+                    if(j <= 1)
+                    {
+                        XmlNode Cells1 = xd.CreateElement("Cells" + j);
+                        XmlAttribute attribute3 = xd.CreateAttribute("TypeCell");
+                        attribute3.Value = dataGridView5.Columns[j].HeaderText; // устанавливаем значение атрибута
+                        Cells1.Attributes.Append(attribute3); // добавляем атрибут
+                        Cells1.InnerText = dataGridView5.Rows[i].Cells[j].Value.ToString();
+                        Str.AppendChild(Cells1);
+                    }
+                    else
+                    {
+                        XmlNode Cells1 = xd.CreateElement("Cells");
+                        XmlAttribute attribute3 = xd.CreateAttribute("TypeCell1");
+                        attribute3.Value = dataGridView5.Columns[j].HeaderText; // устанавливаем значение атрибута
+                        Cells1.Attributes.Append(attribute3); // добавляем атрибут
+                        Cells1.InnerText = dataGridView5.Rows[i].Cells[j].Value.ToString();
+                        Str.AppendChild(Cells1);
+                    }
+                    
+                    //xd.DocumentElement.AppendChild(Cells1);
+                }
+                //   xd.DocumentElement.AppendChild(Str);
+            }
+            xd.DocumentElement.AppendChild(NumberIzmer);
+
+            fs.Close();         // Закрываем поток  
+            xd.Save(filepath); // Сохраняем файл  
         }
         public void WriteXmlKin(ref string filepath)
         {
@@ -7156,55 +7371,101 @@ namespace Ecoview_V2._0
             bool excelInstalled = excelKey == null ? false : true;
             if (excelInstalled == true)
             {
-                if (selet_rezim == 2)
+                switch (selet_rezim)
                 {
-                    if (tabControl2.SelectedIndex == 0 && SposobZadan == "По СО")
-                    {
-                        SaveExcel();
-                    }
-                    else
-                    {
-                        if (tabControl2.SelectedIndex != 0 && SposobZadan == "По СО")
+                    case 2:
+                        if (tabControl2.SelectedIndex == 0 && SposobZadan == "По СО")
                         {
-                            SaveExcel1();
-                        }
-                    }
-                }
-                else
-                {
-                    if (selet_rezim == 1)
-                    {
-                        IzmerenieFR_TableSaveExcel();
-                    }
-                    else
-                    {
-                        if (selet_rezim == 6)
-                        {
-                            if (tabControl2.SelectedIndex == 0 && SposobZadan == "По СО")
-                            {
-                                SaveExcel();
-                            }
-                            else
-                            {
-                                if (tabControl2.SelectedIndex != 0 && SposobZadan == "По СО")
-                                {
-                                    SaveExcel1();
-                                }
-                            }
+                            SaveExcel();
                         }
                         else
                         {
-                            if (selet_rezim == 5)
+                            if (tabControl2.SelectedIndex != 0 && SposobZadan == "По СО")
                             {
-                                SaveExcelScan();
+                                SaveExcel1();
                             }
                         }
-                    }
+                        break;
+                    case 1:
+                        IzmerenieFR_TableSaveExcel();
+                        break;
+                    case 6:
+                        if (tabControl2.SelectedIndex == 0 && SposobZadan == "По СО")
+                        {
+                            SaveExcel();
+                        }
+                        else
+                        {
+                            if (tabControl2.SelectedIndex != 0 && SposobZadan == "По СО")
+                            {
+                                SaveExcel1();
+                            }
+                        }
+                        break;
+                    case 5:
+                        SaveExcelScan();
+                        break;
+                    case 3:
+                        SaveExcelMulti();
+                        break;
+                    case 4:
+                        SaveExcelKin();
+                        break;
                 }
             }
             else
             {
                 MessageBox.Show("Внимание!! Экспорт в Ecxel не возможен! Отсутствует Excel!");
+            }
+        }
+        public void SaveExcelMulti()
+        {
+            bool doNotWrite = false;
+            for (int j = 0; j < dataGridView5.Rows.Count - 1; j++)
+            {
+
+                for (int i = 3; i < dataGridView5.Rows[j].Cells.Count; i++)
+                {
+                    if (dataGridView5.Rows[j].Cells[i].Value == null)
+                    {
+                        doNotWrite = true;
+                        break;
+
+                    }
+                }
+            }
+            if (doNotWrite == true)
+            {
+                MessageBox.Show("Не вся поля таблицы были заполнены!");
+            }
+            else
+            {
+                ExportToExcelMulti();
+            }
+        }
+        public void SaveExcelKin()
+        {
+            bool doNotWrite = false;
+            for (int j = 0; j < TableKinetica1.Rows.Count - 1; j++)
+            {
+
+                for (int i = 3; i < TableKinetica1.Rows[j].Cells.Count; i++)
+                {
+                    if (TableKinetica1.Rows[j].Cells[i].Value == null)
+                    {
+                        doNotWrite = true;
+                        break;
+
+                    }
+                }
+            }
+            if (doNotWrite == true)
+            {
+                MessageBox.Show("Не вся поля таблицы были заполнены!");
+            }
+            else
+            {
+                ExportToExcelKin();
             }
         }
         public void SaveExcelScan()
@@ -7281,6 +7542,74 @@ namespace Ecoview_V2._0
             else
             {
                 ExportToExcel();
+            }
+        }
+
+        public void ExportToExcelMulti()
+        {
+            saveFileDialog1.InitialDirectory = "C";
+            saveFileDialog1.Title = "Save as Excel File";
+            saveFileDialog1.FileName = "";
+            saveFileDialog1.Filter = "Excel Files(2003)|*.xls|Excel Files(2007)|*.xlsx";
+
+            if (saveFileDialog1.ShowDialog() != DialogResult.Cancel)
+            {
+                Microsoft.Office.Interop.Excel.Application exApp = new Microsoft.Office.Interop.Excel.Application();
+                //Excel.Application exApp = new Excel.Application();
+                exApp.Application.Workbooks.Add(Type.Missing);
+
+                exApp.Columns.ColumnWidth = 20;
+                for (int i = 1; i < this.dataGridView5.Columns.Count + 1; i++)
+                {
+                    exApp.Cells[1, i] = this.dataGridView5.Columns[i - 1].HeaderText;
+                }
+                //Thread.Sleep(500);
+                for (int i = 0; i < this.dataGridView5.Rows.Count; i++)
+                {
+                    // Thread.Sleep(200);
+                    for (int j = 0; j < this.dataGridView5.Columns.Count; j++)
+                    {
+                        exApp.Cells[i + 2, j + 1] = this.dataGridView5.Rows[i].Cells[j].Value;
+                    }
+                }
+
+                exApp.ActiveWorkbook.SaveCopyAs(saveFileDialog1.FileName.ToString());
+                exApp.ActiveWorkbook.Saved = true;
+                exApp.Visible = true;
+            }
+        }
+
+        public void ExportToExcelKin()
+        {
+            saveFileDialog1.InitialDirectory = "C";
+            saveFileDialog1.Title = "Save as Excel File";
+            saveFileDialog1.FileName = "";
+            saveFileDialog1.Filter = "Excel Files(2003)|*.xls|Excel Files(2007)|*.xlsx";
+
+            if (saveFileDialog1.ShowDialog() != DialogResult.Cancel)
+            {
+                Microsoft.Office.Interop.Excel.Application exApp = new Microsoft.Office.Interop.Excel.Application();
+                //Excel.Application exApp = new Excel.Application();
+                exApp.Application.Workbooks.Add(Type.Missing);
+
+                exApp.Columns.ColumnWidth = 20;
+                for (int i = 1; i < this.TableKinetica1.Columns.Count + 1; i++)
+                {
+                    exApp.Cells[1, i] = this.TableKinetica1.Columns[i - 1].HeaderText;
+                }
+                //Thread.Sleep(500);
+                for (int i = 0; i < this.TableKinetica1.Rows.Count; i++)
+                {
+                    // Thread.Sleep(200);
+                    for (int j = 0; j < this.TableKinetica1.Columns.Count; j++)
+                    {
+                        exApp.Cells[i + 2, j + 1] = this.TableKinetica1.Rows[i].Cells[j].Value;
+                    }
+                }
+
+                exApp.ActiveWorkbook.SaveCopyAs(saveFileDialog1.FileName.ToString());
+                exApp.ActiveWorkbook.Saved = true;
+                exApp.Visible = true;
             }
         }
         public void ExportToExcelScan()
@@ -8705,7 +9034,7 @@ namespace Ecoview_V2._0
        public void PrintKinetica()
         {
             bool doNotWrite = false;
-            for (int j = 0; j < TableKinetica1.Rows.Count - 2; j++)
+            for (int j = 0; j < TableKinetica1.Rows.Count - 1; j++)
             {
 
                 for (int i = 0; i < TableKinetica1.Rows[j].Cells.Count; i++)
@@ -8730,8 +9059,9 @@ namespace Ecoview_V2._0
                 realheight = 0;
                 width = 0;
                 height1 = 0;
-                PrintKinTable.Document = KinTablePrint;
-                PrintKinTable.ShowDialog();
+                PrintPreviewDialogSelectPrinter printPreviewDialogSelectPrinter = new PrintPreviewDialogSelectPrinter();
+                printPreviewDialogSelectPrinter.Document = KinTablePrint;
+                printPreviewDialogSelectPrinter.ShowDialog();
 
             }
         }
@@ -8764,8 +9094,9 @@ namespace Ecoview_V2._0
                 realheight = 0;
                 width = 0;
                 height1 = 0;
-                PrintScanTable.Document = ScanTablePrint;
-                PrintScanTable.ShowDialog();
+                PrintPreviewDialogSelectPrinter printPreviewDialogSelectPrinter = new PrintPreviewDialogSelectPrinter();
+                printPreviewDialogSelectPrinter.Document = ScanTablePrint;
+                printPreviewDialogSelectPrinter.ShowDialog();
 
             }
         }
@@ -8942,6 +9273,8 @@ namespace Ecoview_V2._0
                     strcountScan++;
                 }
             }
+            prinPage = 0;
+            strcountScan = 0;
         }
         public void ScanTablePrint_PrintPage(object sender, PrintPageEventArgs e)
         {
@@ -9049,7 +9382,8 @@ namespace Ecoview_V2._0
                     strcountScan++;
                 }
             }
-            
+            prinPage = 0;
+            strcountScan = 0;
         }
 
     
