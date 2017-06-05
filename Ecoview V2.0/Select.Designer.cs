@@ -104,7 +104,6 @@
             // radioButton6
             // 
             this.radioButton6.AutoSize = true;
-            this.radioButton6.Enabled = false;
             this.radioButton6.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.radioButton6.Location = new System.Drawing.Point(100, 295);
             this.radioButton6.Name = "radioButton6";
