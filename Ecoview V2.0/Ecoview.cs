@@ -9028,8 +9028,15 @@ namespace Ecoview_V2._0
                 realheight = 0;
                 width = 0;
                 height1 = 0;
-                pageyes = false;
-                pageyes1 = false;
+               pageyes = false; // для первй части таблицы (k = 7)
+               pageyes_1 = false; // для второй части таблицы (dataGridView5.ColumnCount - k <= 14)
+               pageyes1 = false;// для второй части таблицы (dataGridView5.ColumnCount - k > 14)
+                 pageyes1_1 = false; // для третей части таблицы ( dataGridView5.ColumnCount == 22)
+                pageyes2 = false; // для третей части таблицы ( dataGridView5.ColumnCount > 22)
+                pageyes2_1 = false; // первая часть готова
+                pageyes2_2 = false; // вторая часть готова (dataGridView5.ColumnCount - k <= 14)
+                 pageyes2_3 = false; // вторая часть готова (dataGridView5.ColumnCount - k > 14)
+                 pageyes2_4 = false; // третья часть готова  ( dataGridView5.ColumnCount == 22)
                 PrintPreviewDialogSelectPrinter printPreviewDialogSelectPrinter = new PrintPreviewDialogSelectPrinter();
                 printPreviewDialogSelectPrinter.Document = MultiTablePrint;
                 printPreviewDialogSelectPrinter.ShowDialog();
@@ -9238,7 +9245,7 @@ namespace Ecoview_V2._0
             else
             {
                 realwidth = dataGridView5.Columns[0].Width + 5;
-                realheight = height + 35;
+                realheight = 35;
                 width = 100;
                 height1 = dataGridView5.Rows[0].Height + 5;
                 if (dataGridView5.ColumnCount >= 7 || dataGridView5.ColumnCount <= 22)
@@ -9255,18 +9262,22 @@ namespace Ecoview_V2._0
         {
 
         }
-        bool pageyes = false;
-        bool pageyes_1 = false;
-        bool pageyes1 = false;
-        bool pageyes1_1 = false;
-        bool pageyes2 = false;
-        bool pageyes2_1 = false;
+        bool pageyes = false; // для первй части таблицы (k = 7)
+        bool pageyes_1 = false; // для второй части таблицы (dataGridView5.ColumnCount - k <= 14)
+        bool pageyes1 = false;// для второй части таблицы (dataGridView5.ColumnCount - k > 14)
+        bool pageyes1_1 = false; // для третей части таблицы ( dataGridView5.ColumnCount == 22)
+        bool pageyes2 = false; // для третей части таблицы ( dataGridView5.ColumnCount > 22)
+        bool pageyes2_1 = false; // первая часть готова
+        bool pageyes2_2 = false; // вторая часть готова (dataGridView5.ColumnCount - k <= 14)
+        bool pageyes2_3 = false; // вторая часть готова (dataGridView5.ColumnCount - k > 14)
+        bool pageyes2_4 = false; // третья часть готова  ( dataGridView5.ColumnCount == 22)
+        //bool pageyes2_4 = false; // третья часть готова ( dataGridView5.ColumnCount > 22)
         int p = 1;
         public void printdatagridview5_1(object sender, PrintPageEventArgs e)
-        {           
-            
-            if (prinPage <= 0)
+        {
+            if (prinPage == 0)
             {
+                //case 0:
                 int k = 7;
                 for (int z = 0; z < k; z++)
                 {
@@ -9277,7 +9288,6 @@ namespace Ecoview_V2._0
                 }
                 realwidth = dataGridView5.Columns[0].Width + 5;
                 realheight = realheight + 20;
-
                 while (strcountScan < dataGridView5.Rows.Count - 1)
                 {
                     for (int j = 0; j < k; j++)
@@ -9298,7 +9308,7 @@ namespace Ecoview_V2._0
                         //   strcountScan++;
                         prinPage++;
                         pageyes = true;
-                        pageyes_1 = true;
+                        strcountScan++;
                         return;
                     }
                     else
@@ -9308,13 +9318,12 @@ namespace Ecoview_V2._0
                     }
                     strcountScan++;
                 }
-
+                
                 if (dataGridView5.ColumnCount - k <= 14)
                 {
-                    if (prinPage == 0)
-                    {
-                        strcountScan = 0;
-                    }
+                    strcountScan = 0;
+                    pageyes2_1 = true;
+                    pageyes = true;
                     realwidth = dataGridView5.Columns[0].Width + 5;
                     realheight = realheight + 35;
                     width = 100;
@@ -9329,7 +9338,6 @@ namespace Ecoview_V2._0
                     }
                     realwidth = dataGridView5.Columns[0].Width + 5;
                     realheight = realheight + 20;
-
                     while (strcountScan < dataGridView5.Rows.Count - 1)
                     {
                         for (int j = k; j < dataGridView5.ColumnCount - k; j++)
@@ -9349,7 +9357,8 @@ namespace Ecoview_V2._0
                             e.HasMorePages = true;
                             //   strcountScan++;
                             prinPage++;
-                            pageyes1_1 = true;
+                            pageyes_1 = true;
+                            strcountScan++;
                             return;
                         }
                         else
@@ -9359,14 +9368,13 @@ namespace Ecoview_V2._0
                         }
                         strcountScan++;
                     }
-                    pageyes1_1 = true;
+
                 }
-                else
-                {
-                    if (prinPage == 0)
-                    {
-                        strcountScan = 0;
-                    }
+                else {
+                    pageyes2_1 = true;
+                    pageyes = true;
+                    pageyes_1 = true;
+                    strcountScan = 0;
                     realwidth = dataGridView5.Columns[0].Width + 5;
                     realheight = realheight + 35;
                     width = 100;
@@ -9403,7 +9411,7 @@ namespace Ecoview_V2._0
                             //   strcountScan++;
                             prinPage++;
                             pageyes1 = true;
-                            pageyes1_1 = true;
+                            strcountScan++;
                             return;
                         }
                         else
@@ -9412,12 +9420,6 @@ namespace Ecoview_V2._0
 
                         }
                         strcountScan++;
-                    }
-                    pageyes1 = true;
-                    pageyes1_1 = true;
-                    if (prinPage == 0)
-                    {
-                        strcountScan = 0;
                     }
                     realwidth = dataGridView5.Columns[0].Width + 5;
                     realheight = realheight + 40;
@@ -9441,6 +9443,11 @@ namespace Ecoview_V2._0
                     {
                         km = dataGridView5.ColumnCount;
                     }
+                    pageyes = true;
+                    pageyes1 = true;
+                    pageyes_1 = true;
+                    pageyes2_3 = true;
+                    strcountScan = 0;
                     while (strcountScan < dataGridView5.Rows.Count - 1)
                     {
                         for (int j = kk; j < km; j++)
@@ -9460,7 +9467,8 @@ namespace Ecoview_V2._0
                             e.HasMorePages = true;
                             //   strcountScan++;
                             prinPage++;
-                            pageyes2 = true;
+                            pageyes1_1 = true;
+                            strcountScan++;
                             return;
                         }
                         else
@@ -9471,13 +9479,12 @@ namespace Ecoview_V2._0
                         strcountScan++;
 
                     }
-                    pageyes2 = true;
                     if (km == 21)
                     {
-                        if (prinPage == 0)
-                        {
-                            strcountScan = 0;
-                        }
+                        pageyes = true;
+                        pageyes1_1 = true;
+                        pageyes1 = true;
+                        strcountScan = 0;
                         realwidth = dataGridView5.Columns[0].Width + 5;
                         realheight = realheight + 40;
                         width = 100;
@@ -9507,8 +9514,8 @@ namespace Ecoview_V2._0
                                 e.HasMorePages = true;
                                 //   strcountScan++;
                                 prinPage++;
-                                pageyes2_1 = true;
                                 pageyes2 = true;
+                                strcountScan++;
                                 return;
                             }
                             else
@@ -9518,16 +9525,15 @@ namespace Ecoview_V2._0
                             }
                             strcountScan++;
                         }
-                        pageyes2 = true;
                     }
                 }
             }
-            /*------------------------------------------------Конец первой страницы-------------------*/
-            else
-            {
-                int k = 7;
-                if (pageyes == true)
+            else {
+               int k = 7;
+                if (pageyes2_1 == false)
                 {
+                    //strcountScan = 0;
+
                     for (int z = 0; z < k; z++)
                     {
                         e.Graphics.FillRectangle(Brushes.AliceBlue, realwidth, realheight, width, height1);
@@ -9537,7 +9543,6 @@ namespace Ecoview_V2._0
                     }
                     realwidth = dataGridView5.Columns[0].Width + 5;
                     realheight = realheight + 20;
-
                     while (strcountScan < dataGridView5.Rows.Count - 1)
                     {
                         for (int j = 0; j < k; j++)
@@ -9558,41 +9563,43 @@ namespace Ecoview_V2._0
                             //   strcountScan++;
                             prinPage++;
                             pageyes = true;
+                            strcountScan++;
                             return;
                         }
                         else
                         {
-                            pageyes = false;
                             e.HasMorePages = false;
 
                         }
                         strcountScan++;
                     }
                 }
-                if (pageyes1 == true)
+                if (dataGridView5.ColumnCount - k <= 14)
                 {
-                    if (dataGridView5.ColumnCount - k <= 14)
+                    pageyes2_1 = true;
+                    pageyes = true;
+                    if (pageyes_1 == false)
                     {
-                      /*  if (pageyes1_1 == false)
-                        {
-                            strcountScan = 0;
-                        }*/
-                       
+                        strcountScan = 0;
+                    }
+                    if (pageyes2_2 == false)
+                    {
                         realwidth = dataGridView5.Columns[0].Width + 5;
                         realheight = realheight + 35;
                         width = 100;
                         height1 = dataGridView5.Rows[0].Height + 5;
-
-                        for (int z = k; z < dataGridView5.ColumnCount - k; z++)
+                        if (pageyes_1 == false)
                         {
-                            e.Graphics.FillRectangle(Brushes.AliceBlue, realwidth, realheight, width, height1);
-                            e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
-                            e.Graphics.DrawString(dataGridView5.Columns[z].HeaderText, new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, realwidth, realheight);
-                            realwidth = realwidth + width;
+                            for (int z = k; z < dataGridView5.ColumnCount - k; z++)
+                            {
+                                e.Graphics.FillRectangle(Brushes.AliceBlue, realwidth, realheight, width, height1);
+                                e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
+                                e.Graphics.DrawString(dataGridView5.Columns[z].HeaderText, new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, realwidth, realheight);
+                                realwidth = realwidth + width;
+                            }
+                            realwidth = dataGridView5.Columns[0].Width + 5;
+                            realheight = realheight + 20;
                         }
-                        realwidth = dataGridView5.Columns[0].Width + 5;
-                        realheight = realheight + 20;
-
                         while (strcountScan < dataGridView5.Rows.Count - 1)
                         {
                             for (int j = k; j < dataGridView5.ColumnCount - k; j++)
@@ -9612,41 +9619,47 @@ namespace Ecoview_V2._0
                                 e.HasMorePages = true;
                                 //   strcountScan++;
                                 prinPage++;
-                                pageyes1_1 = true;
+                                pageyes_1 = true;
+                                strcountScan++;
                                 return;
                             }
                             else
                             {
-                                pageyes1 = false;
                                 e.HasMorePages = false;
 
                             }
                             strcountScan++;
                         }
                     }
-                    else
+                }
+                else
+                {
+                   // pageyes2_2 = true;
+                    pageyes_1 = true;
+                    if (pageyes1 == false)
                     {
-                        if (pageyes1_1 == false)
-                        {
-                            strcountScan = 0;
-                        }
-                        
+                        strcountScan = 0;
+                    }             
+
+                    int kk = 14;
+                    if (pageyes2_3 == false)
+                    {
                         realwidth = dataGridView5.Columns[0].Width + 5;
-                        realheight = realheight + 40;
+                        realheight = realheight + 35;
                         width = 100;
                         height1 = dataGridView5.Rows[0].Height + 5;
-
-                        int kk = 14;
-                        for (int z = k; z < kk; z++)
+                        if (pageyes1 == false)
                         {
-                            e.Graphics.FillRectangle(Brushes.AliceBlue, realwidth, realheight, width, height1);
-                            e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
-                            e.Graphics.DrawString(dataGridView5.Columns[z].HeaderText, new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, realwidth, realheight);
-                            realwidth = realwidth + width;
+                            for (int z = k; z < kk; z++)
+                            {
+                                e.Graphics.FillRectangle(Brushes.AliceBlue, realwidth, realheight, width, height1);
+                                e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
+                                e.Graphics.DrawString(dataGridView5.Columns[z].HeaderText, new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, realwidth, realheight);
+                                realwidth = realwidth + width;
+                            }
+                            realwidth = dataGridView5.Columns[0].Width + 5;
+                            realheight = realheight + 20;
                         }
-                        realwidth = dataGridView5.Columns[0].Width + 5;
-                        realheight = realheight + 20;
-
                         while (strcountScan < dataGridView5.Rows.Count - 1)
                         {
                             for (int j = k; j < kk; j++)
@@ -9666,32 +9679,42 @@ namespace Ecoview_V2._0
                                 e.HasMorePages = true;
                                 //   strcountScan++;
                                 prinPage++;
-                                pageyes1_1 = true;
+                                pageyes1 = true;
+                                strcountScan++;
                                 return;
                             }
                             else
                             {
-                               // pageyes1_1 = true;
                                 e.HasMorePages = false;
 
                             }
                             strcountScan++;
                         }
-                        
-                        int km = 0;
-                        if (dataGridView5.ColumnCount == 22)
-                        {
-                            km = 21;
-                        }
-                        else
-                        {
-                            km = dataGridView5.ColumnCount;
-                        }
+                    }
+                    pageyes2_3 = true;
+                    pageyes1 = true;
+                    if (pageyes1_1 == false)
+                    {
+                        strcountScan = 0;
+                    }
+
+
+                    int km = 0;
+                    if (dataGridView5.ColumnCount == 22)
+                    {
+                        km = 21;
+                    }
+                    else
+                    {
+                        km = dataGridView5.ColumnCount;
+                    }
+                    if (pageyes2_4 == false)
+                    {
                         realwidth = dataGridView5.Columns[0].Width + 5;
                         realheight = realheight + 40;
                         width = 100;
                         height1 = dataGridView5.Rows[0].Height + 5;
-                        for (int z = kk; z < km; z++)
+                        for (int z = kk; z < dataGridView5.ColumnCount - 1; z++)
                         {
                             e.Graphics.FillRectangle(Brushes.AliceBlue, realwidth, realheight, width, height1);
                             e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
@@ -9700,10 +9723,6 @@ namespace Ecoview_V2._0
                         }
                         realwidth = dataGridView5.Columns[0].Width + 5;
                         realheight = realheight + 20;
-                        if (pageyes2 == false)
-                        {
-                            strcountScan = 0;
-                        }
                         while (strcountScan < dataGridView5.Rows.Count - 1)
                         {
                             for (int j = kk; j < km; j++)
@@ -9722,65 +9741,67 @@ namespace Ecoview_V2._0
                                 height = 100;
                                 e.HasMorePages = true;
                                 //   strcountScan++;
-                                pageyes2 = true;
                                 prinPage++;
+                                pageyes1_1 = true;
+                                strcountScan++;
                                 return;
                             }
                             else
                             {
-                                
                                 e.HasMorePages = false;
 
                             }
                             strcountScan++;
-                            
-                        }
-                       // pageyes2 = false;
-                        if (km == 21)
-                        {                            
-                            if (pageyes2_1 == false)
-                            {
-                                strcountScan = 0;
-                            }
-                            realwidth = dataGridView5.Columns[0].Width + 5;
-                            realheight = realheight + 40;
-                            width = 100;
-                            height1 = dataGridView5.Rows[0].Height + 5;
 
+                        }
+                    }
+                    if (km == 21)
+                    {
+                        pageyes2_4 = true;
+                        pageyes1_1 = true;
+                        if (pageyes2 == false)
+                        {
+                            strcountScan = 0;
+                        }
+                        realwidth = dataGridView5.Columns[0].Width + 5;
+                        realheight = realheight + 35;
+                        width = 100;
+                        height1 = dataGridView5.Rows[0].Height + 5;
+
+                        e.Graphics.FillRectangle(Brushes.AliceBlue, realwidth, realheight, width, height1);
+                        e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
+                        e.Graphics.DrawString(dataGridView5.Columns[dataGridView5.ColumnCount - 1].HeaderText, new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, realwidth, realheight);
+
+                        realwidth = dataGridView5.Columns[0].Width + 5;
+                        realheight = realheight + 20;
+
+                        while (strcountScan < dataGridView5.Rows.Count - 1)
+                        {
                             e.Graphics.FillRectangle(Brushes.AliceBlue, realwidth, realheight, width, height1);
                             e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
-                            e.Graphics.DrawString(dataGridView5.Columns[dataGridView5.ColumnCount - 1].HeaderText, new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, realwidth, realheight);
+                            e.Graphics.DrawString(dataGridView5.Rows[strcountScan].Cells[dataGridView5.ColumnCount - 1].Value.ToString(), new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, realwidth, realheight);
+                            realwidth = realwidth + width;
+
+
                             realwidth = dataGridView5.Columns[0].Width + 5;
                             realheight = realheight + 20;
 
-
-                            while (strcountScan < dataGridView5.Rows.Count - 1)
+                            if (realheight > e.MarginBounds.Height)
                             {
-                                e.Graphics.FillRectangle(Brushes.AliceBlue, realwidth, realheight, width, height1);
-                                e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
-                                e.Graphics.DrawString(dataGridView5.Rows[strcountScan].Cells[dataGridView5.ColumnCount - 1].Value.ToString(), new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, realwidth, realheight);
-                                realwidth = realwidth + width;
-
-
-                                realwidth = dataGridView5.Columns[0].Width + 5;
-                                realheight = realheight + 20;
-
-                                if (realheight > e.MarginBounds.Height)
-                                {
-                                    height = 100;
-                                    e.HasMorePages = true;
-                                    //   strcountScan++;
-                                    prinPage++;
-                                    pageyes2 = true;
-                                    return;
-                                }
-                                else
-                                {
-                                    e.HasMorePages = false;
-
-                                }
+                                height = 100;
+                                e.HasMorePages = true;
+                                //   strcountScan++;
+                                prinPage++;
+                                pageyes2 = true;
                                 strcountScan++;
+                                return;
                             }
+                            else
+                            {
+                                e.HasMorePages = false;
+
+                            }
+                            strcountScan++;
                         }
                     }
                 }
@@ -13498,39 +13519,37 @@ namespace Ecoview_V2._0
         }
         public void Calibrovka()
         {
-            if (selet_rezim == 5)
+            switch (selet_rezim)
             {
-
-                StopSpectr = false;
-                countscan = 0;
-                scan_massSA = new double[ScanTable.Rows.Count - 1];
-                scan_mass = new double[ScanTable.Rows.Count - 1];
-                Application.DoEvents();
-                LogoForm();
-                while ((countscan != ScanTable.Rows.Count - 1) && (StopSpectr != true))                {
-
+                case 5:
+                    StopSpectr = false;
+                    countscan = 0;
+                    scan_massSA = new double[ScanTable.Rows.Count - 1];
+                    scan_mass = new double[ScanTable.Rows.Count - 1];
                     Application.DoEvents();
+                    LogoForm();
+                    while ((countscan != ScanTable.Rows.Count - 1) && (StopSpectr != true))
+                    {
 
-                    Application.DoEvents();
-                    GWNew.Text = string.Format("{0:0.0}", ScanTable.Rows[countscan].Cells[0].Value.ToString());
-                    SW_Scan();
-                    Thread.Sleep(50);
-                    SAGEScan(ref countSA, ref GE5_1_0);
-                    Application.DoEvents();
+                        Application.DoEvents();
+
+                        Application.DoEvents();
+                        GWNew.Text = string.Format("{0:0.0}", ScanTable.Rows[countscan].Cells[0].Value.ToString());
+                        SW_Scan();
+                        Thread.Sleep(50);
+                        SAGEScan(ref countSA, ref GE5_1_0);
+                        Application.DoEvents();
 
 
-                    countscan++;
-                }
-                SWF.Application.OpenForms["LogoFrm"].Close();
-                MessageBox.Show("Калибровка закончена!");
-                Podskazka.Text = "Можно сканировать";
-                label59.Visible = false;
-                label28.Visible = true;
-            }
-            else
-            {
-                if (selet_rezim == 3)
-                {
+                        countscan++;
+                    }
+                    SWF.Application.OpenForms["LogoFrm"].Close();
+                    MessageBox.Show("Калибровка закончена!");
+                    Podskazka.Text = "Можно сканировать";
+                    label59.Visible = false;
+                    label28.Visible = true;
+                    break;
+                case 3:
                     StopSpectr = false;
                     countscan = 0;
                     scan_massSA = new double[dataGridView5.Columns.Count - 2];
@@ -13556,11 +13575,12 @@ namespace Ecoview_V2._0
                     button14.Enabled = true;
                     button11.Enabled = false;
                     MessageBox.Show("Калибровка закончена!");
-                }
-                else
-                {
+                    break;
+                    
+                default:
                     SAGE(ref countSA, ref GE5_1_0);
-                }
+                    break;
+
             }
 
         }
