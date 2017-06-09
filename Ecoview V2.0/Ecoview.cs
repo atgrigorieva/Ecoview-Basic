@@ -222,13 +222,7 @@ namespace Ecoview_V2._0
             Zavisimoct = "A(C)";
             aproksim = "Линейная";
             Table1.AllowUserToResizeRows = false;
-            Podskazka.Text = "Подключите прибор!";
-            label27.Visible = false;
-            label24.Visible = true;
-            label25.Visible = false;
-            label26.Visible = false;
-            label28.Visible = false;
-
+            
 
 
             ToolTip t1 = new ToolTip();
@@ -348,24 +342,31 @@ namespace Ecoview_V2._0
                 {
                     button14.Enabled = true;
                 }
-                if (selet_rezim == 2 || selet_rezim == 6)
+                switch (selet_rezim)
                 {
-                    Podskazka.Text = "Создайте или откройте Градуировку!";
-                    label25.Visible = true;
-                    label26.Visible = true;
-                }
-                else
-                {
-                    if (selet_rezim == 5)
-                    {
+                    case 2:
+                        Podskazka.Text = "Создайте или откройте Градуировку!";
+                        label25.Visible = true;
+                        label26.Visible = true;
+                        break;
+                    case 6:
+                        Podskazka.Text = "Создайте или откройте Градуировку!";
+                        label25.Visible = true;
+                        label26.Visible = true;
+                        break;
+                    case 5:
                         Podskazka.Text = "Создайте Измерение";
                         label25.Visible = true;
                         label26.Visible = false;
-                    }
+                        break;
+                    default:
+                        Podskazka.Text = "Создайте или откройте Измерение";
+                        label25.Visible = true;
+                        label26.Visible = true;
+                        break;
                 }
                 label27.Visible = false;
                 label24.Visible = false;
-
                 label28.Visible = false;
                 label33.Visible = false;
 
@@ -1210,22 +1211,47 @@ namespace Ecoview_V2._0
         private void button5_Click(object sender, EventArgs e)
         {
             TopMost = false;
-            if (selet_rezim == 2)
+            label28.Visible = false;
+            label33.Visible = false;
+            switch (selet_rezim)
             {
-                Izmerenie1 = true;
-                if (tabControl2.SelectedIndex == 0)
-                {
-                    NewGraduirovca(ref CountInSeriya, ref CountSeriya);
-                }
-                else
-                {
-                    NewIzmerenie();
-                }
-            }
-            else
-            {
-                if (selet_rezim == 1)
-                {
+                case 2:
+                    Izmerenie1 = true;
+                    if (tabControl2.SelectedIndex == 0)
+                    {
+                        NewGraduirovca(ref CountInSeriya, ref CountSeriya);
+                        if (ComPodkl == true)
+                        {
+
+                            FotometrScan();
+                            Podskazka.Text = "Измерьте 0 Asb/100%T";
+                            label25.Visible = false;
+                            label26.Visible = false;
+                            label59.Visible = true;
+                        }
+                        else
+                        {
+                            MessageBox.Show("Для проведения сканирования необхдимо подключиться к прибору!");
+                        }
+                    }
+                    else
+                    {
+                        NewIzmerenie();
+                        if (ComPodkl == true)
+                        {
+                            FotometrScan();
+                            Podskazka.Text = "Измерьте 0 Asb/100%T";
+                            label25.Visible = false;
+                            label26.Visible = false;
+                            label59.Visible = true;
+                        }
+                        else
+                        {
+                            MessageBox.Show("Для проведения сканирования необхдимо подключиться к прибору!");
+                        }
+                    }
+                    break;
+                case 1:
                     if (ComPodkl == true)
                     {
                         IzmerenieFR_new();
@@ -1234,68 +1260,86 @@ namespace Ecoview_V2._0
                     {
                         MessageBox.Show("Для проведения измерений необхдимо подключиться к прибору!");
                     }
-                }
-                else
-                {
-                    if (selet_rezim == 6)
+                    break;
+                case 6:
+                    Izmerenie1 = true;
+                    if (tabControl2.SelectedIndex == 0)
                     {
-                        Izmerenie1 = true;
-                        if (tabControl2.SelectedIndex == 0)
+                        NewGraduirovca(ref CountInSeriya, ref CountSeriya);
+                        if (ComPodkl == true)
                         {
-                            NewGraduirovca(ref CountInSeriya, ref CountSeriya);
+                            FotometrScan();
+                            Podskazka.Text = "Измерьте 0 Asb/100%T";
+                            label25.Visible = false;
+                            label26.Visible = false;
+                            label59.Visible = true;
                         }
                         else
                         {
-                            NewIzmerenie();
+                            MessageBox.Show("Для проведения сканирования необхдимо подключиться к прибору!");
                         }
                     }
                     else
                     {
-                        if (selet_rezim == 5)
+                        NewIzmerenie();
+                        if (ComPodkl == true)
                         {
-                            if (ComPodkl == true)
-                            {
 
-                                FotometrScan();
-                                Podskazka.Text = "Измерьте 0 Asb/100%T";
-                                label25.Visible = false;
-                                label59.Visible = true;
-                            }
-                            else
-                            {
-                                MessageBox.Show("Для проведения сканирования необхдимо подключиться к прибору!");
-                            }
+                            FotometrScan();
+                            Podskazka.Text = "Измерьте 0 Asb/100%T";
+                            label25.Visible = false;
+                            label26.Visible = false;
+                            label59.Visible = true;
                         }
                         else
                         {
-                            if (selet_rezim == 4)
-                            {
-                                if (ComPodkl == true)
-                                {
-                                    KineticaScan();
-                                }
-                                else
-                                {
-                                    MessageBox.Show("Для проведения сканирования необхдимо подключиться к прибору!");
-                                }
-                            }
-                            else
-                            {
-                                if (selet_rezim == 3)
-                                {
-                                    if (ComPodkl == true)
-                                    {
-                                        MultiWave();
-                                    }
-                                    else
-                                    {
-                                        MessageBox.Show("Для проведения сканирования необхдимо подключиться к прибору!");
-                                    }
-                                }
-                            }
+                            MessageBox.Show("Для проведения сканирования необхдимо подключиться к прибору!");
                         }
                     }
-                }
+                    break;
+                case 5:
+                    if (ComPodkl == true)
+                    {
+
+                        FotometrScan();
+                        Podskazka.Text = "Измерьте 0 Asb/100%T";
+                        label25.Visible = false;
+                        label26.Visible = false;
+                        label59.Visible = true;
+                    }
+                    else
+                    {
+                        MessageBox.Show("Для проведения сканирования необхдимо подключиться к прибору!");
+                    }
+                    break;
+                case 4:
+                    if (ComPodkl == true)
+                    {
+                        KineticaScan();
+                        Podskazka.Text = "Измерьте 0 Asb/100%T";
+                        label25.Visible = false;
+                        label26.Visible = false;
+                        label59.Visible = true;
+                    }
+                    else
+                    {
+                        MessageBox.Show("Для проведения сканирования необхдимо подключиться к прибору!");
+                    }
+                    break;
+                case 3:
+                    if (ComPodkl == true)
+                    {
+                        MultiWave();
+                        Podskazka.Text = "Измерьте 0 Asb/100%T";
+                        label25.Visible = false;
+                        label26.Visible = false;
+                        label59.Visible = true;
+                    }
+                    else
+                    {
+                        MessageBox.Show("Для проведения сканирования необхдимо подключиться к прибору!");
+                    }
+                    break;
             }
 
         }
@@ -1833,7 +1877,12 @@ namespace Ecoview_V2._0
                     TableMulti_Open();
                     break;
             }
-            
+            label27.Visible = false;
+            label24.Visible = false;
+            label25.Visible = false;
+            label26.Visible = false;
+            label28.Visible = false;
+
         }
 
         public string F1;
@@ -2335,6 +2384,8 @@ namespace Ecoview_V2._0
 
                 ScanChart.ChartAreas[0].AxisX.Minimum = RowsMax[StrCount - 1];
                 ScanChart.ChartAreas[0].AxisX.Maximum = RowsMax[0];
+                ScanChart.ChartAreas[0].AxisY.Minimum = 0;
+                ScanChart.ChartAreas[0].AxisY.Maximum = 125;
             }
 
 
@@ -2421,7 +2472,7 @@ namespace Ecoview_V2._0
                     else {
                         if (i + 1 != StrCount)
                         {
-                            if (massGE[i] > massGE[i - 1] && massGE[i] >= massGE[i + 1])
+                            if (massGE[i] >= massGE[i - 1] && massGE[i] > massGE[i + 1])
                             {
                                 max = massGE[i];
                                 min = max;
@@ -2431,7 +2482,7 @@ namespace Ecoview_V2._0
                                 ScanChart.Series[0].Points.AddXY(x1, y1);
                                 ScanChart.Series[0].ChartType = SeriesChartType.Point;
                             }
-                            if (massGE[i] < massGE[i - 1] && massGE[i] <= massGE[i + 1])
+                            if (massGE[i] <= massGE[i - 1] && massGE[i] < massGE[i + 1])
                             {
                                 min = massGE[i];
                                 //  dataGridView2.Rows.Add(ScanTable.Rows[i].Cells[0].Value, ScanTable.Rows[i].Cells[1].Value, ScanTable.Rows[i].Cells[2].Value);
@@ -11409,6 +11460,9 @@ namespace Ecoview_V2._0
                                 MessageBox.Show("Длина волны градуировки отличается от длины волны, установленной на приборе!\rИзмените настройки градуировки!");
                             }
                             Graduirovka(sender, e);
+                            label27.Visible = true;
+                            label28.Visible = false;
+                            Podskazka.Text = "Сохраните измерение";
                         }
                         else
                         {
@@ -11424,6 +11478,9 @@ namespace Ecoview_V2._0
                                 MessageBox.Show("Длина волны градуировки отличается от длины волны, установленной на приборе!\rИзмените настройки градуировки!");
                             }
                             Izmerenie(sender, e);
+                            label27.Visible = true;
+                            label28.Visible = false;
+                            Podskazka.Text = "Сохраните измерение";
                         }
                         else
                         {
@@ -11451,6 +11508,9 @@ namespace Ecoview_V2._0
                                 MessageBox.Show("Длина волны градуировки отличается от длины волны, установленной на приборе!\rИзмените настройки градуировки!");
                             }
                             Graduirovka(sender, e);
+                            label27.Visible = true;
+                            label28.Visible = false;
+                            Podskazka.Text = "Сохраните измерение";
                         }
                         else
                         {
@@ -11478,6 +11538,9 @@ namespace Ecoview_V2._0
                                 TableAgro2();
                                 Application.DoEvents();
                             }
+                            label27.Visible = true;
+                            label28.Visible = false;
+                            Podskazka.Text = "Сохраните измерение";
                         }
                         else
                         {
@@ -11490,6 +11553,9 @@ namespace Ecoview_V2._0
                     {
                         if (scan_mass != null)
                         {
+                            label33.Visible = true;
+                            label28.Visible = false;
+                            Podskazka.Text = "Можно остановить";
                             int notNull = 0;
                             for (int i = 0; i < ScanTable.Rows.Count; i++)
                             {
@@ -11525,6 +11591,8 @@ namespace Ecoview_V2._0
                                 Application.DoEvents();
                                 TableScan_Save();
                             }
+                            label27.Visible = true;
+                            Podskazka.Text = "Сохраните измерение";
                         }
                         else
                         {
@@ -11547,7 +11615,9 @@ namespace Ecoview_V2._0
                             timer1.Tick += TimerTick1;
                         }
                         else {
-
+                            label33.Visible = true;
+                            label28.Visible = false;
+                            Podskazka.Text = "Можно остановить";
                             timeLeft = Convert.ToInt32(start);
                             TableKinetica1.Rows.Clear();
                             TableKinetica(sender, e);
@@ -11558,7 +11628,10 @@ namespace Ecoview_V2._0
                             timer2.Enabled = true;
                             button11.Enabled = true;
                         }
+
                     }
+                    label27.Visible = true;
+                    Podskazka.Text = "Сохраните измерение";
                     break;
                 case 3:
                     if (scan_mass != null)
@@ -11572,8 +11645,13 @@ namespace Ecoview_V2._0
                         StopSpectr = false;
                         button14.Enabled = false;
                         button11.Enabled = true;
+                        label33.Visible = true;
+                        label28.Visible = false;
+                        Podskazka.Text = "Можно остановить";
                         TableMultiScan();
                         Application.DoEvents();
+                        label27.Visible = true;
+                        Podskazka.Text = "Сохраните измерение";
                     }
                     else
                     {
@@ -11581,6 +11659,7 @@ namespace Ecoview_V2._0
                     }
                     break;
             }
+            label33.Visible = false;
         }
         public double[][] massGEMultiAbs;
         public double[][] massGEMultiT;
@@ -12072,6 +12151,7 @@ namespace Ecoview_V2._0
                 while (GE5Izmer == "")
                 {
                     SW_Scan();
+                    Thread.Sleep(50);
                     GE5Izmer = "";
                     GE5_1_1 = "";
                     newPort.Write("SA " + scan_massSA[countscan] + "\r");
@@ -12201,9 +12281,9 @@ namespace Ecoview_V2._0
                 else {
                     if (i + 1 != ScanTable.Rows.Count)
                     {
-                        if (Convert.ToDouble(ScanTable.Rows[i].Cells[1].Value) > Convert.ToDouble(ScanTable.Rows[i - 1].Cells[1].Value)
+                        if (Convert.ToDouble(ScanTable.Rows[i].Cells[1].Value) >= Convert.ToDouble(ScanTable.Rows[i - 1].Cells[1].Value)
                             &&
-                            Convert.ToDouble(ScanTable.Rows[i].Cells[1].Value) >= Convert.ToDouble(ScanTable.Rows[i + 1].Cells[1].Value)
+                            Convert.ToDouble(ScanTable.Rows[i].Cells[1].Value) > Convert.ToDouble(ScanTable.Rows[i + 1].Cells[1].Value)
 
                             )
                         {
@@ -12215,9 +12295,9 @@ namespace Ecoview_V2._0
                             ScanChart.Series[0].Points.AddXY(x1, y1);
                             ScanChart.Series[0].ChartType = SeriesChartType.Point;
                         }
-                        if ((Convert.ToDouble(ScanTable.Rows[i].Cells[1].Value) < Convert.ToDouble(ScanTable.Rows[i - 1].Cells[1].Value)
+                        if ((Convert.ToDouble(ScanTable.Rows[i].Cells[1].Value) <= Convert.ToDouble(ScanTable.Rows[i - 1].Cells[1].Value)
                             &&
-                            Convert.ToDouble(ScanTable.Rows[i].Cells[1].Value) <= Convert.ToDouble(ScanTable.Rows[i + 1].Cells[1].Value))
+                            Convert.ToDouble(ScanTable.Rows[i].Cells[1].Value) < Convert.ToDouble(ScanTable.Rows[i + 1].Cells[1].Value))
 
                             )
                         {
@@ -13519,6 +13599,7 @@ namespace Ecoview_V2._0
         }
         public void Calibrovka()
         {
+            label59.Visible = false;
             switch (selet_rezim)
             {
                 case 5:
@@ -13532,7 +13613,8 @@ namespace Ecoview_V2._0
                     {
 
                         Application.DoEvents();
-
+                        label33.Visible = true;
+                        Podskazka.Text = "Можно остановить";
                         Application.DoEvents();
                         GWNew.Text = string.Format("{0:0.0}", ScanTable.Rows[countscan].Cells[0].Value.ToString());
                         SW_Scan();
@@ -13548,6 +13630,9 @@ namespace Ecoview_V2._0
                     Podskazka.Text = "Можно сканировать";
                     label59.Visible = false;
                     label28.Visible = true;
+                    label25.Visible = false;
+                    label26.Visible = false;
+                    label33.Visible = false;
                     break;
                 case 3:
                     StopSpectr = false;
@@ -13558,7 +13643,8 @@ namespace Ecoview_V2._0
                     LogoForm();
                     while ((countscan != dataGridView5.Columns.Count - 2) && (StopSpectr != true))
                     {
-
+                        label33.Visible = true;
+                        Podskazka.Text = "Можно остановить";
                         Application.DoEvents();
                         SW_MultiScan();
                         Application.DoEvents();
@@ -13575,13 +13661,28 @@ namespace Ecoview_V2._0
                     button14.Enabled = true;
                     button11.Enabled = false;
                     MessageBox.Show("Калибровка закончена!");
+                    label59.Visible = false;
+                    label28.Visible = true;
+                    label25.Visible = false;
+                    label26.Visible = false;
+
+                    label33.Visible = false;
                     break;
                     
                 default:
                     SAGE(ref countSA, ref GE5_1_0);
+                    MessageBox.Show("Калибровка закончена!");
+                    label59.Visible = false;
+                    label28.Visible = true;
+                    label25.Visible = false;
+                    label26.Visible = false;
+
+                    label33.Visible = false;
+                    Podskazka.Text = "Можно сканировать";
                     break;
 
             }
+            Podskazka.Text = "Можно сканировать";
 
         }
 
@@ -14132,9 +14233,9 @@ namespace Ecoview_V2._0
                 else {
                     if (i + 1 != ScanTable.Rows.Count)
                     {
-                        if (Convert.ToDouble(ScanTable.Rows[i].Cells[1].Value) > Convert.ToDouble(ScanTable.Rows[i - 1].Cells[1].Value)
+                        if (Convert.ToDouble(ScanTable.Rows[i].Cells[1].Value) >= Convert.ToDouble(ScanTable.Rows[i - 1].Cells[1].Value)
                             &&
-                            Convert.ToDouble(ScanTable.Rows[i].Cells[1].Value) >= Convert.ToDouble(ScanTable.Rows[i + 1].Cells[1].Value)
+                            Convert.ToDouble(ScanTable.Rows[i].Cells[1].Value) > Convert.ToDouble(ScanTable.Rows[i + 1].Cells[1].Value)
 
                             )
                         {
@@ -14146,9 +14247,9 @@ namespace Ecoview_V2._0
                             ScanChart.Series[0].Points.AddXY(x1, y1);
                             ScanChart.Series[0].ChartType = SeriesChartType.Point;
                         }
-                        if ((Convert.ToDouble(ScanTable.Rows[i].Cells[1].Value) < Convert.ToDouble(ScanTable.Rows[i - 1].Cells[1].Value)
+                        if ((Convert.ToDouble(ScanTable.Rows[i].Cells[1].Value) <= Convert.ToDouble(ScanTable.Rows[i - 1].Cells[1].Value)
                             &&
-                            Convert.ToDouble(ScanTable.Rows[i].Cells[1].Value) <= Convert.ToDouble(ScanTable.Rows[i + 1].Cells[1].Value))
+                            Convert.ToDouble(ScanTable.Rows[i].Cells[1].Value) < Convert.ToDouble(ScanTable.Rows[i + 1].Cells[1].Value))
 
                             )
                         {

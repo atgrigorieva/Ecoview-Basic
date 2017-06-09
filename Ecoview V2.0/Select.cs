@@ -16,9 +16,9 @@ namespace Ecoview_V2._0
         {
             InitializeComponent();
             this._Analis = parent;
-            
-           // _Analis = this.Owner as EcoviewProfessional1;
-            
+
+            // _Analis = this.Owner as EcoviewProfessional1;
+
 
         }
         bool click = false;
@@ -43,6 +43,8 @@ namespace Ecoview_V2._0
                 _Analis.Ecoview_Header = "Eciview Professional v1.0 Фотометрический режим";
                 _Analis.tabControl2.SelectedIndex = 2;
                 _Analis.tabControl2.SelectTab(_Analis.tabPage1);
+
+
                 _Analis.selet_rezim = 1;
             }
             else
@@ -133,6 +135,12 @@ namespace Ecoview_V2._0
                     }
                 }
             }
+            _Analis.Podskazka.Text = "Подключите прибор!";
+            _Analis.label27.Visible = false;
+            _Analis.label24.Visible = true;
+            _Analis.label25.Visible = false;
+            _Analis.label26.Visible = false;
+            _Analis.label28.Visible = false;
             Close();
         }
 
