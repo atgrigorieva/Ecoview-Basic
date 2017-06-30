@@ -21,9 +21,9 @@ using System.Data;
 
 namespace Ecoview_V2._0
 {
-    public partial class EcoviewProfessional1 : Form
+    public partial class EcoviewStandart1 : Form
     {
-        public EcoviewProfessional1()
+        public EcoviewStandart1()
         {
             InitializeComponent();
             // this.StartPosition = FormStartPosition.WindowsDefaultBounds;
@@ -239,6 +239,30 @@ namespace Ecoview_V2._0
             // _Select.Owner = this;
             _Select.ShowDialog();
             this.Text = Ecoview_Header;
+            ToolTip toolTip1 = new ToolTip();
+
+            // Set up the delays for the ToolTip.
+            toolTip1.AutoPopDelay = 5000;
+            toolTip1.InitialDelay = 100;
+            toolTip1.ReshowDelay = 500;
+            // Force the ToolTip text to be displayed whether or not the form is active.
+            toolTip1.ShowAlways = true;
+
+            // Set up the ToolTip text for the Button and Checkbox.
+            toolTip1.SetToolTip(this.button13, "Изменить длину волны");
+            toolTip1.SetToolTip(this.button1, "Выключить");
+            toolTip1.SetToolTip(this.button2, "Включить");
+            toolTip1.SetToolTip(this.button4, "О приборе");
+            toolTip1.SetToolTip(this.button5, "Создать");
+            toolTip1.SetToolTip(this.button6, "Открыть");
+            toolTip1.SetToolTip(this.button7, "Сохранить");
+            toolTip1.SetToolTip(this.button3, "Печать");
+            toolTip1.SetToolTip(this.button8, "Экспортировать в Excle");
+            toolTip1.SetToolTip(this.button9, "Экспортировать в PDF");
+            toolTip1.SetToolTip(this.button10, "Настройки");
+            toolTip1.SetToolTip(this.button12, "Откалибровать");
+            toolTip1.SetToolTip(this.button14, "Измерить");
+            toolTip1.SetToolTip(this.button11, "Остановить");
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -1045,7 +1069,7 @@ namespace Ecoview_V2._0
         string[] RDstring;
         public void RD()
         {
-            newPort.Write("RD\r");
+            newPort.Write("RD 1\r");
 
             Thread.Sleep(500);
             //  byte[] buffer1 = new byte[byteRecieved1];
@@ -1137,9 +1161,9 @@ namespace Ecoview_V2._0
         }
         public void PortClose()
         {
-            ComPort = false;
-            ComPodkl = false;
-            if (ComPort == false)
+            //ComPort = false;
+          //  ComPodkl = false;
+            if (ComPort == true)
             {
                 char[] ClosePribor = { Convert.ToChar('Q'), Convert.ToChar('U'), Convert.ToChar('\r') };
                 newPort.Write("QU\r");
@@ -1184,6 +1208,12 @@ namespace Ecoview_V2._0
                 newPort.Close();
                 wavelength1 = Convert.ToString(0);
                 // ComPort = false;
+                ComPort = false;
+                ComPodkl = false;
+
+            }
+            else
+            {
 
             }
         }
@@ -1209,6 +1239,11 @@ namespace Ecoview_V2._0
         }
 
         private void button5_Click(object sender, EventArgs e)
+        {
+            NewDoc();
+
+        }
+        public void NewDoc()
         {
             TopMost = false;
             label28.Visible = false;
@@ -1341,7 +1376,6 @@ namespace Ecoview_V2._0
                     }
                     break;
             }
-
         }
         public void MultiWave()
         {
@@ -1525,8 +1559,8 @@ namespace Ecoview_V2._0
             countscan = 0;
             for (int i = 0; i < TableKinetica1.Rows.Count; i++)
             {
-                double x1 = Convert.ToDouble(TableKinetica1.Rows[countscan].Cells[0].Value);
-                double y1 = Convert.ToDouble(TableKinetica1.Rows[countscan].Cells[1].Value);
+                double x1 = 0;
+                double y1 = 0;
                 if (i == 0)
                 {
                     if (Convert.ToDouble(TableKinetica1.Rows[i].Cells[1].Value) > Convert.ToDouble(TableKinetica1.Rows[i + 1].Cells[1].Value))
@@ -1537,7 +1571,10 @@ namespace Ecoview_V2._0
                         x1 = Convert.ToDouble(TableKinetica1.Rows[i].Cells[0].Value);
                         y1 = Convert.ToDouble(TableKinetica1.Rows[i].Cells[1].Value);
                         chart3.Series[0].Points.AddXY(x1, y1);
+                        chart3.Series[0].Points[countscan].Label = Convert.ToString(x1);
+                        chart3.Series[0].Points[countscan].Color = System.Drawing.Color.DarkViolet;
                         chart3.Series[0].ChartType = SeriesChartType.Point;
+                        countscan++;
                     }
                     else
                     {
@@ -1547,7 +1584,10 @@ namespace Ecoview_V2._0
                         x1 = Convert.ToDouble(TableKinetica1.Rows[i].Cells[0].Value);
                         y1 = Convert.ToDouble(TableKinetica1.Rows[i].Cells[1].Value);
                         chart3.Series[0].Points.AddXY(x1, y1);
+                        chart3.Series[0].Points[countscan].Label = Convert.ToString(x1);
+                        chart3.Series[0].Points[countscan].Color = System.Drawing.Color.DarkOrchid;
                         chart3.Series[0].ChartType = SeriesChartType.Point;
+                        countscan++;
                     }
 
                 }
@@ -1566,7 +1606,10 @@ namespace Ecoview_V2._0
                             x1 = Convert.ToDouble(TableKinetica1.Rows[i].Cells[0].Value);
                             y1 = Convert.ToDouble(TableKinetica1.Rows[i].Cells[1].Value);
                             chart3.Series[0].Points.AddXY(x1, y1);
+                            chart3.Series[0].Points[countscan].Label = Convert.ToString(x1);
+                            chart3.Series[0].Points[countscan].Color = System.Drawing.Color.DarkViolet;
                             chart3.Series[0].ChartType = SeriesChartType.Point;
+                            countscan++;
                         }
                         if ((Convert.ToDouble(TableKinetica1.Rows[i].Cells[1].Value) < Convert.ToDouble(TableKinetica1.Rows[i - 1].Cells[1].Value)
                             &&
@@ -1580,13 +1623,17 @@ namespace Ecoview_V2._0
                             x1 = Convert.ToDouble(TableKinetica1.Rows[i].Cells[0].Value);
                             y1 = Convert.ToDouble(TableKinetica1.Rows[i].Cells[1].Value);
                             chart3.Series[0].Points.AddXY(x1, y1);
+                            chart3.Series[0].Points[countscan].Label = Convert.ToString(x1);
+                            chart3.Series[0].Points[countscan].Color = System.Drawing.Color.Teal;
                             chart3.Series[0].ChartType = SeriesChartType.Point;
+                            countscan++;
                         }
                     }
                 }
+                
             }
 
-            // countscan++;
+             
         }
         public void IzmerenieFR_new()
         {
@@ -1757,15 +1804,7 @@ namespace Ecoview_V2._0
         }
         private void новыйToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Izmerenie1 = true;
-            if (tabControl2.SelectedIndex == 0)
-            {
-                NewGraduirovca(ref CountInSeriya, ref CountSeriya);
-            }
-            else
-            {
-                NewIzmerenie();
-            }
+            NewDoc();
         }
         public void WLREMOVE1()
         {
@@ -1840,6 +1879,11 @@ namespace Ecoview_V2._0
 
         private void button6_Click(object sender, EventArgs e)
         {
+
+            Open_Doc();
+        }
+        public void Open_Doc()
+        {
             switch (selet_rezim)
             {
                 case 2:
@@ -1882,9 +1926,7 @@ namespace Ecoview_V2._0
             label25.Visible = false;
             label26.Visible = false;
             label28.Visible = false;
-
         }
-
         public string F1;
         public string F2;
         bool USE_KO_Izmer = false;
@@ -3846,12 +3888,15 @@ namespace Ecoview_V2._0
                 yx1 += (y1 - SREDSUMM) * (y1 - SREDSUMM);
             }
             RR.Text = "R^2 = " + string.Format("{0:0.0000}", (1 - (yx / yx1)));
+           int  k = 0;
             for (int i = 0; i < Table1.Rows.Count - 1; i++)
             {
                 double y1 = Convert.ToDouble(Table1.Rows[i].Cells["Asred"].Value);
                 double x1 = Convert.ToDouble(Table1.Rows[i].Cells["Concetr"].Value);
 
                 chart1.Series[0].Points.AddXY(x1, y1);
+                chart1.Series[0].Points[k].Label = Convert.ToString(Table1.Rows[i].Cells[0].Value);
+                k++;
                 chart1.Series[0].ChartType = SeriesChartType.Point;
                 chart1.ChartAreas[0].AxisY.Crossing = 0;
                 chart1.ChartAreas[0].AxisX.Crossing = 0;
@@ -4053,12 +4098,15 @@ namespace Ecoview_V2._0
                 yx1 += (y1 - x0 - SREDSUMM) * (y1 - x0 - SREDSUMM);
             }
             RR.Text = "R^2 = " + string.Format("{0:0.0000}", (1 - (yx / yx1)));
+            int k = 0;
             for (int i = 1; i < Table1.Rows.Count - 1; i++)
             {
                 y1 = Convert.ToDouble(Table1.Rows[i].Cells["Asred"].Value);
                 x1 = Convert.ToDouble(Table1.Rows[i].Cells["Concetr"].Value);
 
                 chart1.Series[0].Points.AddXY(x1, (y1 - y1_1));
+                chart1.Series[0].Points[k].Label = Convert.ToString(Table1.Rows[i].Cells[0].Value);
+                k++;
                 chart1.Series[0].ChartType = SeriesChartType.Point;
                 chart1.ChartAreas[0].AxisY.Crossing = 0;
                 chart1.ChartAreas[0].AxisX.Crossing = 0;
@@ -4248,12 +4296,15 @@ namespace Ecoview_V2._0
             RR.Text = "R^2 = " + string.Format("{0:0.0000}", (1 - (yx / yx1)));
             double x2 = 0;
             int Table1_Asred = 0;
+            int k = 0;
             for (int i = 0; i < Table1.Rows.Count - 1; i++)
             {
                 double x1 = Convert.ToDouble(Table1.Rows[i].Cells["Asred"].Value);
                 double y1 = Convert.ToDouble(Table1.Rows[i].Cells["Concetr"].Value);
 
                 chart1.Series[0].Points.AddXY(x1, y1);
+                chart1.Series[0].Points[k].Label = Convert.ToString(Table1.Rows[i].Cells[0].Value);
+                k++;
                 chart1.Series[0].ChartType = SeriesChartType.Point;
                 chart1.ChartAreas[0].AxisY.Crossing = 0;
                 chart1.ChartAreas[0].AxisX.Crossing = 0;
@@ -4445,12 +4496,15 @@ namespace Ecoview_V2._0
             }
             RR.Text = "R^2 = " + string.Format("{0:0.0000}", (1 - (yx / yx1)));
             double x2 = 0;
+            int k = 0;
             for (int i = 1; i < Table1.Rows.Count - 1; i++)
             {
                 double x1 = Convert.ToDouble(Table1.Rows[i].Cells["Asred"].Value);
                 double y1 = Convert.ToDouble(Table1.Rows[i].Cells["Concetr"].Value);
 
                 chart1.Series[0].Points.AddXY((x1 - x0), y1);
+                chart1.Series[0].Points[k].Label = Convert.ToString(Table1.Rows[i].Cells[0].Value);
+                k++;
                 chart1.Series[0].ChartType = SeriesChartType.Point;
                 chart1.ChartAreas[0].AxisY.Crossing = 0;
                 chart1.ChartAreas[0].AxisX.Crossing = 0;
@@ -4753,6 +4807,7 @@ namespace Ecoview_V2._0
             double x0 = 0;
             double y0 = x0 * k1 + k0;
             chart1.Series[1].Points.AddXY(x0, y0);
+            int k = 0;
             for (int i = 0; i < Table1.Rows.Count - 1; i++)
             {
                 circle = 1;
@@ -4763,6 +4818,8 @@ namespace Ecoview_V2._0
 
                 // chart1.ChartAreas[0].AxisY.Crossing = k0;
                 chart1.Series[0].Points.AddXY(y1_1, x1_1);
+                chart1.Series[0].Points[k].Label = Convert.ToString(Table1.Rows[i].Cells[0].Value);
+                k++;
                 chart1.Series[0].ChartType = SeriesChartType.Point;
                 chart1.ChartAreas[0].AxisY.Crossing = 0;
                 chart1.ChartAreas[0].AxisX.Crossing = 0;
@@ -4928,6 +4985,7 @@ namespace Ecoview_V2._0
             double x2 = x0 - x0;
             double y2 = x2 * k1 + k0;
             chart1.Series[1].Points.AddXY(x2, y2);
+            int k = 0;
             for (int i = 1; i < Table1.Rows.Count - 1; i++)
             {
                 circle = 1;
@@ -4936,6 +4994,8 @@ namespace Ecoview_V2._0
 
                 // chart1.ChartAreas[0].AxisY.Crossing = k0;
                 chart1.Series[0].Points.AddXY(y1_1, (x1_1 - x0));
+                chart1.Series[0].Points[k].Label = Convert.ToString(Table1.Rows[i].Cells[0].Value);
+                k++;
                 chart1.Series[0].ChartType = SeriesChartType.Point;
                 chart1.ChartAreas[0].AxisY.Crossing = 0;
                 chart1.ChartAreas[0].AxisX.Crossing = 0;
@@ -5098,6 +5158,7 @@ namespace Ecoview_V2._0
             double x2 = x0 - x0;
             double y2 = x2 * k1 + k0;
             chart1.Series[1].Points.AddXY(x2, y2);
+            int k = 0;
             for (int i = 1; i < Table1.Rows.Count - 1; i++)
             {
                 circle = 1;
@@ -5106,6 +5167,8 @@ namespace Ecoview_V2._0
 
                 // chart1.ChartAreas[0].AxisY.Crossing = k0;
                 chart1.Series[0].Points.AddXY((x1_1 - x0), y1_1);
+                chart1.Series[0].Points[k].Label = Convert.ToString(Table1.Rows[i].Cells[0].Value);
+                k++;
                 chart1.Series[0].ChartType = SeriesChartType.Point;
                 chart1.ChartAreas[0].AxisY.Crossing = 0;
                 chart1.ChartAreas[0].AxisX.Crossing = 0;
@@ -5266,6 +5329,7 @@ namespace Ecoview_V2._0
             double y0 = x0 * k1 + k0;
             double x2 = 0;
             chart1.Series[1].Points.AddXY(x0, y0);
+            int k = 0;
             for (int i = 0; i < Table1.Rows.Count - 1; i++)
             {
                 circle = 1;
@@ -5274,6 +5338,8 @@ namespace Ecoview_V2._0
 
                 // chart1.ChartAreas[0].AxisY.Crossing = k0;
                 chart1.Series[0].Points.AddXY(x1_1, y1_1);
+                chart1.Series[0].Points[k].Label = Convert.ToString(Table1.Rows[i].Cells[0].Value);
+                k++;
                 chart1.Series[0].ChartType = SeriesChartType.Point;
                 chart1.ChartAreas[0].AxisY.Crossing = 0;
                 chart1.ChartAreas[0].AxisX.Crossing = 0;
@@ -5622,12 +5688,15 @@ namespace Ecoview_V2._0
             double x2_1 = 0;
             double y0 = k0 + k1 * x2_1 + k2 * x2_1 * x2_1;
             chart1.Series[1].Points.AddXY(x2_1, y0);
+            int k = 0;
             for (int i = 0; i < Table1.Rows.Count - 1; i++)
             {
                 double y = Convert.ToDouble(Table1.Rows[i].Cells["Asred"].Value);
                 double x = Convert.ToDouble(Table1.Rows[i].Cells["Concetr"].Value);
 
                 chart1.Series[0].Points.AddXY(x, y);
+                chart1.Series[0].Points[k].Label = Convert.ToString(Table1.Rows[i].Cells[0].Value);
+                k++;
                 chart1.Series[0].ChartType = SeriesChartType.Point;
                 chart1.ChartAreas[0].AxisY.Crossing = 0;
                 chart1.ChartAreas[0].AxisX.Crossing = 0;
@@ -5799,12 +5868,15 @@ namespace Ecoview_V2._0
             double y2_1 = k0 + k1 * x2_1 + k2 * x2_1 * x2_1;
 
             chart1.Series[1].Points.AddXY(x2_1, y2_1);
+            int k = 0;
             for (int i = 1; i < Table1.Rows.Count - 1; i++)
             {
                 double y = Convert.ToDouble(Table1.Rows[i].Cells["Asred"].Value);
                 double x = Convert.ToDouble(Table1.Rows[i].Cells["Concetr"].Value);
 
                 chart1.Series[0].Points.AddXY(x, (y - y0));
+                chart1.Series[0].Points[k].Label = Convert.ToString(Table1.Rows[i].Cells[0].Value);
+                k++;
                 chart1.Series[0].ChartType = SeriesChartType.Point;
                 chart1.ChartAreas[0].AxisY.Crossing = 0;
                 chart1.ChartAreas[0].AxisX.Crossing = 0;
@@ -5968,12 +6040,15 @@ namespace Ecoview_V2._0
             double x2_1 = 0;
             double y0 = k0 + k1 * x2_1 + k2 * x2_1 * x2_1;
             chart1.Series[1].Points.AddXY(x2_1, y0);
+            int k = 0;
             for (int i = 0; i < Table1.Rows.Count - 1; i++)
             {
                 double x = Convert.ToDouble(Table1.Rows[i].Cells["Asred"].Value);
                 double y = Convert.ToDouble(Table1.Rows[i].Cells["Concetr"].Value);
 
                 chart1.Series[0].Points.AddXY(x, y);
+                chart1.Series[0].Points[k].Label = Convert.ToString(Table1.Rows[i].Cells[0].Value);
+                k++;
                 chart1.Series[0].ChartType = SeriesChartType.Point;
                 chart1.ChartAreas[0].AxisY.Crossing = 0;
                 chart1.ChartAreas[0].AxisX.Crossing = 0;
@@ -6137,12 +6212,15 @@ namespace Ecoview_V2._0
             double y2_1 = k0 + k1 * x2_1 + k2 * x2_1 * x2_1;
 
             chart1.Series[1].Points.AddXY(x2_1, y2_1);
+            int k = 0;
             for (int i = 1; i < Table1.Rows.Count - 1; i++)
             {
                 double x = Convert.ToDouble(Table1.Rows[i].Cells["Asred"].Value);
                 double y = Convert.ToDouble(Table1.Rows[i].Cells["Concetr"].Value);
 
                 chart1.Series[0].Points.AddXY((x - x0), y);
+                chart1.Series[0].Points[k].Label = Convert.ToString(Table1.Rows[i].Cells[0].Value);
+                k++;
                 chart1.Series[0].ChartType = SeriesChartType.Point;
                 chart1.ChartAreas[0].AxisY.Crossing = 0;
                 chart1.ChartAreas[0].AxisX.Crossing = 0;
@@ -6245,6 +6323,10 @@ namespace Ecoview_V2._0
 
         private void button7_Click(object sender, EventArgs e)
         {
+            SaveDoc();
+        }
+        public void SaveDoc()
+        {
             switch (selet_rezim)
             {
                 case 2:
@@ -6311,7 +6393,7 @@ namespace Ecoview_V2._0
                     }
                     break;
                 case 4:
-                    if(TableKinetica1.RowCount < 2)
+                    if (TableKinetica1.RowCount < 2)
                     {
                         MessageBox.Show("Создайте измерение");
                     }
@@ -6321,7 +6403,7 @@ namespace Ecoview_V2._0
                     }
                     break;
                 case 3:
-                    if(dataGridView5.Rows.Count < 2)
+                    if (dataGridView5.Rows.Count < 2)
                     {
                         MessageBox.Show("Создайте измерение");
                     }
@@ -7179,42 +7261,12 @@ namespace Ecoview_V2._0
 
         private void сохранитьToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (tabControl2.SelectedIndex == 0)
-            {
-                if ((Table1.RowCount < 1) && SposobZadan == "По СО")
-                {
-                    MessageBox.Show("Создайте Градуировку");
-
-                }
-                else
-                {
-                    Save();
-                }
-            }
-            else
-            {
-                if (Table1.RowCount > 1)
-                {
-                    Save1();
-                }
-                else
-                {
-                    MessageBox.Show("Создайте Измерение");
-                }
-            }
+            SaveDoc();
         }
 
         private void открытьToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Izmerenie1 = true;
-            if (tabControl2.SelectedIndex == 0)
-            {
-                Open();
-            }
-            else
-            {
-                Open1();
-            }
+            Open_Doc();
         }
 
         public void WLADDSTR1()
@@ -7416,6 +7468,10 @@ namespace Ecoview_V2._0
         }
 
         private void button8_Click(object sender, EventArgs e)
+        {
+            ExportExcelDoc();
+        }
+        public void ExportExcelDoc()
         {
             RegistryKey hkcr = Registry.ClassesRoot;
             RegistryKey excelKey = hkcr.OpenSubKey("Excel.Application");
@@ -7837,6 +7893,11 @@ namespace Ecoview_V2._0
         int countButtonClick = 1;
         private void button10_Click(object sender, EventArgs e)
         {
+            newParametr();
+
+        }
+        public void newParametr()
+        {
             if (selet_rezim == 2)
             {
                 if (tabControl2.SelectedIndex == 0)
@@ -7869,7 +7930,6 @@ namespace Ecoview_V2._0
                     }
                 }
             }
-
         }
         public void NewGrad(ref string CountSeriya, ref string CountInSeriya)
         {
@@ -8238,17 +8298,14 @@ namespace Ecoview_V2._0
         }
         private void параметрыToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (tabControl2.SelectedIndex == 0)
-            {
-                NewGrad(ref CountSeriya, ref CountInSeriya);
-            }
-            else
-            {
-                NewIzmer();
-            }
+            newParametr();
         }
 
         private void button9_Click(object sender, EventArgs e)
+        {
+            ExportPDFDoc();
+        }
+        public void ExportPDFDoc()
         {
             if (selet_rezim == 2)
             {
@@ -8983,6 +9040,10 @@ namespace Ecoview_V2._0
         }
 
         private void button3_Click(object sender, EventArgs e)
+        {
+            Print();
+        }
+        public void Print()
         {
             string str = "";
             for (int i = 0; i < PrinterSettings.InstalledPrinters.Count; i++)
@@ -11394,59 +11455,25 @@ namespace Ecoview_V2._0
 
         private void экспортToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (tabControl2.SelectedIndex == 0 && SposobZadan == "По СО")
-            {
-                SaveExcel();
-            }
-            else
-            {
-                if (tabControl2.SelectedIndex != 0 && SposobZadan == "По СО")
-                {
-                    SaveExcel1();
-                }
-            }
+            ExportExcelDoc();
         }
 
         private void эксопртВPDFToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (tabControl2.SelectedIndex == 0 && SposobZadan == "По СО")
-            {
-                SaveToPdf();
-            }
-            else
-            {
-                if (tabControl2.SelectedIndex == 0 && SposobZadan != "По СО")
-                {
-                    SaveToPdf1();
-                }
-                else
-                {
-                    SaveTpPdf2();
-                }
-            }
+            ExportPDFDoc();
         }
 
 
         private void печатьToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            if (tabControl2.SelectedIndex == 0 && SposobZadan == "По СО")
-            {
-                PrintDoc();
-            }
-            else
-            {
-                if (tabControl2.SelectedIndex == 0 && SposobZadan != "По СО")
-                {
-                    PrintDoc1();
-                }
-                else
-                {
-                    PrintDoc2();
-                }
-            }
+            Print();
         }
 
         private void button14_Click(object sender, EventArgs e)
+        {
+            Play(sender, e);
+        }
+        public void Play(object sender, EventArgs e)
         {
             switch (selet_rezim)
             {
@@ -11607,7 +11634,7 @@ namespace Ecoview_V2._0
                 case 4:
                     ChartGraf();
                     if (timer2.Enabled == false)
-                    { 
+                    {
                         if (delay > 0)
                         {
                             timer1.Interval = Convert.ToInt32(1000); // 500 миллисекунд
@@ -12151,7 +12178,7 @@ namespace Ecoview_V2._0
                 while (GE5Izmer == "")
                 {
                     SW_Scan();
-                    Thread.Sleep(50);
+                    Thread.Sleep(1);
                     GE5Izmer = "";
                     GE5_1_1 = "";
                     newPort.Write("SA " + scan_massSA[countscan] + "\r");
@@ -12171,29 +12198,34 @@ namespace Ecoview_V2._0
                         }
                     }
 
-                    newPort.Write("GE 1\r");
-                    // Thread.Sleep(500);
-                    // GEbyteRecieved4_1 = newPort.ReadBufferSize;
-                    //  GEbuffer4_1 = new byte[GEbyteRecieved4_1];
-                    // MessageBox.Show(newPort.Read(GEbuffer4_1, 0, GEbyteRecieved4_1).ToString());
-                    // Thread.SpinWait(500);
-                    indata_0 = "";
-                    for (int i = 0; i <= 5000000; i++)
+                    double GEIZMERmass = 0;
+                    for (int j = 0; j < 10; j++)
                     {
-                        indata = newPort.ReadExisting();
-                        if (indata_0.Contains("\r>"))
+                        newPort.Write("GE 1\r");
+                        indata_0 = "";
+                        for (int i = 0; i <= 5000000; i++)
                         {
-                            break;
+                            indata = newPort.ReadExisting();
+                            if (indata_0.Contains("\r>"))
+                            {
+                                break;
+                            }
+                            indata_0 += indata;
                         }
-                        indata_0 += indata;
+
+                        indata_bool = true;
+                        GE5Izmer = "";
+                        Regex regex = new Regex(@"\W");
+                        Regex regex1 = new Regex(@"\D");
+                        GE5Izmer = regex.Replace(indata_0, "");
+                        GE5Izmer = regex1.Replace(GE5Izmer, "");
+                        // GEIZMERmass[j] = Convert.ToDouble(GE5Izmer);
+                        GEIZMERmass += Convert.ToDouble(GE5Izmer);
                     }
 
-                    indata_bool = true;
-                    
-                    Regex regex = new Regex(@"\W");
-                    Regex regex1 = new Regex(@"\D");
-                    GE5Izmer = regex.Replace(indata_0, "");
-                    GE5Izmer = regex1.Replace(GE5Izmer, "");
+                    GEIZMERmass = GEIZMERmass / 10;
+                    GE5Izmer = "";
+                    GE5Izmer = Convert.ToString(GEIZMERmass);
                 }
              
                 GEText.Text = GE5Izmer;
@@ -12209,7 +12241,7 @@ namespace Ecoview_V2._0
                     ScanTable.Rows[countscan].Cells[1].Value = string.Format("{0:0.0000}", OptPlot1_1);
                     massGE[countscan] = Convert.ToDouble(ScanTable.Rows[countscan].Cells[1].Value);
                     ScanTable.Rows[countscan].Cells[2].Value =
-                        string.Format("{0:0.0}",
+                        string.Format("{0:0.00}",
                         ((Convert.ToDouble(GE5Izmer) - Convert.ToDouble(RDstring[countSA])) /
                         (Convert.ToDouble(scan_mass[countscan]) - Convert.ToDouble(RDstring[countSA])) * 100));
                 }
@@ -12217,7 +12249,7 @@ namespace Ecoview_V2._0
                 {
                     ScanTable.Rows[countscan].Cells[2].Value = string.Format("{0:0.0000}", OptPlot1_1);
                     ScanTable.Rows[countscan].Cells[1].Value =
-                        string.Format("{0:0.0}",
+                        string.Format("{0:0.00}",
                         ((Convert.ToDouble(GE5Izmer) - Convert.ToDouble(RDstring[countSA])) /
                         (Convert.ToDouble(scan_mass[countscan]) - Convert.ToDouble(RDstring[countSA])) * 100));
                     /** listBox1.Items.Add(GE5Izmer);*/
@@ -12283,7 +12315,7 @@ namespace Ecoview_V2._0
                     {
                         if (Convert.ToDouble(ScanTable.Rows[i].Cells[1].Value) >= Convert.ToDouble(ScanTable.Rows[i - 1].Cells[1].Value)
                             &&
-                            Convert.ToDouble(ScanTable.Rows[i].Cells[1].Value) > Convert.ToDouble(ScanTable.Rows[i + 1].Cells[1].Value)
+                            Convert.ToDouble(ScanTable.Rows[i].Cells[1].Value) > Convert.ToDouble(ScanTable.Rows[i + 1].Cells[1].Value) 
 
                             )
                         {
@@ -12297,7 +12329,9 @@ namespace Ecoview_V2._0
                         }
                         if ((Convert.ToDouble(ScanTable.Rows[i].Cells[1].Value) <= Convert.ToDouble(ScanTable.Rows[i - 1].Cells[1].Value)
                             &&
-                            Convert.ToDouble(ScanTable.Rows[i].Cells[1].Value) < Convert.ToDouble(ScanTable.Rows[i + 1].Cells[1].Value))
+                            Convert.ToDouble(ScanTable.Rows[i].Cells[1].Value) < Convert.ToDouble(ScanTable.Rows[i + 1].Cells[1].Value)
+                            
+                            ) 
 
                             )
                         {
@@ -12417,47 +12451,37 @@ namespace Ecoview_V2._0
                 }
             }
 
-            newPort.Write("GE 1\r");
-            // Thread.Sleep(500);
-            // GEbyteRecieved4_1 = newPort.ReadBufferSize;
-            //  GEbuffer4_1 = new byte[GEbyteRecieved4_1];
-            // MessageBox.Show(newPort.Read(GEbuffer4_1, 0, GEbyteRecieved4_1).ToString());
-            // Thread.SpinWait(500);
-            indata_0 = "";
-            for (int i = 0; i <= 5000000; i++)
+
+           // double[] GEIZMERmass = new double[10];
+            double GEIZMERmass = 0;
+            for (int j = 0; j < 10; j++)
             {
-                indata = newPort.ReadExisting();
-                if (indata_0.Contains("\r>"))
+                newPort.Write("GE 1\r");
+                indata_0 = "";
+                for (int i = 0; i <= 5000000; i++)
                 {
-                    break;
+                    indata = newPort.ReadExisting();
+                    if (indata_0.Contains("\r>"))
+                    {
+                        break;
+                    }
+                    indata_0 += indata;
                 }
-                indata_0 += indata;
+
+                indata_bool = true;
+                GE5Izmer = "";
+                Regex regex = new Regex(@"\W");
+                Regex regex1 = new Regex(@"\D");
+                GE5Izmer = regex.Replace(indata_0, "");
+                GE5Izmer = regex1.Replace(GE5Izmer, "");
+                 // GEIZMERmass[j] = Convert.ToDouble(GE5Izmer);
+                GEIZMERmass += Convert.ToDouble(GE5Izmer);
             }
 
-            //  indata_0 = "";
-            indata_bool = true;
-            /* while (indata_bool == true)
-             {
-
-                 if (indata.Contains(">"))
-                 {
-                     indata_0 = indata;
-                     indata_bool = false;
-
-                 }
-                 else {                   
-
-                         indata = newPort.ReadExisting();
-                         indata_0 += indata;
-
-                 }
-             }*/
-            Regex regex = new Regex(@"\W");
-            Regex regex1 = new Regex(@"\D");
-            GE5Izmer = regex.Replace(indata_0, "");
-            GE5Izmer = regex1.Replace(GE5Izmer, "");
-            //  MessageBox.Show("Измерение: " + GE5Izmer + "\rКалибровка: " + GE5_1_0 + "\rОтклонение: " + Convert.ToString(Convert.ToDouble(GE5_1_0) / (Convert.ToDouble(GE5Izmer))) +
-            //    "\rПоправочный коэффициент: " + RDstring[countSA]);
+            GEIZMERmass = GEIZMERmass / 10;
+            GE5Izmer = "";
+            GE5Izmer = Convert.ToString(GEIZMERmass);
+             //GE5Izmer = Convert.ToString(GEIZMERmass.Max());
 
 
             GEText.Text = GE5Izmer;
@@ -12465,7 +12489,8 @@ namespace Ecoview_V2._0
             double Aser = Convert.ToDouble(GE5Izmer) / Convert.ToDouble(GE5_1_0) * 100;
             double OptPlot1 = 0;
 
-            OptPlot1 = Math.Log10((Convert.ToDouble(GE5_1_0) - Convert.ToDouble(RDstring[countSA])) / (Convert.ToDouble(GE5Izmer) - Convert.ToDouble(RDstring[countSA])));
+            OptPlot1 = Math.Log10((Convert.ToDouble(GE5_1_0) - Convert.ToDouble(RDstring[countSA])) /
+                (Convert.ToDouble(GE5Izmer) - Convert.ToDouble(RDstring[countSA])));
 
 
 
@@ -12478,7 +12503,11 @@ namespace Ecoview_V2._0
                     IzmerenieFR_Table.Rows[rowIndex].Cells["ABS"].Value = string.Format("{0:0.0000}", OptPlot1_1);
                     string k1 = Convert.ToString(IzmerenieFR_Table.Rows[rowIndex].Cells["KOne"].Value);
                     k1 = k1.Replace(".", ",");
-                    IzmerenieFR_Table.Rows[rowIndex].Cells["T"].Value = string.Format("{0:0.0}", ((Convert.ToDouble(GE5_1_0) - Convert.ToDouble(RDstring[countSA])) / (Convert.ToDouble(GE5Izmer) - Convert.ToDouble(RDstring[countSA]))) * 100);
+                    IzmerenieFR_Table.Rows[rowIndex].Cells["T"].Value = string.Format("{0:0.00}",
+                         (Convert.ToDouble(GE5Izmer) - Convert.ToDouble(RDstring[countSA])) /
+                        ((Convert.ToDouble(GE5_1_0) - Convert.ToDouble(RDstring[countSA]))) * 100);
+
+                   
                     IzmerenieFR_Table.Rows[rowIndex].Cells["Concetracia"].Value = string.Format("{0:0.0000}", (OptPlot1_1 * Convert.ToDouble(k1)));
                     int curentIndex = IzmerenieFR_Table.CurrentCell.ColumnIndex;
                     if (curentIndex != IzmerenieFR_Table.ColumnCount - 1 || rowIndex != IzmerenieFR_Table.Rows.Count - 1)
@@ -13569,28 +13598,7 @@ namespace Ecoview_V2._0
         }
         private void измеритьToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (tabControl2.SelectedIndex == 0)
-            {
-                if (Table1.RowCount > 1)
-                {
-                    Graduirovka(sender, e);
-                }
-                else
-                {
-                    MessageBox.Show("Создайте градуировку по СО");
-                }
-            }
-            else
-            {
-                if (Table2.RowCount > 1)
-                {
-                    Izmerenie(sender, e);
-                }
-                else
-                {
-                    MessageBox.Show("Создайте измерение");
-                }
-            }
+            Play(sender, e);
         }
 
         private void button12_Click(object sender, EventArgs e)
@@ -15020,6 +15028,9 @@ namespace Ecoview_V2._0
                 }
             }
         }
+
+
+
         public void SaveTpPdf2()
         {
             bool doNotWrite = false;

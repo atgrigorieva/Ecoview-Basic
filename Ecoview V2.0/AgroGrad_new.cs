@@ -11,8 +11,8 @@ namespace Ecoview_V2._0
 {
     public partial class AgroGrad_new : Form
     {
-        EcoviewProfessional1 _Analis;
-        public AgroGrad_new(EcoviewProfessional1 parent)
+        EcoviewStandart1 _Analis;
+        public AgroGrad_new(EcoviewStandart1 parent)
         {
             InitializeComponent();
             this._Analis = parent;

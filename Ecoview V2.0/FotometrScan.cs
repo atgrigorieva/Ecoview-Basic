@@ -11,8 +11,8 @@ namespace Ecoview_V2._0
 {
     public partial class FotometrScan : Form
     {
-        EcoviewProfessional1 _Analis;
-        public FotometrScan(EcoviewProfessional1 parent)
+        EcoviewStandart1 _Analis;
+        public FotometrScan(EcoviewStandart1 parent)
         {
             InitializeComponent();
             this._Analis = parent;

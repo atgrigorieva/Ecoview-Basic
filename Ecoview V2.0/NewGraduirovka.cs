@@ -8,11 +8,11 @@ namespace Ecoview_V2._0
 {
         public partial class NewGraduirovka : Form
         {
-            EcoviewProfessional1 _Analis;
+            EcoviewStandart1 _Analis;
             public int oldValue = 3;
             public int old = 3;
             int index1 = 9;
-            public NewGraduirovka(EcoviewProfessional1 parent)
+            public NewGraduirovka(EcoviewStandart1 parent)
             {
                 InitializeComponent();
                 this._Analis = parent;

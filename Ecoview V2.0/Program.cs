@@ -16,7 +16,7 @@ namespace Ecoview_V2._0
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new EcoviewProfessional1());
+            Application.Run(new EcoviewStandart1());
         }
     }
 }

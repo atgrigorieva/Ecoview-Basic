@@ -11,8 +11,8 @@ namespace Ecoview_V2._0
 {
     public partial class MultiWave : Form
     {
-        EcoviewProfessional1 _Analis;
-        public MultiWave(EcoviewProfessional1 parent)
+        EcoviewStandart1 _Analis;
+        public MultiWave(EcoviewStandart1 parent)
         {
             InitializeComponent();
             this._Analis = parent;

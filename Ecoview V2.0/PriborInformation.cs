@@ -14,8 +14,8 @@ namespace Ecoview_V2._0
 {
     public partial class PriborInformation : Form
     {
-        EcoviewProfessional1 _Analis;
-        public PriborInformation(EcoviewProfessional1 parent)
+        EcoviewStandart1 _Analis;
+        public PriborInformation(EcoviewStandart1 parent)
         {
             InitializeComponent();
             this._Analis = parent;

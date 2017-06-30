@@ -12,8 +12,8 @@ namespace Ecoview_V2._0
 {
     public partial class IzmerenieFR : Form
     {
-        EcoviewProfessional1 _Analis;
-        public IzmerenieFR(EcoviewProfessional1 parent)
+        EcoviewStandart1 _Analis;
+        public IzmerenieFR(EcoviewStandart1 parent)
         {
             InitializeComponent();
             this._Analis = parent;
