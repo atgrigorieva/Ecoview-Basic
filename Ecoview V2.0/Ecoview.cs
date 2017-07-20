@@ -517,7 +517,7 @@ namespace Ecoview_V2._0
                     Table1.CurrentCell.Value = string.Format("{0:0.0000}", CellOpt);
                     if (CelloptCopy != CellOpt)
                     {
-                        Table1.CurrentCell.Style.BackColor = System.Drawing.Color.OrangeRed;
+                        Table1.CurrentCell.Style.BackColor = System.Drawing.Color.Pink;
                     }
                     CellOpt = 0;      
                 }
@@ -2448,8 +2448,8 @@ namespace Ecoview_V2._0
                 {
                     for (int j = 0; j < StolbecCol; j++)
                     {
-                        if(CellColor[i, j] == "OrangeRed"){
-                            Table1.Rows[i].Cells[j].Style.BackColor = System.Drawing.Color.OrangeRed;
+                        if(CellColor[i, j] == "Pink"){
+                            Table1.Rows[i].Cells[j].Style.BackColor = System.Drawing.Color.Pink;
                         }
                         else
                         {
@@ -2466,9 +2466,9 @@ namespace Ecoview_V2._0
                 {
                     for (int j = 0; j < StolbecCol; j++)
                     {
-                        if (CellColor[i, j] == "OrangeRed")
+                        if (CellColor[i, j] == "Pink")
                         {
-                            Table1.Rows[i].Cells[j].Style.BackColor = System.Drawing.Color.OrangeRed;
+                            Table1.Rows[i].Cells[j].Style.BackColor = System.Drawing.Color.Pink;
                         }
                         else
                         {
@@ -2534,6 +2534,78 @@ namespace Ecoview_V2._0
 
             XDocument xdoc = XDocument.Load(@filepath);
 
+            foreach (XElement IzmerScan1 in xdoc.Element("Data_Izmerenie").Elements("Izmerenie"))
+            {
+                XElement Direction = IzmerScan1.Element("Direction");
+                XElement Code = IzmerScan1.Element("Code");
+                XElement Address = IzmerScan1.Element("Address");
+                XElement NameLab = IzmerScan1.Element("NameLab");
+
+                XElement Ispolnitel1 = IzmerScan1.Element("Ispolnitel");
+                XElement DateTime1 = IzmerScan1.Element("DateTime");
+
+                if (Direction != null && Code != null && Address != null && NameLab != null)
+                {
+                    if(Direction.Value != "")
+                    {
+                        direction = Direction.Value;
+                    }
+                    else
+                    {
+                        direction = "";
+                    }
+
+                    if (Code.Value != "" || Code.Value != null)
+                    {
+                        code = Code.Value;
+                    }
+                    else
+                    {
+                        code = "";
+                    }
+
+                    if (Address.Value != "")
+                    {
+                        address_lab = Address.Value;
+                    }
+                    else
+                    {
+                        address_lab = "";
+                    }
+
+                    if (NameLab.Value != "")
+                    {
+                        name_lab = NameLab.Value;
+                    }
+                    else
+                    {
+                        name_lab = "";
+                    }
+                    
+                }
+                
+                if (Ispolnitel1 != null && DateTime1 != null)
+                {
+                    if (Ispolnitel1.Value != "")
+                    {
+                        Ispolnitel = Ispolnitel1.Value;
+                    }
+                    else
+                    {
+                        Ispolnitel = "";
+                    }
+
+                    if (DateTime1.Value != "" || DateTime1.Value != null)
+                    {
+                        DateTime = DateTime1.Value;
+                    }
+                    else
+                    {
+                        DateTime = "";
+                    }
+                    
+                }
+            }
             foreach (XElement IzmerScan1 in xdoc.Element("Data_Izmerenie").Element("NumberIzmer").Elements("Str")){
                 int celssData = 0;
                 
@@ -2545,19 +2617,36 @@ namespace Ecoview_V2._0
                         if (CellsAttribute0.Value.Contains("Abs")){
                             CellsAttribute0.Value = CellsAttribute0.Value.Substring(4);
                             CellsAttribute0.Value = CellsAttribute0.Value.Substring(0, CellsAttribute0.Value.Length - 3);
-                            dataGridView5.Columns.Add("Abs " + celssData, "Abs " + CellsAttribute0.Value + " нм");
+                           // dataGridView5.Columns.Add("Abs " + celssData, "Abs " + CellsAttribute0.Value + " нм");
+
+                            DataGridViewTextBoxColumn firstColumn1 =
+                            new DataGridViewTextBoxColumn();
+                            firstColumn1.HeaderText = "Abs " + CellsAttribute0.Value + " нм";
+                            firstColumn1.Name = "Abs " + celssData;
+                            firstColumn1.ValueType = Type.GetType("System.Double");
+                            firstColumn1.ReadOnly = true;
+                            dataGridView5.Columns.Add(firstColumn1);
                         }
                         else
                         {
                             CellsAttribute0.Value = CellsAttribute0.Value.Substring(3);
                             CellsAttribute0.Value = CellsAttribute0.Value.Substring(0, CellsAttribute0.Value.Length - 3);
-                            dataGridView5.Columns.Add("Abs " + celssData, "%T " + CellsAttribute0.Value + " нм");
+                           // dataGridView5.Columns.Add("Abs " + celssData, "%T " + CellsAttribute0.Value + " нм");
+
+                            DataGridViewTextBoxColumn firstColumn1 =
+                            new DataGridViewTextBoxColumn();
+                            firstColumn1.HeaderText = "%T " + CellsAttribute0.Value + " нм";
+                            firstColumn1.Name = "Abs " + celssData;
+                            firstColumn1.ValueType = Type.GetType("System.Double");
+                            firstColumn1.ReadOnly = true;
+                            dataGridView5.Columns.Add(firstColumn1);
                         }
                         
                         textBoxCO[celssData] = new TextBox();
                         textBoxCO[celssData].Text = CellsAttribute0.Value;
                     }
                     celssData++;
+                    
                 }
                 break;
                 
@@ -3749,9 +3838,9 @@ namespace Ecoview_V2._0
                 {
                     for (int j = 0; j < StolbecCol_1; j++)
                     {
-                        if (CellColor[i, j] == "OrangeRed")
+                        if (CellColor[i, j] == "Pink")
                         {
-                            Table2.Rows[i].Cells[j].Style.BackColor = System.Drawing.Color.OrangeRed;
+                            Table2.Rows[i].Cells[j].Style.BackColor = System.Drawing.Color.Pink;
                         }
                         else
                         {
@@ -3770,9 +3859,9 @@ namespace Ecoview_V2._0
                     {
                         for (int j = 0; j < StolbecCol_1; j++)
                         {
-                            if (CellColor[i, j] == "OrangeRed")
+                            if (CellColor[i, j] == "Pink")
                             {
-                                Table2.Rows[i].Cells[j].Style.BackColor = System.Drawing.Color.OrangeRed;
+                                Table2.Rows[i].Cells[j].Style.BackColor = System.Drawing.Color.Pink;
                             }
                             else
                             {
@@ -3789,9 +3878,9 @@ namespace Ecoview_V2._0
                     {
                         for (int j = 0; j < StolbecCol_1; j++)
                         {
-                            if (CellColor[i, j] == "OrangeRed")
+                            if (CellColor[i, j] == "Pink")
                             {
-                                Table2.Rows[i].Cells[j].Style.BackColor = System.Drawing.Color.OrangeRed;
+                                Table2.Rows[i].Cells[j].Style.BackColor = System.Drawing.Color.Pink;
                             }
                             else
                             {
@@ -7150,11 +7239,31 @@ namespace Ecoview_V2._0
             xd.Load(fs);
             XmlNode Izmerenie = xd.CreateElement("Izmerenie");
 
-            //string HeaderCells1 =;
-          /*  XmlNode TypeIzmer = xd.CreateElement("TypeIzmer");
-            TypeIzmer.InnerText = TableKinetica1.Columns[1].HeaderText;
-            Izmerenie.AppendChild(TypeIzmer);*/
+            XmlNode Direction = xd.CreateElement("Direction"); // Примечание
+            Direction.InnerText = direction; // и значение
+            Izmerenie.AppendChild(Direction); // и указываем кому принадлежит
 
+
+            XmlNode Code = xd.CreateElement("Code"); // Примечание
+            Code.InnerText = code; // и значение
+            Izmerenie.AppendChild(Code); // и указываем кому принадлежит
+
+            XmlNode Address = xd.CreateElement("Address"); // Примечание
+            Address.InnerText = address_lab; // и значение
+            Izmerenie.AppendChild(Address); // и указываем кому принадлежит
+
+            XmlNode NameLab = xd.CreateElement("NameLab"); // Примечание
+            NameLab.InnerText = name_lab; // и значение
+            Izmerenie.AppendChild(NameLab); // и указываем кому принадлежит
+
+
+            XmlNode DateTime1 = xd.CreateElement("DateTime"); // дата создания градуировки
+            DateTime1.InnerText = DateTime; // и значение
+            Izmerenie.AppendChild(DateTime1); // и указываем кому принадлежит
+
+            XmlNode Ispolnitel1 = xd.CreateElement("Ispolnitel"); // Примечание
+            Ispolnitel1.InnerText = Ispolnitel; // и значение
+            Izmerenie.AppendChild(Ispolnitel1); // и указываем кому принадлежит
             xd.DocumentElement.AppendChild(Izmerenie);
 
             XmlNode NumberIzmer = xd.CreateElement("NumberIzmer");
@@ -7191,8 +7300,12 @@ namespace Ecoview_V2._0
                     
                     //xd.DocumentElement.AppendChild(Cells1);
                 }
+
+                
+
                 //   xd.DocumentElement.AppendChild(Str);
             }
+
             xd.DocumentElement.AppendChild(NumberIzmer);
 
             fs.Close();         // Закрываем поток  
@@ -7473,9 +7586,9 @@ namespace Ecoview_V2._0
                         HeaderCells1.Attributes.Append(attribute); // добавляем атрибут
 
                         XmlAttribute hand = xd.CreateAttribute("Hand");
-                        if(Table1.Rows[i].Cells[j].Style.BackColor.Name == "OrangeRed")
+                        if(Table1.Rows[i].Cells[j].Style.BackColor.Name == "Pink")
                         {
-                            hand.Value = "OrangeRed"; // устанавливаем значение атрибута
+                            hand.Value = "Pink"; // устанавливаем значение атрибута
                         }
                         else
                         {
@@ -7649,9 +7762,9 @@ namespace Ecoview_V2._0
                     HeaderCells1.Attributes.Append(attribute); // добавляем атрибут
 
                     XmlAttribute hand = xd.CreateAttribute("Hand");
-                    if (Table2.Rows[i].Cells[j].Style.BackColor.Name == "OrangeRed")
+                    if (Table2.Rows[i].Cells[j].Style.BackColor.Name == "Pink")
                     {
-                        hand.Value = "OrangeRed"; // устанавливаем значение атрибута
+                        hand.Value = "Pink"; // устанавливаем значение атрибута
                     }
                     else
                     {
@@ -9841,8 +9954,22 @@ namespace Ecoview_V2._0
                 e.Graphics.DrawString("Измерение в многоволновом режиме\n\n",
                 new System.Drawing.Font("Times New Roman", 20, FontStyle.Bold), Brushes.Black, 100, 50);
                 height = 100;
+
+                e.Graphics.DrawString("Идентификационный номер (код) исследования:", new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, 25, height);
+                e.Graphics.DrawString(code, new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, 400, height);
+
+                height = height + 35;
+
+                e.Graphics.DrawString("Лаборатория:", new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, 25, height);
+                e.Graphics.DrawString(name_lab, new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, 140, height);
+                height = height + 35;
+
+                e.Graphics.DrawString("Адрес лаборатории:", new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, 25, height);
+                e.Graphics.DrawString(address_lab, new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, 195, height);
+                height = height + 35;
+
                 e.Graphics.DrawString("Таблица сканирования\n\n",
-                new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, 100, height);
+                new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, 25, height);
                 realwidth = dataGridView5.Columns[0].Width + 5;
                 realheight = height + 35;
                 width = 100;
@@ -9862,6 +9989,7 @@ namespace Ecoview_V2._0
                         printdatagridview5_2(sender, e);
                     }
                 }
+                
             }
             else
             {
@@ -9877,7 +10005,24 @@ namespace Ecoview_V2._0
                 {
                     printdatagridview5_2(sender, e);
                 }
+                
             }
+            
+        }
+        public void PrintMultiCancel(object sender, PrintPageEventArgs e)
+        {
+            realheight += 20;
+            e.Graphics.DrawString("Дата:", new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, 25, realheight);
+            e.Graphics.DrawString(DateTime, new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, 85, realheight);
+            e.Graphics.DrawString("Время начала:", new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, 180, realheight);
+            e.Graphics.DrawString(" _______ ", new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, 290, realheight);
+            e.Graphics.DrawString("Время окончания:", new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, 380, realheight);
+            e.Graphics.DrawString(" _______ ", new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, 530, realheight);
+
+            e.Graphics.DrawString("Исполнитель:", new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, 25, realheight + 30);
+            e.Graphics.DrawString(" _______________________ /   " + Ispolnitel, new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, 160, realheight + 30);
+            e.Graphics.DrawString("Руководитель:", new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, 25, realheight + 60);
+            e.Graphics.DrawString(" _______________________ /   " + direction, new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, 160, realheight + 60);
         }
         public void printdatagridview5_2(object sender, PrintPageEventArgs e)
         {
@@ -9950,7 +10095,7 @@ namespace Ecoview_V2._0
                     width = 100;
                     height1 = dataGridView5.Rows[0].Height + 5;
 
-                    for (int z = k; z < dataGridView5.ColumnCount - k; z++)
+                    for (int z = dataGridView5.ColumnCount - k; z < k; z++)
                     {
                         e.Graphics.FillRectangle(Brushes.AliceBlue, realwidth, realheight, width, height1);
                         e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
@@ -9961,7 +10106,7 @@ namespace Ecoview_V2._0
                     realheight = realheight + 20;
                     while (strcountScan < dataGridView5.Rows.Count - 1)
                     {
-                        for (int j = k; j < dataGridView5.ColumnCount - k; j++)
+                        for (int j = dataGridView5.ColumnCount - k; j < k; j++)
                         {
                             e.Graphics.FillRectangle(Brushes.AliceBlue, realwidth, realheight, width, height1);
                             e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
@@ -10211,7 +10356,7 @@ namespace Ecoview_V2._0
                         height1 = dataGridView5.Rows[0].Height + 5;
                         if (pageyes_1 == false)
                         {
-                            for (int z = k; z < dataGridView5.ColumnCount - k; z++)
+                            for (int z = dataGridView5.ColumnCount - k; z < k; z++)
                             {
                                 e.Graphics.FillRectangle(Brushes.AliceBlue, realwidth, realheight, width, height1);
                                 e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
@@ -10223,7 +10368,7 @@ namespace Ecoview_V2._0
                         }
                         while (strcountScan < dataGridView5.Rows.Count - 1)
                         {
-                            for (int j = k; j < dataGridView5.ColumnCount - k; j++)
+                            for (int j = dataGridView5.ColumnCount - k; j < k; j++)
                             {
                                 e.Graphics.FillRectangle(Brushes.AliceBlue, realwidth, realheight, width, height1);
                                 e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
@@ -10427,6 +10572,7 @@ namespace Ecoview_V2._0
                     }
                 }
             }
+            PrintMultiCancel(sender, e);
         }
         public void printdatagridview5(object sender, PrintPageEventArgs e)
         {
@@ -10468,6 +10614,7 @@ namespace Ecoview_V2._0
                 }
                 strcountScan++;
             }
+            PrintMultiCancel(sender, e);
         }
         public void KinTablePrint_PrintPage(object sender, PrintPageEventArgs e)
         {
@@ -10863,7 +11010,9 @@ namespace Ecoview_V2._0
                 // e.Graphics.DrawString("Градуировочное уравнение: " + label14.Text, new System.Drawing.Font("C:\\Windows\\Fonts\\georgia.ttf", 12, FontStyle.Bold), Brushes.Black, new Point(50, 430));
                 if (SposobZadan == "По СО")
                 {
-                    e.Graphics.DrawString("Таблица исходных данных", new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, 25, 370);
+                    e.Graphics.DrawString("Таблица исходных данных ( ячейки, выделенные цветом ", new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, 25, 370);
+                    e.Graphics.FillRectangle(Brushes.Pink, new System.Drawing.Rectangle(480, 370, 40, 20));
+                    e.Graphics.DrawString(", изменены вручную!):", new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, new Point(530, 370));
                     if (NoCaIzm <= 3)
                     {
                         Table1PrintViewer1(sender, e);
@@ -11071,9 +11220,9 @@ namespace Ecoview_V2._0
             {
                 for (int j = 0; j < Table1.ColumnCount; j++)
                 {
-                    if(Table1.Rows[totalnumber].Cells[j].Style.BackColor.Name == "OrangeRed")
+                    if(Table1.Rows[totalnumber].Cells[j].Style.BackColor.Name == "Pink")
                     {
-                        e.Graphics.FillRectangle(Brushes.OrangeRed, new System.Drawing.Rectangle(width, height, Table1.Columns[j].Width + 10, Table1.Rows[totalnumber].Height));
+                        e.Graphics.FillRectangle(Brushes.Pink, new System.Drawing.Rectangle(width, height, Table1.Columns[j].Width + 10, Table1.Rows[totalnumber].Height));
                     }
                     else
                     {
@@ -11128,9 +11277,9 @@ namespace Ecoview_V2._0
 
             for (int j = 0; j < Table1.Rows.Count - 1; j++)
             {
-                if (Table1.Rows[j].Cells[0].Style.BackColor.Name == "OrangeRed")
+                if (Table1.Rows[j].Cells[0].Style.BackColor.Name == "Pink")
                 {
-                    e.Graphics.FillRectangle(Brushes.OrangeRed, new System.Drawing.Rectangle(width, height, Table1.Columns[0].Width + 10, Table1.Rows[j].Height));
+                    e.Graphics.FillRectangle(Brushes.Pink, new System.Drawing.Rectangle(width, height, Table1.Columns[0].Width + 10, Table1.Rows[j].Height));
                 }
                 else
                 {
@@ -11145,9 +11294,9 @@ namespace Ecoview_V2._0
             width = width + Table1.Columns[0].Width + 5;
             for (int j = 0; j < Table1.Rows.Count - 1; j++)
             {
-                if (Table1.Rows[j].Cells[1].Style.BackColor.Name == "OrangeRed")
+                if (Table1.Rows[j].Cells[1].Style.BackColor.Name == "Pink")
                 {
-                    e.Graphics.FillRectangle(Brushes.OrangeRed, new System.Drawing.Rectangle(width, height, Table1.Columns[1].Width + 10, Table1.Rows[j].Height));
+                    e.Graphics.FillRectangle(Brushes.Pink, new System.Drawing.Rectangle(width, height, Table1.Columns[1].Width + 10, Table1.Rows[j].Height));
                 }
                 else
                 {
@@ -11162,9 +11311,9 @@ namespace Ecoview_V2._0
             width = width + Table1.Columns[1].Width;
             for (int j = 0; j < Table1.Rows.Count - 1; j++)
             {
-                if (Table1.Rows[j].Cells[2].Style.BackColor.Name == "OrangeRed")
+                if (Table1.Rows[j].Cells[2].Style.BackColor.Name == "Pink")
                 {
-                    e.Graphics.FillRectangle(Brushes.OrangeRed, new System.Drawing.Rectangle(width, height, Table1.Columns[2].Width + 10, Table1.Rows[j].Height));
+                    e.Graphics.FillRectangle(Brushes.Pink, new System.Drawing.Rectangle(width, height, Table1.Columns[2].Width + 10, Table1.Rows[j].Height));
                 }
                 else
                 {
@@ -11190,9 +11339,9 @@ namespace Ecoview_V2._0
             {
                 for (int i = 0; i < NoCaIzm; i++)
                 {
-                    if (Table1.Rows[j].Cells[k].Style.BackColor.Name == "OrangeRed")
+                    if (Table1.Rows[j].Cells[k].Style.BackColor.Name == "Pink")
                     {
-                        e.Graphics.FillRectangle(Brushes.OrangeRed, new System.Drawing.Rectangle(width, height, Table1.Columns[k].Width + 10, Table1.Rows[j].Height));
+                        e.Graphics.FillRectangle(Brushes.Pink, new System.Drawing.Rectangle(width, height, Table1.Columns[k].Width + 10, Table1.Rows[j].Height));
                     }
                     else
                     {
@@ -11223,9 +11372,9 @@ namespace Ecoview_V2._0
                 k = NoCaIzm + 3;
                 for (int i = 0; i < Table1.Columns.Count - NoCaIzm - 3; i++)
                 {
-                    if (Table1.Rows[i].Cells[k].Style.BackColor.Name == "OrangeRed")
+                    if (Table1.Rows[i].Cells[k].Style.BackColor.Name == "Pink")
                     {
-                        e.Graphics.FillRectangle(Brushes.OrangeRed, new System.Drawing.Rectangle(width, height, Table1.Columns[k].Width + 10, Table1.Rows[i].Height));
+                        e.Graphics.FillRectangle(Brushes.Pink, new System.Drawing.Rectangle(width, height, Table1.Columns[k].Width + 10, Table1.Rows[i].Height));
                     }
                     else
                     {
@@ -11248,9 +11397,9 @@ namespace Ecoview_V2._0
                 {
                     for (int i = 0; i < Table1.Columns.Count - NoCaIzm - 3; i++)
                     {
-                        if (Table1.Rows[j].Cells[k].Style.BackColor.Name == "OrangeRed")
+                        if (Table1.Rows[j].Cells[k].Style.BackColor.Name == "Pink")
                         {
-                            e.Graphics.FillRectangle(Brushes.OrangeRed, new System.Drawing.Rectangle(width, height, Table1.Columns[k].Width + 10, Table1.Rows[j].Height));
+                            e.Graphics.FillRectangle(Brushes.Pink, new System.Drawing.Rectangle(width, height, Table1.Columns[k].Width + 10, Table1.Rows[j].Height));
                         }
                         else
                         {
@@ -11313,9 +11462,9 @@ namespace Ecoview_V2._0
             {
                 for (int i = 0; i < Table1.Columns.Count - NoCaIzm - 3; i++)
                 {
-                    if (Table1.Rows[j].Cells[k].Style.BackColor.Name == "OrangeRed")
+                    if (Table1.Rows[j].Cells[k].Style.BackColor.Name == "Pink")
                     {
-                        e.Graphics.FillRectangle(Brushes.OrangeRed, new System.Drawing.Rectangle(width, height, Table1.Columns[k].Width + 10, Table1.Rows[j].Height));
+                        e.Graphics.FillRectangle(Brushes.Pink, new System.Drawing.Rectangle(width, height, Table1.Columns[k].Width + 10, Table1.Rows[j].Height));
                     }
                     else
                     {
@@ -11392,9 +11541,9 @@ namespace Ecoview_V2._0
                 width = width + Table1.Columns[0].Width + 5;
                 for (int j = 0; j < Table1.Rows.Count - 1; j++)
                 {
-                    if (Table1.Rows[j].Cells[1].Style.BackColor.Name == "OrangeRed")
+                    if (Table1.Rows[j].Cells[1].Style.BackColor.Name == "Pink")
                     {
-                        e.Graphics.FillRectangle(Brushes.OrangeRed, new System.Drawing.Rectangle(width, height, Table1.Columns[1].Width + 10, Table1.Rows[j].Height));
+                        e.Graphics.FillRectangle(Brushes.Pink, new System.Drawing.Rectangle(width, height, Table1.Columns[1].Width + 10, Table1.Rows[j].Height));
                     }
                     else
                     {
@@ -11409,9 +11558,9 @@ namespace Ecoview_V2._0
                 width = width + Table1.Columns[1].Width;
                 for (int j = 0; j < Table1.Rows.Count - 1; j++)
                 {
-                    if (Table1.Rows[j].Cells[2].Style.BackColor.Name == "OrangeRed")
+                    if (Table1.Rows[j].Cells[2].Style.BackColor.Name == "Pink")
                     {
-                        e.Graphics.FillRectangle(Brushes.OrangeRed, new System.Drawing.Rectangle(width, height, Table1.Columns[2].Width + 10, Table1.Rows[j].Height));
+                        e.Graphics.FillRectangle(Brushes.Pink, new System.Drawing.Rectangle(width, height, Table1.Columns[2].Width + 10, Table1.Rows[j].Height));
                     }
                     else
                     {
@@ -11437,9 +11586,9 @@ namespace Ecoview_V2._0
                 {
                     for (int i = 0; i < 7; i++)
                     {
-                        if (Table1.Rows[j].Cells[k].Style.BackColor.Name == "OrangeRed")
+                        if (Table1.Rows[j].Cells[k].Style.BackColor.Name == "Pink")
                         {
-                            e.Graphics.FillRectangle(Brushes.OrangeRed, new System.Drawing.Rectangle(width, height, Table1.Columns[k].Width + 10, Table1.Rows[j].Height));
+                            e.Graphics.FillRectangle(Brushes.Pink, new System.Drawing.Rectangle(width, height, Table1.Columns[k].Width + 10, Table1.Rows[j].Height));
                         }
                         else
                         {
@@ -11502,9 +11651,9 @@ namespace Ecoview_V2._0
                     {
                         for (int i = 0; i < NoCaIzm - 7; i++)
                         {
-                            if (Table1.Rows[j].Cells[k].Style.BackColor.Name == "OrangeRed")
+                            if (Table1.Rows[j].Cells[k].Style.BackColor.Name == "Pink")
                             {
-                                e.Graphics.FillRectangle(Brushes.OrangeRed, new System.Drawing.Rectangle(width, height, Table1.Columns[k].Width + 10, Table1.Rows[j].Height));
+                                e.Graphics.FillRectangle(Brushes.Pink, new System.Drawing.Rectangle(width, height, Table1.Columns[k].Width + 10, Table1.Rows[j].Height));
                             }
                             else
                             {
@@ -11535,9 +11684,9 @@ namespace Ecoview_V2._0
                     {
                         for (int i = 0; i < Table1.Columns.Count - NoCaIzm - 3; i++)
                         {
-                            if (Table1.Rows[j].Cells[k].Style.BackColor.Name == "OrangeRed")
+                            if (Table1.Rows[j].Cells[k].Style.BackColor.Name == "Pink")
                             {
-                                e.Graphics.FillRectangle(Brushes.OrangeRed, new System.Drawing.Rectangle(width, height, Table1.Columns[k].Width + 10, Table1.Rows[j].Height));
+                                e.Graphics.FillRectangle(Brushes.Pink, new System.Drawing.Rectangle(width, height, Table1.Columns[k].Width + 10, Table1.Rows[j].Height));
                             }
                             else
                             {
@@ -11620,9 +11769,9 @@ namespace Ecoview_V2._0
             {
                 for (int i = 0; i < NoCaIzm - 7; i++)
                 {
-                    if (Table1.Rows[j].Cells[i].Style.BackColor.Name == "OrangeRed")
+                    if (Table1.Rows[j].Cells[i].Style.BackColor.Name == "Pink")
                     {
-                        e.Graphics.FillRectangle(Brushes.OrangeRed, new System.Drawing.Rectangle(width, height, Table1.Columns[i].Width + 10, Table1.Rows[j].Height));
+                        e.Graphics.FillRectangle(Brushes.Pink, new System.Drawing.Rectangle(width, height, Table1.Columns[i].Width + 10, Table1.Rows[j].Height));
                     }
                     else
                     {
@@ -11653,9 +11802,9 @@ namespace Ecoview_V2._0
             {
                 for (int i = 0; i < Table1.Columns.Count - NoCaIzm - 3; i++)
                 {
-                    if (Table1.Rows[j].Cells[i].Style.BackColor.Name == "OrangeRed")
+                    if (Table1.Rows[j].Cells[i].Style.BackColor.Name == "Pink")
                     {
-                        e.Graphics.FillRectangle(Brushes.OrangeRed, new System.Drawing.Rectangle(width, height, Table1.Columns[i].Width + 10, Table1.Rows[j].Height));
+                        e.Graphics.FillRectangle(Brushes.Pink, new System.Drawing.Rectangle(width, height, Table1.Columns[i].Width + 10, Table1.Rows[j].Height));
                     }
                     else
                     {
@@ -11706,7 +11855,7 @@ namespace Ecoview_V2._0
                 e.Graphics.DrawString(textBox8.Text, new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, 130, 230);
 
                 e.Graphics.DrawString("Длина волны:", new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, 60, 250);
-                e.Graphics.DrawString(wavelength1, new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, 160, 250);
+                e.Graphics.DrawString(wavelength1, new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, 180, 250);
 
                 e.Graphics.DrawString("Погрешность методики: ", new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, 240, 250);
                 e.Graphics.DrawString(textBox7.Text, new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, 470, 250);
@@ -11775,7 +11924,11 @@ namespace Ecoview_V2._0
                 fs3.Close();
                 e.Graphics.DrawString("Поверка действительна до: ", new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, new Point(60, 510));
                 e.Graphics.DrawString(data.Date.ToString("dd.MM.yyyy"), new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, new Point(315, 510));
-                e.Graphics.DrawString("Данные измерений:", new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, 25, 530);
+                e.Graphics.DrawString("Данные измерений (ячейки, выделенные цветом ", new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, 25, 530);
+
+                e.Graphics.FillRectangle(Brushes.Pink, new System.Drawing.Rectangle(420, 530, 40, 20));
+                e.Graphics.DrawString(", изменены вручную!):", new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, new Point(470, 530));
+
                 if (NoCaIzm1 <= 3)
                 {
                     Table2PrintViewer1(sender, e);
@@ -11920,7 +12073,14 @@ namespace Ecoview_V2._0
 
             for (int j = 0; j < Table2.Rows.Count - 1; j++)
             {
-                e.Graphics.FillRectangle(Brushes.White, new System.Drawing.Rectangle(width, height, Table2.Columns[0].Width + 5, Table2.Rows[j].Height));
+                if (Table2.Rows[j].Cells[0].Style.BackColor.Name == "Pink")
+                {
+                    e.Graphics.FillRectangle(Brushes.Pink, new System.Drawing.Rectangle(width, height, Table2.Columns[0].Width + 10, Table2.Rows[j].Height));
+                }
+                else
+                {
+                    e.Graphics.FillRectangle(Brushes.White, new System.Drawing.Rectangle(width, height, Table2.Columns[0].Width + 10, Table2.Rows[j].Height));
+                }
                 e.Graphics.DrawRectangle(p, new System.Drawing.Rectangle(width, height, Table2.Columns[0].Width + 5, Table2.Rows[j].Height));
                 e.Graphics.DrawString(Table2.Rows[j].Cells[0].Value.ToString(), new System.Drawing.Font("Times New Roman", 10, FontStyle.Regular), Brushes.Black, new System.Drawing.Rectangle(width + 10, height, Table2.Columns[0].Width + 5, Table2.Rows[j].Height));
                 // width = width + Table2.Columns[0].Width;
@@ -11930,7 +12090,14 @@ namespace Ecoview_V2._0
             width = width + Table2.Columns[0].Width + 5;
             for (int j = 0; j < Table2.Rows.Count - 1; j++)
             {
-                e.Graphics.FillRectangle(Brushes.White, new System.Drawing.Rectangle(width, height, Table2.Columns[1].Width, Table2.Rows[j].Height));
+                if (Table2.Rows[j].Cells[1].Style.BackColor.Name == "Pink")
+                {
+                    e.Graphics.FillRectangle(Brushes.Pink, new System.Drawing.Rectangle(width, height, Table2.Columns[1].Width + 10, Table2.Rows[j].Height));
+                }
+                else
+                {
+                    e.Graphics.FillRectangle(Brushes.White, new System.Drawing.Rectangle(width, height, Table2.Columns[1].Width + 10, Table2.Rows[j].Height));
+                }
                 e.Graphics.DrawRectangle(p, new System.Drawing.Rectangle(width, height, Table2.Columns[1].Width, Table2.Rows[j].Height));
                 if (Table2.Rows[j].Cells[1].Value != null)
                 {
@@ -11952,7 +12119,14 @@ namespace Ecoview_V2._0
             {
                 for (int i = 2; i <= Table2.Columns.Count - NoCaIzm1; i++)
                 {
-                    e.Graphics.FillRectangle(Brushes.White, new System.Drawing.Rectangle(width, height, Table2.Columns[i].Width + 10, Table2.Rows[j].Height));
+                    if (Table2.Rows[j].Cells[i].Style.BackColor.Name == "Pink")
+                    {
+                        e.Graphics.FillRectangle(Brushes.Pink, new System.Drawing.Rectangle(width, height, Table2.Columns[i].Width + 10, Table2.Rows[j].Height));
+                    }
+                    else
+                    {
+                        e.Graphics.FillRectangle(Brushes.White, new System.Drawing.Rectangle(width, height, Table2.Columns[i].Width + 10, Table2.Rows[j].Height));
+                    }
                     e.Graphics.DrawRectangle(p, new System.Drawing.Rectangle(width, height, Table2.Columns[i].Width + 10, Table2.Rows[j].Height));
                     if (Table2.Rows[j].Cells[i].Value != null)
                     {
@@ -11976,7 +12150,14 @@ namespace Ecoview_V2._0
             {
                 for (int i = Table2.Columns.Count - NoCaIzm1 + 1; i < Table2.Columns.Count; i++)
                 {
-                    e.Graphics.FillRectangle(Brushes.White, new System.Drawing.Rectangle(width, height, Table2.Columns[i].Width + 10, Table2.Rows[j].Height));
+                    if (Table2.Rows[j].Cells[i].Style.BackColor.Name == "Pink")
+                    {
+                        e.Graphics.FillRectangle(Brushes.Pink, new System.Drawing.Rectangle(width, height, Table2.Columns[i].Width + 10, Table2.Rows[j].Height));
+                    }
+                    else
+                    {
+                        e.Graphics.FillRectangle(Brushes.White, new System.Drawing.Rectangle(width, height, Table2.Columns[i].Width + 10, Table2.Rows[j].Height));
+                    }
                     e.Graphics.DrawRectangle(p, new System.Drawing.Rectangle(width, height, Table2.Columns[i].Width + 10, Table2.Rows[j].Height));
                     if (Table2.Rows[j].Cells[i].Value != null)
                     {
@@ -12030,7 +12211,14 @@ namespace Ecoview_V2._0
 
                 for (int j = 0; j < Table2.Rows.Count - 1; j++)
                 {
-                    e.Graphics.FillRectangle(Brushes.White, new System.Drawing.Rectangle(width, height, Table2.Columns[0].Width + 5, Table2.Rows[j].Height));
+                    if (Table2.Rows[j].Cells[0].Style.BackColor.Name == "Pink")
+                    {
+                        e.Graphics.FillRectangle(Brushes.Pink, new System.Drawing.Rectangle(width, height, Table2.Columns[0].Width + 10, Table2.Rows[j].Height));
+                    }
+                    else
+                    {
+                        e.Graphics.FillRectangle(Brushes.White, new System.Drawing.Rectangle(width, height, Table2.Columns[0].Width + 10, Table2.Rows[j].Height));
+                    }
                     e.Graphics.DrawRectangle(p, new System.Drawing.Rectangle(width, height, Table2.Columns[0].Width + 5, Table2.Rows[j].Height));
                     e.Graphics.DrawString(Table2.Rows[j].Cells[0].Value.ToString(), new System.Drawing.Font("Times New Roman", 10, FontStyle.Regular), Brushes.Black, new System.Drawing.Rectangle(width + 10, height, Table2.Columns[0].Width + 5, Table2.Rows[j].Height));
                     // width = width + Table2.Columns[0].Width;
@@ -12040,7 +12228,14 @@ namespace Ecoview_V2._0
                 width = width + Table2.Columns[0].Width + 5;
                 for (int j = 0; j < Table2.Rows.Count - 1; j++)
                 {
-                    e.Graphics.FillRectangle(Brushes.White, new System.Drawing.Rectangle(width, height, Table2.Columns[1].Width, Table2.Rows[j].Height));
+                    if (Table2.Rows[j].Cells[1].Style.BackColor.Name == "Pink")
+                    {
+                        e.Graphics.FillRectangle(Brushes.Pink, new System.Drawing.Rectangle(width, height, Table2.Columns[1].Width + 10, Table2.Rows[j].Height));
+                    }
+                    else
+                    {
+                        e.Graphics.FillRectangle(Brushes.White, new System.Drawing.Rectangle(width, height, Table2.Columns[1].Width + 10, Table2.Rows[j].Height));
+                    }
                     e.Graphics.DrawRectangle(p, new System.Drawing.Rectangle(width, height, Table2.Columns[1].Width, Table2.Rows[j].Height));
                     if (Table2.Rows[j].Cells[1].Value != null)
                     {
@@ -12063,7 +12258,15 @@ namespace Ecoview_V2._0
                 {
                     for (int i = 0; i < NoCaIzm1 * 2; i++)
                     {
-                        e.Graphics.FillRectangle(Brushes.White, new System.Drawing.Rectangle(width, height, Table2.Columns[k].Width + 10, Table2.Rows[j].Height));
+                        if (Table2.Rows[j].Cells[k].Style.BackColor.Name == "Pink")
+                        {
+                            e.Graphics.FillRectangle(Brushes.Pink, new System.Drawing.Rectangle(width, height, Table2.Columns[k].Width + 10, Table2.Rows[j].Height));
+                        }
+                        else
+                        {
+                            e.Graphics.FillRectangle(Brushes.White, new System.Drawing.Rectangle(width, height, Table2.Columns[k].Width + 10, Table2.Rows[j].Height));
+                        }
+
                         e.Graphics.DrawRectangle(p, new System.Drawing.Rectangle(width, height, Table2.Columns[k].Width + 10, Table2.Rows[j].Height));
                         if (Table2.Rows[j].Cells[k].Value != null)
                         {
@@ -12107,7 +12310,15 @@ namespace Ecoview_V2._0
                     {
                         for (int i = 0; i < Table2.Columns.Count - NoCaIzm1 * 2 - 2; i++)
                         {
-                            e.Graphics.FillRectangle(Brushes.White, new System.Drawing.Rectangle(width, height, Table2.Columns[k].Width + 10, Table2.Rows[j].Height));
+                            if (Table2.Rows[j].Cells[k].Style.BackColor.Name == "Pink")
+                            {
+                                e.Graphics.FillRectangle(Brushes.Pink, new System.Drawing.Rectangle(width, height, Table2.Columns[k].Width + 10, Table2.Rows[j].Height));
+                            }
+                            else
+                            {
+                                e.Graphics.FillRectangle(Brushes.White, new System.Drawing.Rectangle(width, height, Table2.Columns[k].Width + 10, Table2.Rows[j].Height));
+                            }
+
                             e.Graphics.DrawRectangle(p, new System.Drawing.Rectangle(width, height, Table2.Columns[k].Width + 10, Table2.Rows[j].Height));
                             if (Table2.Rows[j].Cells[k].Value != null)
                             {
@@ -12173,7 +12384,14 @@ namespace Ecoview_V2._0
             k = NoCaIzm1 * 2 + 2;
             for (int j = 0; j < Table2.Rows.Count - 1; j++)
             {
-                e.Graphics.FillRectangle(Brushes.White, new System.Drawing.Rectangle(width, height, Table2.Columns[0].Width + 10, Table2.Rows[j].Height));
+                if (Table2.Rows[j].Cells[0].Style.BackColor.Name == "Pink")
+                {
+                    e.Graphics.FillRectangle(Brushes.Pink, new System.Drawing.Rectangle(width, height, Table2.Columns[0].Width + 10, Table2.Rows[j].Height));
+                }
+                else
+                {
+                    e.Graphics.FillRectangle(Brushes.White, new System.Drawing.Rectangle(width, height, Table2.Columns[0].Width + 10, Table2.Rows[j].Height));
+                }
                 e.Graphics.DrawRectangle(p, new System.Drawing.Rectangle(width, height, Table2.Columns[0].Width + 10, Table2.Rows[j].Height));
                 if (Table2.Rows[j].Cells[0].Value != null)
                 {
@@ -12185,7 +12403,14 @@ namespace Ecoview_V2._0
                 }
                 width = width + Table2.Columns[0].Width + 10;
 
-                e.Graphics.FillRectangle(Brushes.White, new System.Drawing.Rectangle(width, height, Table2.Columns[1].Width + 10, Table2.Rows[j].Height));
+                if (Table2.Rows[j].Cells[1].Style.BackColor.Name == "Pink")
+                {
+                    e.Graphics.FillRectangle(Brushes.Pink, new System.Drawing.Rectangle(width, height, Table2.Columns[1].Width + 10, Table2.Rows[j].Height));
+                }
+                else
+                {
+                    e.Graphics.FillRectangle(Brushes.White, new System.Drawing.Rectangle(width, height, Table2.Columns[1].Width + 10, Table2.Rows[j].Height));
+                }
                 e.Graphics.DrawRectangle(p, new System.Drawing.Rectangle(width, height, Table2.Columns[1].Width + 10, Table2.Rows[j].Height));
                 if (Table2.Rows[j].Cells[1].Value != null)
                 {
@@ -12198,7 +12423,14 @@ namespace Ecoview_V2._0
                 width = width + Table2.Columns[1].Width + 10;
                 for (int i = 0; i < Table2.Columns.Count - NoCaIzm1 * 2 - 2; i++)
                 {
-                    e.Graphics.FillRectangle(Brushes.White, new System.Drawing.Rectangle(width, height, Table2.Columns[k].Width + 10, Table2.Rows[j].Height));
+                    if (Table2.Rows[j].Cells[k].Style.BackColor.Name == "Pink")
+                    {
+                        e.Graphics.FillRectangle(Brushes.Pink, new System.Drawing.Rectangle(width, height, Table2.Columns[k].Width + 10, Table2.Rows[j].Height));
+                    }
+                    else
+                    {
+                        e.Graphics.FillRectangle(Brushes.White, new System.Drawing.Rectangle(width, height, Table2.Columns[k].Width + 10, Table2.Rows[j].Height));
+                    }
                     e.Graphics.DrawRectangle(p, new System.Drawing.Rectangle(width, height, Table2.Columns[k].Width + 10, Table2.Rows[j].Height));
                     if (Table2.Rows[j].Cells[k].Value != null)
                     {
@@ -12256,7 +12488,14 @@ namespace Ecoview_V2._0
 
                 for (int j = 0; j < Table2.Rows.Count - 1; j++)
                 {
-                    e.Graphics.FillRectangle(Brushes.White, new System.Drawing.Rectangle(width, height, Table2.Columns[0].Width + 5, Table2.Rows[j].Height));
+                    if (Table2.Rows[j].Cells[0].Style.BackColor.Name == "Pink")
+                    {
+                        e.Graphics.FillRectangle(Brushes.Pink, new System.Drawing.Rectangle(width, height, Table2.Columns[0].Width + 10, Table2.Rows[j].Height));
+                    }
+                    else
+                    {
+                        e.Graphics.FillRectangle(Brushes.White, new System.Drawing.Rectangle(width, height, Table2.Columns[0].Width + 10, Table2.Rows[j].Height));
+                    }
                     e.Graphics.DrawRectangle(p, new System.Drawing.Rectangle(width, height, Table2.Columns[0].Width + 5, Table2.Rows[j].Height));
                     e.Graphics.DrawString(Table2.Rows[j].Cells[0].Value.ToString(), new System.Drawing.Font("Times New Roman", 10, FontStyle.Regular), Brushes.Black, new System.Drawing.Rectangle(width + 10, height, Table2.Columns[0].Width + 5, Table2.Rows[j].Height));
                     // width = width + Table2.Columns[0].Width;
@@ -12266,7 +12505,14 @@ namespace Ecoview_V2._0
                 width = width + Table2.Columns[0].Width + 5;
                 for (int j = 0; j < Table2.Rows.Count - 1; j++)
                 {
-                    e.Graphics.FillRectangle(Brushes.White, new System.Drawing.Rectangle(width, height, Table2.Columns[1].Width, Table2.Rows[j].Height));
+                    if (Table2.Rows[j].Cells[1].Style.BackColor.Name == "Pink")
+                    {
+                        e.Graphics.FillRectangle(Brushes.Pink, new System.Drawing.Rectangle(width, height, Table2.Columns[1].Width + 10, Table2.Rows[j].Height));
+                    }
+                    else
+                    {
+                        e.Graphics.FillRectangle(Brushes.White, new System.Drawing.Rectangle(width, height, Table2.Columns[1].Width + 10, Table2.Rows[j].Height));
+                    }
                     e.Graphics.DrawRectangle(p, new System.Drawing.Rectangle(width, height, Table2.Columns[1].Width, Table2.Rows[j].Height));
                     if (Table2.Rows[j].Cells[1].Value != null)
                     {
@@ -12289,7 +12535,14 @@ namespace Ecoview_V2._0
                 {
                     for (int i = 0; i < 10; i++)
                     {
-                        e.Graphics.FillRectangle(Brushes.White, new System.Drawing.Rectangle(width, height, Table2.Columns[k].Width + 10, Table2.Rows[j].Height));
+                        if (Table2.Rows[j].Cells[k].Style.BackColor.Name == "Pink")
+                        {
+                            e.Graphics.FillRectangle(Brushes.Pink, new System.Drawing.Rectangle(width, height, Table2.Columns[k].Width + 10, Table2.Rows[j].Height));
+                        }
+                        else
+                        {
+                            e.Graphics.FillRectangle(Brushes.White, new System.Drawing.Rectangle(width, height, Table2.Columns[k].Width + 10, Table2.Rows[j].Height));
+                        }
                         e.Graphics.DrawRectangle(p, new System.Drawing.Rectangle(width, height, Table2.Columns[k].Width + 10, Table2.Rows[j].Height));
                         if (Table2.Rows[j].Cells[k].Value != null)
                         {
@@ -12345,7 +12598,14 @@ namespace Ecoview_V2._0
                     {
                         for (int i = 0; i < NoCaIzm1 * 2 - 10; i++)
                         {
-                            e.Graphics.FillRectangle(Brushes.White, new System.Drawing.Rectangle(width, height, Table2.Columns[k].Width + 10, Table2.Rows[j].Height));
+                            if (Table2.Rows[j].Cells[k].Style.BackColor.Name == "Pink")
+                            {
+                                e.Graphics.FillRectangle(Brushes.Pink, new System.Drawing.Rectangle(width, height, Table2.Columns[k].Width + 10, Table2.Rows[j].Height));
+                            }
+                            else
+                            {
+                                e.Graphics.FillRectangle(Brushes.White, new System.Drawing.Rectangle(width, height, Table2.Columns[k].Width + 10, Table2.Rows[j].Height));
+                            }
                             e.Graphics.DrawRectangle(p, new System.Drawing.Rectangle(width, height, Table2.Columns[k].Width + 10, Table2.Rows[j].Height));
                             if (Table2.Rows[j].Cells[k].Value != null)
                             {
@@ -12371,7 +12631,14 @@ namespace Ecoview_V2._0
                     {
                         for (int i = 0; i < Table2.Columns.Count - NoCaIzm1 * 2 - 2; i++)
                         {
-                            e.Graphics.FillRectangle(Brushes.White, new System.Drawing.Rectangle(width, height, Table2.Columns[k].Width + 10, Table2.Rows[j].Height));
+                            if (Table2.Rows[j].Cells[k].Style.BackColor.Name == "Pink")
+                            {
+                                e.Graphics.FillRectangle(Brushes.Pink, new System.Drawing.Rectangle(width, height, Table2.Columns[k].Width + 10, Table2.Rows[j].Height));
+                            }
+                            else
+                            {
+                                e.Graphics.FillRectangle(Brushes.White, new System.Drawing.Rectangle(width, height, Table2.Columns[k].Width + 10, Table2.Rows[j].Height));
+                            }
                             e.Graphics.DrawRectangle(p, new System.Drawing.Rectangle(width, height, Table2.Columns[k].Width + 10, Table2.Rows[j].Height));
                             if (Table2.Rows[j].Cells[k].Value != null)
                             {
@@ -12440,7 +12707,14 @@ namespace Ecoview_V2._0
             {
                 for (int i = 0; i < NoCaIzm1 * 2 - 10; i++)
                 {
-                    e.Graphics.FillRectangle(Brushes.White, new System.Drawing.Rectangle(width, height, Table2.Columns[k].Width + 10, Table2.Rows[j].Height));
+                    if (Table2.Rows[j].Cells[k].Style.BackColor.Name == "Pink")
+                    {
+                        e.Graphics.FillRectangle(Brushes.Pink, new System.Drawing.Rectangle(width, height, Table2.Columns[k].Width + 10, Table2.Rows[j].Height));
+                    }
+                    else
+                    {
+                        e.Graphics.FillRectangle(Brushes.White, new System.Drawing.Rectangle(width, height, Table2.Columns[k].Width + 10, Table2.Rows[j].Height));
+                    }
                     e.Graphics.DrawRectangle(p, new System.Drawing.Rectangle(width, height, Table2.Columns[k].Width + 10, Table2.Rows[j].Height));
                     if (Table2.Rows[j].Cells[k].Value != null)
                     {
@@ -12466,7 +12740,14 @@ namespace Ecoview_V2._0
             {
                 for (int i = 0; i < Table2.Columns.Count - NoCaIzm1 * 2 - 2; i++)
                 {
-                    e.Graphics.FillRectangle(Brushes.White, new System.Drawing.Rectangle(width, height, Table2.Columns[k].Width + 10, Table2.Rows[j].Height));
+                    if (Table2.Rows[j].Cells[k].Style.BackColor.Name == "Pink")
+                    {
+                        e.Graphics.FillRectangle(Brushes.Pink, new System.Drawing.Rectangle(width, height, Table2.Columns[k].Width + 10, Table2.Rows[j].Height));
+                    }
+                    else
+                    {
+                        e.Graphics.FillRectangle(Brushes.White, new System.Drawing.Rectangle(width, height, Table2.Columns[k].Width + 10, Table2.Rows[j].Height));
+                    }
                     e.Graphics.DrawRectangle(p, new System.Drawing.Rectangle(width, height, Table2.Columns[k].Width + 10, Table2.Rows[j].Height));
                     if (Table2.Rows[j].Cells[k].Value != null)
                     {
@@ -14339,7 +14620,7 @@ namespace Ecoview_V2._0
                     Table2.CurrentCell.Value = string.Format("{0:0.0000}", CellOpt);
                     if(CelloptCopy != CellOpt)
                     {
-                        Table2.CurrentCell.Style.BackColor = System.Drawing.Color.OrangeRed;
+                        Table2.CurrentCell.Style.BackColor = System.Drawing.Color.Pink;
                     }
                     
                     CellOpt = 0;

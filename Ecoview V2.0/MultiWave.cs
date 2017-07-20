@@ -245,8 +245,13 @@ namespace Ecoview_V2._0
                 firstColumn1.HeaderText = "Abs " + _Analis.textBoxCO[i].Text + " нм";
                 firstColumn1.Name = "Abs " + i;
                 firstColumn1.ValueType = Type.GetType("System.Double");
+                firstColumn1.ReadOnly = true;
                 _Analis.dataGridView5.Columns.Add(firstColumn1);
             }
+            _Analis.code = textBox1.Text;
+            _Analis.direction = textBox2.Text;
+            _Analis.DateTime = dateTimePicker1.Value.AddDays(_Analis.Days).ToString("dd.MM.yyyy");
+            _Analis.Ispolnitel = textBox3.Text;
             _Analis.massGEMultiAbs = new double[1][];
             _Analis.massGEMultiT = new double[1][];
             Close();
