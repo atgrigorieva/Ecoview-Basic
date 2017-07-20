@@ -225,8 +225,6 @@
             this.F2Text = new System.Windows.Forms.Label();
             this.F1Text = new System.Windows.Forms.Label();
             this.Table2 = new System.Windows.Forms.DataGridView();
-            this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Obrazec = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Opt_dlin_cuvet = new System.Windows.Forms.ComboBox();
             this.label19 = new System.Windows.Forms.Label();
             this.dateTimePicker2 = new System.Windows.Forms.DateTimePicker();
@@ -278,10 +276,15 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.tabControl2 = new System.Windows.Forms.TabControl();
+            this.tabPage9 = new System.Windows.Forms.TabPage();
+            this.label61 = new System.Windows.Forms.Label();
+            this.label60 = new System.Windows.Forms.Label();
             this.label59 = new System.Windows.Forms.Label();
             this.ScanTablePrint = new System.Drawing.Printing.PrintDocument();
             this.KinTablePrint = new System.Drawing.Printing.PrintDocument();
             this.MultiTablePrint = new System.Drawing.Printing.PrintDocument();
+            this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Obrazec = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Podskazki.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataSet1)).BeginInit();
@@ -322,6 +325,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.tabControl2.SuspendLayout();
+            this.tabPage9.SuspendLayout();
             this.SuspendLayout();
             // 
             // printTable1
@@ -2255,17 +2259,6 @@
             this.Table2.CellParsing += new System.Windows.Forms.DataGridViewCellParsingEventHandler(this.Table2_CellParsing);
             this.Table2.EditingControlShowing += new System.Windows.Forms.DataGridViewEditingControlShowingEventHandler(this.Table2_EditingControlShowing);
             // 
-            // Column1
-            // 
-            this.Column1.HeaderText = "№ Изм";
-            this.Column1.Name = "Column1";
-            this.Column1.Width = 45;
-            // 
-            // Obrazec
-            // 
-            this.Obrazec.HeaderText = "Образец";
-            this.Obrazec.Name = "Obrazec";
-            // 
             // Opt_dlin_cuvet
             // 
             this.Opt_dlin_cuvet.FormattingEnabled = true;
@@ -2487,7 +2480,7 @@
             this.NoCo.HeaderText = "№ CO";
             this.NoCo.Name = "NoCo";
             this.NoCo.ReadOnly = true;
-            this.NoCo.Width = 45;
+            this.NoCo.Width = 40;
             // 
             // Concetr
             // 
@@ -2498,10 +2491,10 @@
             // 
             // Asred
             // 
-            this.Asred.HeaderText = "A среднее";
+            this.Asred.HeaderText = "A сред";
             this.Asred.Name = "Asred";
             this.Asred.ReadOnly = true;
-            this.Asred.Width = 90;
+            this.Asred.Width = 65;
             // 
             // groupBox5
             // 
@@ -2887,12 +2880,45 @@
             this.tabControl2.Controls.Add(this.tabPage6);
             this.tabControl2.Controls.Add(this.tabPage7);
             this.tabControl2.Controls.Add(this.tabPage8);
+            this.tabControl2.Controls.Add(this.tabPage9);
             this.tabControl2.Location = new System.Drawing.Point(32, 108);
             this.tabControl2.Name = "tabControl2";
             this.tabControl2.SelectedIndex = 0;
             this.tabControl2.Size = new System.Drawing.Size(965, 582);
             this.tabControl2.TabIndex = 52;
             this.tabControl2.SelectedIndexChanged += new System.EventHandler(this.tabControl2_SelectedIndexChanged);
+            // 
+            // tabPage9
+            // 
+            this.tabPage9.Controls.Add(this.label61);
+            this.tabPage9.Controls.Add(this.label60);
+            this.tabPage9.Location = new System.Drawing.Point(4, 22);
+            this.tabPage9.Name = "tabPage9";
+            this.tabPage9.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage9.Size = new System.Drawing.Size(957, 556);
+            this.tabPage9.TabIndex = 8;
+            this.tabPage9.Text = "Работа в Excel";
+            this.tabPage9.UseVisualStyleBackColor = true;
+            // 
+            // label61
+            // 
+            this.label61.AutoSize = true;
+            this.label61.Location = new System.Drawing.Point(30, 102);
+            this.label61.Name = "label61";
+            this.label61.Size = new System.Drawing.Size(41, 13);
+            this.label61.TabIndex = 1;
+            this.label61.Text = "label61";
+            this.label61.Visible = false;
+            // 
+            // label60
+            // 
+            this.label60.AutoSize = true;
+            this.label60.Location = new System.Drawing.Point(30, 76);
+            this.label60.Name = "label60";
+            this.label60.Size = new System.Drawing.Size(41, 13);
+            this.label60.TabIndex = 0;
+            this.label60.Text = "label60";
+            this.label60.Visible = false;
             // 
             // label59
             // 
@@ -2917,6 +2943,18 @@
             // MultiTablePrint
             // 
             this.MultiTablePrint.PrintPage += new System.Drawing.Printing.PrintPageEventHandler(this.MultiTablePrint_PrintPage);
+            // 
+            // Column1
+            // 
+            this.Column1.HeaderText = "№ Изм";
+            this.Column1.Name = "Column1";
+            this.Column1.ReadOnly = true;
+            this.Column1.Width = 45;
+            // 
+            // Obrazec
+            // 
+            this.Obrazec.HeaderText = "Образец";
+            this.Obrazec.Name = "Obrazec";
             // 
             // EcoviewStandart1
             // 
@@ -3021,6 +3059,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             this.tabControl2.ResumeLayout(false);
+            this.tabPage9.ResumeLayout(false);
+            this.tabPage9.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -3045,7 +3085,6 @@
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.TextBox GEText;
-        private System.Windows.Forms.Button button12;
         private System.Windows.Forms.PrintPreviewDialog printPreviewTable2;
         public System.Windows.Forms.Button button14;
         public System.Windows.Forms.Button button10;
@@ -3053,7 +3092,6 @@
         private System.Windows.Forms.Button button8;
         private System.Windows.Forms.Button button7;
         private System.Windows.Forms.Button button6;
-        private System.Windows.Forms.Button button5;
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button1;
@@ -3088,13 +3126,11 @@
         private System.Windows.Forms.ToolStripMenuItem файлToolStripMenuItem;
         private System.Windows.Forms.ColorDialog colorDialog1;
         private System.Windows.Forms.MenuStrip menuStrip1;
-        private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Data.DataSet dataSet1;
         private System.ComponentModel.BackgroundWorker backgroundWorker1;
         private System.Windows.Forms.ToolStripMenuItem печатьToolStripMenuItem1;
         public System.Windows.Forms.Button button11;
         public System.Windows.Forms.Label label33;
-        private System.Windows.Forms.Button button13;
         private System.Windows.Forms.PrintPreviewDialog IzmerenieFRprintPreviewTable1;
         private System.Drawing.Printing.PrintDocument IzmerenieFRprintTable1;
         public System.Windows.Forms.Timer timer2;
@@ -3208,8 +3244,6 @@
         public System.Windows.Forms.Label F2Text;
         public System.Windows.Forms.Label F1Text;
         public System.Windows.Forms.DataGridView Table2;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Obrazec;
         public System.Windows.Forms.ComboBox Opt_dlin_cuvet;
         private System.Windows.Forms.Label label19;
         public System.Windows.Forms.DateTimePicker dateTimePicker2;
@@ -3225,9 +3259,6 @@
         private System.Windows.Forms.Label label30;
         private System.Windows.Forms.GroupBox groupBox6;
         public System.Windows.Forms.DataGridView Table1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn NoCo;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Concetr;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Asred;
         private System.Windows.Forms.GroupBox groupBox5;
         private System.Windows.Forms.Label label22;
         private System.Windows.Forms.Label label21;
@@ -3267,5 +3298,17 @@
         private System.Drawing.Printing.PrintDocument ScanTablePrint;
         private System.Drawing.Printing.PrintDocument KinTablePrint;
         private System.Drawing.Printing.PrintDocument MultiTablePrint;
+        public System.Windows.Forms.TabPage tabPage9;
+        public System.Windows.Forms.OpenFileDialog openFileDialog1;
+        public System.Windows.Forms.Label label60;
+        public System.Windows.Forms.Label label61;
+        public System.Windows.Forms.Button button12;
+        public System.Windows.Forms.Button button5;
+        public System.Windows.Forms.Button button13;
+        private System.Windows.Forms.DataGridViewTextBoxColumn NoCo;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Concetr;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Asred;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Obrazec;
     }
 }

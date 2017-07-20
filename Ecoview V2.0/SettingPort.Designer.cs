@@ -73,6 +73,7 @@
             this.Controls.Add(this.comboBox1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "SettingPort";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Выбор порта";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.SettingPort_FormClosed);
             this.Load += new System.EventHandler(this.SettingPort_Load);

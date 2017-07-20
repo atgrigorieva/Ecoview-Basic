@@ -80,6 +80,10 @@
             this.ND = new System.Windows.Forms.TextBox();
             this.label15 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.Direction = new System.Windows.Forms.Label();
+            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.code = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.groupBox5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown4)).BeginInit();
@@ -214,7 +218,7 @@
             // 
             // WL_grad
             // 
-            this.WL_grad.Location = new System.Drawing.Point(108, 234);
+            this.WL_grad.Location = new System.Drawing.Point(108, 268);
             this.WL_grad.Name = "WL_grad";
             this.WL_grad.Size = new System.Drawing.Size(202, 20);
             this.WL_grad.TabIndex = 48;
@@ -225,7 +229,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(12, 237);
+            this.label4.Location = new System.Drawing.Point(12, 271);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(75, 13);
             this.label4.TabIndex = 47;
@@ -391,6 +395,8 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.textBox1);
+            this.groupBox1.Controls.Add(this.Direction);
             this.groupBox1.Controls.Add(this.Ispolnitel);
             this.groupBox1.Controls.Add(this.label6);
             this.groupBox1.Controls.Add(this.numericUpDown1);
@@ -399,7 +405,7 @@
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Location = new System.Drawing.Point(14, 75);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(304, 119);
+            this.groupBox1.Size = new System.Drawing.Size(304, 158);
             this.groupBox1.TabIndex = 46;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Действие";
@@ -428,7 +434,7 @@
             // 
             this.groupBox2.Controls.Add(this.Ed);
             this.groupBox2.Controls.Add(this.label5);
-            this.groupBox2.Location = new System.Drawing.Point(11, 335);
+            this.groupBox2.Location = new System.Drawing.Point(11, 369);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(304, 48);
             this.groupBox2.TabIndex = 49;
@@ -465,7 +471,7 @@
             // 
             // textBox4
             // 
-            this.textBox4.Location = new System.Drawing.Point(773, 419);
+            this.textBox4.Location = new System.Drawing.Point(773, 455);
             this.textBox4.Name = "textBox4";
             this.textBox4.Size = new System.Drawing.Size(100, 20);
             this.textBox4.TabIndex = 63;
@@ -475,7 +481,7 @@
             // label19
             // 
             this.label19.AutoSize = true;
-            this.label19.Location = new System.Drawing.Point(622, 422);
+            this.label19.Location = new System.Drawing.Point(622, 458);
             this.label19.Name = "label19";
             this.label19.Size = new System.Drawing.Size(144, 13);
             this.label19.TabIndex = 62;
@@ -487,7 +493,7 @@
             this.groupBox8.Controls.Add(this.label13);
             this.groupBox8.Controls.Add(this.Up);
             this.groupBox8.Controls.Add(this.Down);
-            this.groupBox8.Location = new System.Drawing.Point(14, 260);
+            this.groupBox8.Location = new System.Drawing.Point(14, 294);
             this.groupBox8.Name = "groupBox8";
             this.groupBox8.Size = new System.Drawing.Size(304, 76);
             this.groupBox8.TabIndex = 59;
@@ -535,9 +541,9 @@
             this.groupBox3.Controls.Add(this.radioButton3);
             this.groupBox3.Controls.Add(this.radioButton2);
             this.groupBox3.Controls.Add(this.radioButton1);
-            this.groupBox3.Location = new System.Drawing.Point(11, 389);
+            this.groupBox3.Location = new System.Drawing.Point(11, 423);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(304, 83);
+            this.groupBox3.Size = new System.Drawing.Size(304, 92);
             this.groupBox3.TabIndex = 50;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Аппроксимация";
@@ -559,7 +565,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(20, 204);
+            this.label1.Location = new System.Drawing.Point(20, 238);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(58, 13);
             this.label1.TabIndex = 53;
@@ -567,7 +573,7 @@
             // 
             // Veshestvo
             // 
-            this.Veshestvo.Location = new System.Drawing.Point(108, 206);
+            this.Veshestvo.Location = new System.Drawing.Point(108, 240);
             this.Veshestvo.Name = "Veshestvo";
             this.Veshestvo.Size = new System.Drawing.Size(202, 20);
             this.Veshestvo.TabIndex = 55;
@@ -647,11 +653,45 @@
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(93, 118);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(203, 20);
+            this.textBox1.TabIndex = 16;
+            // 
+            // Direction
+            // 
+            this.Direction.AutoSize = true;
+            this.Direction.Location = new System.Drawing.Point(6, 121);
+            this.Direction.Name = "Direction";
+            this.Direction.Size = new System.Drawing.Size(78, 13);
+            this.Direction.TabIndex = 15;
+            this.Direction.Text = "Руководитель";
+            // 
+            // textBox2
+            // 
+            this.textBox2.Location = new System.Drawing.Point(618, 424);
+            this.textBox2.Name = "textBox2";
+            this.textBox2.Size = new System.Drawing.Size(255, 20);
+            this.textBox2.TabIndex = 69;
+            // 
+            // code
+            // 
+            this.code.AutoSize = true;
+            this.code.Location = new System.Drawing.Point(615, 405);
+            this.code.Name = "code";
+            this.code.Size = new System.Drawing.Size(251, 13);
+            this.code.TabIndex = 68;
+            this.code.Text = "Идентификационный номер (код) исследования";
+            // 
             // ParametrsGrad
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(921, 494);
+            this.ClientSize = new System.Drawing.Size(921, 525);
+            this.Controls.Add(this.textBox2);
+            this.Controls.Add(this.code);
             this.Controls.Add(this.Cancel);
             this.Controls.Add(this.WL_grad);
             this.Controls.Add(this.label4);
@@ -753,5 +793,9 @@
         private System.Windows.Forms.Label label15;
         public System.Windows.Forms.Button button1;
         public System.Windows.Forms.Button Cancel;
+        public System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.Label Direction;
+        public System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.Label code;
     }
 }

@@ -43,13 +43,17 @@
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
             this.textBox3 = new System.Windows.Forms.TextBox();
+            this.textBox4 = new System.Windows.Forms.TextBox();
+            this.Direction = new System.Windows.Forms.Label();
+            this.textBox5 = new System.Windows.Forms.TextBox();
+            this.code = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(14, 61);
+            this.label1.Location = new System.Drawing.Point(14, 112);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(125, 13);
             this.label1.TabIndex = 0;
@@ -58,7 +62,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(14, 88);
+            this.label2.Location = new System.Drawing.Point(14, 139);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(75, 13);
             this.label2.TabIndex = 1;
@@ -67,7 +71,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(14, 114);
+            this.label3.Location = new System.Drawing.Point(14, 165);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(252, 13);
             this.label3.TabIndex = 2;
@@ -75,9 +79,9 @@
             // 
             // numericUpDown3
             // 
-            this.numericUpDown3.Location = new System.Drawing.Point(324, 59);
+            this.numericUpDown3.Location = new System.Drawing.Point(324, 110);
             this.numericUpDown3.Maximum = new decimal(new int[] {
-            36,
+            26,
             0,
             0,
             0});
@@ -97,7 +101,7 @@
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(324, 111);
+            this.textBox1.Location = new System.Drawing.Point(324, 162);
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(149, 20);
             this.textBox1.TabIndex = 58;
@@ -106,7 +110,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(325, 186);
+            this.button1.Location = new System.Drawing.Point(295, 242);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 59;
@@ -116,7 +120,7 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(191, 186);
+            this.button2.Location = new System.Drawing.Point(161, 242);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 60;
@@ -126,7 +130,7 @@
             // 
             // Walve
             // 
-            this.Walve.Location = new System.Drawing.Point(324, 85);
+            this.Walve.Location = new System.Drawing.Point(324, 136);
             this.Walve.Name = "Walve";
             this.Walve.Size = new System.Drawing.Size(149, 20);
             this.Walve.TabIndex = 61;
@@ -168,7 +172,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(14, 140);
+            this.label6.Location = new System.Drawing.Point(14, 191);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(70, 13);
             this.label6.TabIndex = 66;
@@ -176,16 +180,53 @@
             // 
             // textBox3
             // 
-            this.textBox3.Location = new System.Drawing.Point(324, 137);
+            this.textBox3.Location = new System.Drawing.Point(324, 188);
             this.textBox3.Name = "textBox3";
             this.textBox3.Size = new System.Drawing.Size(149, 20);
             this.textBox3.TabIndex = 67;
+            // 
+            // textBox4
+            // 
+            this.textBox4.Location = new System.Drawing.Point(324, 59);
+            this.textBox4.Name = "textBox4";
+            this.textBox4.Size = new System.Drawing.Size(150, 20);
+            this.textBox4.TabIndex = 69;
+            this.textBox4.TextChanged += new System.EventHandler(this.textBox4_TextChanged);
+            // 
+            // Direction
+            // 
+            this.Direction.AutoSize = true;
+            this.Direction.Location = new System.Drawing.Point(14, 62);
+            this.Direction.Name = "Direction";
+            this.Direction.Size = new System.Drawing.Size(78, 13);
+            this.Direction.TabIndex = 68;
+            this.Direction.Text = "Руководитель";
+            // 
+            // textBox5
+            // 
+            this.textBox5.Location = new System.Drawing.Point(324, 85);
+            this.textBox5.Name = "textBox5";
+            this.textBox5.Size = new System.Drawing.Size(150, 20);
+            this.textBox5.TabIndex = 71;
+            // 
+            // code
+            // 
+            this.code.AutoSize = true;
+            this.code.Location = new System.Drawing.Point(14, 88);
+            this.code.Name = "code";
+            this.code.Size = new System.Drawing.Size(251, 13);
+            this.code.TabIndex = 70;
+            this.code.Text = "Идентификационный номер (код) исследования";
             // 
             // IzmerenieFR
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(502, 264);
+            this.ClientSize = new System.Drawing.Size(502, 287);
+            this.Controls.Add(this.textBox5);
+            this.Controls.Add(this.code);
+            this.Controls.Add(this.textBox4);
+            this.Controls.Add(this.Direction);
             this.Controls.Add(this.textBox3);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.textBox2);
@@ -203,7 +244,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "IzmerenieFR";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Измерение ФР";
+            this.Text = "Настройки Фотометрического режима";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.IzmerenieFR_FormClosing);
             this.Load += new System.EventHandler(this.IzmerenieFR_Load);
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).EndInit();
@@ -228,5 +269,9 @@
         private System.Windows.Forms.TextBox textBox2;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.TextBox textBox3;
+        public System.Windows.Forms.TextBox textBox4;
+        private System.Windows.Forms.Label Direction;
+        public System.Windows.Forms.TextBox textBox5;
+        private System.Windows.Forms.Label code;
     }
 }

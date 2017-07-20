@@ -45,6 +45,12 @@ namespace Ecoview_V2._0
             string Poveren_Text = @"pribor/Poveren";
             var Poveren_Text_var = Path.Combine(applicationDirectory, Poveren_Text);
 
+            string address_lab_Text = @"pribor/address_lab";
+            var address_lab_var = Path.Combine(applicationDirectory, address_lab_Text);
+
+            string name_lab_Text = @"pribor/name_lab";
+            var name_lab_var = Path.Combine(applicationDirectory, name_lab_Text);
+
             StreamReader fs = new StreamReader(model_var);
             string model1;
             model1 = fs.ReadLine();
@@ -86,7 +92,13 @@ namespace Ecoview_V2._0
             dateTimePicker1.Text = fs4.ReadLine();
             fs4.Close();
 
+            StreamReader fs5 = new StreamReader(address_lab_var);
+            textBox5.Text = fs5.ReadLine();
+            fs5.Close();
 
+            StreamReader fs6 = new StreamReader(name_lab_var);
+            textBox4.Text = fs6.ReadLine();
+            fs6.Close();
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -118,6 +130,13 @@ namespace Ecoview_V2._0
             string Poveren_Text = @"pribor/Poveren";
             var Poveren_Text_var = Path.Combine(applicationDirectory, Poveren_Text);
 
+
+            string address_lab_Text = @"pribor/address_lab";
+            var address_lab_var = Path.Combine(applicationDirectory, address_lab_Text);
+
+            string name_lab_Text = @"pribor/name_lab";
+            var name_lab_var = Path.Combine(applicationDirectory, name_lab_Text);
+
             File.WriteAllText(SerNomer_Text_var, string.Empty);
             File.AppendAllText(SerNomer_Text_var, textBox1.Text, Encoding.UTF8);
             File.WriteAllText(InventarNomer_Text_var, string.Empty);
@@ -126,6 +145,13 @@ namespace Ecoview_V2._0
             File.AppendAllText(SrokIstech_Text_var, textBox3.Text, Encoding.UTF8);
             File.WriteAllText(Poveren_Text_var, string.Empty);
             File.AppendAllText(Poveren_Text_var, dateTimePicker1.Value.ToString("dd.MM.yyyy"), Encoding.UTF8);
+            File.WriteAllText(address_lab_var, string.Empty);
+            File.AppendAllText(address_lab_var, textBox5.Text, Encoding.UTF8);
+            File.WriteAllText(name_lab_var, string.Empty);
+            File.AppendAllText(name_lab_var, textBox4.Text, Encoding.UTF8);
+
+            _Analis.address_lab = textBox5.Text;
+            _Analis.name_lab = textBox4.Text;
             Close();
         }
 

@@ -76,7 +76,7 @@
             this.MinimizeBox = false;
             this.Name = "InputBox";
             this.ShowIcon = false;
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Введите число";
             this.Load += new System.EventHandler(this.InputBox_Load);
             this.ResumeLayout(false);

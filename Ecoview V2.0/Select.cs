@@ -40,6 +40,7 @@ namespace Ecoview_V2._0
                 _Analis.tabControl2.TabPages.Remove(_Analis.tabPage6);
                 _Analis.tabControl2.TabPages.Remove(_Analis.tabPage7);
                 _Analis.tabControl2.TabPages.Remove(_Analis.tabPage8);
+                _Analis.tabControl2.TabPages.Remove(_Analis.tabPage9);
                 _Analis.Ecoview_Header = "Eciview Normal v1.0 Фотометрический режим";
                 _Analis.tabControl2.SelectedIndex = 2;
                 _Analis.tabControl2.SelectTab(_Analis.tabPage1);
@@ -57,9 +58,11 @@ namespace Ecoview_V2._0
                     _Analis.tabControl2.TabPages.Remove(_Analis.tabPage6);
                     _Analis.tabControl2.TabPages.Remove(_Analis.tabPage7);
                     _Analis.tabControl2.TabPages.Remove(_Analis.tabPage8);
+                    _Analis.tabControl2.TabPages.Remove(_Analis.tabPage9);
                     _Analis.Ecoview_Header = "Eciview Normal v1.0 Количественный режим";
                     _Analis.tabControl2.SelectedIndex = 0;
                     _Analis.tabControl2.SelectTab(_Analis.tabPage3);
+                    _Analis.button13.Enabled = false;
                     _Analis.selet_rezim = 2;
                 }
                 else
@@ -73,8 +76,10 @@ namespace Ecoview_V2._0
                         _Analis.tabControl2.TabPages.Remove(_Analis.tabPage6);
                         _Analis.tabControl2.TabPages.Remove(_Analis.tabPage7);
                         _Analis.tabControl2.TabPages.Remove(_Analis.tabPage8);
+                        _Analis.tabControl2.TabPages.Remove(_Analis.tabPage9);
                         _Analis.Ecoview_Header = "Eciview Normal v1.0 Многоволновой режим";
                         _Analis.tabControl2.SelectedIndex = 3;
+                        _Analis.button13.Enabled = false;
                         _Analis.tabControl2.SelectTab(_Analis.tabPage2);
                         _Analis.selet_rezim = 3;
                     }
@@ -89,17 +94,38 @@ namespace Ecoview_V2._0
                             _Analis.tabControl2.TabPages.Remove(_Analis.tabPage6);
                             _Analis.tabControl2.TabPages.Remove(_Analis.tabPage7);
                             _Analis.tabControl2.TabPages.Remove(_Analis.tabPage8);
+                            _Analis.tabControl2.TabPages.Remove(_Analis.tabPage9);
                             _Analis.Ecoview_Header = "Eciview Normal v1.0 Кинетический режим";
                             _Analis.tabControl2.SelectedIndex = 4;
+                            _Analis.button13.Enabled = false;
                             _Analis.tabControl2.SelectTab(_Analis.tabPage5);
                             _Analis.selet_rezim = 4;
+                        }
+                        else
+                        {
+                            if(radioButton5.Checked == true)
+                            {
+                                _Analis.tabControl2.TabPages.Remove(_Analis.tabPage3);
+                                _Analis.tabControl2.TabPages.Remove(_Analis.tabPage4);
+                                _Analis.tabControl2.TabPages.Remove(_Analis.tabPage5);
+                                _Analis.tabControl2.TabPages.Remove(_Analis.tabPage2);
+                                _Analis.tabControl2.TabPages.Remove(_Analis.tabPage1);
+                                _Analis.tabControl2.TabPages.Remove(_Analis.tabPage6);
+                                _Analis.tabControl2.TabPages.Remove(_Analis.tabPage7);
+                                _Analis.tabControl2.TabPages.Remove(_Analis.tabPage8);
+                                _Analis.Ecoview_Header = "Eciview Normal v1.0 Работа в Excel";
+                                _Analis.tabControl2.SelectedIndex = 9;
+                                
+                                _Analis.tabControl2.SelectTab(_Analis.tabPage9);
+                                _Analis.selet_rezim = 9;
+                            }
                         }
                         
                     }
                 }
             }
             _Analis.Podskazka.Text = "Подключите прибор!";
-            _Analis.label27.Visible = false;
+            _Analis.label27.Visible = false;            
             _Analis.label24.Visible = true;
             _Analis.label25.Visible = false;
             _Analis.label26.Visible = false;

@@ -38,6 +38,7 @@ namespace Ecoview_V2._0
             SW();
             _Analis.SAGE(ref _Analis.countSA, ref _Analis.GE5_1_0);
             form_close = true;
+            _Analis.label60.Text = "Длина волны для измерения " + _Analis.GWNew.Text;
             Close();
         }
         public void SW()
@@ -63,6 +64,7 @@ namespace Ecoview_V2._0
                     indata = _Analis.newPort.ReadExisting();
                 }
             }
+            Walve.Text = Walve.Text.Replace(".", ",");
             _Analis.GWNew.Text = string.Format("{0:0.0}", Convert.ToDouble(Walve.Text));
             _Analis.GWNew.Text = _Analis.GWNew.Text.Replace(",", ".");
             SWF.Application.OpenForms["LogoFrm"].Close();
@@ -95,7 +97,7 @@ namespace Ecoview_V2._0
             if ((e.KeyChar <= 42 || e.KeyChar >= 58 || e.KeyChar == 43 || e.KeyChar <= 45 || e.KeyChar == 47) && number != 8 && number != 44) //цифры, клавиша BackSpace и запятая а ASCII
             {
                 e.Handled = true;
-                MessageBox.Show("В данное поле можно вводить цифры, знаки '.'");
+                MessageBox.Show("В данное поле можно вводить цифры, знаки ','");
             }
         }
         private void Walve_Leave(object sender, EventArgs e)

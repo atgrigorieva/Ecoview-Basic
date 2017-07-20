@@ -50,6 +50,13 @@ namespace Ecoview_V2._0
             _Analis.DateTime = dateTimePicker1.Value.Date.ToString("dd.MM.yyyy");
             _Analis.Ispolnitel = textBox2.Text;
             _Analis.Description = textBox3.Text;
+            _Analis.direction = textBox4.Text;
+            _Analis.code = textBox5.Text;
+
+            _Analis.label26.Visible = false;
+            _Analis.label25.Visible = false;
+            _Analis.label59.Visible = true;
+            _Analis.Podskazka.Text = "Измерьте 0 Asb/100%T";
             //  _Analis.button10.Enabled = true;
             Close();
         }
@@ -198,6 +205,11 @@ namespace Ecoview_V2._0
         }
 
         private void IzmerenieFR_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox4_TextChanged(object sender, EventArgs e)
         {
 
         }

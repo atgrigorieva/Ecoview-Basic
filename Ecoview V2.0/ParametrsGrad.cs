@@ -716,6 +716,8 @@ namespace Ecoview_V2._0
                             break;
                         _Analis.Table1.Columns.RemoveAt(i);
                     }
+                    _Analis.direction = textBox1.Text;
+                    _Analis.code = textBox2.Text;
                     Close();
                 }
             }

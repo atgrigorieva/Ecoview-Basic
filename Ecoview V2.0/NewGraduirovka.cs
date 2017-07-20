@@ -51,6 +51,8 @@ namespace Ecoview_V2._0
               //  USE_KO.Checked = false;
             }
             //_Analis.SposobZadan = "По СО";
+            textBox1.Text = _Analis.direction;
+            textBox2.Text = _Analis.code;
             var height = 22;
                 var labelx = 6;
                 for (int i = 0; i <= 9; i++)
@@ -858,7 +860,9 @@ namespace Ecoview_V2._0
                         {
                             _Analis.button14.Enabled = false;
                         }
-                        Close();
+                    _Analis.direction = textBox1.Text;
+                    _Analis.code = textBox2.Text;
+                    Close();
 
                     }
                 }

@@ -149,6 +149,12 @@
       <DependentUpon>Ecoview.cs</DependentUpon>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
+    <Compile Include="ExcelResim.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ExcelResim.Designer.cs">
+      <DependentUpon>ExcelResim.cs</DependentUpon>
+    </Compile>
     <Compile Include="FotometrScan.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -254,6 +260,9 @@
       <DependentUpon>Ecoview.cs</DependentUpon>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
+    <EmbeddedResource Include="ExcelResim.resx">
+      <DependentUpon>ExcelResim.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FotometrScan.resx">
       <DependentUpon>FotometrScan.cs</DependentUpon>
     </EmbeddedResource>
@@ -357,6 +366,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Analys200.ico" />
+    <None Include="Resources\point2.jpg" />
+    <None Include="Resources\point1.jpg" />
+    <None Include="Resources\point.jpg" />
     <None Include="Resources\LOGO_ECOVIEW1.jpg" />
     <None Include="Resources\LOGO_ECOVIEW.jpg" />
     <None Include="Resources\AT_btn.bmp" />

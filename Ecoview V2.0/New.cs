@@ -35,7 +35,8 @@ namespace Ecoview_V2._0
             //  MessageBox.Show(index.ToString());
             Opt_dlin_cuvet.SelectedIndex = index;
 
-
+            label23.Text = _Analis.code;
+            label22.Text = _Analis.direction;
             Description.Text = _Analis.Description;
             Sozdana.Text = _Analis.DateTime;
             Zavisimost.Text = _Analis.Zavisimoct;
@@ -269,6 +270,11 @@ namespace Ecoview_V2._0
         private void Cancel_Click(object sender, EventArgs e)
         {
             Close();
+        }
+
+        private void dateTimePicker1_ValueChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }
