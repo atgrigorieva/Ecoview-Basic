@@ -48,5 +48,23 @@ namespace Ecoview_V2._0
                 MessageBox.Show("Print Error: " + ex.Message);
             }
         }
+
+        private void InitializeComponent()
+        {
+            this.SuspendLayout();
+            // 
+            // PrintPreviewDialogSelectPrinter
+            // 
+            this.ClientSize = new System.Drawing.Size(400, 300);
+            this.Name = "PrintPreviewDialogSelectPrinter";
+            this.Load += new System.EventHandler(this.PrintPreviewDialogSelectPrinter_Load);
+            this.ResumeLayout(false);
+
+        }
+
+        private void PrintPreviewDialogSelectPrinter_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

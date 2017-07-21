@@ -90,8 +90,12 @@ namespace Ecoview_V2._0
                       Convert.ToInt32(_Analis.start), Convert.ToInt32(_Analis.interval));*/
                 _Analis.timer2.Interval = Convert.ToInt32(_Analis.interval*1000); // 500 миллисекунд
                 _Analis.timer2.Enabled = false;
-                
-               // button1.Click += button1_Click;
+
+                _Analis.code = textBox7.Text;
+                _Analis.direction = textBox6.Text;
+                _Analis.DateTime = dateTimePicker1.Value.AddDays(_Analis.Days).ToString("dd.MM.yyyy");
+                _Analis.Ispolnitel = textBox5.Text;
+                // button1.Click += button1_Click;
                 _Analis.timer2.Tick += _Analis.TableKinetica;
                // _Analis.timer2.Start();
                 Close();

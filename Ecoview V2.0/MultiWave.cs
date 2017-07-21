@@ -42,7 +42,7 @@ namespace Ecoview_V2._0
             {
                 var label = new Label();
                 label.Name = "WLlabel" + i++.ToString();
-                label.Text = "ВЛ " + i-- + " =";
+                label.Text = "ДВ " + i-- + " =";
                 label.Width = 85;
                 label.Location = new Point(labelx, height);
                 height += label.Height+10;
@@ -73,7 +73,7 @@ namespace Ecoview_V2._0
             {
                 var label = new Label();
                 label.Name = "WLlabel" + i++.ToString();
-                label.Text = "ВЛ " + i-- + " =";
+                label.Text = "ДВ " + i-- + " =";
                 label.Width = 85;
                 label.Location = new Point(labelx1, height2);
                 height2 += label.Height+10;

@@ -301,6 +301,9 @@
       <DependentUpon>PriborInformation.cs</DependentUpon>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
+    <EmbeddedResource Include="PrintPreviewDialogSelectPrinter.resx">
+      <DependentUpon>PrintPreviewDialogSelectPrinter.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <SubType>Designer</SubType>

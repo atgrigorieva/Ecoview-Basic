@@ -1677,7 +1677,7 @@ namespace Ecoview_V2._0
         {
             TableKinetica1.Rows.Add();
         }
-        int timeLeft;
+        double timeLeft;
         public void TableKinetica(object sender, EventArgs e)
         {
             //  int x = (int)obj;
@@ -1686,8 +1686,9 @@ namespace Ecoview_V2._0
 
             // timeLeft = timeLeft - Convert.ToInt32(interval * 1000);
             // label56.Text = Convert.ToString(timeLeft);
-            timeLeft = timeLeft - Convert.ToInt32(interval);
-            label56.Text = Convert.ToString(timeLeft);
+
+            label56.Text = string.Format("{0:0.0}", timeLeft);
+            timeLeft = timeLeft - Convert.ToDouble(interval);
             Application.DoEvents();
             //  MessageBox.Show("Интервал: " + interval*1000);
             TableKinetica1.Rows.Add();
@@ -1815,7 +1816,7 @@ namespace Ecoview_V2._0
             //del = GoodMorning;
 
 
-            if (timeLeft < 0)
+            if (timeLeft == 0.0)
             {
                 timer2.Enabled = false;
                 timer2.Stop();
@@ -1826,6 +1827,8 @@ namespace Ecoview_V2._0
                 label27.Visible = true;
                 Podskazka.Text = "Сохраните градуировку!";
                 button1.Enabled = true;
+                label56.Text = "00";
+                countscan = 0;
 
             }
 
@@ -2721,6 +2724,31 @@ namespace Ecoview_V2._0
                                     }
                                     chart3.ChartAreas[0].AxisX.Title = TableKinetica1.Columns[0].HeaderText;
                                     chart3.ChartAreas[0].AxisY.Title = TableKinetica1.Columns[1].HeaderText;
+                                }
+
+                                if ("Direction".Equals(k.Name) && k.FirstChild != null)
+                                {
+                                    direction = k.FirstChild.Value;
+                                }
+                                if ("Code".Equals(k.Name) && k.FirstChild != null)
+                                {
+                                    code = k.FirstChild.Value;
+                                }
+                                if ("Address".Equals(k.Name) && k.FirstChild != null)
+                                {
+                                    address_lab = k.FirstChild.Value;
+                                }
+                                if ("NameLab".Equals(k.Name) && k.FirstChild != null)
+                                {
+                                    name_lab = k.FirstChild.Value;
+                                }
+                                if ("DateTime".Equals(k.Name) && k.FirstChild != null)
+                                {
+                                    DateTime = k.FirstChild.Value;
+                                }
+                                if ("Ispolnitel".Equals(k.Name) && k.FirstChild != null)
+                                {
+                                    Ispolnitel = k.FirstChild.Value;
                                 }
                             }
                         }
@@ -7323,6 +7351,31 @@ namespace Ecoview_V2._0
             TypeIzmer.InnerText = TableKinetica1.Columns[1].HeaderText;
             Izmerenie.AppendChild(TypeIzmer);
 
+            XmlNode Direction = xd.CreateElement("Direction"); // Примечание
+            Direction.InnerText = direction; // и значение
+            Izmerenie.AppendChild(Direction); // и указываем кому принадлежит
+
+
+            XmlNode Code = xd.CreateElement("Code"); // Примечание
+            Code.InnerText = code; // и значение
+            Izmerenie.AppendChild(Code); // и указываем кому принадлежит
+
+            XmlNode Address = xd.CreateElement("Address"); // Примечание
+            Address.InnerText = address_lab; // и значение
+            Izmerenie.AppendChild(Address); // и указываем кому принадлежит
+
+            XmlNode NameLab = xd.CreateElement("NameLab"); // Примечание
+            NameLab.InnerText = name_lab; // и значение
+            Izmerenie.AppendChild(NameLab); // и указываем кому принадлежит
+
+
+            XmlNode DateTime1 = xd.CreateElement("DateTime"); // дата создания градуировки
+            DateTime1.InnerText = DateTime; // и значение
+            Izmerenie.AppendChild(DateTime1); // и указываем кому принадлежит
+
+            XmlNode Ispolnitel1 = xd.CreateElement("Ispolnitel"); // Примечание
+            Ispolnitel1.InnerText = Ispolnitel; // и значение
+            Izmerenie.AppendChild(Ispolnitel1); // и указываем кому принадлежит
             xd.DocumentElement.AppendChild(Izmerenie);
 
             XmlNode NumberIzmer = xd.CreateElement("NumberIzmer");
@@ -9762,6 +9815,7 @@ namespace Ecoview_V2._0
                 PrintPreviewDialogSelectPrinter printPreviewDialogSelectPrinter = new PrintPreviewDialogSelectPrinter();
                 printPreviewDialogSelectPrinter.Document = MultiTablePrint;
                 printPreviewDialogSelectPrinter.ShowDialog();
+                
             }
         }
         public void PrintDoc()
@@ -9800,7 +9854,7 @@ namespace Ecoview_V2._0
         }
         private int pagesCount;
         //  PaperSize paperSize = new PaperSize("papersize", 2100, 5);
-        int prinPage = 0;
+        public int prinPage = 0;
         int strcountScan = 0;
         int realwidth = 0;
         int realheight = 0;
@@ -9958,20 +10012,20 @@ namespace Ecoview_V2._0
                 e.Graphics.DrawString("Идентификационный номер (код) исследования:", new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, 25, height);
                 e.Graphics.DrawString(code, new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, 400, height);
 
-                height = height + 35;
+                height = height + 20;
 
                 e.Graphics.DrawString("Лаборатория:", new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, 25, height);
                 e.Graphics.DrawString(name_lab, new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, 140, height);
-                height = height + 35;
+                height = height + 20;
 
                 e.Graphics.DrawString("Адрес лаборатории:", new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, 25, height);
                 e.Graphics.DrawString(address_lab, new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, 195, height);
-                height = height + 35;
+                height = height + 20;
 
                 e.Graphics.DrawString("Таблица сканирования\n\n",
                 new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, 25, height);
                 realwidth = dataGridView5.Columns[0].Width + 5;
-                realheight = height + 35;
+                realheight = height + 30;
                 width = 100;
                 height1 = dataGridView5.Rows[0].Height + 5;
                 if (dataGridView5.ColumnCount < 7)
@@ -9982,36 +10036,88 @@ namespace Ecoview_V2._0
                 {
                     if(dataGridView5.ColumnCount >= 7 || dataGridView5.ColumnCount <= 22)
                     {
-                        printdatagridview5_1(sender, e);
+                       printdatagridview5_1(sender, e);
                     }
                     else
                     {
-                        printdatagridview5_2(sender, e);
+                       // printdatagridview5_2(sender, e);
                     }
                 }
                 
             }
             else
             {
+                height = 50;
+
+                e.Graphics.DrawString("Идентификационный номер (код) исследования:", new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, 25, height);
+                e.Graphics.DrawString(code, new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, 400, height);
+
+                height = height + 10;
                 realwidth = dataGridView5.Columns[0].Width + 5;
-                realheight = 35;
+                realheight = height;
                 width = 100;
                 height1 = dataGridView5.Rows[0].Height + 5;
                 if (dataGridView5.ColumnCount >= 7 || dataGridView5.ColumnCount <= 22)
                 {
-                    printdatagridview5_1(sender, e);
+                    
+                    if (prinPage > 1) {
+                        if (prinPage == 2 && dataGridView5.ColumnCount <= 17 && dataGridView5.Rows.Count > 22)
+                        {
+                            PrintDatagridview5PageAdd2(sender, e);
+                        }
+                        else
+                        {
+                            if (dataGridView5.ColumnCount > 17 && dataGridView5.Rows.Count < 22)
+                            {
+                                PrintDatagridview5PageAdd3(sender, e);
+                               // PrintMultiCancel(sender, e);
+                            }
+                            else {
+
+                                if (dataGridView5.ColumnCount > 17 && dataGridView5.Rows.Count > 22)
+                                {
+                                    if(prinPage == 2)
+                                    {
+                                        PrintDatagridview5PageAdd4(sender, e);
+                                    }
+
+                                    else
+                                    {
+                                        PrintDatagridview5PageAdd3(sender, e);
+                                    }
+                                    
+                                       // PrintMultiCancel(sender, e);
+                                                                        
+
+                                }
+                            }
+                        }
+                        //PrintMultiCancel(sender, e);
+                    }
+                    else
+                    {
+                        PrintDatagridview5PageAdd(sender, e);
+                        if (dataGridView5.ColumnCount <= 17|| dataGridView5.Rows.Count < 22)
+                        { 
+                            PrintMultiCancel(sender, e);
+                        }
+                        
+                        
+
+                    }
                 }
                 else
                 {
-                    printdatagridview5_2(sender, e);
+                    PrintMultiCancel(sender, e);
                 }
                 
             }
             
+           
         }
         public void PrintMultiCancel(object sender, PrintPageEventArgs e)
         {
-            realheight += 20;
+            realheight += 30;
             e.Graphics.DrawString("Дата:", new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, 25, realheight);
             e.Graphics.DrawString(DateTime, new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, 85, realheight);
             e.Graphics.DrawString("Время начала:", new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, 180, realheight);
@@ -10023,6 +10129,13 @@ namespace Ecoview_V2._0
             e.Graphics.DrawString(" _______________________ /   " + Ispolnitel, new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, 160, realheight + 30);
             e.Graphics.DrawString("Руководитель:", new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, 25, realheight + 60);
             e.Graphics.DrawString(" _______________________ /   " + direction, new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, 160, realheight + 60);
+            if (prinPage > 0)
+            {
+                e.Graphics.DrawString("Страница " + (prinPage + 1), new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, 300, 1100);
+            }
+
+            prinPage = 0;
+            strcountScan = 0;
         }
         public void printdatagridview5_2(object sender, PrintPageEventArgs e)
         {
@@ -10041,13 +10154,12 @@ namespace Ecoview_V2._0
         int p = 1;
         public void printdatagridview5_1(object sender, PrintPageEventArgs e)
         {
-            if (prinPage == 0)
+            if (prinPage < 1)
             {
-                //case 0:
                 int k = 7;
                 for (int z = 0; z < k; z++)
                 {
-                    e.Graphics.FillRectangle(Brushes.AliceBlue, realwidth, realheight, width, height1);
+                    e.Graphics.FillRectangle(Brushes.White, realwidth, realheight, width, height1);
                     e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
                     e.Graphics.DrawString(dataGridView5.Columns[z].HeaderText, new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, realwidth, realheight);
                     realwidth = realwidth + width;
@@ -10058,7 +10170,7 @@ namespace Ecoview_V2._0
                 {
                     for (int j = 0; j < k; j++)
                     {
-                        e.Graphics.FillRectangle(Brushes.AliceBlue, realwidth, realheight, width, height1);
+                        e.Graphics.FillRectangle(Brushes.White, realwidth, realheight, width, height1);
                         e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
                         e.Graphics.DrawString(dataGridView5.Rows[strcountScan].Cells[j].Value.ToString(), new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, realwidth, realheight);
                         realwidth = realwidth + width;
@@ -10075,6 +10187,7 @@ namespace Ecoview_V2._0
                         prinPage++;
                         pageyes = true;
                         strcountScan++;
+                        e.Graphics.DrawString("Страница " + prinPage, new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, 300, 1100);
                         return;
                     }
                     else
@@ -10084,405 +10197,29 @@ namespace Ecoview_V2._0
                     }
                     strcountScan++;
                 }
-                
-                if (dataGridView5.ColumnCount - k <= 14)
+                if (dataGridView5.Rows.Count < 20)
                 {
-                    strcountScan = 0;
-                    pageyes2_1 = true;
-                    pageyes = true;
-                    realwidth = dataGridView5.Columns[0].Width + 5;
-                    realheight = realheight + 35;
-                    width = 100;
-                    height1 = dataGridView5.Rows[0].Height + 5;
-
-                    for (int z = dataGridView5.ColumnCount - k; z < k; z++)
+                    if (dataGridView5.ColumnCount - k <= 5)
                     {
-                        e.Graphics.FillRectangle(Brushes.AliceBlue, realwidth, realheight, width, height1);
-                        e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
-                        e.Graphics.DrawString(dataGridView5.Columns[z].HeaderText, new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, realwidth, realheight);
-                        realwidth = realwidth + width;
-                    }
-                    realwidth = dataGridView5.Columns[0].Width + 5;
-                    realheight = realheight + 20;
-                    while (strcountScan < dataGridView5.Rows.Count - 1)
-                    {
-                        for (int j = dataGridView5.ColumnCount - k; j < k; j++)
-                        {
-                            e.Graphics.FillRectangle(Brushes.AliceBlue, realwidth, realheight, width, height1);
-                            e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
-                            e.Graphics.DrawString(dataGridView5.Rows[strcountScan].Cells[j].Value.ToString(), new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, realwidth, realheight);
-                            realwidth = realwidth + width;
-
-                        }
-                        realwidth = dataGridView5.Columns[0].Width + 5;
-                        realheight = realheight + 20;
-
-                        if (realheight > e.MarginBounds.Height)
-                        {
-                            height = 100;
-                            e.HasMorePages = true;
-                            //   strcountScan++;
-                            prinPage++;
-                            pageyes_1 = true;
-                            strcountScan++;
-                            return;
-                        }
-                        else
-                        {
-                            e.HasMorePages = false;
-
-                        }
-                        strcountScan++;
-                    }
-
-                }
-                else {
-                    pageyes2_1 = true;
-                    pageyes = true;
-                    pageyes_1 = true;
-                    strcountScan = 0;
-                    realwidth = dataGridView5.Columns[0].Width + 5;
-                    realheight = realheight + 35;
-                    width = 100;
-                    height1 = dataGridView5.Rows[0].Height + 5;
-
-                    int kk = 14;
-                    for (int z = k; z < kk; z++)
-                    {
-                        e.Graphics.FillRectangle(Brushes.AliceBlue, realwidth, realheight, width, height1);
-                        e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
-                        e.Graphics.DrawString(dataGridView5.Columns[z].HeaderText, new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, realwidth, realheight);
-                        realwidth = realwidth + width;
-                    }
-                    realwidth = dataGridView5.Columns[0].Width + 5;
-                    realheight = realheight + 20;
-
-                    while (strcountScan < dataGridView5.Rows.Count - 1)
-                    {
-                        for (int j = k; j < kk; j++)
-                        {
-                            e.Graphics.FillRectangle(Brushes.AliceBlue, realwidth, realheight, width, height1);
-                            e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
-                            e.Graphics.DrawString(dataGridView5.Rows[strcountScan].Cells[j].Value.ToString(), new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, realwidth, realheight);
-                            realwidth = realwidth + width;
-
-                        }
-                        realwidth = dataGridView5.Columns[0].Width + 5;
-                        realheight = realheight + 20;
-
-                        if (realheight > e.MarginBounds.Height)
-                        {
-                            height = 100;
-                            e.HasMorePages = true;
-                            //   strcountScan++;
-                            prinPage++;
-                            pageyes1 = true;
-                            strcountScan++;
-                            return;
-                        }
-                        else
-                        {
-                            e.HasMorePages = false;
-
-                        }
-                        strcountScan++;
-                    }
-                    realwidth = dataGridView5.Columns[0].Width + 5;
-                    realheight = realheight + 40;
-                    width = 100;
-                    height1 = dataGridView5.Rows[0].Height + 5;
-                    for (int z = kk; z < dataGridView5.ColumnCount - 1; z++)
-                    {
-                        e.Graphics.FillRectangle(Brushes.AliceBlue, realwidth, realheight, width, height1);
-                        e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
-                        e.Graphics.DrawString(dataGridView5.Columns[z].HeaderText, new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, realwidth, realheight);
-                        realwidth = realwidth + width;
-                    }
-                    realwidth = dataGridView5.Columns[0].Width + 5;
-                    realheight = realheight + 20;
-                    int km = 0;
-                    if (dataGridView5.ColumnCount == 22)
-                    {
-                        km = 21;
-                    }
-                    else
-                    {
-                        km = dataGridView5.ColumnCount;
-                    }
-                    pageyes = true;
-                    pageyes1 = true;
-                    pageyes_1 = true;
-                    pageyes2_3 = true;
-                    strcountScan = 0;
-                    while (strcountScan < dataGridView5.Rows.Count - 1)
-                    {
-                        for (int j = kk; j < km; j++)
-                        {
-                            e.Graphics.FillRectangle(Brushes.AliceBlue, realwidth, realheight, width, height1);
-                            e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
-                            e.Graphics.DrawString(dataGridView5.Rows[strcountScan].Cells[j].Value.ToString(), new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, realwidth, realheight);
-                            realwidth = realwidth + width;
-
-                        }
-                        realwidth = dataGridView5.Columns[0].Width + 5;
-                        realheight = realheight + 20;
-
-                        if (realheight > e.MarginBounds.Height)
-                        {
-                            height = 100;
-                            e.HasMorePages = true;
-                            //   strcountScan++;
-                            prinPage++;
-                            pageyes1_1 = true;
-                            strcountScan++;
-                            return;
-                        }
-                        else
-                        {
-                            e.HasMorePages = false;
-
-                        }
-                        strcountScan++;
-
-                    }
-                    if (km == 21)
-                    {
+                        strcountScan = 0;
+                        pageyes2_1 = true;
                         pageyes = true;
-                        pageyes1_1 = true;
-                        pageyes1 = true;
-                        strcountScan = 0;
-                        realwidth = dataGridView5.Columns[0].Width + 5;
-                        realheight = realheight + 40;
-                        width = 100;
-                        height1 = dataGridView5.Rows[0].Height + 5;
-
-                        e.Graphics.FillRectangle(Brushes.AliceBlue, realwidth, realheight, width, height1);
-                        e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
-                        e.Graphics.DrawString(dataGridView5.Columns[dataGridView5.ColumnCount - 1].HeaderText, new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, realwidth, realheight);
-
-                        realwidth = dataGridView5.Columns[0].Width + 5;
-                        realheight = realheight + 20;
-
-                        while (strcountScan < dataGridView5.Rows.Count - 1)
-                        {
-                            e.Graphics.FillRectangle(Brushes.AliceBlue, realwidth, realheight, width, height1);
-                            e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
-                            e.Graphics.DrawString(dataGridView5.Rows[strcountScan].Cells[dataGridView5.ColumnCount - 1].Value.ToString(), new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, realwidth, realheight);
-                            realwidth = realwidth + width;
-
-
-                            realwidth = dataGridView5.Columns[0].Width + 5;
-                            realheight = realheight + 20;
-
-                            if (realheight > e.MarginBounds.Height)
-                            {
-                                height = 100;
-                                e.HasMorePages = true;
-                                //   strcountScan++;
-                                prinPage++;
-                                pageyes2 = true;
-                                strcountScan++;
-                                return;
-                            }
-                            else
-                            {
-                                e.HasMorePages = false;
-
-                            }
-                            strcountScan++;
-                        }
-                    }
-                }
-            }
-            else {
-               int k = 7;
-                if (pageyes2_1 == false)
-                {
-                    //strcountScan = 0;
-
-                    for (int z = 0; z < k; z++)
-                    {
-                        e.Graphics.FillRectangle(Brushes.AliceBlue, realwidth, realheight, width, height1);
-                        e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
-                        e.Graphics.DrawString(dataGridView5.Columns[z].HeaderText, new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, realwidth, realheight);
-                        realwidth = realwidth + width;
-                    }
-                    realwidth = dataGridView5.Columns[0].Width + 5;
-                    realheight = realheight + 20;
-                    while (strcountScan < dataGridView5.Rows.Count - 1)
-                    {
-                        for (int j = 0; j < k; j++)
-                        {
-                            e.Graphics.FillRectangle(Brushes.AliceBlue, realwidth, realheight, width, height1);
-                            e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
-                            e.Graphics.DrawString(dataGridView5.Rows[strcountScan].Cells[j].Value.ToString(), new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, realwidth, realheight);
-                            realwidth = realwidth + width;
-
-                        }
-                        realwidth = dataGridView5.Columns[0].Width + 5;
-                        realheight = realheight + 20;
-
-                        if (realheight > e.MarginBounds.Height)
-                        {
-                            height = 100;
-                            e.HasMorePages = true;
-                            //   strcountScan++;
-                            prinPage++;
-                            pageyes = true;
-                            strcountScan++;
-                            return;
-                        }
-                        else
-                        {
-                            e.HasMorePages = false;
-
-                        }
-                        strcountScan++;
-                    }
-                }
-                if (dataGridView5.ColumnCount - k <= 14)
-                {
-                    pageyes2_1 = true;
-                    pageyes = true;
-                    if (pageyes_1 == false)
-                    {
-                        strcountScan = 0;
-                    }
-                    if (pageyes2_2 == false)
-                    {
                         realwidth = dataGridView5.Columns[0].Width + 5;
                         realheight = realheight + 35;
                         width = 100;
                         height1 = dataGridView5.Rows[0].Height + 5;
-                        if (pageyes_1 == false)
+                        for (int z = 0; z < 2; z++)
                         {
-                            for (int z = dataGridView5.ColumnCount - k; z < k; z++)
-                            {
-                                e.Graphics.FillRectangle(Brushes.AliceBlue, realwidth, realheight, width, height1);
-                                e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
-                                e.Graphics.DrawString(dataGridView5.Columns[z].HeaderText, new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, realwidth, realheight);
-                                realwidth = realwidth + width;
-                            }
-                            realwidth = dataGridView5.Columns[0].Width + 5;
-                            realheight = realheight + 20;
+                            e.Graphics.FillRectangle(Brushes.White, realwidth, realheight, width, height1);
+                            e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
+                            e.Graphics.DrawString(dataGridView5.Columns[z].HeaderText, new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, realwidth, realheight);
+                            realwidth = realwidth + width;
                         }
-                        while (strcountScan < dataGridView5.Rows.Count - 1)
+                        //realwidth = dataGridView5.Columns[0].Width + 5;
+                        // realheight = realheight + 20;
+                        for (int z = k; z < dataGridView5.ColumnCount; z++)
                         {
-                            for (int j = dataGridView5.ColumnCount - k; j < k; j++)
-                            {
-                                e.Graphics.FillRectangle(Brushes.AliceBlue, realwidth, realheight, width, height1);
-                                e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
-                                e.Graphics.DrawString(dataGridView5.Rows[strcountScan].Cells[j].Value.ToString(), new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, realwidth, realheight);
-                                realwidth = realwidth + width;
-
-                            }
-                            realwidth = dataGridView5.Columns[0].Width + 5;
-                            realheight = realheight + 20;
-
-                            if (realheight > e.MarginBounds.Height)
-                            {
-                                height = 100;
-                                e.HasMorePages = true;
-                                //   strcountScan++;
-                                prinPage++;
-                                pageyes_1 = true;
-                                strcountScan++;
-                                return;
-                            }
-                            else
-                            {
-                                e.HasMorePages = false;
-
-                            }
-                            strcountScan++;
-                        }
-                    }
-                }
-                else
-                {
-                   // pageyes2_2 = true;
-                    pageyes_1 = true;
-                    if (pageyes1 == false)
-                    {
-                        strcountScan = 0;
-                    }             
-
-                    int kk = 14;
-                    if (pageyes2_3 == false)
-                    {
-                        realwidth = dataGridView5.Columns[0].Width + 5;
-                        realheight = realheight + 35;
-                        width = 100;
-                        height1 = dataGridView5.Rows[0].Height + 5;
-                        if (pageyes1 == false)
-                        {
-                            for (int z = k; z < kk; z++)
-                            {
-                                e.Graphics.FillRectangle(Brushes.AliceBlue, realwidth, realheight, width, height1);
-                                e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
-                                e.Graphics.DrawString(dataGridView5.Columns[z].HeaderText, new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, realwidth, realheight);
-                                realwidth = realwidth + width;
-                            }
-                            realwidth = dataGridView5.Columns[0].Width + 5;
-                            realheight = realheight + 20;
-                        }
-                        while (strcountScan < dataGridView5.Rows.Count - 1)
-                        {
-                            for (int j = k; j < kk; j++)
-                            {
-                                e.Graphics.FillRectangle(Brushes.AliceBlue, realwidth, realheight, width, height1);
-                                e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
-                                e.Graphics.DrawString(dataGridView5.Rows[strcountScan].Cells[j].Value.ToString(), new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, realwidth, realheight);
-                                realwidth = realwidth + width;
-
-                            }
-                            realwidth = dataGridView5.Columns[0].Width + 5;
-                            realheight = realheight + 20;
-
-                            if (realheight > e.MarginBounds.Height)
-                            {
-                                height = 100;
-                                e.HasMorePages = true;
-                                //   strcountScan++;
-                                prinPage++;
-                                pageyes1 = true;
-                                strcountScan++;
-                                return;
-                            }
-                            else
-                            {
-                                e.HasMorePages = false;
-
-                            }
-                            strcountScan++;
-                        }
-                    }
-                    pageyes2_3 = true;
-                    pageyes1 = true;
-                    if (pageyes1_1 == false)
-                    {
-                        strcountScan = 0;
-                    }
-
-
-                    int km = 0;
-                    if (dataGridView5.ColumnCount == 22)
-                    {
-                        km = 21;
-                    }
-                    else
-                    {
-                        km = dataGridView5.ColumnCount;
-                    }
-                    if (pageyes2_4 == false)
-                    {
-                        realwidth = dataGridView5.Columns[0].Width + 5;
-                        realheight = realheight + 40;
-                        width = 100;
-                        height1 = dataGridView5.Rows[0].Height + 5;
-                        for (int z = kk; z < dataGridView5.ColumnCount - 1; z++)
-                        {
-                            e.Graphics.FillRectangle(Brushes.AliceBlue, realwidth, realheight, width, height1);
+                            e.Graphics.FillRectangle(Brushes.White, realwidth, realheight, width, height1);
                             e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
                             e.Graphics.DrawString(dataGridView5.Columns[z].HeaderText, new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, realwidth, realheight);
                             realwidth = realwidth + width;
@@ -10491,9 +10228,19 @@ namespace Ecoview_V2._0
                         realheight = realheight + 20;
                         while (strcountScan < dataGridView5.Rows.Count - 1)
                         {
-                            for (int j = kk; j < km; j++)
+                            for (int j = 0; j < 2; j++)
                             {
-                                e.Graphics.FillRectangle(Brushes.AliceBlue, realwidth, realheight, width, height1);
+                                e.Graphics.FillRectangle(Brushes.White, realwidth, realheight, width, height1);
+                                e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
+                                e.Graphics.DrawString(dataGridView5.Rows[strcountScan].Cells[j].Value.ToString(), new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, realwidth, realheight);
+                                realwidth = realwidth + width;
+
+                            }
+                            //    realwidth = dataGridView5.Columns[0].Width + 5;
+                            // realheight = realheight + 20;
+                            for (int j = k; j < dataGridView5.ColumnCount; j++)
+                            {
+                                e.Graphics.FillRectangle(Brushes.White, realwidth, realheight, width, height1);
                                 e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
                                 e.Graphics.DrawString(dataGridView5.Rows[strcountScan].Cells[j].Value.ToString(), new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, realwidth, realheight);
                                 realwidth = realwidth + width;
@@ -10501,84 +10248,928 @@ namespace Ecoview_V2._0
                             }
                             realwidth = dataGridView5.Columns[0].Width + 5;
                             realheight = realheight + 20;
+                            strcountScan++;
+                        }
+                    }
 
-                            if (realheight > e.MarginBounds.Height)
+                    else
+                    {
+                        if (dataGridView5.Rows.Count < 14 && dataGridView5.ColumnCount <= 17)
+                        {
+                            strcountScan = 0;
+                            pageyes2_1 = true;
+                            pageyes = true;
+                            realwidth = dataGridView5.Columns[0].Width + 5;
+                            realheight = realheight + 35;
+                            width = 100;
+                            height1 = dataGridView5.Rows[0].Height + 5;
+
+                            for (int z = 0; z < 2; z++)
                             {
-                                height = 100;
-                                e.HasMorePages = true;
-                                //   strcountScan++;
-                                prinPage++;
-                                pageyes1_1 = true;
+                                e.Graphics.FillRectangle(Brushes.White, realwidth, realheight, width, height1);
+                                e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
+                                e.Graphics.DrawString(dataGridView5.Columns[z].HeaderText, new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, realwidth, realheight);
+                                realwidth = realwidth + width;
+                            }
+                            //realwidth = dataGridView5.Columns[0].Width + 5;
+                            // realheight = realheight + 20;
+                            for (int z = k; z < 12; z++)
+                            {
+                                e.Graphics.FillRectangle(Brushes.White, realwidth, realheight, width, height1);
+                                e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
+                                e.Graphics.DrawString(dataGridView5.Columns[z].HeaderText, new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, realwidth, realheight);
+                                realwidth = realwidth + width;
+                            }
+                            realwidth = dataGridView5.Columns[0].Width + 5;
+                            realheight = realheight + 20;
+                            while (strcountScan < dataGridView5.Rows.Count - 1)
+                            {
+                                for (int j = 0; j < 2; j++)
+                                {
+                                    e.Graphics.FillRectangle(Brushes.White, realwidth, realheight, width, height1);
+                                    e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
+                                    e.Graphics.DrawString(dataGridView5.Rows[strcountScan].Cells[j].Value.ToString(), new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, realwidth, realheight);
+                                    realwidth = realwidth + width;
+
+                                }
+                                //    realwidth = dataGridView5.Columns[0].Width + 5;
+                                // realheight = realheight + 20;
+                                for (int j = k; j < 12; j++)
+                                {
+                                    e.Graphics.FillRectangle(Brushes.White, realwidth, realheight, width, height1);
+                                    e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
+                                    e.Graphics.DrawString(dataGridView5.Rows[strcountScan].Cells[j].Value.ToString(), new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, realwidth, realheight);
+                                    realwidth = realwidth + width;
+
+                                }
+                                realwidth = dataGridView5.Columns[0].Width + 5;
+                                realheight = realheight + 20;
                                 strcountScan++;
-                                return;
+                            }
+
+                            strcountScan = 0;
+                            pageyes2_1 = true;
+                            pageyes = true;
+                            realwidth = dataGridView5.Columns[0].Width + 5;
+                            realheight = realheight + 35;
+                            width = 100;
+                            height1 = dataGridView5.Rows[0].Height + 5;
+
+                            for (int z = 0; z < 2; z++)
+                            {
+                                e.Graphics.FillRectangle(Brushes.White, realwidth, realheight, width, height1);
+                                e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
+                                e.Graphics.DrawString(dataGridView5.Columns[z].HeaderText, new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, realwidth, realheight);
+                                realwidth = realwidth + width;
+                            }
+                            //realwidth = dataGridView5.Columns[0].Width + 5;
+                            // realheight = realheight + 20;
+                            for (int z = 12; z < dataGridView5.ColumnCount; z++)
+                            {
+                                e.Graphics.FillRectangle(Brushes.White, realwidth, realheight, width, height1);
+                                e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
+                                e.Graphics.DrawString(dataGridView5.Columns[z].HeaderText, new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, realwidth, realheight);
+                                realwidth = realwidth + width;
+                            }
+                            realwidth = dataGridView5.Columns[0].Width + 5;
+                            realheight = realheight + 20;
+                            while (strcountScan < dataGridView5.Rows.Count - 1)
+                            {
+                                for (int j = 0; j < 2; j++)
+                                {
+                                    e.Graphics.FillRectangle(Brushes.White, realwidth, realheight, width, height1);
+                                    e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
+                                    e.Graphics.DrawString(dataGridView5.Rows[strcountScan].Cells[j].Value.ToString(), new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, realwidth, realheight);
+                                    realwidth = realwidth + width;
+
+                                }
+                                //    realwidth = dataGridView5.Columns[0].Width + 5;
+                                // realheight = realheight + 20;
+                                for (int j = 12; j < dataGridView5.ColumnCount; j++)
+                                {
+                                    e.Graphics.FillRectangle(Brushes.White, realwidth, realheight, width, height1);
+                                    e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
+                                    e.Graphics.DrawString(dataGridView5.Rows[strcountScan].Cells[j].Value.ToString(), new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, realwidth, realheight);
+                                    realwidth = realwidth + width;
+
+                                }
+                                realwidth = dataGridView5.Columns[0].Width + 5;
+                                realheight = realheight + 20;
+                                strcountScan++;
+                            }
+                        }
+                        else
+                        {
+                            if (dataGridView5.Rows.Count < 10 && dataGridView5.ColumnCount > 17)
+                            {
+                                strcountScan = 0;
+                                pageyes2_1 = true;
+                                pageyes = true;
+                                realwidth = dataGridView5.Columns[0].Width + 5;
+                                realheight = realheight + 35;
+                                width = 100;
+                                height1 = dataGridView5.Rows[0].Height + 5;
+
+                                for (int z = 0; z < 2; z++)
+                                {
+                                    e.Graphics.FillRectangle(Brushes.White, realwidth, realheight, width, height1);
+                                    e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
+                                    e.Graphics.DrawString(dataGridView5.Columns[z].HeaderText, new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, realwidth, realheight);
+                                    realwidth = realwidth + width;
+                                }
+                                //realwidth = dataGridView5.Columns[0].Width + 5;
+                                // realheight = realheight + 20;
+                                for (int z = k; z < 12; z++)
+                                {
+                                    e.Graphics.FillRectangle(Brushes.White, realwidth, realheight, width, height1);
+                                    e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
+                                    e.Graphics.DrawString(dataGridView5.Columns[z].HeaderText, new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, realwidth, realheight);
+                                    realwidth = realwidth + width;
+                                }
+                                realwidth = dataGridView5.Columns[0].Width + 5;
+                                realheight = realheight + 20;
+                                while (strcountScan < dataGridView5.Rows.Count - 1)
+                                {
+                                    for (int j = 0; j < 2; j++)
+                                    {
+                                        e.Graphics.FillRectangle(Brushes.White, realwidth, realheight, width, height1);
+                                        e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
+                                        e.Graphics.DrawString(dataGridView5.Rows[strcountScan].Cells[j].Value.ToString(), new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, realwidth, realheight);
+                                        realwidth = realwidth + width;
+
+                                    }
+                                    //    realwidth = dataGridView5.Columns[0].Width + 5;
+                                    // realheight = realheight + 20;
+                                    for (int j = k; j < 12; j++)
+                                    {
+                                        e.Graphics.FillRectangle(Brushes.White, realwidth, realheight, width, height1);
+                                        e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
+                                        e.Graphics.DrawString(dataGridView5.Rows[strcountScan].Cells[j].Value.ToString(), new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, realwidth, realheight);
+                                        realwidth = realwidth + width;
+
+                                    }
+                                    realwidth = dataGridView5.Columns[0].Width + 5;
+                                    realheight = realheight + 20;
+                                    strcountScan++;
+                                }
+
+                                strcountScan = 0;
+                                pageyes2_1 = true;
+                                pageyes = true;
+                                realwidth = dataGridView5.Columns[0].Width + 5;
+                                realheight = realheight + 35;
+                                width = 100;
+                                height1 = dataGridView5.Rows[0].Height + 5;
+
+                                for (int z = 0; z < 2; z++)
+                                {
+                                    e.Graphics.FillRectangle(Brushes.White, realwidth, realheight, width, height1);
+                                    e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
+                                    e.Graphics.DrawString(dataGridView5.Columns[z].HeaderText, new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, realwidth, realheight);
+                                    realwidth = realwidth + width;
+                                }
+                                //realwidth = dataGridView5.Columns[0].Width + 5;
+                                // realheight = realheight + 20;
+                                for (int z = 12; z < 17; z++)
+                                {
+                                    e.Graphics.FillRectangle(Brushes.White, realwidth, realheight, width, height1);
+                                    e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
+                                    e.Graphics.DrawString(dataGridView5.Columns[z].HeaderText, new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, realwidth, realheight);
+                                    realwidth = realwidth + width;
+                                }
+                                realwidth = dataGridView5.Columns[0].Width + 5;
+                                realheight = realheight + 20;
+                                while (strcountScan < dataGridView5.Rows.Count - 1)
+                                {
+                                    for (int j = 0; j < 2; j++)
+                                    {
+                                        e.Graphics.FillRectangle(Brushes.White, realwidth, realheight, width, height1);
+                                        e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
+                                        e.Graphics.DrawString(dataGridView5.Rows[strcountScan].Cells[j].Value.ToString(), new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, realwidth, realheight);
+                                        realwidth = realwidth + width;
+
+                                    }
+                                    //    realwidth = dataGridView5.Columns[0].Width + 5;
+                                    // realheight = realheight + 20;
+                                    for (int j = 12; j < 17; j++)
+                                    {
+                                        e.Graphics.FillRectangle(Brushes.White, realwidth, realheight, width, height1);
+                                        e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
+                                        e.Graphics.DrawString(dataGridView5.Rows[strcountScan].Cells[j].Value.ToString(), new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, realwidth, realheight);
+                                        realwidth = realwidth + width;
+
+                                    }
+                                    realwidth = dataGridView5.Columns[0].Width + 5;
+                                    realheight = realheight + 20;
+                                    strcountScan++;
+                                }
+
+                                strcountScan = 0;
+                                pageyes2_1 = true;
+                                pageyes = true;
+                                realwidth = dataGridView5.Columns[0].Width + 5;
+                                realheight = realheight + 35;
+                                width = 100;
+                                height1 = dataGridView5.Rows[0].Height + 5;
+
+                                for (int z = 0; z < 2; z++)
+                                {
+                                    e.Graphics.FillRectangle(Brushes.White, realwidth, realheight, width, height1);
+                                    e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
+                                    e.Graphics.DrawString(dataGridView5.Columns[z].HeaderText, new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, realwidth, realheight);
+                                    realwidth = realwidth + width;
+                                }
+                                //realwidth = dataGridView5.Columns[0].Width + 5;
+                                // realheight = realheight + 20;
+                                for (int z = 17; z < dataGridView5.ColumnCount; z++)
+                                {
+                                    e.Graphics.FillRectangle(Brushes.White, realwidth, realheight, width, height1);
+                                    e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
+                                    e.Graphics.DrawString(dataGridView5.Columns[z].HeaderText, new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, realwidth, realheight);
+                                    realwidth = realwidth + width;
+                                }
+                                realwidth = dataGridView5.Columns[0].Width + 5;
+                                realheight = realheight + 20;
+                                while (strcountScan < dataGridView5.Rows.Count - 1)
+                                {
+                                    for (int j = 0; j < 2; j++)
+                                    {
+                                        e.Graphics.FillRectangle(Brushes.White, realwidth, realheight, width, height1);
+                                        e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
+                                        e.Graphics.DrawString(dataGridView5.Rows[strcountScan].Cells[j].Value.ToString(), new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, realwidth, realheight);
+                                        realwidth = realwidth + width;
+
+                                    }
+                                    //    realwidth = dataGridView5.Columns[0].Width + 5;
+                                    // realheight = realheight + 20;
+                                    for (int j = 17; j < dataGridView5.ColumnCount; j++)
+                                    {
+                                        e.Graphics.FillRectangle(Brushes.White, realwidth, realheight, width, height1);
+                                        e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
+                                        e.Graphics.DrawString(dataGridView5.Rows[strcountScan].Cells[j].Value.ToString(), new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, realwidth, realheight);
+                                        realwidth = realwidth + width;
+
+                                    }
+                                    realwidth = dataGridView5.Columns[0].Width + 5;
+                                    realheight = realheight + 20;
+                                    strcountScan++;
+                                }
                             }
                             else
                             {
-                                e.HasMorePages = false;
-
+                                e.HasMorePages = true;
+                                prinPage++;
+                                e.Graphics.DrawString("Страница " + prinPage, new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, 300, 1100);
+                                // pageyes_1 = true;
+                                //strcountScan++;
+                                return;
                             }
-                            strcountScan++;
 
                         }
                     }
-                    if (km == 21)
+                }
+                else
+                {
+                    e.HasMorePages = true;
+                    prinPage++;
+                    e.Graphics.DrawString("Страница " + prinPage, new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, 300, 1100);
+                    //pageyes_1 = true;
+                    //strcountScan++;
+                    return;
+
+                }
+                PrintMultiCancel(sender, e);
+            }
+        }
+        public void PrintDatagridview5PageAdd(object sender, PrintPageEventArgs e)
+        {
+            int k = 7;
+            if (dataGridView5.ColumnCount - k <= 5)
+            {
+                strcountScan = 0;
+                pageyes2_1 = true;
+                pageyes = true;
+                realwidth = dataGridView5.Columns[0].Width + 5;
+                realheight = realheight + 35;
+                width = 100;
+                height1 = dataGridView5.Rows[0].Height + 5;
+                for (int z = 0; z < 2; z++)
+                {
+                    e.Graphics.FillRectangle(Brushes.White, realwidth, realheight, width, height1);
+                    e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
+                    e.Graphics.DrawString(dataGridView5.Columns[z].HeaderText, new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, realwidth, realheight);
+                    realwidth = realwidth + width;
+                }
+                //realwidth = dataGridView5.Columns[0].Width + 5;
+                // realheight = realheight + 20;
+                for (int z = k; z < dataGridView5.ColumnCount; z++)
+                {
+                    e.Graphics.FillRectangle(Brushes.White, realwidth, realheight, width, height1);
+                    e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
+                    e.Graphics.DrawString(dataGridView5.Columns[z].HeaderText, new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, realwidth, realheight);
+                    realwidth = realwidth + width;
+                }
+                realwidth = dataGridView5.Columns[0].Width + 5;
+                realheight = realheight + 20;
+                while (strcountScan < dataGridView5.Rows.Count - 1)
+                {
+                    for (int j = 0; j < 2; j++)
                     {
-                        pageyes2_4 = true;
-                        pageyes1_1 = true;
-                        if (pageyes2 == false)
+                        e.Graphics.FillRectangle(Brushes.White, realwidth, realheight, width, height1);
+                        e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
+                        e.Graphics.DrawString(dataGridView5.Rows[strcountScan].Cells[j].Value.ToString(), new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, realwidth, realheight);
+                        realwidth = realwidth + width;
+
+                    }
+                    //    realwidth = dataGridView5.Columns[0].Width + 5;
+                    // realheight = realheight + 20;
+                    for (int j = k; j < dataGridView5.ColumnCount; j++)
+                    {
+                        e.Graphics.FillRectangle(Brushes.White, realwidth, realheight, width, height1);
+                        e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
+                        e.Graphics.DrawString(dataGridView5.Rows[strcountScan].Cells[j].Value.ToString(), new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, realwidth, realheight);
+                        realwidth = realwidth + width;
+
+                    }
+                    realwidth = dataGridView5.Columns[0].Width + 5;
+                    realheight = realheight + 20;
+                    strcountScan++;
+                }
+            }
+
+            else
+            {
+                if (dataGridView5.ColumnCount <= 17 && dataGridView5.Rows.Count <= 22)
+                {
+                    strcountScan = 0;
+                    pageyes2_1 = true;
+                    pageyes = true;
+                    realwidth = dataGridView5.Columns[0].Width + 5;
+                    realheight = realheight + 35;
+                    width = 100;
+                    height1 = dataGridView5.Rows[0].Height + 5;
+
+                    for (int z = 0; z < 2; z++)
+                    {
+                        e.Graphics.FillRectangle(Brushes.White, realwidth, realheight, width, height1);
+                        e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
+                        e.Graphics.DrawString(dataGridView5.Columns[z].HeaderText, new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, realwidth, realheight);
+                        realwidth = realwidth + width;
+                    }
+                    //realwidth = dataGridView5.Columns[0].Width + 5;
+                    // realheight = realheight + 20;
+                    for (int z = k; z < 12; z++)
+                    {
+                        e.Graphics.FillRectangle(Brushes.White, realwidth, realheight, width, height1);
+                        e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
+                        e.Graphics.DrawString(dataGridView5.Columns[z].HeaderText, new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, realwidth, realheight);
+                        realwidth = realwidth + width;
+                    }
+                    realwidth = dataGridView5.Columns[0].Width + 5;
+                    realheight = realheight + 20;
+                    while (strcountScan < dataGridView5.Rows.Count - 1)
+                    {
+                        for (int j = 0; j < 2; j++)
                         {
-                            strcountScan = 0;
+                            e.Graphics.FillRectangle(Brushes.White, realwidth, realheight, width, height1);
+                            e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
+                            e.Graphics.DrawString(dataGridView5.Rows[strcountScan].Cells[j].Value.ToString(), new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, realwidth, realheight);
+                            realwidth = realwidth + width;
+
                         }
+                        //    realwidth = dataGridView5.Columns[0].Width + 5;
+                        // realheight = realheight + 20;
+                        for (int j = k; j < 12; j++)
+                        {
+                            e.Graphics.FillRectangle(Brushes.White, realwidth, realheight, width, height1);
+                            e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
+                            e.Graphics.DrawString(dataGridView5.Rows[strcountScan].Cells[j].Value.ToString(), new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, realwidth, realheight);
+                            realwidth = realwidth + width;
+
+                        }
+                        realwidth = dataGridView5.Columns[0].Width + 5;
+                        realheight = realheight + 20;
+                        strcountScan++;
+                    }
+
+                    strcountScan = 0;
+                    pageyes2_1 = true;
+                    pageyes = true;
+                    realwidth = dataGridView5.Columns[0].Width + 5;
+                    realheight = realheight + 35;
+                    width = 100;
+                    height1 = dataGridView5.Rows[0].Height + 5;
+
+                    for (int z = 0; z < 2; z++)
+                    {
+                        e.Graphics.FillRectangle(Brushes.White, realwidth, realheight, width, height1);
+                        e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
+                        e.Graphics.DrawString(dataGridView5.Columns[z].HeaderText, new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, realwidth, realheight);
+                        realwidth = realwidth + width;
+                    }
+                    //realwidth = dataGridView5.Columns[0].Width + 5;
+                    // realheight = realheight + 20;
+                    for (int z = 12; z < dataGridView5.ColumnCount; z++)
+                    {
+                        e.Graphics.FillRectangle(Brushes.White, realwidth, realheight, width, height1);
+                        e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
+                        e.Graphics.DrawString(dataGridView5.Columns[z].HeaderText, new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, realwidth, realheight);
+                        realwidth = realwidth + width;
+                    }
+                    realwidth = dataGridView5.Columns[0].Width + 5;
+                    realheight = realheight + 20;
+                    while (strcountScan < dataGridView5.Rows.Count - 1)
+                    {
+                        for (int j = 0; j < 2; j++)
+                        {
+                            e.Graphics.FillRectangle(Brushes.White, realwidth, realheight, width, height1);
+                            e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
+                            e.Graphics.DrawString(dataGridView5.Rows[strcountScan].Cells[j].Value.ToString(), new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, realwidth, realheight);
+                            realwidth = realwidth + width;
+
+                        }
+                        //    realwidth = dataGridView5.Columns[0].Width + 5;
+                        // realheight = realheight + 20;
+                        for (int j = 12; j < dataGridView5.ColumnCount; j++)
+                        {
+                            e.Graphics.FillRectangle(Brushes.White, realwidth, realheight, width, height1);
+                            e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
+                            e.Graphics.DrawString(dataGridView5.Rows[strcountScan].Cells[j].Value.ToString(), new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, realwidth, realheight);
+                            realwidth = realwidth + width;
+
+                        }
+                        realwidth = dataGridView5.Columns[0].Width + 5;
+                        realheight = realheight + 20;
+                        strcountScan++;
+                    }
+                }
+                else
+                {
+
+
+                    if (dataGridView5.ColumnCount <= 17 && dataGridView5.Rows.Count > 22)
+                    {
+                        strcountScan = 0;
+                        pageyes2_1 = true;
+                        pageyes = true;
                         realwidth = dataGridView5.Columns[0].Width + 5;
                         realheight = realheight + 35;
                         width = 100;
                         height1 = dataGridView5.Rows[0].Height + 5;
 
-                        e.Graphics.FillRectangle(Brushes.AliceBlue, realwidth, realheight, width, height1);
-                        e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
-                        e.Graphics.DrawString(dataGridView5.Columns[dataGridView5.ColumnCount - 1].HeaderText, new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, realwidth, realheight);
-
+                        for (int z = 0; z < 2; z++)
+                        {
+                            e.Graphics.FillRectangle(Brushes.White, realwidth, realheight, width, height1);
+                            e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
+                            e.Graphics.DrawString(dataGridView5.Columns[z].HeaderText, new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, realwidth, realheight);
+                            realwidth = realwidth + width;
+                        }
+                        //realwidth = dataGridView5.Columns[0].Width + 5;
+                        // realheight = realheight + 20;
+                        for (int z = k; z < 12; z++)
+                        {
+                            e.Graphics.FillRectangle(Brushes.White, realwidth, realheight, width, height1);
+                            e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
+                            e.Graphics.DrawString(dataGridView5.Columns[z].HeaderText, new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, realwidth, realheight);
+                            realwidth = realwidth + width;
+                        }
                         realwidth = dataGridView5.Columns[0].Width + 5;
                         realheight = realheight + 20;
-
                         while (strcountScan < dataGridView5.Rows.Count - 1)
                         {
-                            e.Graphics.FillRectangle(Brushes.AliceBlue, realwidth, realheight, width, height1);
-                            e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
-                            e.Graphics.DrawString(dataGridView5.Rows[strcountScan].Cells[dataGridView5.ColumnCount - 1].Value.ToString(), new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, realwidth, realheight);
-                            realwidth = realwidth + width;
+                            for (int j = 0; j < 2; j++)
+                            {
+                                e.Graphics.FillRectangle(Brushes.White, realwidth, realheight, width, height1);
+                                e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
+                                e.Graphics.DrawString(dataGridView5.Rows[strcountScan].Cells[j].Value.ToString(), new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, realwidth, realheight);
+                                realwidth = realwidth + width;
 
+                            }
+                            //    realwidth = dataGridView5.Columns[0].Width + 5;
+                            // realheight = realheight + 20;
+                            for (int j = k; j < 12; j++)
+                            {
+                                e.Graphics.FillRectangle(Brushes.White, realwidth, realheight, width, height1);
+                                e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
+                                e.Graphics.DrawString(dataGridView5.Rows[strcountScan].Cells[j].Value.ToString(), new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, realwidth, realheight);
+                                realwidth = realwidth + width;
 
+                            }
                             realwidth = dataGridView5.Columns[0].Width + 5;
                             realheight = realheight + 20;
+                            strcountScan++;
+                        }
 
-                            if (realheight > e.MarginBounds.Height)
+                        e.HasMorePages = true;
+                        prinPage++;
+                        e.Graphics.DrawString("Страница " + prinPage, new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, 300, 1100);
+                        pageyes_1 = true;
+                        //strcountScan++;
+                        return;
+                    }
+                    else {
+
+                        if (dataGridView5.ColumnCount > 17 && dataGridView5.Rows.Count < 18)
+                        {
+                            strcountScan = 0;
+                            pageyes2_1 = true;
+                            pageyes = true;
+                            realwidth = dataGridView5.Columns[0].Width + 5;
+                            realheight = realheight + 35;
+                            width = 100;
+                            height1 = dataGridView5.Rows[0].Height + 5;
+
+                            for (int z = 0; z < 2; z++)
                             {
-                                height = 100;
-                                e.HasMorePages = true;
-                                //   strcountScan++;
-                                prinPage++;
-                                pageyes2 = true;
+                                e.Graphics.FillRectangle(Brushes.White, realwidth, realheight, width, height1);
+                                e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
+                                e.Graphics.DrawString(dataGridView5.Columns[z].HeaderText, new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, realwidth, realheight);
+                                realwidth = realwidth + width;
+                            }
+                            //realwidth = dataGridView5.Columns[0].Width + 5;
+                            // realheight = realheight + 20;
+                            for (int z = k; z < 12; z++)
+                            {
+                                e.Graphics.FillRectangle(Brushes.White, realwidth, realheight, width, height1);
+                                e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
+                                e.Graphics.DrawString(dataGridView5.Columns[z].HeaderText, new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, realwidth, realheight);
+                                realwidth = realwidth + width;
+                            }
+                            realwidth = dataGridView5.Columns[0].Width + 5;
+                            realheight = realheight + 20;
+                            while (strcountScan < dataGridView5.Rows.Count - 1)
+                            {
+                                for (int j = 0; j < 2; j++)
+                                {
+                                    e.Graphics.FillRectangle(Brushes.White, realwidth, realheight, width, height1);
+                                    e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
+                                    e.Graphics.DrawString(dataGridView5.Rows[strcountScan].Cells[j].Value.ToString(), new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, realwidth, realheight);
+                                    realwidth = realwidth + width;
+
+                                }
+                                //    realwidth = dataGridView5.Columns[0].Width + 5;
+                                // realheight = realheight + 20;
+                                for (int j = k; j < 12; j++)
+                                {
+                                    e.Graphics.FillRectangle(Brushes.White, realwidth, realheight, width, height1);
+                                    e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
+                                    e.Graphics.DrawString(dataGridView5.Rows[strcountScan].Cells[j].Value.ToString(), new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, realwidth, realheight);
+                                    realwidth = realwidth + width;
+
+                                }
+                                realwidth = dataGridView5.Columns[0].Width + 5;
+                                realheight = realheight + 20;
                                 strcountScan++;
-                                return;
+                            }
+
+                            strcountScan = 0;
+                            pageyes2_1 = true;
+                            pageyes = true;
+                            realwidth = dataGridView5.Columns[0].Width + 5;
+                            realheight = realheight + 35;
+                            width = 100;
+                            height1 = dataGridView5.Rows[0].Height + 5;
+
+                            for (int z = 0; z < 2; z++)
+                            {
+                                e.Graphics.FillRectangle(Brushes.White, realwidth, realheight, width, height1);
+                                e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
+                                e.Graphics.DrawString(dataGridView5.Columns[z].HeaderText, new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, realwidth, realheight);
+                                realwidth = realwidth + width;
+                            }
+                            //realwidth = dataGridView5.Columns[0].Width + 5;
+                            // realheight = realheight + 20;
+                            for (int z = 12; z < 17; z++)
+                            {
+                                e.Graphics.FillRectangle(Brushes.White, realwidth, realheight, width, height1);
+                                e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
+                                e.Graphics.DrawString(dataGridView5.Columns[z].HeaderText, new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, realwidth, realheight);
+                                realwidth = realwidth + width;
+                            }
+                            realwidth = dataGridView5.Columns[0].Width + 5;
+                            realheight = realheight + 20;
+                            while (strcountScan < dataGridView5.Rows.Count - 1)
+                            {
+                                for (int j = 0; j < 2; j++)
+                                {
+                                    e.Graphics.FillRectangle(Brushes.White, realwidth, realheight, width, height1);
+                                    e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
+                                    e.Graphics.DrawString(dataGridView5.Rows[strcountScan].Cells[j].Value.ToString(), new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, realwidth, realheight);
+                                    realwidth = realwidth + width;
+
+                                }
+                                //    realwidth = dataGridView5.Columns[0].Width + 5;
+                                // realheight = realheight + 20;
+                                for (int j = 12; j < 17; j++)
+                                {
+                                    e.Graphics.FillRectangle(Brushes.White, realwidth, realheight, width, height1);
+                                    e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
+                                    e.Graphics.DrawString(dataGridView5.Rows[strcountScan].Cells[j].Value.ToString(), new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, realwidth, realheight);
+                                    realwidth = realwidth + width;
+
+                                }
+                                realwidth = dataGridView5.Columns[0].Width + 5;
+                                realheight = realheight + 20;
+                                strcountScan++;
+                            }
+
+
+                        }
+                        else
+                        {
+
+                            strcountScan = 0;
+                            pageyes2_1 = true;
+                            pageyes = true;
+                            realwidth = dataGridView5.Columns[0].Width + 5;
+                            realheight = realheight + 35;
+                            width = 100;
+                            height1 = dataGridView5.Rows[0].Height + 5;
+
+                            for (int z = 0; z < 2; z++)
+                            {
+                                e.Graphics.FillRectangle(Brushes.White, realwidth, realheight, width, height1);
+                                e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
+                                e.Graphics.DrawString(dataGridView5.Columns[z].HeaderText, new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, realwidth, realheight);
+                                realwidth = realwidth + width;
+                            }
+                            //realwidth = dataGridView5.Columns[0].Width + 5;
+                            // realheight = realheight + 20;
+                            for (int z = k; z < 12; z++)
+                            {
+                                e.Graphics.FillRectangle(Brushes.White, realwidth, realheight, width, height1);
+                                e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
+                                e.Graphics.DrawString(dataGridView5.Columns[z].HeaderText, new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, realwidth, realheight);
+                                realwidth = realwidth + width;
+                            }
+                            realwidth = dataGridView5.Columns[0].Width + 5;
+                            realheight = realheight + 20;
+                            while (strcountScan < dataGridView5.Rows.Count - 1)
+                            {
+                                for (int j = 0; j < 2; j++)
+                                {
+                                    e.Graphics.FillRectangle(Brushes.White, realwidth, realheight, width, height1);
+                                    e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
+                                    e.Graphics.DrawString(dataGridView5.Rows[strcountScan].Cells[j].Value.ToString(), new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, realwidth, realheight);
+                                    realwidth = realwidth + width;
+
+                                }
+                                //    realwidth = dataGridView5.Columns[0].Width + 5;
+                                // realheight = realheight + 20;
+                                for (int j = k; j < 12; j++)
+                                {
+                                    e.Graphics.FillRectangle(Brushes.White, realwidth, realheight, width, height1);
+                                    e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
+                                    e.Graphics.DrawString(dataGridView5.Rows[strcountScan].Cells[j].Value.ToString(), new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, realwidth, realheight);
+                                    realwidth = realwidth + width;
+
+                                }
+                                realwidth = dataGridView5.Columns[0].Width + 5;
+                                realheight = realheight + 20;
+                                strcountScan++;
+                            }
+                            if (dataGridView5.Rows.Count < 22)
+                            {
+                                strcountScan = 0;
+                                pageyes2_1 = true;
+                                pageyes = true;
+                                realwidth = dataGridView5.Columns[0].Width + 5;
+                                realheight = realheight + 35;
+                                width = 100;
+                                height1 = dataGridView5.Rows[0].Height + 5;
+
+                                for (int z = 0; z < 2; z++)
+                                {
+                                    e.Graphics.FillRectangle(Brushes.White, realwidth, realheight, width, height1);
+                                    e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
+                                    e.Graphics.DrawString(dataGridView5.Columns[z].HeaderText, new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, realwidth, realheight);
+                                    realwidth = realwidth + width;
+                                }
+                                //realwidth = dataGridView5.Columns[0].Width + 5;
+                                // realheight = realheight + 20;
+                                for (int z = 12; z < 17; z++)
+                                {
+                                    e.Graphics.FillRectangle(Brushes.White, realwidth, realheight, width, height1);
+                                    e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
+                                    e.Graphics.DrawString(dataGridView5.Columns[z].HeaderText, new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, realwidth, realheight);
+                                    realwidth = realwidth + width;
+                                }
+                                realwidth = dataGridView5.Columns[0].Width + 5;
+                                realheight = realheight + 20;
+                                while (strcountScan < dataGridView5.Rows.Count - 1)
+                                {
+                                    for (int j = 0; j < 2; j++)
+                                    {
+                                        e.Graphics.FillRectangle(Brushes.White, realwidth, realheight, width, height1);
+                                        e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
+                                        e.Graphics.DrawString(dataGridView5.Rows[strcountScan].Cells[j].Value.ToString(), new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, realwidth, realheight);
+                                        realwidth = realwidth + width;
+
+                                    }
+                                    //    realwidth = dataGridView5.Columns[0].Width + 5;
+                                    // realheight = realheight + 20;
+                                    for (int j = 12; j < 17; j++)
+                                    {
+                                        e.Graphics.FillRectangle(Brushes.White, realwidth, realheight, width, height1);
+                                        e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
+                                        e.Graphics.DrawString(dataGridView5.Rows[strcountScan].Cells[j].Value.ToString(), new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, realwidth, realheight);
+                                        realwidth = realwidth + width;
+
+                                    }
+                                    realwidth = dataGridView5.Columns[0].Width + 5;
+                                    realheight = realheight + 20;
+                                    strcountScan++;
+                                }
                             }
                             else
                             {
-                                e.HasMorePages = false;
-
+                                e.HasMorePages = true;
+                                prinPage++;
+                                e.Graphics.DrawString("Страница " + prinPage, new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, 300, 1100);
+                                // pageyes_1 = true;
+                                //strcountScan++;
+                                return;
                             }
-                            strcountScan++;
+
                         }
                     }
                 }
             }
+            //PrintMultiCancel(sender, e);
+        }
+        public void PrintDatagridview5PageAdd2(object sender, PrintPageEventArgs e)
+        {
+            strcountScan = 0;
+            pageyes2_1 = true;
+            pageyes = true;
+            realwidth = dataGridView5.Columns[0].Width + 5;
+            realheight = realheight + 35;
+            width = 100;
+            height1 = dataGridView5.Rows[0].Height + 5;
+
+            for (int z = 0; z < 2; z++)
+            {
+                e.Graphics.FillRectangle(Brushes.White, realwidth, realheight, width, height1);
+                e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
+                e.Graphics.DrawString(dataGridView5.Columns[z].HeaderText, new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, realwidth, realheight);
+                realwidth = realwidth + width;
+            }
+            //realwidth = dataGridView5.Columns[0].Width + 5;
+            // realheight = realheight + 20;
+            for (int z = 12; z < dataGridView5.ColumnCount; z++)
+            {
+                e.Graphics.FillRectangle(Brushes.White, realwidth, realheight, width, height1);
+                e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
+                e.Graphics.DrawString(dataGridView5.Columns[z].HeaderText, new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, realwidth, realheight);
+                realwidth = realwidth + width;
+            }
+            realwidth = dataGridView5.Columns[0].Width + 5;
+            realheight = realheight + 20;
+            while (strcountScan < dataGridView5.Rows.Count - 1)
+            {
+                for (int j = 0; j < 2; j++)
+                {
+                    e.Graphics.FillRectangle(Brushes.White, realwidth, realheight, width, height1);
+                    e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
+                    e.Graphics.DrawString(dataGridView5.Rows[strcountScan].Cells[j].Value.ToString(), new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, realwidth, realheight);
+                    realwidth = realwidth + width;
+
+                }
+                //    realwidth = dataGridView5.Columns[0].Width + 5;
+                // realheight = realheight + 20;
+                for (int j = 12; j < dataGridView5.ColumnCount; j++)
+                {
+                    e.Graphics.FillRectangle(Brushes.White, realwidth, realheight, width, height1);
+                    e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
+                    e.Graphics.DrawString(dataGridView5.Rows[strcountScan].Cells[j].Value.ToString(), new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, realwidth, realheight);
+                    realwidth = realwidth + width;
+
+                }
+                realwidth = dataGridView5.Columns[0].Width + 5;
+                realheight = realheight + 20;
+                strcountScan++;
+            }
             PrintMultiCancel(sender, e);
+        }
+
+        public void PrintDatagridview5PageAdd3(object sender, PrintPageEventArgs e)
+        {
+            strcountScan = 0;
+            pageyes2_1 = true;
+            pageyes = true;
+            realwidth = dataGridView5.Columns[0].Width + 5;
+            realheight = realheight + 35;
+            width = 100;
+            height1 = dataGridView5.Rows[0].Height + 5;
+
+            for (int z = 0; z < 2; z++)
+            {
+                e.Graphics.FillRectangle(Brushes.White, realwidth, realheight, width, height1);
+                e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
+                e.Graphics.DrawString(dataGridView5.Columns[z].HeaderText, new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, realwidth, realheight);
+                realwidth = realwidth + width;
+            }
+            //realwidth = dataGridView5.Columns[0].Width + 5;
+            // realheight = realheight + 20;
+            for (int z = 17; z < dataGridView5.ColumnCount; z++)
+            {
+                e.Graphics.FillRectangle(Brushes.White, realwidth, realheight, width, height1);
+                e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
+                e.Graphics.DrawString(dataGridView5.Columns[z].HeaderText, new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, realwidth, realheight);
+                realwidth = realwidth + width;
+            }
+            realwidth = dataGridView5.Columns[0].Width + 5;
+            realheight = realheight + 20;
+            while (strcountScan < dataGridView5.Rows.Count - 1)
+            {
+                for (int j = 0; j < 2; j++)
+                {
+                    e.Graphics.FillRectangle(Brushes.White, realwidth, realheight, width, height1);
+                    e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
+                    e.Graphics.DrawString(dataGridView5.Rows[strcountScan].Cells[j].Value.ToString(), new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, realwidth, realheight);
+                    realwidth = realwidth + width;
+
+                }
+                //    realwidth = dataGridView5.Columns[0].Width + 5;
+                // realheight = realheight + 20;
+                for (int j = 17; j < dataGridView5.ColumnCount; j++)
+                {
+                    e.Graphics.FillRectangle(Brushes.White, realwidth, realheight, width, height1);
+                    e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
+                    e.Graphics.DrawString(dataGridView5.Rows[strcountScan].Cells[j].Value.ToString(), new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, realwidth, realheight);
+                    realwidth = realwidth + width;
+
+                }
+                realwidth = dataGridView5.Columns[0].Width + 5;
+                realheight = realheight + 20;
+                strcountScan++;
+            }
+            PrintMultiCancel(sender, e);
+        }
+        public void PrintDatagridview5PageAdd4(object sender, PrintPageEventArgs e)
+        {
+            strcountScan = 0;
+            pageyes2_1 = true;
+            pageyes = true;
+            realwidth = dataGridView5.Columns[0].Width + 5;
+            realheight = realheight + 35;
+            width = 100;
+            height1 = dataGridView5.Rows[0].Height + 5;
+
+            for (int z = 0; z < 2; z++)
+            {
+                e.Graphics.FillRectangle(Brushes.White, realwidth, realheight, width, height1);
+                e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
+                e.Graphics.DrawString(dataGridView5.Columns[z].HeaderText, new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, realwidth, realheight);
+                realwidth = realwidth + width;
+            }
+            //realwidth = dataGridView5.Columns[0].Width + 5;
+            // realheight = realheight + 20;
+            for (int z = 12; z < 17; z++)
+            {
+                e.Graphics.FillRectangle(Brushes.White, realwidth, realheight, width, height1);
+                e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
+                e.Graphics.DrawString(dataGridView5.Columns[z].HeaderText, new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, realwidth, realheight);
+                realwidth = realwidth + width;
+            }
+            realwidth = dataGridView5.Columns[0].Width + 5;
+            realheight = realheight + 20;
+            while (strcountScan < dataGridView5.Rows.Count - 1)
+            {
+                for (int j = 0; j < 2; j++)
+                {
+                    e.Graphics.FillRectangle(Brushes.White, realwidth, realheight, width, height1);
+                    e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
+                    e.Graphics.DrawString(dataGridView5.Rows[strcountScan].Cells[j].Value.ToString(), new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, realwidth, realheight);
+                    realwidth = realwidth + width;
+
+                }
+                //    realwidth = dataGridView5.Columns[0].Width + 5;
+                // realheight = realheight + 20;
+                for (int j = 12; j < 17; j++)
+                {
+                    e.Graphics.FillRectangle(Brushes.White, realwidth, realheight, width, height1);
+                    e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
+                    e.Graphics.DrawString(dataGridView5.Rows[strcountScan].Cells[j].Value.ToString(), new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, realwidth, realheight);
+                    realwidth = realwidth + width;
+
+                }
+                realwidth = dataGridView5.Columns[0].Width + 5;
+                realheight = realheight + 20;
+                strcountScan++;
+            }
+            e.HasMorePages = true;
+            prinPage++;
+            e.Graphics.DrawString("Страница " + prinPage, new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, 300, 1100);
+          //  pageyes_1 = true;
+            //strcountScan++;
+            return;
         }
         public void printdatagridview5(object sender, PrintPageEventArgs e)
         {
             for (int z = 0; z < dataGridView5.Columns.Count; z++)
             {
-                e.Graphics.FillRectangle(Brushes.AliceBlue, realwidth, realheight, width, height1);
+                e.Graphics.FillRectangle(Brushes.White, realwidth, realheight, width, height1);
                 e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
                 e.Graphics.DrawString(dataGridView5.Columns[z].HeaderText, new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, realwidth, realheight);
                 realwidth = realwidth + width;
@@ -10590,7 +11181,7 @@ namespace Ecoview_V2._0
             {
                 for (int j = 0; j < dataGridView5.Columns.Count; j++)
                 {
-                    e.Graphics.FillRectangle(Brushes.AliceBlue, realwidth, realheight, width, height1);
+                    e.Graphics.FillRectangle(Brushes.White, realwidth, realheight, width, height1);
                     e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
                     e.Graphics.DrawString(dataGridView5.Rows[strcountScan].Cells[j].Value.ToString(), new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, realwidth, realheight);
                     realwidth = realwidth + width;
@@ -10599,12 +11190,13 @@ namespace Ecoview_V2._0
                 realwidth = dataGridView5.Columns[0].Width + 5;
                 realheight = realheight + 20;
 
-                if (realheight > e.MarginBounds.Height)
+                if (realheight > e.MarginBounds.Height+20)
                 {
                     height = 100;
                     e.HasMorePages = true;
                     //   strcountScan++;
                     prinPage++;
+                    e.Graphics.DrawString("Страница " + prinPage, new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, 300, 1100);
                     return;
                 }
                 else
@@ -10622,15 +11214,24 @@ namespace Ecoview_V2._0
             {
                 e.Graphics.DrawString("Измерение в режиме кинетики\n\n",
                 new System.Drawing.Font("Times New Roman", 20, FontStyle.Bold), Brushes.Black, 100, 50);
+
+                e.Graphics.DrawString("Идентификационный номер (код) исследования:", new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, 25, 100);
+                e.Graphics.DrawString(code, new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, 400, 100);
+
+                e.Graphics.DrawString("Лаборатория:", new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, 25, 120);
+                e.Graphics.DrawString(name_lab, new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, 140, 120);
+
+                e.Graphics.DrawString("Адрес лаборатории:", new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, 25, 140);
+                e.Graphics.DrawString(address_lab, new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, 195, 140);
                 e.Graphics.DrawString("График сканирования\n\n",
-                  new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, 100, 100);
+                  new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, 25, 170);
                 height = chart3.Height;
                 Bitmap bmp = new Bitmap(chart3.Width, chart3.Height);
                 chart3.DrawToBitmap(bmp, new System.Drawing.Rectangle(0, 0, chart3.Width, chart3.Height));
-                e.Graphics.DrawImage(bmp, 25, 130);
-                height = height + 160;
+                e.Graphics.DrawImage(bmp, 25, 200);
+                height = height + 230;
                 e.Graphics.DrawString("Таблица сканирования\n\n",
-                new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, 100, height);
+                new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, 25, height);
 
                 realwidth = TableKinetica1.Columns[0].Width + 5;
                 realheight = height + 35;
@@ -10638,7 +11239,7 @@ namespace Ecoview_V2._0
                 height1 = TableKinetica1.Rows[0].Height + 5;
                 for (int z = 0; z < ScanTable.Columns.Count; z++)
                 {
-                    e.Graphics.FillRectangle(Brushes.AliceBlue, realwidth, realheight, width, height1);
+                    e.Graphics.FillRectangle(Brushes.White, realwidth, realheight, width, height1);
                     e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
                     e.Graphics.DrawString(TableKinetica1.Columns[z].HeaderText, new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, realwidth, realheight);
                     realwidth = realwidth + width;
@@ -10650,7 +11251,7 @@ namespace Ecoview_V2._0
                 {
                     for (int j = 0; j < TableKinetica1.Columns.Count; j++)
                     {
-                        e.Graphics.FillRectangle(Brushes.AliceBlue, realwidth, realheight, width, height1);
+                        e.Graphics.FillRectangle(Brushes.White, realwidth, realheight, width, height1);
                         e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
                         e.Graphics.DrawString(TableKinetica1.Rows[strcountScan].Cells[j].Value.ToString(), new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, realwidth, realheight);
                         realwidth = realwidth + width;
@@ -10664,6 +11265,7 @@ namespace Ecoview_V2._0
                         height = 100;
                         e.HasMorePages = true;
                         //   strcountScan++;
+                        e.Graphics.DrawString("Страница " + (prinPage + 1), new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, 300, 1100);
                         prinPage++;
                         return;
                     }
@@ -10678,13 +11280,15 @@ namespace Ecoview_V2._0
                 }
             }
             else {
+                e.Graphics.DrawString("Идентификационный номер (код) исследования:", new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, 25, 50);
+                e.Graphics.DrawString(code, new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, 400, 50);
                 realwidth = TableKinetica1.Columns[0].Width + 5;
-                realheight = 20;
+                realheight = 80;
                 width = 100;
                 height1 = TableKinetica1.Rows[0].Height + 5;
                 for (int z = 0; z < TableKinetica1.Columns.Count; z++)
                 {
-                    e.Graphics.FillRectangle(Brushes.AliceBlue, realwidth, realheight, width, height1);
+                    e.Graphics.FillRectangle(Brushes.White, realwidth, realheight, width, height1);
                     e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
                     e.Graphics.DrawString(TableKinetica1.Columns[z].HeaderText, new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, realwidth, realheight);
                     realwidth = realwidth + width;
@@ -10696,7 +11300,7 @@ namespace Ecoview_V2._0
                 {
                     for (int j = 0; j < TableKinetica1.Columns.Count; j++)
                     {
-                        e.Graphics.FillRectangle(Brushes.AliceBlue, realwidth, realheight, width, height1);
+                        e.Graphics.FillRectangle(Brushes.White, realwidth, realheight, width, height1);
                         e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
                         e.Graphics.DrawString(TableKinetica1.Rows[strcountScan].Cells[j].Value.ToString(), new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, realwidth, realheight);
                         realwidth = realwidth + width;
@@ -10710,6 +11314,7 @@ namespace Ecoview_V2._0
                         height = 100;
                         e.HasMorePages = true;
                         //   strcountScan++;
+                        e.Graphics.DrawString("Страница " + (prinPage + 1), new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, 300, 1100);
                         prinPage++;
                         return;
                     }
@@ -10720,6 +11325,30 @@ namespace Ecoview_V2._0
                     }
                     strcountScan++;
                 }
+            }
+            KinPrintCancel(sender, e);
+
+            
+        }
+
+        public void KinPrintCancel(object sender, PrintPageEventArgs e)
+        {
+            realheight += 20;
+            e.Graphics.DrawString("Дата:", new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, 25, realheight);
+            e.Graphics.DrawString(DateTime, new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, 85, realheight);
+            e.Graphics.DrawString("Время начала:", new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, 180, realheight);
+            e.Graphics.DrawString(" _______ ", new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, 290, realheight);
+
+            e.Graphics.DrawString("Время окончания:", new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, 380, realheight);
+            e.Graphics.DrawString(" _______ ", new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, 530, realheight);
+
+            e.Graphics.DrawString("Исполнитель:", new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, 25, realheight + 30);
+            e.Graphics.DrawString(" _______________________ /   " + Ispolnitel, new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, 160, realheight + 30);
+            e.Graphics.DrawString("Руководитель:", new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, 25, realheight + 60);
+            e.Graphics.DrawString(" _______________________ /   " + direction, new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, 160, realheight + 60);
+            if(prinPage > 0)
+            {
+                e.Graphics.DrawString("Страница " + (prinPage + 1), new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, 300, 1100);
             }
             prinPage = 0;
             strcountScan = 0;
@@ -10747,7 +11376,7 @@ namespace Ecoview_V2._0
                 height1 = ScanTable.Rows[0].Height + 5;
                 for (int z = 0; z < ScanTable.Columns.Count; z++)
                 {
-                    e.Graphics.FillRectangle(Brushes.AliceBlue, realwidth, realheight, width, height1);
+                    e.Graphics.FillRectangle(Brushes.White, realwidth, realheight, width, height1);
                     e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
                     e.Graphics.DrawString(ScanTable.Columns[z].HeaderText, new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, realwidth, realheight);
                     realwidth = realwidth + width;
@@ -10759,7 +11388,7 @@ namespace Ecoview_V2._0
                 {
                     for (int j = 0; j < ScanTable.Columns.Count; j++)
                     {
-                        e.Graphics.FillRectangle(Brushes.AliceBlue, realwidth, realheight, width, height1);
+                        e.Graphics.FillRectangle(Brushes.White, realwidth, realheight, width, height1);
                         e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
                         e.Graphics.DrawString(ScanTable.Rows[strcountScan].Cells[j].Value.ToString(), new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, realwidth, realheight);
                         realwidth = realwidth + width;
@@ -10793,7 +11422,7 @@ namespace Ecoview_V2._0
                 height1 = ScanTable.Rows[0].Height + 5;
                 for (int z = 0; z < ScanTable.Columns.Count; z++)
                 {
-                    e.Graphics.FillRectangle(Brushes.AliceBlue, realwidth, realheight, width, height1);
+                    e.Graphics.FillRectangle(Brushes.White, realwidth, realheight, width, height1);
                     e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
                     e.Graphics.DrawString(ScanTable.Columns[z].HeaderText, new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, realwidth, realheight);
                     realwidth = realwidth + width;
@@ -10805,7 +11434,7 @@ namespace Ecoview_V2._0
                 {
                     for (int j = 0; j < ScanTable.Columns.Count; j++)
                     {
-                        e.Graphics.FillRectangle(Brushes.AliceBlue, realwidth, realheight, width, height1);
+                        e.Graphics.FillRectangle(Brushes.White, realwidth, realheight, width, height1);
                         e.Graphics.DrawRectangle(Pens.Black, realwidth, realheight, width, height1);
                         e.Graphics.DrawString(ScanTable.Rows[strcountScan].Cells[j].Value.ToString(), new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, realwidth, realheight);
                         realwidth = realwidth + width;
@@ -10924,6 +11553,7 @@ namespace Ecoview_V2._0
              // Check to see if more pages are to be printed.
              e.HasMorePages = (stringToPrint.Length > 0);*/
             e.HasMorePages = false;
+
         }
         
         private void printDocument1_PrintPage_2(object sender, PrintPageEventArgs e)
@@ -11036,7 +11666,7 @@ namespace Ecoview_V2._0
 
                 if (cordY > e.MarginBounds.Height)
                 {
-                    e.Graphics.DrawString("Страница " + (prinPage + 1) + " из 2", new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, 300, 1130);
+                    e.Graphics.DrawString("Страница " + (prinPage + 1) + " из 2", new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, 300, 1100);
                     e.HasMorePages = true;
                     //   strcountScan++;
                     prinPage++;
@@ -11047,7 +11677,7 @@ namespace Ecoview_V2._0
                 {
                     if (prinPage <= 0 && NoCaIzm > 3 && Table1.Rows.Count > 6)
                     {
-                        e.Graphics.DrawString("Страница " + (prinPage + 1) + " из 2", new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, 300, 1130);
+                        e.Graphics.DrawString("Страница " + (prinPage + 1) + " из 2", new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, 300, 1100);
                         e.HasMorePages = true;
                         //   strcountScan++;
                         prinPage++;
@@ -11057,7 +11687,7 @@ namespace Ecoview_V2._0
                     else {
                         if (prinPage <= 0 && NoCaIzm <= 3 && Table1.Rows.Count > 11)
                         {
-                            e.Graphics.DrawString("Страница " + (prinPage+1) + " из 2", new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, 300, 1130);
+                            e.Graphics.DrawString("Страница " + (prinPage+1) + " из 2", new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, 300, 1100);
                             e.HasMorePages = true;
                             //   strcountScan++;
                             prinPage++;                            
@@ -11089,9 +11719,10 @@ namespace Ecoview_V2._0
                                 e.Graphics.DrawString("Руководитель:", new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, 25, cordY + 60);
                                 e.Graphics.DrawString(" _______________________ /   " + direction, new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, 160, cordY + 60);
 
+                                prinPage = 0;
+                                strcountScan = 0;
 
 
-                               
                             }
                         }
                     }
@@ -11153,7 +11784,9 @@ namespace Ecoview_V2._0
                 e.Graphics.DrawString(" _______________________ /   " + direction, new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, 160, cordY + 60);
 
 
-                e.Graphics.DrawString("Страница " + (prinPage + 1) + " из 2", new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, 300, 1130);
+                e.Graphics.DrawString("Страница " + (prinPage + 1) + " из 2", new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, 300, 1100);
+                prinPage = 0;
+                strcountScan = 0;
             }
 
         }
@@ -11163,7 +11796,7 @@ namespace Ecoview_V2._0
             int totalnumber = 0;
             int height = 300;
             int width = 25;
-            Pen p = new Pen(Brushes.Black, 2.5f);
+            Pen p = new Pen(Brushes.Black, 1.5f);
             for (int i = 0; i < IzmerenieFR_Table.ColumnCount; i++)
             {
                 e.Graphics.FillRectangle(Brushes.White, new System.Drawing.Rectangle(width, height, IzmerenieFR_Table.Columns[i].Width + 5, IzmerenieFR_Table.Rows[0].Height * 2));
@@ -11426,7 +12059,7 @@ namespace Ecoview_V2._0
             }
             else
             {
-                e.Graphics.DrawString("Страница " + (prinPage + 1) + " из 2", new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, 300, 1130);
+                e.Graphics.DrawString("Страница " + (prinPage + 1) + " из 2", new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, 300, 1100);
                 e.HasMorePages = true;
                 prinPage++;
                 
@@ -11715,7 +12348,7 @@ namespace Ecoview_V2._0
                 }
                 else
                 {
-                    e.Graphics.DrawString("Страница " + (prinPage + 1) + " из 2", new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, 300, 1130);
+                    e.Graphics.DrawString("Страница " + (prinPage + 1) + " из 2", new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, 300, 1100);
                     e.HasMorePages = true;
                     prinPage++;
                     
@@ -11947,7 +12580,7 @@ namespace Ecoview_V2._0
 
                 if (cordY > e.MarginBounds.Height)
                 {
-                    e.Graphics.DrawString("Страница " + (prinPage + 1) + " из 2", new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, 300, 1130);
+                    e.Graphics.DrawString("Страница " + (prinPage + 1) + " из 2", new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, 300, 1100);
                     e.HasMorePages = true;
                     //   strcountScan++;
                     prinPage++;
@@ -11958,7 +12591,7 @@ namespace Ecoview_V2._0
                 {
                     if (prinPage <= 0 && NoCaIzm1 > 3 && Table2.Rows.Count > 10)
                     {
-                        e.Graphics.DrawString("Страница " + (prinPage + 1) + " из 2", new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, 300, 1130);
+                        e.Graphics.DrawString("Страница " + (prinPage + 1) + " из 2", new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, 300, 1100);
                         e.HasMorePages = true;
                         //   strcountScan++;
                         prinPage++;
@@ -11968,7 +12601,7 @@ namespace Ecoview_V2._0
                     else {
                         if (prinPage <= 0 && NoCaIzm1 <= 3 && Table2.Rows.Count > 11)
                         {
-                            e.Graphics.DrawString("Страница " + (prinPage + 1) + " из 2", new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, 300, 1130);
+                            e.Graphics.DrawString("Страница " + (prinPage + 1) + " из 2", new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, 300, 1100);
                             e.HasMorePages = true;
                             //   strcountScan++;
                             prinPage++;
@@ -11992,6 +12625,8 @@ namespace Ecoview_V2._0
 
                                 e.Graphics.DrawString("Руководитель:", new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, 25, cordY + 90);
                                 e.Graphics.DrawString(" _______________________ /   " + direction, new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, 160, cordY + 90);
+                                prinPage = 0;
+                                strcountScan = 0;
                             }
                         }
                     }
@@ -12031,7 +12666,9 @@ namespace Ecoview_V2._0
 
                 e.Graphics.DrawString("Руководитель:", new System.Drawing.Font("Times New Roman", 12, FontStyle.Bold), Brushes.Black, 25, cordY + 95);
                 e.Graphics.DrawString(" _______________________ /   " + direction, new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, 160, cordY + 95);
-                e.Graphics.DrawString("Страница " + (prinPage + 1) + " из 2", new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, 300, 1130);
+                e.Graphics.DrawString("Страница " + (prinPage + 1) + " из 2", new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, 300, 1100);
+                prinPage = 0;
+                strcountScan = 0;
             }
 
         }
@@ -12340,7 +12977,7 @@ namespace Ecoview_V2._0
                 }
                 else
                 {
-                    e.Graphics.DrawString("Страница " + (prinPage + 1) + " из 2", new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, 300, 1130);
+                    e.Graphics.DrawString("Страница " + (prinPage + 1) + " из 2", new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, 300, 1100);
                     e.HasMorePages = true;
                     prinPage++;
 
@@ -12660,7 +13297,7 @@ namespace Ecoview_V2._0
                 }
                 else
                 {
-                    e.Graphics.DrawString("Страница " + (prinPage + 1) + " из 2", new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, 300, 1130);
+                    e.Graphics.DrawString("Страница " + (prinPage + 1) + " из 2", new System.Drawing.Font("Times New Roman", 12, FontStyle.Regular), Brushes.Black, 300, 1100);
                     e.HasMorePages = true;
                     prinPage++;
 
@@ -12806,7 +13443,8 @@ namespace Ecoview_V2._0
                                     MessageBox.Show("Длина волны градуировки отличается от длины волны, установленной на приборе!\rИзмените настройки градуировки!");
                                 }
                                 Graduirovka(sender, e);
-                                
+
+                                label59.Visible = false;
                                 label27.Visible = true;
                                 label28.Visible = false;
                                 Podskazka.Text = "Сохраните измерение";
@@ -12843,6 +13481,8 @@ namespace Ecoview_V2._0
                             IzmerenieFr_izmer();
                             label27.Visible = true;
                             label28.Visible = false;
+
+                            label59.Visible = false;
                             Podskazka.Text = "Сохраните измерение";
                             button1.Enabled = true;
                         }
@@ -12961,32 +13601,35 @@ namespace Ecoview_V2._0
                         }
                         break;
                     case 4:
-                        ChartGraf();
-                        if (timer2.Enabled == false)
-                        {
-                            if (delay > 0)
+
+                            ChartGraf();
+                            timer2.Enabled = false;
+                            if (timer2.Enabled == false)
                             {
-                                timer1.Interval = Convert.ToInt32(1000); // 500 миллисекунд
-                                timer1.Enabled = true;
-                                timer1.Tick += TimerTick1;
-                            }
-                            else {
-                                label33.Visible = true;
-                                label28.Visible = false;
-                                Podskazka.Text = "Можно остановить";
-                                timeLeft = Convert.ToInt32(start);
-                                TableKinetica1.Rows.Clear();
-                                TableKinetica(sender, e);
+                                if (delay > 0)
+                                {
+                                    timer1.Interval = Convert.ToInt32(1000); // 500 миллисекунд
+                                    timer1.Enabled = true;
+                                    timer1.Tick += TimerTick1;
+                                }
+                                else {
+                                    label33.Visible = true;
+                                    label28.Visible = false;
+                                    Podskazka.Text = "Можно остановить";
+                                    timeLeft = Convert.ToInt32(start);
+                                    TableKinetica1.Rows.Clear();
+                                label27.Visible = false;
                                 button14.Enabled = false;
-                                dataGridView3.Rows.Clear();
-                                dataGridView4.Rows.Clear();
-                                timer2.Start();
-                                timer2.Enabled = true;
-                                button11.Enabled = true;
+                                    dataGridView3.Rows.Clear();
+                                    dataGridView4.Rows.Clear();
+                                    timer2.Start();
+                                    timer2.Enabled = true;
+                                    TableKinetica(sender, e);
+                                    button11.Enabled = true;
+                                }
+
                             }
-
-                        }
-
+                        
                      //   label27.Visible = true;
                       //  Podskazka.Text = "Сохраните измерение";
                         button7.Enabled = true;
@@ -12998,18 +13641,27 @@ namespace Ecoview_V2._0
                         if (scan_mass != null)
                         {
                             Application.DoEvents();
-                            dataGridView5.Rows.Add(dataGridView5.Rows.Count, "Образец " + dataGridView5.Rows.Count);
-                            Array.Resize<double[]>(ref massGEMultiAbs, dataGridView5.Rows.Count - 1);
-                            massGEMultiAbs[massGEMultiAbs.Length - 1] = new double[dataGridView5.ColumnCount - 2];
-                            Array.Resize<double[]>(ref massGEMultiT, dataGridView5.Rows.Count - 1);
-                            massGEMultiT[massGEMultiAbs.Length - 1] = new double[dataGridView5.ColumnCount - 2];
-                            StopSpectr = false;
-                            button14.Enabled = false;
-                            button11.Enabled = true;
-                            label33.Visible = true;
-                            label28.Visible = false;
-                            Podskazka.Text = "Можно остановить";
-                            TableMultiScan();
+
+                            if(dataGridView5.Rows.Count <= 35)
+                            {
+                                dataGridView5.Rows.Add(dataGridView5.Rows.Count, "Образец " + dataGridView5.Rows.Count);
+                                Array.Resize<double[]>(ref massGEMultiAbs, dataGridView5.Rows.Count - 1);
+                                massGEMultiAbs[massGEMultiAbs.Length - 1] = new double[dataGridView5.ColumnCount - 2];
+                                Array.Resize<double[]>(ref massGEMultiT, dataGridView5.Rows.Count - 1);
+                                massGEMultiT[massGEMultiAbs.Length - 1] = new double[dataGridView5.ColumnCount - 2];
+                                StopSpectr = false;
+                                button14.Enabled = false;
+                                button11.Enabled = true;
+                                label33.Visible = true;
+                                label28.Visible = false;
+                                label27.Visible = false;
+                                Podskazka.Text = "Можно остановить";
+                                TableMultiScan();
+                            }
+                            else
+                            {
+                                MessageBox.Show("Достигнут максимум измерений! Создайте новое измерение!");
+                            }
                             Application.DoEvents();
                             label27.Visible = true;
                             Podskazka.Text = "Сохраните измерение";
@@ -13213,7 +13865,7 @@ namespace Ecoview_V2._0
                 timer2.Start();
                 timer2.Enabled = true;
                 button11.Enabled = true;
-                
+                countscan = 0;
             }
             
         }
@@ -15151,7 +15803,7 @@ namespace Ecoview_V2._0
                         label28.Visible = true;
                         label25.Visible = false;
                         label26.Visible = false;
-
+                        label27.Visible = false;
                         label33.Visible = false;
                         Podskazka.Text = "Можно сканировать";
                         break;
@@ -15600,6 +16252,8 @@ namespace Ecoview_V2._0
                         timer2.Enabled = true;
                         timer2.Stop();
                         MinMax();
+                        countscan = 0;
+                        //  TableKinetica1.Rows.Add();
                         button14.Enabled = true;
                         button11.Enabled = false;
                         label27.Visible = true;
