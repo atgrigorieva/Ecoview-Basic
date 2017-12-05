@@ -40,6 +40,7 @@ namespace Ecoview_V2._0
                 _Analis.tabControl2.TabPages.Remove(_Analis.tabPage6);
                 _Analis.tabControl2.TabPages.Remove(_Analis.tabPage7);
                 _Analis.tabControl2.TabPages.Remove(_Analis.tabPage8);
+                _Analis.tabControl2.TabPages.Remove(_Analis.tabPage9);
                 _Analis.Ecoview_Header = "Eciview Professional v1.0 Фотометрический режим";
                 _Analis.tabControl2.SelectedIndex = 2;
                 _Analis.tabControl2.SelectTab(_Analis.tabPage1);
@@ -57,6 +58,7 @@ namespace Ecoview_V2._0
                     _Analis.tabControl2.TabPages.Remove(_Analis.tabPage6);
                     _Analis.tabControl2.TabPages.Remove(_Analis.tabPage7);
                     _Analis.tabControl2.TabPages.Remove(_Analis.tabPage8);
+                    _Analis.tabControl2.TabPages.Remove(_Analis.tabPage9);
                     _Analis.Ecoview_Header = "Eciview Professional v1.0 Количественный режим";
                     _Analis.tabControl2.SelectedIndex = 0;
                     _Analis.tabControl2.SelectTab(_Analis.tabPage3);
@@ -73,6 +75,7 @@ namespace Ecoview_V2._0
                         _Analis.tabControl2.TabPages.Remove(_Analis.tabPage6);
                         _Analis.tabControl2.TabPages.Remove(_Analis.tabPage7);
                         _Analis.tabControl2.TabPages.Remove(_Analis.tabPage8);
+                        _Analis.tabControl2.TabPages.Remove(_Analis.tabPage9);
                         _Analis.Ecoview_Header = "Eciview Professional v1.0 Многоволновой режим";
                         _Analis.tabControl2.SelectedIndex = 3;
                         _Analis.tabControl2.SelectTab(_Analis.tabPage2);
@@ -89,6 +92,7 @@ namespace Ecoview_V2._0
                             _Analis.tabControl2.TabPages.Remove(_Analis.tabPage6);
                             _Analis.tabControl2.TabPages.Remove(_Analis.tabPage7);
                             _Analis.tabControl2.TabPages.Remove(_Analis.tabPage8);
+                            _Analis.tabControl2.TabPages.Remove(_Analis.tabPage9);
                             _Analis.Ecoview_Header = "Eciview Professional v1.0 Кинетический режим";
                             _Analis.tabControl2.SelectedIndex = 4;
                             _Analis.tabControl2.SelectTab(_Analis.tabPage5);
@@ -105,6 +109,7 @@ namespace Ecoview_V2._0
                                 _Analis.tabControl2.TabPages.Remove(_Analis.tabPage1);
                                 _Analis.tabControl2.TabPages.Remove(_Analis.tabPage7);
                                 _Analis.tabControl2.TabPages.Remove(_Analis.tabPage8);
+                                _Analis.tabControl2.TabPages.Remove(_Analis.tabPage9);
                                 _Analis.Ecoview_Header = "Eciview Professional v1.0 Сканирование спектра";
   
                                 _Analis.tabControl2.SelectedIndex = 5;
@@ -116,19 +121,40 @@ namespace Ecoview_V2._0
                             }
                             else
                             {
-                                _Analis.tabControl2.TabPages.Remove(_Analis.tabPage7);
-                                _Analis.tabControl2.TabPages.Remove(_Analis.tabPage8);
-                                _Analis.tabControl2.TabPages.Remove(_Analis.tabPage2);
-                                _Analis.tabControl2.TabPages.Remove(_Analis.tabPage5);
-                                _Analis.tabControl2.TabPages.Remove(_Analis.tabPage6);
-                                _Analis.tabControl2.TabPages.Remove(_Analis.tabPage1);
-                                _Analis.Ecoview_Header = "Eciview Professional v1.0 Агро режим";
-                                _Analis.tabControl2.SelectedIndex = 6;
-                                _Analis.Add_Table2.Visible = false;
-                                _Analis.Remove_Table2.Visible = false;
-                                _Analis.tabControl2.SelectTab(_Analis.tabPage3);
-                                _Analis.selet_rezim = 6;
-                                _Analis.tabControl2.TabPages[0].Text = "Градуировка Агро";
+                                if (radioButton7.Checked == true)
+                                {
+                                    _Analis.tabControl2.TabPages.Remove(_Analis.tabPage7);
+                                    _Analis.tabControl2.TabPages.Remove(_Analis.tabPage8);
+                                    _Analis.tabControl2.TabPages.Remove(_Analis.tabPage2);
+                                    _Analis.tabControl2.TabPages.Remove(_Analis.tabPage5);
+                                    _Analis.tabControl2.TabPages.Remove(_Analis.tabPage6);
+                                    _Analis.tabControl2.TabPages.Remove(_Analis.tabPage1);
+                                    _Analis.tabControl2.TabPages.Remove(_Analis.tabPage3);
+                                    _Analis.tabControl2.TabPages.Remove(_Analis.tabPage4);
+                                    _Analis.Ecoview_Header = "Eciview Professional v1.0 Работа в Excel";
+                                    _Analis.tabControl2.SelectedIndex = 8;
+                                    _Analis.tabControl2.SelectTab(_Analis.tabPage9);
+                                    _Analis.Podskazka.Text = "Подключите прибор";
+                                    _Analis.label24.Visible = true;
+
+                                    _Analis.selet_rezim = 9;
+                                }
+                                else {
+                                    _Analis.tabControl2.TabPages.Remove(_Analis.tabPage7);
+                                    _Analis.tabControl2.TabPages.Remove(_Analis.tabPage8);
+                                    _Analis.tabControl2.TabPages.Remove(_Analis.tabPage2);
+                                    _Analis.tabControl2.TabPages.Remove(_Analis.tabPage5);
+                                    _Analis.tabControl2.TabPages.Remove(_Analis.tabPage6);
+                                    _Analis.tabControl2.TabPages.Remove(_Analis.tabPage1);
+                                    _Analis.tabControl2.TabPages.Remove(_Analis.tabPage9);
+                                    _Analis.Ecoview_Header = "Eciview Professional v1.0 Агро режим";
+                                    _Analis.tabControl2.SelectedIndex = 6;
+                                    _Analis.Add_Table2.Visible = false;
+                                    _Analis.Remove_Table2.Visible = false;
+                                    _Analis.tabControl2.SelectTab(_Analis.tabPage3);
+                                    _Analis.selet_rezim = 6;
+                                    _Analis.tabControl2.TabPages[0].Text = "Градуировка Агро";
+                                }
                                 
                             }
                         }

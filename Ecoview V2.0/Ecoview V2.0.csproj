@@ -149,6 +149,10 @@
       <DependentUpon>Ecoview.cs</DependentUpon>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
+    <Compile Include="ExcelResim.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ExcelResim.Designer.cs" />
     <Compile Include="FotometrScan.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -229,12 +233,17 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Program.cs" />
+    <Compile Include="ProgrammVersion.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ProgrammVersion.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="ReadFilePribor.cs" />
     <Compile Include="Select.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -253,6 +262,9 @@
     <EmbeddedResource Include="Ecoview.resx">
       <DependentUpon>Ecoview.cs</DependentUpon>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ExcelResim.resx">
+      <DependentUpon>ExcelResim.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FotometrScan.resx">
       <DependentUpon>FotometrScan.cs</DependentUpon>

@@ -41,7 +41,7 @@ namespace Ecoview_V2._0
                 _Analis.interval = Convert.ToDouble(comboBox1.SelectedItem.ToString());
                 _Analis.delay = Convert.ToDouble(textBox3.Text);
                 SW();
-               // _Analis.SAGE(ref _Analis.countSA, ref _Analis.GE5_1_0);
+                // _Analis.SAGE(ref _Analis.countSA, ref _Analis.GE5_1_0);
                 _Analis.massWL = new double[0];
                 _Analis.massGE = new double[0];
                 _Analis.countscan = 0;
@@ -88,12 +88,16 @@ namespace Ecoview_V2._0
                 /*  TimerCallback tm = new TimerCallback(_Analis.TableKinetica);
                   System.Threading.Timer timer = new System.Threading.Timer(tm, _Analis.delay,
                       Convert.ToInt32(_Analis.start), Convert.ToInt32(_Analis.interval));*/
-                _Analis.timer2.Interval = Convert.ToInt32(_Analis.interval*1000); // 500 миллисекунд
+                _Analis.timer2.Interval = Convert.ToInt32(_Analis.interval * 1000); // 500 миллисекунд
                 _Analis.timer2.Enabled = false;
-                
-               // button1.Click += button1_Click;
+                _Analis.Description = textBox1.Text;
+                _Analis.code = textBox7.Text;
+                _Analis.direction = textBox6.Text;
+                _Analis.DateTime = dateTimePicker1.Value.AddDays(_Analis.Days).ToString("dd.MM.yyyy");
+                _Analis.Ispolnitel = textBox5.Text;
+                // button1.Click += button1_Click;
                 _Analis.timer2.Tick += _Analis.TableKinetica;
-               // _Analis.timer2.Start();
+                // _Analis.timer2.Start();
                 Close();
 
             }
@@ -127,6 +131,36 @@ namespace Ecoview_V2._0
             // _Analis.GW();
         }
         private void textBox2_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            char number = e.KeyChar;
+            if (e.KeyChar == 46 && textBox2.Text.IndexOf(',') == -1)
+            {
+                e.KeyChar = ',';
+
+            }
+            else
+            {
+
+                if (e.KeyChar == 46 && textBox2.Text.IndexOf(',') != -1)
+                {
+                    e.Handled = true;
+                    return;
+                }
+
+            }
+            if (number == 44 && textBox2.Text.IndexOf(',') != -1)
+            {
+                e.Handled = true;
+                return;
+            }
+
+            if ((e.KeyChar >= 58 || e.KeyChar <= 47) && number != 8 && number != 44 && number != 46) //цифры, клавиша BackSpace и запятая а ASCII
+            {
+                e.Handled = true;
+                MessageBox.Show("В данное поле можно вводить цифры, знаки '.'");
+            }
+        }
+        private void textBox3_KeyPress(object sender, KeyPressEventArgs e)
         {
             char number = e.KeyChar;
             if (e.KeyChar == 46 && textBox3.Text.IndexOf(',') == -1)
@@ -201,11 +235,11 @@ namespace Ecoview_V2._0
 
         private void textBox3_Leave(object sender, EventArgs e)
         {
-            if(Convert.ToDouble(textBox3.Text) > 3600)
+            if (Convert.ToDouble(textBox3.Text) > 3600)
             {
                 textBox3.Text = "3600,0";
             }
-            if(Convert.ToDouble(textBox3.Text) < 0)
+            if (Convert.ToDouble(textBox3.Text) < 0)
             {
                 textBox3.Text = "0,0";
             }

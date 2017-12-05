@@ -41,6 +41,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
+            this.radioButton7 = new System.Windows.Forms.RadioButton();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -115,7 +116,7 @@
             // button1
             // 
             this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.button1.Location = new System.Drawing.Point(50, 337);
+            this.button1.Location = new System.Drawing.Point(50, 411);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(132, 45);
             this.button1.TabIndex = 6;
@@ -126,7 +127,7 @@
             // button2
             // 
             this.button2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.button2.Location = new System.Drawing.Point(214, 337);
+            this.button2.Location = new System.Drawing.Point(214, 411);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(132, 45);
             this.button2.TabIndex = 7;
@@ -173,12 +174,24 @@
             this.label3.TabIndex = 11;
             this.label3.Text = "v1.0";
             // 
+            // radioButton7
+            // 
+            this.radioButton7.AutoSize = true;
+            this.radioButton7.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.radioButton7.Location = new System.Drawing.Point(100, 323);
+            this.radioButton7.Name = "radioButton7";
+            this.radioButton7.Size = new System.Drawing.Size(143, 22);
+            this.radioButton7.TabIndex = 12;
+            this.radioButton7.Text = "Работа в Excel";
+            this.radioButton7.UseVisualStyleBackColor = true;
+            // 
             // Select
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.ClientSize = new System.Drawing.Size(400, 407);
+            this.ClientSize = new System.Drawing.Size(400, 554);
+            this.Controls.Add(this.radioButton7);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
@@ -218,5 +231,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.RadioButton radioButton7;
     }
 }

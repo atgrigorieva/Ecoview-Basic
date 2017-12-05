@@ -28,7 +28,7 @@ namespace Ecoview_V2._0
 
         public void comBoxAdd()
         {
-            for(int i = 1; i <= 20; i++)
+            for (int i = 1; i <= 20; i++)
             {
                 comboBox1.Items.Add(i);
             }
@@ -42,10 +42,10 @@ namespace Ecoview_V2._0
             {
                 var label = new Label();
                 label.Name = "WLlabel" + i++.ToString();
-                label.Text = "ВЛ " + i-- + " =";
+                label.Text = "ДВ " + i-- + " =";
                 label.Width = 85;
                 label.Location = new Point(labelx, height);
-                height += label.Height+10;
+                height += label.Height + 10;
                 groupBox1.Controls.Add(label);
             }
             var height1 = 77;
@@ -73,10 +73,10 @@ namespace Ecoview_V2._0
             {
                 var label = new Label();
                 label.Name = "WLlabel" + i++.ToString();
-                label.Text = "ВЛ " + i-- + " =";
+                label.Text = "ДВ " + i-- + " =";
                 label.Width = 85;
                 label.Location = new Point(labelx1, height2);
-                height2 += label.Height+10;
+                height2 += label.Height + 10;
                 this.Controls.Add(label);
                 groupBox1.Controls.Add(label);
             }
@@ -96,8 +96,8 @@ namespace Ecoview_V2._0
                 _Analis.textBoxCO[i].Enabled = false;
                 groupBox1.Controls.Add(_Analis.textBoxCO[i]);
                 _Analis.textBoxCO[i].Enter += new EventHandler(txt_Enter);
-                _Analis.textBoxCO[i].KeyPress += new System.Windows.Forms.KeyPressEventHandler(txt_KeyPress);               
-               
+                _Analis.textBoxCO[i].KeyPress += new System.Windows.Forms.KeyPressEventHandler(txt_KeyPress);
+
             }
             this.comboBox1.SelectedIndexChanged += new EventHandler(comboBox1_SelectedIndexChanged);
             for (int i = oldValue - 1; i >= 0; i--)
@@ -109,34 +109,34 @@ namespace Ecoview_V2._0
         void txt_KeyPress(object sender, KeyPressEventArgs e)
         {
 
-                char number = e.KeyChar;
-                if (e.KeyChar == 46 && _Analis.textBoxCO[active].Text.IndexOf(',') == -1)
-                {
-                    e.KeyChar = ',';
+            char number = e.KeyChar;
+            if (e.KeyChar == 46 && _Analis.textBoxCO[active].Text.IndexOf(',') == -1)
+            {
+                e.KeyChar = ',';
 
-                }
-                else
-                {
+            }
+            else
+            {
 
-                    if (e.KeyChar == 46 && _Analis.textBoxCO[active].Text.IndexOf(',') != -1)
-                    {
-                        e.Handled = true;
-                        return;
-                    }
-
-                }
-                if (number == 44 && _Analis.textBoxCO[active].Text.IndexOf(',') != -1)
+                if (e.KeyChar == 46 && _Analis.textBoxCO[active].Text.IndexOf(',') != -1)
                 {
                     e.Handled = true;
                     return;
                 }
 
-                if ((e.KeyChar >= 58 || e.KeyChar <= 47) && number != 8 && number != 44 && number != 46) //цифры, клавиша BackSpace и запятая а ASCII
-                {
-                    e.Handled = true;
-                    MessageBox.Show("В данное поле можно вводить цифры, знаки '.'");
-                }
-         
+            }
+            if (number == 44 && _Analis.textBoxCO[active].Text.IndexOf(',') != -1)
+            {
+                e.Handled = true;
+                return;
+            }
+
+            if ((e.KeyChar >= 58 || e.KeyChar <= 47) && number != 8 && number != 44 && number != 46) //цифры, клавиша BackSpace и запятая а ASCII
+            {
+                e.Handled = true;
+                MessageBox.Show("В данное поле можно вводить цифры, знаки '.'");
+            }
+
         }
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -174,7 +174,7 @@ namespace Ecoview_V2._0
             {
                 if (_Analis.textBoxCO[i].Focused)
                 {
-                     active = i;
+                    active = i;
                     _Analis.textBoxCO[i].Leave += new EventHandler(txt_Leave);
                 }
             }
@@ -245,8 +245,14 @@ namespace Ecoview_V2._0
                 firstColumn1.HeaderText = "Abs " + _Analis.textBoxCO[i].Text + " нм";
                 firstColumn1.Name = "Abs " + i;
                 firstColumn1.ValueType = Type.GetType("System.Double");
+                firstColumn1.ReadOnly = true;
                 _Analis.dataGridView5.Columns.Add(firstColumn1);
             }
+            _Analis.code = textBox1.Text;
+            _Analis.direction = textBox2.Text;
+            _Analis.DateTime = dateTimePicker1.Value.AddDays(_Analis.Days).ToString("dd.MM.yyyy");
+            _Analis.Ispolnitel = textBox3.Text;
+            _Analis.Description = textBox4.Text;
             _Analis.massGEMultiAbs = new double[1][];
             _Analis.massGEMultiT = new double[1][];
             Close();

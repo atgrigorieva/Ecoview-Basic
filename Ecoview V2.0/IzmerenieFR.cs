@@ -26,21 +26,21 @@ namespace Ecoview_V2._0
         bool form_close = false;
         private void button2_Click(object sender, EventArgs e)
         {
-            form_close = false;
-            Close();
+            // form_close = false;
+            SWF.Application.OpenForms["IzmerenieFR"].Close();
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            textBox1.Text = textBox1.Text.Replace(",", ".");
+            k1_linear0.Text = k1_linear0.Text.Replace(",", ".");
             _Analis.IzmerenieFR_RowsRemove2();
             string Dlina = Walve.Text;
-            for (int i = 0; i < Convert.ToInt32(numericUpDown3.Text); i++)
+            for (int i = 0; i < Convert.ToInt32(countIzmer.Text); i++)
             {
                 _Analis.IzmerenieFR_Table.Rows.Add();
                 _Analis.IzmerenieFR_Table.Rows[i].Cells["N"].Value = i + 1;
                 _Analis.IzmerenieFR_Table.Rows[i].Cells["Walve"].Value = Walve.Text;
-                _Analis.IzmerenieFR_Table.Rows[i].Cells["KOne"].Value = string.Format("{0:0.0}", textBox1.Text);
+                _Analis.IzmerenieFR_Table.Rows[i].Cells["KOne"].Value = string.Format("{0:0.0}", k1_linear0.Text);
             }
             _Analis.IzmerenieFR_Table.CurrentCell = _Analis.IzmerenieFR_Table[3, 0];
             SW();
@@ -48,8 +48,15 @@ namespace Ecoview_V2._0
             form_close = true;
             _Analis.button11.Enabled = true;
             _Analis.DateTime = dateTimePicker1.Value.Date.ToString("dd.MM.yyyy");
-            _Analis.Ispolnitel = textBox2.Text;
-            _Analis.Description = textBox3.Text;
+            _Analis.Ispolnitel = administrant.Text;
+            _Analis.Description = annotation.Text;
+            _Analis.direction = direction_text.Text;
+            _Analis.code = code_text.Text;
+
+            _Analis.label26.Visible = false;
+            _Analis.label25.Visible = false;
+            _Analis.label59.Visible = true;
+            _Analis.Podskazka.Text = "Измерьте 0 Asb/100%T";
             //  _Analis.button10.Enabled = true;
             Close();
         }
@@ -83,7 +90,7 @@ namespace Ecoview_V2._0
         private void textBox1_KeyPress(object sender, KeyPressEventArgs e)
         {
             char number = e.KeyChar;
-            if (e.KeyChar == 46 && textBox1.Text.IndexOf(',') == -1)
+            if (e.KeyChar == 46 && k1_linear0.Text.IndexOf(',') == -1)
             {
                 e.KeyChar = ',';
 
@@ -91,19 +98,19 @@ namespace Ecoview_V2._0
             else
             {
 
-                if (e.KeyChar == 46 && textBox1.Text.IndexOf(',') != -1)
+                if (e.KeyChar == 46 && k1_linear0.Text.IndexOf(',') != -1)
                 {
                     e.Handled = true;
                     return;
                 }
 
             }
-            if (number == 44 && textBox1.Text.IndexOf(',') != -1)
+            if (number == 44 && k1_linear0.Text.IndexOf(',') != -1)
             {
                 e.Handled = true;
                 return;
             }
-            if ((number == 45 && textBox1.Text.IndexOf('-') != -1))
+            if ((number == 45 && k1_linear0.Text.IndexOf('-') != -1))
             {
                 e.Handled = true;
                 return;
@@ -138,7 +145,7 @@ namespace Ecoview_V2._0
                 e.Handled = true;
                 return;
             }
-           
+
             if ((e.KeyChar <= 42 || e.KeyChar >= 58 || e.KeyChar == 43 || e.KeyChar <= 45 || e.KeyChar == 47) && number != 8 && number != 44) //цифры, клавиша BackSpace и запятая а ASCII
             {
                 e.Handled = true;
@@ -191,10 +198,10 @@ namespace Ecoview_V2._0
 
         private void IzmerenieFR_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if(form_close == false)
-            {
-                Application.Exit();
-            }
+            /* if(form_close == false)
+             {
+                 Application.Exit();
+             }*/
         }
 
         private void IzmerenieFR_Load(object sender, EventArgs e)
